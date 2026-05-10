@@ -192,13 +192,29 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
       </div>
     </div>
   </div>
-  <!-- Bảng tổng hợp Nhà máy -->
+  <!-- Bảng tổng hợp Nhà máy + biểu đồ -->
   <div class="panel" style="margin-bottom:12px">
     <div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Tổng hợp theo Nhà máy</div></div>
-    <table class="dt" style="font-size:11px;width:100%" id="nhamay-detail-table">
-      <thead><tr><th>Nhà máy</th><th>Số mẫu</th><th>Tỷ lệ làm lại</th><th>Leadtime TB</th></tr></thead>
-      <tbody id="nhamay-detail-tbody"></tbody>
-    </table>
+    <div style="display:flex;gap:16px;align-items:flex-start">
+      <!-- Bảng compact -->
+      <div style="flex:0 0 auto">
+        <table style="border-collapse:collapse;font-size:11px;min-width:340px">
+          <thead>
+            <tr style="background:#F3F2EF">
+              <th style="padding:6px 10px;text-align:left;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Nhà máy</th>
+              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Số mẫu</th>
+              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Tỷ lệ làm lại</th>
+              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Leadtime TB</th>
+            </tr>
+          </thead>
+          <tbody id="nhamay-detail-tbody"></tbody>
+        </table>
+      </div>
+      <!-- Biểu đồ cột -->
+      <div style="flex:1;min-width:0">
+        <div style="height:160px"><canvas id="c-nhamay-bar"></canvas></div>
+      </div>
+    </div>
   </div>
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">⚠</span>Mẫu cần chú ý</div><div class="pa" onclick="goTab('progress',1)">Tất cả →</div></div>
@@ -1390,18 +1406,43 @@ function initCharts() {
     </tr>`).join('');
   }
 
-  // ── Bảng Nhà máy chi tiết ──
+  // ── Bảng Nhà máy chi tiết + Biểu đồ ──
   const nmData=s.byNhaMayDetail||[];
+  const tdS='padding:5px 10px;border-bottom:1px solid #F0EEE8;';
   const nmTb=document.getElementById('nhamay-detail-tbody');
   if(nmTb) nmTb.innerHTML=nmData.map(n=>{
-    const ltDisplay = n.lt18Count<3 ? `<span style="color:var(--orange);font-size:10px">⚠ Ít dữ liệu (${n.lt18Count})</span>` : n.lt18Avg+' ngày';
+    const laiColor=n.laiMauRate>15?'var(--red)':n.laiMauRate>8?'var(--orange)':'var(--green)';
+    const ltDisplay=n.lt18Count<3
+      ? `<span style="color:var(--orange);font-size:10px">⚠ Ít dữ liệu (${n.lt18Count})</span>`
+      : `${n.lt18Avg} ngày`;
     return `<tr>
-      <td style="font-weight:600">${n.nm}</td>
-      <td style="text-align:right">${n.total}</td>
-      <td style="text-align:right;color:${n.laiMauRate>15?'var(--red)':n.laiMauRate>8?'var(--orange)':'var(--green)'}">${n.laiMauRate}%</td>
-      <td style="text-align:right">${ltDisplay}</td>
+      <td style="${tdS}font-weight:600">${n.nm}</td>
+      <td style="${tdS}text-align:right">${n.total}</td>
+      <td style="${tdS}text-align:right;color:${laiColor};font-weight:600">${n.laiMauRate}%</td>
+      <td style="${tdS}text-align:right">${ltDisplay}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--gray)">Chưa có dữ liệu</td></tr>';
+  }).join('')||`<tr><td colspan="4" style="${tdS}text-align:center;color:var(--gray)">Chưa có dữ liệu</td></tr>`;
+  // Bar chart nhà máy: Số mẫu + Leadtime TB
+  if(document.getElementById('c-nhamay-bar') && nmData.length) {
+    charts.nmBar=new Chart(document.getElementById('c-nhamay-bar'),{type:'bar',
+      data:{labels:nmData.map(n=>n.nm),datasets:[
+        {label:'Số mẫu',data:nmData.map(n=>n.total),backgroundColor:NAVY+'CC',borderRadius:4,yAxisID:'y'},
+        {label:'LT TB (ngày)',data:nmData.map(n=>n.lt18Count>=3?n.lt18Avg:null),type:'line',
+          borderColor:RED,backgroundColor:RED+'22',pointRadius:5,pointBackgroundColor:RED,
+          fill:false,yAxisID:'y1',_noLabel:true},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6}},
+          tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+(ctx.raw??'N/A')}}},
+        scales:{
+          y:{beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Số mẫu',font:{size:8}}},
+          y1:{beginAtZero:true,position:'right',grid:{drawOnChartArea:false},
+            ticks:{font:{size:9},callback:v=>v+' ng'}},
+          x:{ticks:{font:{size:10},font:{weight:'600'}}},
+        }},
+      plugins:[barLabels]
+    });
+  }
 
   const bc=DATA.bcTomtat||[];
   charts.bctDoughnut=new Chart(document.getElementById('c-bct-doughnut'),{type:'doughnut',
