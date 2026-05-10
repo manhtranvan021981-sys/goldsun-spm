@@ -359,7 +359,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📈</span>Trend KPI theo tháng</div></div><div class="cw" style="height:260px"><canvas id="c-kpi-trend"></canvas></div></div>
   </div>
   <div class="sdiv sdiv-g">KPI nhóm SPM — Theo tuần</div>
-  <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Xu hướng KPI theo tuần</div></div><div class="cw" style="height:240px"><canvas id="c-kpi-weekly"></canvas></div></div>
+  <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Xu hướng KPI theo tuần</div><div class="pa" id="kpi-week-count"></div></div><div class="cw" style="height:300px"><canvas id="c-kpi-weekly"></canvas></div></div>
   <div class="sdiv sdiv-r">Cá nhân xuất sắc &amp; Cảnh báo</div>
   <div class="g2"><div class="topbot best" id="best-pic"></div><div class="topbot worst" id="worst-pic"></div></div>
   <div class="sdiv">KPI chi tiết từng cá nhân</div>
@@ -774,12 +774,14 @@ function weekKey(d) {
 function vnStr(s) {
   return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').trim();
 }
-// Danh sách trạng thái pass (ĐK2)
+// PASS_STATUS — theo tài liệu KPI chính thức
 const PASS_STATUS = [
   'da duyet mau',
   'ok, khach hang da duyet',
-  'ok, cong ty tu duyet',
+  'ok, cong ty duyet',      // chuẩn theo PDF
+  'ok, cong ty tu duyet',   // biến thể
   'ok, khong can lam mau',
+  'huy',                    // Hủy — theo PDF K1 ĐK3
 ];
 function isPassStatus(ts) {
   const n = vnStr(ts);
@@ -879,19 +881,39 @@ function getWeek(d) {
   return 1+Math.round(((t-w1)/86400000-3+(w1.getDay()+6)%7)/7);
 }
 
+// ── KPI HELPERS — theo tài liệu chính thức ────────────────────
+function calcK5Score(lt) {
+  if (!lt || lt <= 0 || isNaN(lt)) return null;
+  if (lt <= 3)  return 100;
+  if (lt <= 7)  return 80;
+  if (lt <= 15) return 60;
+  return 50;
+}
+function recK1(r) {
+  return r.lanThu === 1 &&
+    r.ngayBanGiao && !isNaN(r.ngayBanGiao) &&
+    isPassStatus(r.tinhTrang);
+}
+function recK2(r) {
+  if (!r.ngayBanGiao || isNaN(r.ngayBanGiao) || !r.dkht) return false;
+  const dk = new Date(r.dkht);
+  return !isNaN(dk) && r.ngayBanGiao <= dk;
+}
+function recK4(r) { return r.lanThu === 1; }
+
 // ── COMPUTE KPI ────────────────────────────────────────────────
 function computeKPI(records) {
   const n = records.length || 1;
-  const done = records.filter(r=>r.level==='ok').length;
-  const pass1 = records.filter(r=>r.lanThu===1&&r.level==='ok').length;
-  const noRedo = records.filter(r=>r.lanThu<=1).length;
-  const ltArr = records.filter(r=>r.ltThucTe>0).map(r=>r.ltThucTe);
-  const ltAvg = ltArr.length ? ltArr.reduce((a,b)=>a+b,0)/ltArr.length : 0;
-  const k1=Math.round(pass1/n*100), k2=Math.round(done/n*100), k3=100,
-        k4=Math.round(noRedo/n*100), k5=Math.round(ltAvg*10)/10,
-        k5Score=k5<=3?100:k5<=5?80:k5<=7?60:40;
+  const k1cnt = records.filter(recK1).length;
+  const k2cnt = records.filter(recK2).length;
+  const k4cnt = records.filter(recK4).length;
+  const k5Scores = records.map(r => calcK5Score(r.leadtime17)).filter(v => v !== null);
+  const k5Score  = k5Scores.length ? Math.round(k5Scores.reduce((a,b)=>a+b,0)/k5Scores.length) : 0;
+  const ltArr    = records.filter(r => r.leadtime17 > 0).map(r => r.leadtime17);
+  const ltAvg    = ltArr.length ? Math.round(ltArr.reduce((a,b)=>a+b,0)/ltArr.length*10)/10 : 0;
+  const k1=Math.round(k1cnt/n*100), k2=Math.round(k2cnt/n*100), k3=100, k4=Math.round(k4cnt/n*100);
   const kpiTotal=Math.round(k1*0.3+k2*0.25+k3*0.15+k4*0.2+k5Score*0.1);
-  const groupKPI={k1,k2,k3,k4,k5,k5Score,kpiTotal};
+  const groupKPI={k1,k2,k3,k4,k5:ltAvg,k5Score,kpiTotal};
 
   const picMap={};
   records.forEach(r => {
@@ -901,19 +923,75 @@ function computeKPI(records) {
   });
   const kpiByPIC = Object.values(picMap).map(p => {
     const rs=p.recs, pn=rs.length||1;
-    const pp1=rs.filter(r=>r.lanThu===1&&r.level==='ok').length;
-    const pd=rs.filter(r=>r.level==='ok').length;
-    const pnr=rs.filter(r=>r.lanThu<=1).length;
-    const plt=rs.filter(r=>r.ltThucTe>0).map(r=>r.ltThucTe);
-    const pLtA=plt.length?plt.reduce((a,b)=>a+b,0)/plt.length:0;
-    const pk1=Math.round(pp1/pn*100),pk2=Math.round(pd/pn*100),pk3=100,
-          pk4=Math.round(pnr/pn*100),pk5=Math.round(pLtA*10)/10,
-          pk5S=pk5<=3?100:pk5<=5?80:pk5<=7?60:40;
-    return {pic:p.pic,total:pn,k1:pk1,k2:pk2,k3:pk3,k4:pk4,k5:pk5,k5Score:pk5S,
-            kpiTotal:Math.round(pk1*0.3+pk2*0.25+pk3*0.15+pk4*0.2+pk5S*0.1)};
+    const pk1cnt=rs.filter(recK1).length;
+    const pk2cnt=rs.filter(recK2).length;
+    const pk4cnt=rs.filter(recK4).length;
+    const pk5s=rs.map(r=>calcK5Score(r.leadtime17)).filter(v=>v!==null);
+    const pk5Score=pk5s.length?Math.round(pk5s.reduce((a,b)=>a+b,0)/pk5s.length):0;
+    const pltArr=rs.filter(r=>r.leadtime17>0).map(r=>r.leadtime17);
+    const pltAvg=pltArr.length?Math.round(pltArr.reduce((a,b)=>a+b,0)/pltArr.length*10)/10:0;
+    const pk1=Math.round(pk1cnt/pn*100),pk2=Math.round(pk2cnt/pn*100),pk3=100,pk4=Math.round(pk4cnt/pn*100);
+    return {pic:p.pic,total:pn,k1:pk1,k2:pk2,k3:pk3,k4:pk4,k5:pltAvg,k5Score:pk5Score,
+            kpiTotal:Math.round(pk1*0.3+pk2*0.25+pk3*0.15+pk4*0.2+pk5Score*0.1)};
   }).sort((a,b)=>b.kpiTotal-a.kpiTotal);
 
   return {groupKPI, kpiByPIC};
+}
+
+// ── COMPUTE KPI BY WEEK ─────────────────────────────────────────
+// GHI CHÚ: Tuần/tháng lấy từ cột "Ngày yêu cầu (1)" — theo tài liệu KPI
+function computeKPIByWeek(records) {
+  const weekMap = {};
+  records.forEach(r => {
+    const d = (r.ngayYeuCau && !isNaN(r.ngayYeuCau)) ? r.ngayYeuCau : null;
+    if (!d) return;
+    const wk = weekKey(d);
+    if (!wk) return;
+    if (!weekMap[wk]) weekMap[wk] = {week: wk, ts: d.getTime(), recs: []};
+    weekMap[wk].recs.push(r);
+  });
+  return Object.values(weekMap)
+    .sort((a, b) => a.ts - b.ts)
+    .map(w => {
+      const recs = w.recs, n = recs.length || 1;
+      const k1cnt  = recs.filter(recK1).length;
+      const k2cnt  = recs.filter(recK2).length;
+      const k4cnt  = recs.filter(recK4).length;
+      const k5s    = recs.map(r => calcK5Score(r.leadtime17)).filter(v => v !== null);
+      const k5Score = k5s.length ? Math.round(k5s.reduce((a,b)=>a+b,0)/k5s.length) : 0;
+      const ltArr  = recs.filter(r => r.leadtime17 > 0).map(r => r.leadtime17);
+      const ltAvg  = ltArr.length ? Math.round(ltArr.reduce((a,b)=>a+b,0)/ltArr.length*10)/10 : 0;
+      const k1=Math.round(k1cnt/n*100), k2=Math.round(k2cnt/n*100), k3=100, k4=Math.round(k4cnt/n*100);
+      const kpiTotal=Math.round(k1*0.3+k2*0.25+k3*0.15+k4*0.2+k5Score*0.1);
+      return {week:w.week, n, k1, k2, k3, k4, k5:ltAvg, k5Score, kpiTotal};
+    });
+}
+
+// ── COMPUTE KPI BY MONTH ────────────────────────────────────────
+function computeKPIByMonth(records) {
+  const mMap = {};
+  records.forEach(r => {
+    const d = (r.ngayYeuCau && !isNaN(r.ngayYeuCau)) ? r.ngayYeuCau : null;
+    if (!d) return;
+    const yr  = d.getFullYear();
+    const mo  = d.getMonth() + 1;
+    const key = `T${mo}/${yr}`;
+    if (!mMap[key]) mMap[key] = {key, ts: new Date(yr, mo-1, 1).getTime(), label:`T${mo}`, recs:[]};
+    mMap[key].recs.push(r);
+  });
+  return Object.values(mMap)
+    .sort((a,b) => a.ts - b.ts)
+    .map(m => {
+      const recs = m.recs, n = recs.length || 1;
+      const k1cnt  = recs.filter(recK1).length;
+      const k2cnt  = recs.filter(recK2).length;
+      const k4cnt  = recs.filter(recK4).length;
+      const k5s    = recs.map(r => calcK5Score(r.leadtime17)).filter(v => v !== null);
+      const k5Score = k5s.length ? Math.round(k5s.reduce((a,b)=>a+b,0)/k5s.length) : 0;
+      const k1=Math.round(k1cnt/n*100), k2=Math.round(k2cnt/n*100), k3=100, k4=Math.round(k4cnt/n*100);
+      const kpiTotal=Math.round(k1*0.3+k2*0.25+k3*0.15+k4*0.2+k5Score*0.1);
+      return {key:m.key, label:m.label, n, k1, k2, k3, k4, k5Score, kpiTotal};
+    });
 }
 
 // ── COMPUTE BC TOMTAT ──────────────────────────────────────────
@@ -965,7 +1043,9 @@ async function loadData() {
 
     const stats = computeStats(records);
     const {groupKPI, kpiByPIC} = computeKPI(records);
-    const bcTomtat = computeBCTomtat(records);
+    const kpiByWeek  = computeKPIByWeek(records);
+    const kpiByMonth = computeKPIByMonth(records);
+    const bcTomtat   = computeBCTomtat(records);
 
     const alerts = records
       .filter(r=>r.level!=='ok')
@@ -975,7 +1055,7 @@ async function loadData() {
         actionSuggest: aiMap[r.soYQ]?.actionSuggest||'Liên hệ PIC cập nhật tiến độ',
       }));
 
-    DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, bcTomtat, alerts, project};
+    DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project};
     renderAll();
     document.getElementById('last-upd').textContent = 'Cập nhật: ' + new Date().toLocaleString('vi-VN');
   } catch(e) {
@@ -1559,26 +1639,161 @@ function initCharts() {
       scales:{r:{min:0,max:105,ticks:{font:{size:8},stepSize:25,backdropColor:'transparent'},pointLabels:{font:{size:9}}}}}
   });
 
-  charts.kpiTrend=new Chart(document.getElementById('c-kpi-trend'),{type:'line',
-    data:{labels:['T1','T2','T3','T4','T5'],datasets:[
-      {label:'Pass lần đầu',data:[null,null,null,null,kpi.k1||null],borderColor:GREEN,borderWidth:2,tension:0.3,pointRadius:4,spanGaps:true,pointBackgroundColor:GREEN},
-      {label:'Đúng hạn',    data:[null,null,null,null,kpi.k2||null],borderColor:RED,  borderWidth:2,tension:0.3,pointRadius:4,spanGaps:true,borderDash:[5,3],pointBackgroundColor:RED},
-      {label:'KPI tổng',    data:[null,null,null,null,kpi.kpiTotal||null],borderColor:NAVY,borderWidth:2,tension:0.3,pointRadius:4,spanGaps:true,pointBackgroundColor:NAVY},
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}}},
-      scales:{y:{min:0,max:110,ticks:{font:{size:9},callback:v=>v+'%'}},x:{ticks:{font:{size:9}}}}}
-  });
+  // ── Chart KPI tổng theo tháng — bar + trendline ──
+  {
+    const mbData = DATA.kpiByMonth || [];
+    const mbEl   = document.getElementById('c-kpi-trend');
+    if (mbEl && mbData.length) {
+      const mbLabels = mbData.map(m => m.label);
+      const mbVals   = mbData.map(m => m.kpiTotal);
+      const mbColors = mbVals.map(v => v>=85?GREEN+'CC':v>=70?GOLD+'CC':RED+'CC');
+      charts.kpiTrend = new Chart(mbEl, {
+        type: 'bar',
+        data: {
+          labels: mbLabels,
+          datasets: [
+            {
+              label: 'KPI tổng nhóm (%)',
+              data:   mbVals,
+              backgroundColor: mbColors,
+              borderColor:     mbColors.map(c=>c.replace('CC','')),
+              borderWidth: 1,
+              borderRadius: 5,
+              barPercentage: 0.6,
+              order: 2,
+            },
+            {
+              label: 'Trendline',
+              data:  linReg(mbVals),
+              type:  'line',
+              borderColor: NAVY,
+              borderWidth: 2,
+              borderDash: [5,4],
+              pointRadius: 0,
+              fill: false,
+              tension: 0.3,
+              order: 1,
+              _noLabel: true,
+            },
+          ],
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font:{size:9}, boxWidth:10, padding:5,
+                filter: (item, data) => !data.datasets[item.datasetIndex]._noLabel,
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.dataset._noLabel ? null : `KPI tổng: ${ctx.raw}%`,
+                afterLabel: ctx => {
+                  if (ctx.dataset._noLabel) return null;
+                  const m = mbData[ctx.dataIndex];
+                  return m ? [`K1: ${m.k1}%  K2: ${m.k2}%  K4: ${m.k4}%  K5: ${m.k5Score}%`, `(${m.n} YQ)`] : [];
+                },
+              },
+            },
+          },
+          scales: {
+            x: {ticks:{font:{size:9}}, grid:{display:false}},
+            y: {
+              min:0, max:110,
+              ticks:{font:{size:9}, callback:v=>v+'%'},
+              grid:{color:'#F0EEE8'},
+            },
+          },
+        },
+        plugins: [barLabels],
+      });
+    } else if (mbEl) {
+      const ctx=mbEl.getContext('2d');
+      const {width,height}=mbEl.getBoundingClientRect();
+      mbEl.width=width||400; mbEl.height=height||260;
+      ctx.font='13px Segoe UI'; ctx.fillStyle='#aaa'; ctx.textAlign='center';
+      ctx.fillText('Chưa có dữ liệu theo tháng', mbEl.width/2, (mbEl.height||260)/2);
+    }
+  }
 
-  const wkL=['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T15','T16','T17','T18','T19'];
-  charts.kpiWeekly=new Chart(document.getElementById('c-kpi-weekly'),{type:'bar',
-    data:{labels:wkL,datasets:KPI_DEFS.map((kd,i)=>({
-      label:'KPI'+kd.id+': '+kd.name,
-      data:wkL.map((_,wi)=>wi===18?(kpi[kd.key]||null):null),
-      backgroundColor:[GREEN,RED,NAVY,GOLD,'#9C27B0'][i]+'CC',borderRadius:3,barPercentage:0.75
-    }))},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{ticks:{font:{size:8},maxRotation:0}},y:{min:0,max:110,ticks:{font:{size:9},callback:v=>v+'%'}}}}
-  });
+  // ── Chart KPI theo tuần — tính thực tế từng tuần ──
+  const wkByW = DATA.kpiByWeek || [];
+  const wkCntEl = document.getElementById('kpi-week-count');
+  if (wkCntEl) wkCntEl.textContent = wkByW.length ? `${wkByW.length} tuần có dữ liệu` : '';
+  const wkElW = document.getElementById('c-kpi-weekly');
+  if (wkElW) {
+    if (!wkByW.length) {
+      const ctx2 = wkElW.getContext('2d');
+      const {width,height} = wkElW.getBoundingClientRect();
+      wkElW.width=width||600; wkElW.height=height||280;
+      ctx2.font='13px Segoe UI,Arial'; ctx2.fillStyle='#aaa'; ctx2.textAlign='center';
+      ctx2.fillText('Chưa có đủ dữ liệu theo tuần',wkElW.width/2,(wkElW.height||280)/2);
+    } else {
+      const wkLabels  = wkByW.map(w => w.week);
+      const KC  = [GREEN, RED, NAVY, GOLD, '#9C27B0'];
+      const KNM = ['Pass lần đầu','Đúng hạn','Hồ sơ','Không tái lỗi','Lead time'];
+      const KKEY = ['k1','k2','k3','k4','k5Score'];
+      const barDS = KKEY.map((key,i) => ({
+        type: 'bar',
+        label: `KPI${i+1}: ${KNM[i]}`,
+        data: wkByW.map(w => w[key]),
+        backgroundColor: KC[i]+'99',
+        borderColor: KC[i],
+        borderWidth: 1,
+        borderRadius: 3,
+        barPercentage: 0.72,
+        categoryPercentage: 0.9,
+        order: 2,
+      }));
+      const trendDS = KKEY.map((key,i) => ({
+        type: 'line',
+        label: `_trend_${i}`,
+        data: linReg(wkByW.map(w => w[key])),
+        borderColor: KC[i],
+        borderWidth: 2,
+        borderDash: [5,3],
+        pointRadius: 0,
+        fill: false,
+        tension: 0.3,
+        order: 1,
+        _noLabel: true,
+      }));
+      charts.kpiWeekly = new Chart(wkElW, {
+        type: 'bar',
+        data: {labels: wkLabels, datasets: [...barDS, ...trendDS]},
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: {size: 9}, boxWidth: 10, padding: 6,
+                filter: (item, data) => !data.datasets[item.datasetIndex]._noLabel,
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ctx.dataset._noLabel ? null : `${ctx.dataset.label}: ${ctx.raw}%`,
+                afterBody: (items) => {
+                  const wi = items[0]?.dataIndex;
+                  if (wi === undefined) return [];
+                  const w = wkByW[wi];
+                  return w ? [`(${w.n} mẫu — KPI tổng: ${w.kpiTotal}%)`] : [];
+                },
+              },
+            },
+          },
+          scales: {
+            x: {ticks: {font:{size:8}, maxRotation:45, minRotation:30}},
+            y: {min:0, max:110, ticks:{font:{size:9}, callback: v=>v+'%'},
+              grid: {color:'#F0EEE8'}},
+          },
+        },
+      });
+    }
+  }
 
   const picNames=Object.values((()=>{const m={};(DATA.records||[]).forEach(r=>{if(!m[r.pic])m[r.pic]={pic:r.pic,red:0,orange:0,ok:0};m[r.pic][r.level==='red'?'red':r.level==='orange'?'orange':'ok']++;});return m;})());
   charts.alertPic=new Chart(document.getElementById('c-alert-pic'),{type:'bar',
