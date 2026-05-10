@@ -645,12 +645,29 @@ function weekKey(d) {
   return `W${String(getWeek(d)).padStart(2,'0')}/${yr}`;
 }
 
+// Chuẩn hóa chuỗi tiếng Việt để so sánh
+function vnStr(s) {
+  return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').trim();
+}
+// Danh sách trạng thái pass (ĐK2)
+const PASS_STATUS = [
+  'da duyet mau',
+  'ok, khach hang da duyet',
+  'ok, cong ty tu duyet',
+  'ok, khong can lam mau',
+];
+function isPassStatus(ts) {
+  const n = vnStr(ts);
+  return PASS_STATUS.some(p => n === p || n.includes(p) || p.includes(n));
+}
+
 function computeStats(records) {
   const s = {
     total: records.length, red:0, orange:0, green:0, ok:0, escalate:0,
     byKH:[], byFactory:{GS1:0,GS5:0,GS6:0}, byWeek:[],
     lt18Sum:0, lt18Count:0, lt17Sum:0, lt17Count:0,
     gtLamMauSum:0, gtDHSum:0,
+    pass1st:0, pass1stRate:0,   // Mẫu pass lần đầu (đủ 3 ĐK)
   };
   const khMap = {}, weekMap = {};
 
@@ -681,6 +698,15 @@ function computeStats(records) {
     s.gtLamMauSum += r.gtLamMau || 0;
     s.gtDHSum     += r.gtDH     || 0;
 
+    // Mẫu pass lần đầu — đủ 3 điều kiện:
+    // ĐK1: Lần làm mẫu thứ = 1
+    // ĐK2: Tình trạng mẫu là một trong các trạng thái pass
+    // ĐK3: Ngày bàn giao mẫu (7) có giá trị xác định
+    const dk1 = r.lanThu === 1;
+    const dk2 = isPassStatus(r.tinhTrang);
+    const dk3 = r.ngayBanGiao !== null && r.ngayBanGiao !== undefined && !isNaN(r.ngayBanGiao);
+    if (dk1 && dk2 && dk3) s.pass1st++;
+
     // Weekly — đếm theo từng cột ngày riêng
     if (r.ngayYeuCau  && !isNaN(r.ngayYeuCau))  addWeek(r.ngayYeuCau,  'newCount');
     if (r.ngayBanGiao && !isNaN(r.ngayBanGiao)) addWeek(r.ngayBanGiao, 'banGiao');
@@ -690,6 +716,8 @@ function computeStats(records) {
   s.lt18Avg = s.lt18Count ? Math.round(s.lt18Sum / s.lt18Count * 10) / 10 : 0;
   s.lt17Avg = s.lt17Count ? Math.round(s.lt17Sum / s.lt17Count * 10) / 10 : 0;
   s.byWeek  = Object.values(weekMap).sort((a,b) => a.week.localeCompare(b.week));
+  // Tỷ lệ pass lần đầu (tính trên tổng mẫu)
+  s.pass1stRate = s.total > 0 ? Math.round(s.pass1st / s.total * 100) : 0;
   return s;
 }
 
@@ -885,6 +913,7 @@ function renderMetrics() {
   document.getElementById('metric-cards').innerHTML=[
     {label:'Tổng YQ mẫu',        val:s.total,                          sub:`Cập nhật ${new Date().toLocaleDateString('vi-VN')}`,  badge:'',bc:''},
     {label:'Cảnh báo đỏ',        val:s.red,                            sub:'Cần xử lý ngay',         badge:(s.escalate||0)+' Escalation',bc:'b-red'},
+    {label:'MẪU PASS LẦN ĐẦU',  val:s.pass1st,                        sub:'ĐK1: Lần thứ 1 | ĐK2: Đã duyệt | ĐK3: Có ngày BG', badge:s.pass1stRate+'% tổng YQ', bc: s.pass1stRate>=80?'b-green':s.pass1stRate>=60?'b-orange':'b-red'},
     {label:'LEADTIME TB',         val:(s.lt18Avg||0)+' ngày',           sub:'Cột (18) = BG − YC (1)', badge:s.lt18Avg<=3?'✓ Đạt ≤3 ngày':s.lt18Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt18Avg<=3?'b-green':s.lt18Avg<=5?'b-orange':'b-red'},
     {label:'LEADTIME TB ĐỦ ĐK',  val:(s.lt17Avg||0)+' ngày',           sub:'Cột (17) = BG − Duyệt (4)',badge:s.lt17Avg<=3?'✓ Đạt ≤3 ngày':s.lt17Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt17Avg<=3?'b-green':s.lt17Avg<=5?'b-orange':'b-red'},
     {label:'GIÁ TRỊ LÀM MẪU',   val:fmtBil(s.gtLamMauSum),            sub:'Tổng "Giá trị làm mẫu dự kiến"',badge:'',bc:''},
