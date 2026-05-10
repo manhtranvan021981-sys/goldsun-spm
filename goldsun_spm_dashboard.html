@@ -8,7 +8,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--red:#C8372D;--green:#1B6B3A;--navy:#1A2B4A;--gold:#C8952A;--orange:#D97706;--gray:#5F5E5A}
-body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;overflow-x:hidden}
 .topbar{background:var(--green);padding:0 16px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
 .logo{display:flex;align-items:center;gap:10px;padding:10px 16px 10px 0;border-right:1px solid rgba(255,255,255,0.2)}
 .logo-badge{width:34px;height:34px;border-radius:8px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff}
@@ -113,6 +113,86 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
 .stitle{font-size:12px;font-weight:600;color:#1A1A1A}
 .sdesc{font-size:11px;color:var(--gray);margin-top:2px;line-height:1.6}
 .cblock{font-family:monospace;font-size:10px;background:#1A1A1A;color:#7CFC00;border-radius:8px;padding:8px 12px;margin-top:6px;white-space:pre;overflow-x:auto}
+
+/* ── RESPONSIVE BREAKPOINTS ── */
+/* Tablet rộng ≤1400px */
+@media (max-width:1400px){
+  .g7{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .g6{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .mc-val{font-size:20px}
+}
+/* Tablet ≤1024px */
+@media (max-width:1024px){
+  .g7{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .g6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .content{padding:10px}
+  .mc{padding:9px 10px}
+  .mc-val{font-size:18px}
+  .logo-text,.logo-sub{display:none}
+  .topbar-right .last-upd{display:none}
+  .nm-flex{flex-direction:column!important}
+  .nm-flex > div:first-child{flex:unset!important}
+  .nm-flex table{min-width:unset!important;width:100%!important}
+  .status-flex{flex-direction:column!important}
+  .status-flex > div{min-width:unset!important}
+  .bct-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .bct{min-width:560px}
+}
+/* Tablet nhỏ ≤768px */
+@media (max-width:768px){
+  .g7{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .g6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+  .content{padding:8px}
+  .panel{padding:10px}
+  .mc{padding:8px 9px}
+  .mc-val{font-size:16px}
+  .mc-label{font-size:8px}
+  .nav-item{padding:12px 10px;font-size:11px}
+  .period-sel{display:none}
+  .alert-strip{gap:6px}
+  .a-chip{padding:6px 12px;font-size:11px}
+  .bct-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .bct{min-width:520px}
+}
+/* Mobile ≤480px */
+@media (max-width:480px){
+  .g7{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  .g6{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3{grid-template-columns:1fr}
+  .g2{grid-template-columns:1fr}
+  .content{padding:6px}
+  .panel{padding:8px;border-radius:10px}
+  .mc{padding:7px 8px;border-radius:10px}
+  .mc-val{font-size:15px}
+  .mc-label{font-size:8px;letter-spacing:0}
+  .badge{font-size:9px;padding:2px 6px}
+  .topbar{padding:0 8px}
+  .logo{padding:8px 10px 8px 0}
+  .logo-badge{width:28px;height:28px;font-size:11px}
+  .nav-item{padding:10px 8px;font-size:10px;gap:3px}
+  .sync-btn span:not(:first-child){display:none}
+  .ph{flex-wrap:wrap;gap:6px}
+  .pt{font-size:12px}
+  .dt th,.dt td{padding:5px 6px;font-size:10px}
+  .bct-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .bct{min-width:480px}
+  .bct th,.bct td{padding:5px 6px;font-size:10px}
+  .ai-txt{font-size:11px}
+  .cw canvas{max-height:200px}
+}
+/* Mobile nhỏ ≤360px */
+@media (max-width:360px){
+  .g7{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+  .mc-val{font-size:13px}
+  .nav-item{padding:8px 6px;font-size:10px}
+  .content{padding:4px}
+}
 </style>
 </head>
 <body>
@@ -169,9 +249,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>YQ mẫu theo tuần</div></div><div class="cw" style="height:180px"><canvas id="c-weekly"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Tình trạng mẫu</div></div>
-      <div style="display:flex;gap:10px;align-items:flex-start">
-        <div style="flex:1;min-width:0"><div class="cw" style="height:180px"><canvas id="c-status"></canvas></div></div>
-        <div style="width:200px;max-height:190px;overflow-y:auto" id="status-table"></div>
+      <div class="status-flex" style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px"><div class="cw" style="height:180px"><canvas id="c-status"></canvas></div></div>
+        <div style="width:200px;max-width:100%;max-height:190px;overflow-y:auto" id="status-table"></div>
       </div>
     </div>
   </div>
@@ -182,9 +262,9 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
   <!-- Leadtime theo Dòng hàng -->
   <div class="panel" style="margin-bottom:12px">
     <div class="ph"><div class="pt"><span class="pt-icon">📈</span>Leadtime TB & Tỷ lệ làm lại theo Dòng hàng</div></div>
-    <div style="display:flex;gap:10px;align-items:flex-start">
-      <div style="flex:1;min-width:0"><div class="cw" style="height:200px"><canvas id="c-lt-donghang"></canvas></div></div>
-      <div style="width:220px">
+    <div class="status-flex" style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px"><div class="cw" style="height:200px"><canvas id="c-lt-donghang"></canvas></div></div>
+      <div style="width:220px;max-width:100%;overflow-x:auto">
         <table class="dt" style="font-size:10px" id="lt-donghang-table">
           <thead><tr><th>Dòng hàng</th><th>LT TB</th><th>Tỷ lệ lại</th></tr></thead>
           <tbody id="lt-donghang-tbody"></tbody>
@@ -195,10 +275,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
   <!-- Bảng tổng hợp Nhà máy + biểu đồ -->
   <div class="panel" style="margin-bottom:12px">
     <div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Tổng hợp theo Nhà máy</div></div>
-    <div style="display:flex;gap:16px;align-items:flex-start">
+    <div class="nm-flex" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
       <!-- Bảng compact -->
-      <div style="flex:0 0 auto">
-        <table style="border-collapse:collapse;font-size:11px;min-width:340px">
+      <div style="flex:0 0 auto;overflow-x:auto;max-width:100%">
+        <table style="border-collapse:collapse;font-size:11px;min-width:300px;max-width:100%">
           <thead>
             <tr style="background:#F3F2EF">
               <th style="padding:6px 10px;text-align:left;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Nhà máy</th>
