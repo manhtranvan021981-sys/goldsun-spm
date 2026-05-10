@@ -45,10 +45,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:12px}
-.mc{background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
-.mc-label{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.mc-val{font-size:26px;font-weight:600;color:#1A1A1A;line-height:1}
-.mc-sub{font-size:10px;color:var(--gray);margin-top:4px}
+.g7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.mc{background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.mc-label{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:4px}
+.mc-val{font-size:22px;font-weight:600;color:#1A1A1A;line-height:1}
+.mc-sub{font-size:9px;color:var(--gray);margin-top:4px}
 .badge{display:inline-block;font-size:10px;padding:3px 8px;border-radius:10px;margin-top:5px;font-weight:600}
 .b-red{background:#FDF0EF;color:var(--red)}.b-green{background:#EAF5EE;color:var(--green)}
 .b-orange{background:#FEF3E2;color:var(--orange)}.b-gold{background:#FDF6E8;color:#7A5510}
@@ -157,7 +158,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
     <div class="a-chip green" onclick="goTab('ai',3)">🟢 <span id="c-green">--</span> Theo dõi 3–5 ngày</div>
     <div class="a-chip blue" onclick="goTab('progress',1)">✅ <span id="c-ok">--</span> Đúng/Trước hạn</div>
   </div>
-  <div class="g6" id="metric-cards"></div>
+  <div class="g7" id="metric-cards"></div>
   <div class="ai-box">
     <div class="ai-hd">
       <div class="ai-lbl">🤖 AI Tóm tắt tình hình — <span id="ai-date">--</span></div>
@@ -167,11 +168,37 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px}
   </div>
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>YQ mẫu theo tuần</div></div><div class="cw" style="height:180px"><canvas id="c-weekly"></canvas></div></div>
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🍩</span>Tình trạng mẫu</div></div><div class="cw" style="height:180px"><canvas id="c-status"></canvas></div></div>
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Tình trạng mẫu</div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="flex:1;min-width:0"><div class="cw" style="height:180px"><canvas id="c-status"></canvas></div></div>
+        <div style="width:200px;max-height:190px;overflow-y:auto" id="status-table"></div>
+      </div>
+    </div>
   </div>
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📉</span>Pipeline YC → OK</div></div><div id="fn-pipeline"></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Phân bổ nhà máy GS1/GS5/GS6</div></div><div class="cw" style="height:160px"><canvas id="c-factory"></canvas></div></div>
+  </div>
+  <!-- Leadtime theo Dòng hàng -->
+  <div class="panel" style="margin-bottom:12px">
+    <div class="ph"><div class="pt"><span class="pt-icon">📈</span>Leadtime TB & Tỷ lệ làm lại theo Dòng hàng</div></div>
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="flex:1;min-width:0"><div class="cw" style="height:200px"><canvas id="c-lt-donghang"></canvas></div></div>
+      <div style="width:220px">
+        <table class="dt" style="font-size:10px" id="lt-donghang-table">
+          <thead><tr><th>Dòng hàng</th><th>LT TB</th><th>Tỷ lệ lại</th></tr></thead>
+          <tbody id="lt-donghang-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Bảng tổng hợp Nhà máy -->
+  <div class="panel" style="margin-bottom:12px">
+    <div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Tổng hợp theo Nhà máy</div></div>
+    <table class="dt" style="font-size:11px;width:100%" id="nhamay-detail-table">
+      <thead><tr><th>Nhà máy</th><th>Số mẫu</th><th>Tỷ lệ làm lại</th><th>Leadtime TB</th></tr></thead>
+      <tbody id="nhamay-detail-tbody"></tbody>
+    </table>
   </div>
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">⚠</span>Mẫu cần chú ý</div><div class="pa" onclick="goTab('progress',1)">Tất cả →</div></div>
@@ -498,6 +525,7 @@ function parseDataNPI(table) {
     leadtime17: F('so ngay hoan thanh mau thuc te (17)','so ngay hoan thanh mau thuc te','(17) = (7) - (4)','(17)'),
     gtLamMau:   F('gia tri lam mau du kien','gia tri lam mau','gt lam mau'),
     gtDH:       F('gia tri don hang du kien','gia tri don hang du kien','gia tri don hang','gt don hang'),
+    maDongHang: F('ma dong hang','dong hang','product line','product code','ma dong','ma sp','product'),
     // Ngày — dùng đúng cột (1) và (7)
     ngayYeuCau: F('ngay yeu cau (1)','ngay yeu cau','ngay nhan yc','ngay nhan','ngay tiep nhan'),
     ngayBanGiao:F('ngay ban giao mau (7)','ngay ban giao mau','ngay ban giao','ngay bg mau','ngay bg'),
@@ -555,6 +583,7 @@ function parseDataNPI(table) {
       leadtime17: lt17Raw > 0 ? lt17Raw : null,
       gtLamMau:   parseVNNum(get(C.gtLamMau)),
       gtDH:       parseVNNum(get(C.gtDH)),
+      maDongHang: String(get(C.maDongHang)||''),
       level:      level,
       daysFromDeadline: daysFL||0,
       escalate:   level==='red' && (daysFL||0) >= 3,
@@ -665,11 +694,13 @@ function computeStats(records) {
   const s = {
     total: records.length, red:0, orange:0, green:0, ok:0, escalate:0,
     byKH:[], byFactory:{GS1:0,GS5:0,GS6:0}, byWeek:[],
+    byDongHang:[], byNhaMayDetail:[],
     lt18Sum:0, lt18Count:0, lt17Sum:0, lt17Count:0,
     gtLamMauSum:0, gtDHSum:0,
     pass1st:0, pass1stRate:0,   // Mẫu pass lần đầu (đủ 3 ĐK)
   };
   const khMap = {}, weekMap = {};
+  const dhMap = {}, nmDetailMap = {};
 
   const addWeek = (d, field) => {
     const wy = weekKey(d);
@@ -684,6 +715,20 @@ function computeStats(records) {
     else if (r.level==='green') s.green++;
     else s.ok++;
     if (r.escalate) s.escalate++;
+
+    // By Dòng hàng
+    const dh = (r.maDongHang||'').trim() || 'Chưa xác định';
+    if (!dhMap[dh]) dhMap[dh] = {maDH:dh, total:0, lt18Sum:0, lt18Count:0, laiMau:0};
+    dhMap[dh].total++;
+    if (r.leadtime18 > 0) { dhMap[dh].lt18Sum += r.leadtime18; dhMap[dh].lt18Count++; }
+    if ((r.lanThu||1) > 1) dhMap[dh].laiMau++;
+
+    // By Nhà máy chi tiết
+    const nmKey = r.nhaMay || 'Khác';
+    if (!nmDetailMap[nmKey]) nmDetailMap[nmKey] = {nm:nmKey, total:0, lt18Sum:0, lt18Count:0, laiMau:0};
+    nmDetailMap[nmKey].total++;
+    if (r.leadtime18 > 0) { nmDetailMap[nmKey].lt18Sum += r.leadtime18; nmDetailMap[nmKey].lt18Count++; }
+    if ((r.lanThu||1) > 1) nmDetailMap[nmKey].laiMau++;
 
     const nm = r.nhaMay;
     if (nm==='GS1'||nm==='GS5'||nm==='GS6') s.byFactory[nm]++;
@@ -718,6 +763,16 @@ function computeStats(records) {
   s.byWeek  = Object.values(weekMap).sort((a,b) => a.week.localeCompare(b.week));
   // Tỷ lệ pass lần đầu (tính trên tổng mẫu)
   s.pass1stRate = s.total > 0 ? Math.round(s.pass1st / s.total * 100) : 0;
+  s.byDongHang = Object.values(dhMap).map(d=>({
+    ...d,
+    lt18Avg: d.lt18Count>0 ? Math.round(d.lt18Sum/d.lt18Count*100)/100 : 0,
+    laiMauRate: d.total>0 ? Math.round(d.laiMau/d.total*1000)/10 : 0,
+  })).sort((a,b)=>b.total-a.total);
+  s.byNhaMayDetail = Object.values(nmDetailMap).map(n=>({
+    ...n,
+    lt18Avg: n.lt18Count>0 ? Math.round(n.lt18Sum/n.lt18Count*100)/100 : 0,
+    laiMauRate: n.total>0 ? Math.round(n.laiMau/n.total*1000)/10 : 0,
+  })).sort((a,b)=>b.total-a.total);
   return s;
 }
 
@@ -1280,13 +1335,26 @@ function initCharts() {
   }
 
   const stMap={};
-  r.forEach(rec=>{stMap[rec.tinhTrang]=(stMap[rec.tinhTrang]||0)+1;});
-  charts.status=new Chart(document.getElementById('c-status'),{type:'doughnut',
-    data:{labels:Object.keys(stMap),datasets:[{data:Object.values(stMap),backgroundColor:[GOLD,GREEN,RED,NAVY+'BB','#9C27B0'],borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
-      plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed}`}}}}
+  r.forEach(rec=>{const ts=(rec.tinhTrang||'Chưa xác định').trim(); stMap[ts]=(stMap[ts]||0)+1;});
+  const stEntries=Object.entries(stMap).sort((a,b)=>b[1]-a[1]);
+  const stTotal=r.length||1;
+  const stColors=[NAVY+'CC',GOLD+'CC',GREEN+'CC',RED+'CC','#9C27B0CC','#607D8BCC','#FF7043CC'];
+  charts.status=new Chart(document.getElementById('c-status'),{type:'bar',
+    data:{labels:stEntries.map(e=>e[0]),datasets:[{data:stEntries.map(e=>e[1]),
+      backgroundColor:stEntries.map((_,i)=>stColors[i%stColors.length]),borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`${ctx.raw} mẫu (${(ctx.raw/stTotal*100).toFixed(1)}%)`}}},
+      scales:{x:{beginAtZero:true,ticks:{font:{size:9}}},y:{ticks:{font:{size:9},maxRotation:0}}}},
+    plugins:[barLabels]
   });
+  // Bảng Tình trạng
+  if(document.getElementById('status-table')) {
+    document.getElementById('status-table').innerHTML=`<table class="dt" style="font-size:10px;width:100%">
+      <thead><tr><th style="text-align:left">Tình trạng</th><th>SL</th><th>%</th></tr></thead>
+      <tbody>${stEntries.map(([ts,cnt])=>`<tr><td style="font-size:10px">${ts}</td><td style="text-align:right">${cnt}</td><td style="text-align:right">${(cnt/stTotal*100).toFixed(1)}%</td></tr>`).join('')}</tbody>
+    </table>`;
+  }
 
   const fac=s.byFactory||{};
   charts.factory=new Chart(document.getElementById('c-factory'),{type:'bar',
@@ -1295,6 +1363,45 @@ function initCharts() {
       scales:{y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1}},x:{ticks:{font:{size:9}}}}},
     plugins:[barLabels]
   });
+
+  // ── Chart Leadtime TB theo Dòng hàng ──
+  const dhData=(s.byDongHang||[]).slice(0,12);
+  if(document.getElementById('c-lt-donghang') && dhData.length) {
+    charts.ltDongHang=new Chart(document.getElementById('c-lt-donghang'),{type:'bar',
+      data:{labels:dhData.map(d=>d.maDH),datasets:[
+        {label:'LT TB (ngày)',data:dhData.map(d=>d.lt18Avg),backgroundColor:NAVY+'CC',borderRadius:4,yAxisID:'y'},
+        {label:'% Làm lại',data:dhData.map(d=>d.laiMauRate),type:'line',borderColor:RED,backgroundColor:RED+'22',pointRadius:4,pointBackgroundColor:RED,fill:false,yAxisID:'y1',_noLabel:true},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}}},
+        scales:{
+          y:{beginAtZero:true,ticks:{font:{size:9}},title:{display:true,text:'Ngày',font:{size:8}}},
+          y1:{beginAtZero:true,max:100,position:'right',grid:{drawOnChartArea:false},ticks:{font:{size:9},callback:v=>v+'%'}},
+          x:{ticks:{font:{size:9}}},
+        }},
+      plugins:[barLabels]
+    });
+    // Bảng Dòng hàng
+    const tb=document.getElementById('lt-donghang-tbody');
+    if(tb) tb.innerHTML=dhData.map(d=>`<tr>
+      <td style="font-weight:600">${d.maDH}</td>
+      <td style="text-align:right">${d.lt18Avg>0?d.lt18Avg+' ng':'--'}</td>
+      <td style="text-align:right;color:${d.laiMauRate>20?'var(--red)':d.laiMauRate>10?'var(--orange)':'var(--green)'}">${d.laiMauRate}%</td>
+    </tr>`).join('');
+  }
+
+  // ── Bảng Nhà máy chi tiết ──
+  const nmData=s.byNhaMayDetail||[];
+  const nmTb=document.getElementById('nhamay-detail-tbody');
+  if(nmTb) nmTb.innerHTML=nmData.map(n=>{
+    const ltDisplay = n.lt18Count<3 ? `<span style="color:var(--orange);font-size:10px">⚠ Ít dữ liệu (${n.lt18Count})</span>` : n.lt18Avg+' ngày';
+    return `<tr>
+      <td style="font-weight:600">${n.nm}</td>
+      <td style="text-align:right">${n.total}</td>
+      <td style="text-align:right;color:${n.laiMauRate>15?'var(--red)':n.laiMauRate>8?'var(--orange)':'var(--green)'}">${n.laiMauRate}%</td>
+      <td style="text-align:right">${ltDisplay}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--gray)">Chưa có dữ liệu</td></tr>';
 
   const bc=DATA.bcTomtat||[];
   charts.bctDoughnut=new Chart(document.getElementById('c-bct-doughnut'),{type:'doughnut',
