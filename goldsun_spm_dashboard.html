@@ -404,7 +404,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   <!-- Hàng 2: Cảnh báo tiến độ + Cảnh báo công việc -->
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">⚠</span>Cảnh báo tiến độ</div></div><div class="cw" style="height:200px"><canvas id="c-proj-tiendo"></canvas></div></div>
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🔔</span>Cảnh báo công việc</div></div><div class="cw" style="height:200px"><canvas id="c-proj-cviec"></canvas></div></div>
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🔔</span>Cảnh báo công việc</div></div><div class="cw" style="height:200px;overflow-y:auto"><div id="proj-cviec-gauges" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:12px;padding:8px 4px"></div></div></div>
   </div>
   <!-- Hàng 3: Số việc theo nhân viên -->
   <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">👤</span>Số việc giao theo nhân viên (Pic triển khai)</div></div><div class="cw" style="height:200px"><canvas id="c-proj-pic"></canvas></div></div>
@@ -414,7 +414,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     <div class="ai-txt" id="proj-ai-txt">Đang phân tích...</div>
   </div>
   <div id="proj-alert-list" style="display:none"></div>
-  <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">💼</span>Danh sách công việc</div></div><div id="proj-list"></div></div>
+  <div class="panel">
+    <div class="ph" style="flex-wrap:wrap;gap:8px;align-items:center">
+      <div class="pt"><span class="pt-icon">💼</span>Danh sách công việc</div>
+      <input id="proj-search" type="text" placeholder="🔍 Tìm tên dự án, nội dung, PIC..." oninput="filterProjList(this.value)"
+        style="border:1px solid #E0DED9;border-radius:20px;padding:5px 14px;font-size:12px;outline:none;flex:1;min-width:180px;max-width:320px;background:#FAF9F7;color:#1A1A1A">
+    </div>
+    <div id="proj-list"></div>
+  </div>
 </div>
 
 <!-- TAB CÀI ĐẶT -->
@@ -470,6 +477,17 @@ let DATA = {
   stats:{total:0,red:0,orange:0,green:0,ok:0,escalate:0,byKH:[],byFactory:{GS1:0,GS5:0,GS6:0},byWeek:[]},
   records:[], alerts:[], kpiGroup:{k1:0,k2:0,k3:100,k4:0,k5:0,k5Score:0,kpiTotal:0},
   kpiByPIC:[], kpiByWeek:[], kpiByMonth:[], bcTomtat:[], project:[], ai5Data:null
+};
+let projSorted = [];
+// 0=đỏ, 1=vàng, 2=xanh/bình thường, 3=hoàn thành
+const warnRank = p => {
+  const t = (p.trangThai||'').toLowerCase();
+  if(t.includes('hoan')||t.includes('xong')||t.includes('done')||t.includes('complete')) return 3;
+  const v = ((p.canhBaoTienDo||'')+'|'+(p.canhBaoCViec||'')).toLowerCase()
+              .normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+  if(v.includes('do')||v.includes('qua han')) return 0;
+  if(v.includes('vang')||v.includes('chu y')) return 1;
+  return 2;
 };
 let charts = {};
 
@@ -1556,26 +1574,52 @@ function renderProjectTab() {
     ${late.slice(0,5).map(p=>`• <strong>${p.duAn}</strong> (PIC: ${p.picTrienKhai||'--'}): ${p.noiDung} — Target ${p.targetKT||'--'}`).join('<br>')}
     ${late.length>0?'<br><br><strong style="color:var(--green)">✅ Đề xuất:</strong><br>• Họp review tiến độ trong 24h<br>• Phân bổ nguồn lực nếu PIC quá tải':''}`;
 
-  document.getElementById('proj-list').innerHTML=proj.map(p=>{
-    const tl=(p.trangThai||'').toLowerCase();
-    const cls=tl.includes('qu')||tl.includes('tre')?'late':tl.includes('hoan')||tl.includes('xong')||tl.includes('done')?'done':'doing';
-    const cbTD=p.canhBaoTienDo, cbCV=p.canhBaoCViec;
-    return `<div class="proj-card ${cls}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-        <div style="font-size:13px;font-weight:600">${p.duAn}
-          ${p.mucDoUuTien?`<span style="font-size:9px;padding:2px 6px;border-radius:8px;background:${p.mucDoUuTien.toLowerCase().includes('cao')?'#FDF0EF':'#FEF3E2'};color:${p.mucDoUuTien.toLowerCase().includes('cao')?RED:ORANGE};margin-left:5px">${p.mucDoUuTien}</span>`:''}
-        </div>
-        <span class="pill ${cls==='late'?'p-late':cls==='done'?'p-pass':'p-prog'}">${p.trangThai}</span>
-      </div>
-      <div style="font-size:11px;color:#1A1A1A;margin-bottom:4px">${p.noiDung}</div>
-      <div style="font-size:10px;color:var(--gray)">
-        PIC: <strong>${p.picTrienKhai||'--'}</strong> | ${p.targetBD||'--'} → ${p.targetKT||'--'}
-        ${cbTD?`<span style="margin-left:8px;padding:1px 5px;border-radius:4px;background:#FDF0EF;color:var(--red);font-size:9px">TD: ${cbTD}</span>`:''}
-        ${cbCV?`<span style="margin-left:4px;padding:1px 5px;border-radius:4px;background:#FEF3E2;color:var(--orange);font-size:9px">CV: ${cbCV}</span>`:''}
-      </div>
-    </div>`;
-  }).join('')||'<div style="padding:14px;text-align:center;color:var(--gray);font-size:11px">Chưa có dữ liệu công việc</div>';
+  // Sắp xếp: đỏ → vàng → xanh/bình thường → hoàn thành
+  projSorted = [...proj].sort((a,b)=>warnRank(a)-warnRank(b));
+  const se=document.getElementById('proj-search'); if(se) se.value='';
+  renderProjList('');
 }
+
+function renderProjCard(p){
+  const tl=(p.trangThai||'').toLowerCase();
+  const cls=tl.includes('qu')||tl.includes('tre')?'late':tl.includes('hoan')||tl.includes('xong')||tl.includes('done')?'done':'doing';
+  const cbTD=p.canhBaoTienDo||'', cbCV=p.canhBaoCViec||'';
+  const rnk=warnRank(p);
+  const borderClr=rnk===0?'#C8372D':rnk===1?'#E5C200':rnk===3?'#0EA5E9':'#16A34A';
+  const udBg=p.mucDoUuTien&&p.mucDoUuTien.toLowerCase().includes('cao')?'#FDF0EF':'#FEF3E2';
+  const udClr=p.mucDoUuTien&&p.mucDoUuTien.toLowerCase().includes('cao')?RED:ORANGE;
+  const cbTDClr=((cbTD).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':RED;
+  const cbCVClr=((cbCV).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':rnk===3?'#0EA5E9':'#16A34A';
+  return `<div class="proj-card ${cls}" style="border-left-color:${borderClr}">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:8px">
+      <div style="font-size:13px;font-weight:600;line-height:1.4">${p.duAn}
+        ${p.mucDoUuTien?`<span style="font-size:18px;padding:2px 8px;border-radius:8px;background:${udBg};color:${udClr};margin-left:6px;vertical-align:middle">${p.mucDoUuTien}</span>`:''}
+      </div>
+      <span class="pill ${cls==='late'?'p-late':cls==='done'?'p-pass':'p-prog'}" style="white-space:nowrap;flex-shrink:0">${p.trangThai}</span>
+    </div>
+    <div style="font-size:11px;color:#1A1A1A;margin-bottom:5px">${p.noiDung}</div>
+    <div style="font-size:10px;color:var(--gray);display:flex;flex-wrap:wrap;align-items:center;gap:4px">
+      <span>PIC: <strong>${p.picTrienKhai||'--'}</strong></span>
+      <span>| ${p.targetBD||'--'} → ${p.targetKT||'--'}</span>
+      ${cbTD?`<span style="padding:2px 8px;border-radius:4px;background:#FDF0EF;color:${cbTDClr};font-size:27px;font-weight:600">⚠ TD: ${cbTD}</span>`:''}
+      ${cbCV?`<span style="padding:2px 8px;border-radius:4px;background:#FEF3E2;color:${cbCVClr};font-size:27px;font-weight:600">🔔 CV: ${cbCV}</span>`:''}
+    </div>
+  </div>`;
+}
+
+function renderProjList(q){
+  const el=document.getElementById('proj-list');
+  if(!el) return;
+  const kw=(q||'').toLowerCase().trim();
+  const list=kw?projSorted.filter(p=>{
+    const hay=((p.duAn||'')+(p.noiDung||'')+(p.picTrienKhai||'')+(p.canhBaoTienDo||'')+(p.canhBaoCViec||'')).toLowerCase();
+    return hay.includes(kw);
+  }):projSorted;
+  el.innerHTML=list.map(renderProjCard).join('')
+    ||`<div style="padding:20px;text-align:center;color:var(--gray);font-size:12px">${kw?'Không tìm thấy công việc phù hợp':'Chưa có dữ liệu công việc'}</div>`;
+}
+
+function filterProjList(q){ renderProjList(q); }
 
 function renderOwners() {
   const pics=DATA.kpiByPIC||[];
@@ -1968,7 +2012,9 @@ function initCharts() {
 
   // Nếu không có dữ liệu project → hiện thông báo trên canvas
   if (!proj.length) {
-    ['c-proj','c-proj-uutien','c-proj-tiendo','c-proj-cviec','c-proj-pic'].forEach(id=>{
+    const gdiv=document.getElementById('proj-cviec-gauges');
+    if(gdiv) gdiv.innerHTML='<div style="color:var(--gray);font-size:12px;padding:20px;text-align:center">⚠ Chưa có dữ liệu cảnh báo</div>';
+    ['c-proj','c-proj-uutien','c-proj-tiendo','c-proj-pic'].forEach(id=>{
       const el=document.getElementById(id);
       if(!el) return;
       const ctx=el.getContext('2d');
@@ -2052,17 +2098,72 @@ function initCharts() {
     });
   }
 
-  // ── Chart 4: Cảnh báo công việc (pie) ──
+  // ── Chart 4: Cảnh báo công việc (gauges) ──
   const pCV={};
-  proj.forEach(p=>{const v=p.canhBaoCViec||'Bình thường'; if(v) pCV[v]=(pCV[v]||0)+1;});
-  const pCVKeys=Object.keys(pCV), pCVVals=pCVKeys.map(k=>pCV[k]);
-  const cvColors=pCVKeys.map(k=>{const kl=k.toLowerCase();return kl.includes('đỏ')||kl.includes('do')||kl.includes('qua')?RED+'CC':kl.includes('vàng')||kl.includes('vang')?ORANGE+'CC':GREEN+'CC';});
-  if(document.getElementById('c-proj-cviec')) {
-    charts.projCViec=new Chart(document.getElementById('c-proj-cviec'),{type:'pie',
-      data:{labels:pCVKeys,datasets:[{data:pCVVals,backgroundColor:cvColors,borderWidth:0}]},
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:4}},
-          tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed}`}}}}
+  proj.forEach(p=>{const v=(p.canhBaoCViec||'').trim()||'Bình thường'; pCV[v]=(pCV[v]||0)+1;});
+  const totalProj=proj.length||1;
+  const cvNorm=s=>s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+  const cvColorFn=k=>{
+    const kl=cvNorm(k);
+    if(kl.includes('do')||kl.includes('qua han')||kl.match(/canh.?bao.?do/)) return '#C8372D';
+    if(kl.includes('vang')||kl.includes('chu y')||kl.match(/canh.?bao.?vang/))  return '#E5C200';
+    if(kl.includes('ket thuc')||kl.includes('hoan thanh')||kl.includes('xong')||kl.includes('done')||kl.includes('complete')) return '#0EA5E9';
+    if(kl.includes('xanh')) return '#16A34A';
+    return '#16A34A';
+  };
+  const gaugeDiv=document.getElementById('proj-cviec-gauges');
+  if(gaugeDiv){
+    gaugeDiv.innerHTML='';
+    gaugeDiv.style.cssText='display:flex;flex-wrap:wrap;justify-content:space-evenly;align-items:flex-start;gap:8px;padding:10px 4px;width:100%;box-sizing:border-box';
+    const cvOrder=['do','vang','xanh','binh thuong','ket thuc','hoan thanh'];
+    const cvKeys=Object.keys(pCV).sort((a,b)=>{
+      const ia=cvOrder.findIndex(x=>cvNorm(a).includes(x));
+      const ib=cvOrder.findIndex(x=>cvNorm(b).includes(x));
+      return (ia<0?99:ia)-(ib<0?99:ib);
+    });
+    cvKeys.forEach(label=>{
+      const cnt=pCV[label];
+      const pct=Math.min(100,Math.round(cnt/totalProj*100));
+      const clr=cvColorFn(label);
+      const bgClr=clr+'28';
+      const cW=170;
+      const halfH=Math.round(cW/2)+22;
+      const wEl=document.createElement('div');
+      wEl.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:150px;max-width:210px';
+      const ccEl=document.createElement('div');
+      ccEl.style.cssText=`position:relative;width:${cW}px;height:${halfH}px;overflow:hidden`;
+      const cvs=document.createElement('canvas');
+      cvs.width=cW; cvs.height=cW;
+      ccEl.appendChild(cvs);
+      const pEl=document.createElement('div');
+      pEl.style.cssText=`position:absolute;bottom:0;left:0;right:0;text-align:center;transform:translateX(1.5ch);font-size:45px;font-weight:700;color:${clr};line-height:1`;
+      pEl.textContent=pct+'%';
+      ccEl.appendChild(pEl);
+      wEl.appendChild(ccEl);
+      const lEl=document.createElement('div');
+      lEl.style.cssText='font-size:14px;font-weight:600;text-align:center;color:#444;max-width:200px;line-height:1.3;margin-top:4px';
+      lEl.textContent=label;
+      wEl.appendChild(lEl);
+      const nEl=document.createElement('div');
+      nEl.style.cssText=`font-size:15px;font-weight:700;color:${clr}`;
+      nEl.textContent=cnt+' việc';
+      wEl.appendChild(nEl);
+      gaugeDiv.appendChild(wEl);
+      new Chart(cvs,{
+        type:'doughnut',
+        data:{datasets:[{
+          data:[pct,100-pct],
+          backgroundColor:[clr,bgClr],
+          borderWidth:0,
+          borderRadius:pct>0&&pct<100?[6,0]:0
+        }]},
+        options:{
+          circumference:180,rotation:180,
+          responsive:false,cutout:'68%',
+          plugins:{legend:{display:false},tooltip:{enabled:false}},
+          animation:{duration:700}
+        }
+      });
     });
   }
 
