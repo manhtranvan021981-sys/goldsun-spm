@@ -337,7 +337,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
         <select id="f-ts"  onchange="renderMainTable()" style="font-size:10px;padding:3px 6px;border:1px solid #E8E6E0;border-radius:6px"><option value="">Tất cả TT</option></select>
       </div>
     </div>
-    <div style="overflow-x:auto"><table class="dt" style="min-width:750px"><thead><tr><th>STT</th><th>⚠</th><th>Số YQ</th><th>KH</th><th>Loại</th><th>PIC</th><th>NM</th><th>DKHT</th><th>Lần thứ</th><th>LT</th><th>Tình trạng</th></tr></thead><tbody id="main-tbody"></tbody></table></div>
+    <div style="overflow-x:auto"><table class="dt" style="min-width:1100px"><thead><tr><th>STT</th><th>⚠</th><th>Số YQ</th><th>Tên sản phẩm</th><th>Diễn giải</th><th>Quy trình SX</th><th>Mô tả mẫu</th><th>KH</th><th>Loại</th><th>PIC</th><th>NM</th><th>DKHT</th><th>Lần thứ</th><th>LT</th><th>Tình trạng</th></tr></thead><tbody id="main-tbody"></tbody></table></div>
   </div>
 </div>
 
@@ -369,6 +369,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 <!-- TAB AI -->
 <div class="tab-content" id="tab-ai">
   <div class="g3" style="margin-bottom:14px" id="alert-big-cards"></div>
+  <!-- Phân tích tổng quát 5 tiêu chí -->
+  <div class="panel" style="margin-bottom:14px">
+    <div class="ph">
+      <div class="pt"><span class="pt-icon">📊</span>Phân tích tổng quát — 5 Tiêu chí</div>
+      <span style="font-size:10px;color:var(--gray)">Nguồn: AI-5TIEUCHI</span>
+    </div>
+    <div id="ai-5tieuchi-content"><div style="padding:12px;text-align:center;color:var(--gray);font-size:11px">Đang tải dữ liệu phân tích...</div></div>
+  </div>
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🏆</span>Ranking PIC — tiến độ tốt nhất</div></div><div id="rank-best"></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Cảnh báo theo PIC</div></div><div class="cw" style="height:180px"><canvas id="c-alert-pic"></canvas></div></div>
@@ -461,7 +469,7 @@ const RED='#C8372D', GREEN='#1B6B3A', NAVY='#1A2B4A', GOLD='#C8952A', ORANGE='#D
 let DATA = {
   stats:{total:0,red:0,orange:0,green:0,ok:0,escalate:0,byKH:[],byFactory:{GS1:0,GS5:0,GS6:0},byWeek:[]},
   records:[], alerts:[], kpiGroup:{k1:0,k2:0,k3:100,k4:0,k5:0,k5Score:0,kpiTotal:0},
-  kpiByPIC:[], bcTomtat:[], project:[]
+  kpiByPIC:[], kpiByWeek:[], kpiByMonth:[], bcTomtat:[], project:[], ai5Data:null
 };
 let charts = {};
 
@@ -607,7 +615,7 @@ function parseDataNPI(table) {
   // Phát hiện cột theo từ khoá — không phụ thuộc vào vị trí cố định
   const C = {
     stt:        F('stt'),
-    soYQ:       F('so yq mau','so yq','ma yc','so yeu cau','yq mau','number'),
+    soYQ:       F('so yq mau','so yq','ma yc','so yeu cau','yq mau','so yc mau','so yc','yc mau','number'),
     tenKH:      F('ten khach hang','khach hang','ten kh','customer name'),
     phanLoai:   F('phan loai kh','phan loai khach','loai kh','phan loai'),
     xepLoai:    F('xep loai kh','xep loai','cap do','ranking'),
@@ -623,8 +631,13 @@ function parseDataNPI(table) {
     gtDH:       F('gia tri don hang du kien','gia tri don hang du kien','gia tri don hang','gt don hang'),
     maDongHang: F('ma dong hang','dong hang','product line','product code','ma dong','ma sp','product'),
     // Ngày — dùng đúng cột (1) và (7)
-    ngayYeuCau: F('ngay yeu cau (1)','ngay yeu cau','ngay nhan yc','ngay nhan','ngay tiep nhan'),
-    ngayBanGiao:F('ngay ban giao mau (7)','ngay ban giao mau','ngay ban giao','ngay bg mau','ngay bg'),
+    ngayYeuCau:    F('ngay yeu cau (1)','ngay yeu cau','ngay nhan yc','ngay nhan','ngay tiep nhan'),
+    ngayBanGiao:   F('ngay ban giao mau (7)','ngay ban giao mau','ngay ban giao','ngay bg mau','ngay bg'),
+    // Thông tin sản phẩm — lấy thẳng từ DATA_SPM_V1
+    tenSanPhamMau: F('ten san pham mau','ten san pham','ten sp mau','ten sp'),
+    dienGiai:      F('dien giai','dien giai yq','mo ta yq'),
+    quyTrinhSX:    F('quy trinh san xuat mau','quy trinh sx mau','quy trinh san xuat','quy trinh sx','quy trinh'),
+    moTaMau:       F('noi dung phan hoi mau','noi dung phan hoi','phan hoi mau','mo ta mau','ly do lam lai','mo ta sp'),
   };
 
   console.log('📊 Column mapping DATA_NPI:', C);
@@ -679,12 +692,17 @@ function parseDataNPI(table) {
       leadtime17: lt17Raw > 0 ? lt17Raw : null,
       gtLamMau:   parseVNNum(get(C.gtLamMau)),
       gtDH:       parseVNNum(get(C.gtDH)),
-      maDongHang: String(get(C.maDongHang)||''),
-      level:      level,
+      maDongHang:    String(get(C.maDongHang)||''),
+      level:         level,
       daysFromDeadline: daysFL||0,
-      escalate:   level==='red' && (daysFL||0) >= 3,
-      ngayYeuCau: ngayYeuCau,
-      ngayBanGiao:ngayBanGiao,
+      escalate:      level==='red' && (daysFL||0) >= 3,
+      ngayYeuCau:    ngayYeuCau,
+      ngayBanGiao:   ngayBanGiao,
+      // Thông tin sản phẩm từ DATA_SPM_V1
+      tenSanPhamMau: String(get(C.tenSanPhamMau)||''),
+      dienGiai:      String(get(C.dienGiai)||''),
+      quyTrinhSX:    String(get(C.quyTrinhSX)||''),
+      moTaMau:       String(get(C.moTaMau)||''),
     });
   });
   return records;
@@ -748,19 +766,81 @@ function parseAIAnalysis(table) {
   const headers = (table.cols||[]).map(c => (c.label||c.id||'').trim());
   const F = makeFind(headers);
   const C = {
-    id:        F('id','so yq','ma yc','number'),
-    rootCause: F('ai root cause','root cause','nguyen nhan','root'),
-    action:    F('ai action','action','de xuat','action plan'),
-    note:      F('management note','ghi chu','note','notes'),
+    id:         F('so yc mau','so yq mau','so yc','so yq','ma yc','so yeu cau mau','yc mau'),
+    tenSanPham: F('ten san pham mau','ten san pham','ten sp mau','ten sp'),
+    ghiChu:     F('ghi chu phan tich','ghi chu pt','ghi chu'),
+    giaiPhap:   F('giai phap/hanh dong','giai phap hanh dong','giai phap'),
+    rootCause:  F('ai root cause','root cause','nguyen nhan'),
+    action:     F('ai action','action plan'),
+    note:       F('management note','note'),
   };
+  // Position-based fallback: col6=Số YC mẫu, col16=Tên SP mẫu, col30=GHI CHÚ PHÂN TÍCH, col31=GIẢI PHÁP/HÀNH ĐỘNG
+  if (C.id < 0)         C.id = 6;
+  if (C.tenSanPham < 0) C.tenSanPham = 16;
+  if (C.ghiChu < 0)     C.ghiChu = 30;
+  if (C.giaiPhap < 0)   C.giaiPhap = 31;
+  console.log('🤖 AI_ANALYSIS headers (0-35):', headers.slice(0,35));
+  console.log('🤖 Column mapping AI_ANALYSIS:', C);
   const map = {};
   (table.rows||[]).forEach(row => {
     const cells = row.c||[];
-    const get = i => i>=0 ? String(cellGet(cells,i)||'') : '';
-    const id = get(C.id);
-    if (id) map[id] = { rootCause: get(C.rootCause), actionSuggest: get(C.action), note: get(C.note) };
+    const get = i => i>=0 && i<cells.length ? String(cellGet(cells,i)||'') : '';
+    const id = get(C.id).trim();
+    if (!id) return;
+    map[id] = {
+      rootCause:      get(C.ghiChu) || get(C.rootCause) || '',
+      actionSuggest:  get(C.giaiPhap) || get(C.action) || '',
+      note:           get(C.note),
+      tenSanPhamMau:  get(C.tenSanPham),
+      ghiChuPhanTich: get(C.ghiChu),
+      giaiPhap:       get(C.giaiPhap),
+    };
   });
+  console.log('🤖 aiMap size:', Object.keys(map).length, '| sample keys:', Object.keys(map).slice(0,3));
   return map;
+}
+
+// ── PARSE AI-5TIEUCHI — đọc toàn bộ cột động ──────────────────
+function parseAI5Tieuchi(table) {
+  if (!table || !table.rows) return {headers:[], rows:[]};
+  const cols = table.cols || [];
+  const autoGen = /^[A-Z]{1,3}$/;
+  const headers = cols.map(c => {
+    const lbl = (c.label||'').trim();
+    return (lbl && !autoGen.test(lbl)) ? lbl : '';
+  });
+  const vnNorm = s => (s||'').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').trim();
+  const lowH = headers.map(h => vnNorm(h));
+  const rows = [];
+  (table.rows||[]).forEach(row => {
+    const cells = row.c||[];
+    const obj = {};
+    let contentCount = 0;
+    let isHeaderRow = false;
+    headers.forEach((h, i) => {
+      if (!h) return;
+      const cell = cells[i];
+      let val = '';
+      if (cell) {
+        val = cell.v !== null && cell.v !== undefined
+          ? String(typeof cell.v === 'number' ? (cell.f||cell.v) : cell.v)
+          : (cell.f||'');
+        val = val.trim();
+      }
+      if (!val) return;
+      if (vnNorm(val) === lowH[i] && val.length > 1) { isHeaderRow = true; }
+      obj[h] = val;
+      contentCount++;
+    });
+    if (contentCount === 0 || isHeaderRow) return;
+    const vals = Object.values(obj);
+    if (vals.length === 1 && /^\d+$/.test(vals[0])) return;
+    rows.push(obj);
+  });
+  const usedHeaders = headers.filter(h => h && rows.some(r => r[h]));
+  console.log('🔬 AI-5TIEUCHI usedHeaders:', usedHeaders, '| rows:', rows.length);
+  return {headers: usedHeaders, rows};
 }
 
 // ── COMPUTE STATS ──────────────────────────────────────────────
@@ -1025,13 +1105,14 @@ async function loadData() {
   loadEl.classList.remove('hide');
   try {
     sub.textContent = 'Đang đọc DATA_NPI...';
-    const [dataNPI, kpiSheet, alertSheet, ownerSheet, projSheet, aiSheet] = await Promise.allSettled([
+    const [dataNPI, kpiSheet, alertSheet, ownerSheet, projSheet, aiSheet, ai5Sheet] = await Promise.allSettled([
       gvizFetch(CFG.DATA_ID, CFG.DATA_TAB, CFG.DATA_HR),
       gvizFetch(CFG.SYS_ID, 'KPI_NPI'),
       gvizFetch(CFG.SYS_ID, 'ALERT_CONFIG'),
       gvizFetch(CFG.SYS_ID, 'OWNER_EMAIL'),
       gvizFetch(CFG.PROJ_ID, CFG.PROJ_TAB, CFG.PROJ_HR),
       gvizFetch(CFG.AI_ID, CFG.AI_TAB),
+      gvizFetch(CFG.AI_ID, 'AI-5TIEUCHI'),
     ]);
 
     if (dataNPI.status === 'rejected') throw new Error('DATA_NPI: ' + dataNPI.reason?.message);
@@ -1040,6 +1121,9 @@ async function loadData() {
     const records = parseDataNPI(dataNPI.value);
     const project = projSheet.status==='fulfilled' ? parseProject(projSheet.value) : [];
     const aiMap   = aiSheet.status==='fulfilled'   ? parseAIAnalysis(aiSheet.value) : {};
+    const ai5Data = ai5Sheet.status==='fulfilled'  ? parseAI5Tieuchi(ai5Sheet.value) : [];
+    const _ai5Rows = Array.isArray(ai5Data) ? ai5Data : (ai5Data?.rows||[]);
+    console.log('🔬 AI-5TIEUCHI rows:', _ai5Rows.length, _ai5Rows.slice(0,2));
 
     const stats = computeStats(records);
     const {groupKPI, kpiByPIC} = computeKPI(records);
@@ -1051,11 +1135,14 @@ async function loadData() {
       .filter(r=>r.level!=='ok')
       .sort((a,b)=>{const o={red:0,orange:1,green:2};return (o[a.level]||3)-(o[b.level]||3)||b.daysFromDeadline-a.daysFromDeadline;})
       .map(r=>({...r,
-        rootCause:   aiMap[r.soYQ]?.rootCause||'Chưa có phân tích AI',
-        actionSuggest: aiMap[r.soYQ]?.actionSuggest||'Liên hệ PIC cập nhật tiến độ',
+        rootCause:      aiMap[r.soYQ]?.ghiChuPhanTich || aiMap[r.soYQ]?.rootCause || 'Chưa có phân tích AI',
+        actionSuggest:  aiMap[r.soYQ]?.giaiPhap || aiMap[r.soYQ]?.actionSuggest || 'Liên hệ PIC cập nhật tiến độ',
+        tenSanPhamMau:  aiMap[r.soYQ]?.tenSanPhamMau || r.tenSanPhamMau || '',
+        ghiChuPhanTich: aiMap[r.soYQ]?.ghiChuPhanTich || '',
+        giaiPhap:       aiMap[r.soYQ]?.giaiPhap || '',
       }));
 
-    DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project};
+    DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project, aiMap, ai5Data};
     renderAll();
     document.getElementById('last-upd').textContent = 'Cập nhật: ' + new Date().toLocaleString('vi-VN');
   } catch(e) {
@@ -1224,18 +1311,23 @@ function renderMainTable() {
   const ts=document.getElementById('f-ts').value;
   const rows=(DATA.records||[]).filter(r=>(!pic||r.pic===pic)&&(!nm||r.nhaMay===nm)&&(!ts||r.tinhTrang===ts));
   const alBg={red:'rgba(200,55,45,0.05)',orange:'rgba(217,119,6,0.05)',green:'rgba(27,107,58,0.05)',ok:''};
+  const trunc=(s,n)=>{const t=String(s||'');return t.length>n?t.slice(0,n)+'…':t;};
   document.getElementById('main-tbody').innerHTML=rows.map(r=>`
     <tr style="background:${alBg[r.level]||''}">
       <td>${r.stt}</td>
       <td>${dotHtml(r.level)} ${r.daysFromDeadline>0?`<span style="color:var(--red);font-size:9px">+${r.daysFromDeadline}d</span>`:''}</td>
       <td style="font-family:monospace;font-size:10px">${r.soYQ||'--'}</td>
+      <td style="font-size:10px;max-width:130px" title="${r.tenSanPhamMau||''}">${trunc(r.tenSanPhamMau||'--',22)}</td>
+      <td style="font-size:10px;max-width:130px" title="${r.dienGiai||''}">${trunc(r.dienGiai||'--',22)}</td>
+      <td style="font-size:10px;max-width:130px" title="${r.quyTrinhSX||''}">${trunc(r.quyTrinhSX||'--',22)}</td>
+      <td style="font-size:10px;max-width:130px" title="${r.moTaMau||''}">${trunc(r.moTaMau||'--',22)}</td>
       <td>${r.tenKH||'--'}</td>
       <td><span class="badge b-gold" style="font-size:9px">${r.xepLoai||r.phanLoai||'--'}</span></td>
       <td style="font-size:10px">${(r.pic||'').split(' ').slice(-2).join(' ')}</td>
       <td style="font-size:10px">${r.nhaMay||'--'}</td>
       <td>${fmtD(r.dkht)}</td>
       <td style="text-align:center">${r.lanThu||1}</td>
-      <td style="text-align:center">${r.ltThucTe||'--'}n</td>
+      <td style="text-align:center">${r.leadtime17>0?r.leadtime17+'n':'--'}</td>
       <td>${pillTs(r.tinhTrang)}</td></tr>`).join('');
 }
 
@@ -1347,16 +1439,19 @@ function renderAITab() {
     <div class="panel" style="margin-bottom:8px;border-left:4px solid ${a.level==='red'?RED:a.level==='orange'?ORANGE:GREEN}" data-lv="${a.level}" data-esc="${a.escalate}">
       <div style="display:flex;align-items:flex-start;gap:10px">
         <div style="flex:1">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
             ${dotHtml(a.level)}
             <span style="font-size:13px;font-weight:600">${a.soYQ||'--'} — ${a.tenKH||'--'}</span>
             ${a.escalate?'<span style="font-size:10px;padding:2px 7px;border-radius:4px;background:#FDF0EF;color:var(--red);font-weight:600">⬆ Escalation</span>':''}
             ${a.daysFromDeadline>0?`<span style="font-size:11px;color:var(--red);font-weight:600">Quá ${a.daysFromDeadline} ngày</span>`:''}
           </div>
-          <div style="font-size:11px;color:var(--gray);margin-bottom:6px">PIC: <strong>${a.pic||'--'}</strong> | DKHT: ${fmtD(a.dkht)} | Lần thứ: ${a.lanThu}</div>
+          <div style="font-size:10px;color:var(--navy);font-weight:600;margin-bottom:4px;font-family:monospace;background:#EEF4FB;display:inline-block;padding:2px 8px;border-radius:6px">
+            ${a.soYQ||'--'} / Lần ${a.lanThu||1}${a.tenSanPhamMau?' / '+a.tenSanPhamMau:''}
+          </div>
+          <div style="font-size:11px;color:var(--gray);margin-bottom:6px;margin-top:4px">PIC: <strong>${a.pic||'--'}</strong> | DKHT: ${fmtD(a.dkht)}</div>
           <div style="font-size:11px;padding:8px;background:#F8F7F4;border-radius:8px;line-height:1.7">
-            <span style="color:var(--navy);font-weight:600">Root cause:</span> ${a.rootCause}<br>
-            <span style="color:var(--gold);font-weight:600">Action:</span> ${a.actionSuggest}
+            <span style="color:var(--navy);font-weight:600">Root cause:</span> ${a.ghiChuPhanTich||'—'}<br>
+            <span style="color:var(--gold);font-weight:600">Giải pháp:</span> ${a.giaiPhap||'—'}
           </div>
         </div>
         <div>${pillTs(a.tinhTrang)}</div>
@@ -1366,6 +1461,61 @@ function renderAITab() {
       <div style="font-size:14px;font-weight:600;color:var(--green);margin-bottom:6px">Không có cảnh báo tồn đọng</div>
       <div style="font-size:11px;color:var(--gray)">Tổng ${totalRec} bản ghi — Tất cả đã hoàn thành hoặc chưa đến hạn cảnh báo (≤5 ngày).<br>Mở F12 → Console để xem chi tiết phân tích cột dữ liệu.</div>
     </div>`;
+
+  // Render Phân tích tổng quát 5 tiêu chí
+  renderAI5Tieuchi(DATA.ai5Data||[]);
+}
+
+// ── RENDER AI-5TIEUCHI ─────────────────────────────────────────
+function renderAI5Tieuchi(data) {
+  const el = document.getElementById('ai-5tieuchi-content');
+  if (!el) return;
+  const rows = Array.isArray(data) ? data : (data&&data.rows ? data.rows : []);
+  const hdrs = Array.isArray(data) ? null  : (data&&data.headers ? data.headers : null);
+  if (!rows.length) {
+    el.innerHTML=`<div style="padding:10px;color:var(--gray);font-size:11px">
+      ⚠ Chưa có dữ liệu — Kiểm tra sheet <code>AI-5TIEUCHI</code> trong file AI_ANALYSIS_SPM (chia sẻ "Anyone with link").</div>`;
+    return;
+  }
+  const vnNormLocal = s => (s||'').toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').trim();
+  const labelColor = h => {
+    const n = vnNormLocal(h);
+    if (/nguyen nhan|root cause|loi/.test(n)) return 'color:var(--red);font-weight:600';
+    if (/giai phap|hanh dong|de xuat|khuyen nghi/.test(n)) return 'color:var(--gold);font-weight:600';
+    if (/nguoi|pic|owner|ct|trach nhiem/.test(n)) return 'color:var(--green);font-weight:600';
+    if (/ngay|thoi han|deadline|moc/.test(n)) return 'color:var(--navy);font-weight:600';
+    return 'color:var(--gray);font-weight:600';
+  };
+  const isTitleField = h => {
+    const n = vnNormLocal(h);
+    return /tieu chi|noi dung|hang muc|chu de|topic|title/.test(n);
+  };
+  const iconMap={'0':'📊','1':'📅','2':'⏰','3':'✅','4':'⭐'};
+  const colBg=['#FDF0EF','#FEF3E2','#EEF4FB','#EAF5EE','#F8F7F4'];
+  const colBd=['#F5C6C3','#FCD88A','#B5D4F4','#A3D9B4','#E8E6E0'];
+  const usedHdrs = hdrs || (rows.length ? Object.keys(rows[0]) : []);
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px">
+    ${rows.map((r,i)=>{
+      const bg=colBg[i%colBg.length], bd=colBd[i%colBd.length];
+      const icon=iconMap[String(i%5)]||'📌';
+      // Auto-detect title field
+      const titleKey = usedHdrs.find(h=>isTitleField(h));
+      const title = (titleKey&&r[titleKey]) ? r[titleKey] : ('Tiêu chí '+(i+1));
+      const bodyFields = usedHdrs.filter(h => h !== titleKey && r[h]);
+      return `<div style="background:${bg};border:1px solid ${bd};border-radius:10px;padding:12px">
+        <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:8px">
+          <span style="font-size:16px;flex-shrink:0">${icon}</span>
+          <span style="font-size:12px;font-weight:600;color:#1A1A1A;line-height:1.4">${title}</span>
+        </div>
+        ${bodyFields.map(h=>`
+          <div style="font-size:11px;margin-bottom:5px;line-height:1.6">
+            <span style="${labelColor(h)}">${h}:</span>
+            <span style="color:#1A1A1A;margin-left:4px">${r[h]}</span>
+          </div>`).join('')}
+      </div>`;
+    }).join('')}
+  </div>`;
 }
 
 function filterAI(type, el) {
@@ -1486,6 +1636,13 @@ const barLabels = {
 
 // ── CHARTS ─────────────────────────────────────────────────────
 function initCharts() {
+  // mkChart: tạo Chart an toàn — không throw nếu canvas không tồn tại
+  const mkChart = (id, cfg) => {
+    const el = document.getElementById(id);
+    if (!el) { console.warn('⚠ initCharts: canvas #'+id+' not found — skipped'); return null; }
+    try { return new Chart(el, cfg); }
+    catch(e) { console.error('⚠ initCharts: Chart(#'+id+') error —', e.message); return null; }
+  };
   const s=DATA.stats, r=DATA.records||[], kpi=DATA.kpiGroup||{};
   const weeks=s.byWeek||[];
 
@@ -1515,7 +1672,7 @@ function initCharts() {
   const stEntries=Object.entries(stMap).sort((a,b)=>b[1]-a[1]);
   const stTotal=r.length||1;
   const stColors=[NAVY+'CC',GOLD+'CC',GREEN+'CC',RED+'CC','#9C27B0CC','#607D8BCC','#FF7043CC'];
-  charts.status=new Chart(document.getElementById('c-status'),{type:'bar',
+  charts.status=mkChart('c-status',{type:'bar',
     data:{labels:stEntries.map(e=>e[0]),datasets:[{data:stEntries.map(e=>e[1]),
       backgroundColor:stEntries.map((_,i)=>stColors[i%stColors.length]),borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
@@ -1533,7 +1690,7 @@ function initCharts() {
   }
 
   const fac=s.byFactory||{};
-  charts.factory=new Chart(document.getElementById('c-factory'),{type:'bar',
+  charts.factory=mkChart('c-factory',{type:'bar',
     data:{labels:['GS1 — HN','GS5 — QV','GS6 — BD'],datasets:[{data:[fac.GS1||0,fac.GS5||0,fac.GS6||0],backgroundColor:[NAVY,RED,GREEN],borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} mẫu`}}},
       scales:{y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1}},x:{ticks:{font:{size:9}}}}},
@@ -1605,14 +1762,14 @@ function initCharts() {
   }
 
   const bc=DATA.bcTomtat||[];
-  charts.bctDoughnut=new Chart(document.getElementById('c-bct-doughnut'),{type:'doughnut',
+  charts.bctDoughnut=mkChart('c-bct-doughnut',{type:'doughnut',
     data:{labels:bc.map(b=>b.phanLoai),datasets:[{data:bc.map(b=>b.total),backgroundColor:[GOLD,RED,GREEN,NAVY],borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
       plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
         tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed}`}}}}
   });
 
-  charts.bctBar=new Chart(document.getElementById('c-bct-bar'),{type:'bar',
+  charts.bctBar=mkChart('c-bct-bar',{type:'bar',
     data:{labels:bc.map(b=>b.phanLoai),datasets:[
       {label:'Đang làm',data:bc.map(b=>b.dangPhat||0),backgroundColor:GOLD+'BB',borderRadius:3},
       {label:'Đã duyệt',data:bc.map(b=>b.daduyettts||0),backgroundColor:GREEN+'BB',borderRadius:3},
@@ -1623,14 +1780,14 @@ function initCharts() {
   });
 
   const top5=s.byKH||[];
-  charts.top5=new Chart(document.getElementById('c-top5'),{type:'bar',
+  charts.top5=mkChart('c-top5',{type:'bar',
     data:{labels:top5.map(k=>k.kh),datasets:[{data:top5.map(k=>k.cnt),backgroundColor:[RED,GREEN,NAVY+'BB',GOLD,'#9C27B0'],borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw} mẫu`}}},
       scales:{x:{ticks:{font:{size:9}}},y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1}}}},
     plugins:[barLabels]
   });
 
-  charts.radar=new Chart(document.getElementById('c-radar'),{type:'radar',
+  charts.radar=mkChart('c-radar',{type:'radar',
     data:{labels:['Pass lần đầu','Đúng hạn','Hồ sơ','Không tái lỗi','Lead time'],datasets:[
       {label:'Thực tế',data:[kpi.k1||0,kpi.k2||0,kpi.k3||0,kpi.k4||0,kpi.k5Score||0],borderColor:RED,backgroundColor:RED+'22',pointBackgroundColor:RED,borderWidth:2,pointRadius:4},
       {label:'Target', data:[85,95,100,95,100],borderColor:GREEN,backgroundColor:'transparent',pointBackgroundColor:GREEN,borderDash:[4,3],borderWidth:1.5,pointRadius:3}
@@ -1796,7 +1953,7 @@ function initCharts() {
   }
 
   const picNames=Object.values((()=>{const m={};(DATA.records||[]).forEach(r=>{if(!m[r.pic])m[r.pic]={pic:r.pic,red:0,orange:0,ok:0};m[r.pic][r.level==='red'?'red':r.level==='orange'?'orange':'ok']++;});return m;})());
-  charts.alertPic=new Chart(document.getElementById('c-alert-pic'),{type:'bar',
+  charts.alertPic=mkChart('c-alert-pic',{type:'bar',
     data:{labels:picNames.map(p=>p.pic.split(' ').slice(-1)[0]),datasets:[
       {label:'Đỏ',  data:picNames.map(p=>p.red),   backgroundColor:RED+'AA',  borderRadius:3},
       {label:'Vàng',data:picNames.map(p=>p.orange),backgroundColor:GOLD+'AA', borderRadius:3},
@@ -1807,6 +1964,7 @@ function initCharts() {
   });
 
   const proj=DATA.project||[];
+  renderFunnels(); // Luôn render pipeline — không phụ thuộc vào project data
 
   // Nếu không có dữ liệu project → hiện thông báo trên canvas
   if (!proj.length) {
@@ -1923,7 +2081,6 @@ function initCharts() {
     });
   }
 
-  renderFunnels();
 }
 
 function renderFunnels() {
