@@ -1139,9 +1139,9 @@ async function loadData() {
     const records = parseDataNPI(dataNPI.value);
     const project = projSheet.status==='fulfilled' ? parseProject(projSheet.value) : [];
     const aiMap   = aiSheet.status==='fulfilled'   ? parseAIAnalysis(aiSheet.value) : {};
-    const ai5Data = ai5Sheet.status==='fulfilled'  ? parseAI5Tieuchi(ai5Sheet.value) : [];
-    const _ai5Rows = Array.isArray(ai5Data) ? ai5Data : (ai5Data?.rows||[]);
-    console.log('🔬 AI-5TIEUCHI rows:', _ai5Rows.length, _ai5Rows.slice(0,2));
+    // Lưu raw GViz table — render trực tiếp theo vị trí cột (không qua parseAI5Tieuchi)
+    const ai5Data = ai5Sheet.status==='fulfilled' ? ai5Sheet.value : null;
+    console.log('🔬 AI-5TIEUCHI raw table rows:', ai5Data?.rows?.length ?? 0);
 
     const stats = computeStats(records);
     const {groupKPI, kpiByPIC} = computeKPI(records);
@@ -1484,56 +1484,101 @@ function renderAITab() {
   renderAI5Tieuchi(DATA.ai5Data||[]);
 }
 
-// ── RENDER AI-5TIEUCHI ─────────────────────────────────────────
-function renderAI5Tieuchi(data) {
+// ── RENDER AI-5TIEUCHI — đọc theo VỊ TRÍ CỘT (robust, không phụ thuộc header label) ──
+function renderAI5Tieuchi(rawTable) {
   const el = document.getElementById('ai-5tieuchi-content');
   if (!el) return;
-  const rows = Array.isArray(data) ? data : (data&&data.rows ? data.rows : []);
-  const hdrs = Array.isArray(data) ? null  : (data&&data.headers ? data.headers : null);
-  if (!rows.length) {
-    el.innerHTML=`<div style="padding:10px;color:var(--gray);font-size:11px">
-      ⚠ Chưa có dữ liệu — Kiểm tra sheet <code>AI-5TIEUCHI</code> trong file AI_ANALYSIS_SPM (chia sẻ "Anyone with link").</div>`;
+
+  // ── Helper: lấy giá trị cell từ GViz raw table ──
+  const cellVal = (cells, colIdx) => {
+    const c = cells && cells[colIdx];
+    if (!c || c.v === null || c.v === undefined) return '';
+    return String(c.f || c.v).trim();
+  };
+
+  // ── Parse raw GViz table theo vị trí cột cố định ──
+  // Cột: 0=STT, 1=Vấn đề nổi cộm (title), 2=Thực trạng, 3=Nguyên nhân, 4=Giải pháp, 5=Owner
+  const dataRows = [];
+
+  if (rawTable && rawTable.rows) {
+    rawTable.rows.forEach(row => {
+      const cells = row.c || [];
+      const col0 = cellVal(cells, 0);
+      const sttNum = parseFloat(col0);
+      // Chỉ lấy row có STT là số nguyên 1-20 (bỏ header row và row trống)
+      if (!isNaN(sttNum) && sttNum >= 1 && sttNum <= 20 && Number.isInteger(sttNum)) {
+        dataRows.push({
+          stt:      Math.round(sttNum),
+          title:    cellVal(cells, 1),
+          desc:     cellVal(cells, 2),
+          cause:    cellVal(cells, 3),
+          solution: cellVal(cells, 4),
+          owner:    cellVal(cells, 5),
+        });
+      }
+    });
+  }
+
+  console.log('🎨 renderAI5Tieuchi (direct col idx) dataRows:', dataRows.length, dataRows[0] || '(empty)');
+
+  if (!dataRows.length) {
+    el.innerHTML = `<div style="padding:16px;color:var(--gray);font-size:11px;text-align:center">
+      ⚠ Chưa có dữ liệu 5 Tiêu chí — Chạy <code>CHAY_PHAN_TICH_LAM_MAU.bat</code> để phân tích và ghi vào GSheet.<br>
+      <span style="font-size:10px">Xem F12 → Console log "AI-5TIEUCHI raw table rows" để kiểm tra.</span></div>`;
     return;
   }
-  const vnNormLocal = s => (s||'').toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').trim();
-  const labelColor = h => {
-    const n = vnNormLocal(h);
-    if (/nguyen nhan|root cause|loi/.test(n)) return 'color:var(--red);font-weight:600';
-    if (/giai phap|hanh dong|de xuat|khuyen nghi/.test(n)) return 'color:var(--gold);font-weight:600';
-    if (/nguoi|pic|owner|ct|trach nhiem/.test(n)) return 'color:var(--green);font-weight:600';
-    if (/ngay|thoi han|deadline|moc/.test(n)) return 'color:var(--navy);font-weight:600';
-    return 'color:var(--gray);font-weight:600';
-  };
-  const isTitleField = h => {
-    const n = vnNormLocal(h);
-    return /tieu chi|noi dung|hang muc|chu de|topic|title/.test(n);
-  };
-  const iconMap={'0':'📊','1':'📅','2':'⏰','3':'✅','4':'⭐'};
-  const colBg=['#FDF0EF','#FEF3E2','#EEF4FB','#EAF5EE','#F8F7F4'];
-  const colBd=['#F5C6C3','#FCD88A','#B5D4F4','#A3D9B4','#E8E6E0'];
-  const usedHdrs = hdrs || (rows.length ? Object.keys(rows[0]) : []);
-  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px">
-    ${rows.map((r,i)=>{
-      const bg=colBg[i%colBg.length], bd=colBd[i%colBd.length];
-      const icon=iconMap[String(i%5)]||'📌';
-      // Auto-detect title field
-      const titleKey = usedHdrs.find(h=>isTitleField(h));
-      const title = (titleKey&&r[titleKey]) ? r[titleKey] : ('Tiêu chí '+(i+1));
-      const bodyFields = usedHdrs.filter(h => h !== titleKey && r[h]);
-      return `<div style="background:${bg};border:1px solid ${bd};border-radius:10px;padding:12px">
-        <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:8px">
-          <span style="font-size:16px;flex-shrink:0">${icon}</span>
-          <span style="font-size:12px;font-weight:600;color:#1A1A1A;line-height:1.4">${title}</span>
-        </div>
-        ${bodyFields.map(h=>`
-          <div style="font-size:11px;margin-bottom:5px;line-height:1.6">
-            <span style="${labelColor(h)}">${h}:</span>
-            <span style="color:#1A1A1A;margin-left:4px">${r[h]}</span>
-          </div>`).join('')}
-      </div>`;
-    }).join('')}
-  </div>`;
+
+  // ── Render 5 card scroll ngang ──
+  const colors  = ['#C8372D','#D97706','#7C3AED','#1B6B3A','#1A2B4A'];
+  const nl = s => String(s||'').replace(/\n/g,'<br>');
+
+  const cards = dataRows.map((d, i) => {
+    const color = colors[i % colors.length];
+    return `
+    <div style="min-width:310px;flex:1;flex-shrink:0;border-left:4px solid ${color};
+         background:#fff;border-radius:10px;padding:16px;
+         box-shadow:0 1px 4px rgba(0,0,0,0.08);display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:700;font-size:13px;color:${color};padding-bottom:8px;
+           border-bottom:1px solid #F0EEE8;line-height:1.4">
+        ${d.stt}. ${d.title || ('Tiêu chí ' + d.stt)}
+      </div>
+      ${d.desc ? `
+      <div style="font-size:11.5px">
+        <div style="font-weight:700;color:#555;font-size:10px;margin-bottom:5px;
+             text-transform:uppercase;letter-spacing:0.4px">📊 Thực trạng &amp; Rủi ro</div>
+        <div style="color:#2D2D2D;line-height:1.8">${nl(d.desc)}</div>
+      </div>` : ''}
+      ${d.cause ? `
+      <div style="font-size:11.5px">
+        <div style="font-weight:700;color:#555;font-size:10px;margin-bottom:5px;
+             text-transform:uppercase;letter-spacing:0.4px">🔍 Nguyên nhân Gốc rễ</div>
+        <div style="color:#333;line-height:1.8">${nl(d.cause)}</div>
+      </div>` : ''}
+      ${d.solution ? `
+      <div style="font-size:11.5px;background:#EAF5EE;border-radius:7px;
+           padding:10px 12px;border-left:3px solid var(--green)">
+        <div style="font-weight:700;color:var(--green);font-size:10px;margin-bottom:5px;
+             text-transform:uppercase;letter-spacing:0.4px">→ Giải pháp Hệ thống</div>
+        <div style="color:#1B4332;line-height:1.8">${nl(d.solution)}</div>
+      </div>` : ''}
+      ${d.owner ? `
+      <div style="margin-top:auto;font-size:11px;background:#EEF4FB;border-radius:6px;
+           padding:7px 10px">
+        <strong style="color:#1A4B8C">👤 Owner:</strong>
+        <span style="color:var(--gray)">${d.owner}</span>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="font-size:10px;font-weight:700;letter-spacing:1.2px;color:var(--gray);
+         text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid #E8E6E0;margin-bottom:14px">
+      5 Tiêu chí phân tích — Góc nhìn lãnh đạo cấp cao &nbsp;
+      <span style="font-weight:400;color:#bbb;font-size:9px">↔ Cuộn ngang để xem đủ 5 tiêu chí</span>
+    </div>
+    <div style="display:flex;gap:14px;overflow-x:auto;padding-bottom:8px">
+      ${cards}
+    </div>`;
 }
 
 function filterAI(type, el) {
