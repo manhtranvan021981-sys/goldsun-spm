@@ -396,15 +396,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 
 <!-- TAB DỰ ÁN -->
 <div class="tab-content" id="tab-project">
-  <!-- Hàng 1: Trạng thái + Mức độ ưu tiên -->
-  <div class="g2">
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🍩</span>Trạng thái công việc</div></div><div class="cw" style="height:220px"><canvas id="c-proj"></canvas></div></div>
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Phân loại theo Mức độ ưu tiên</div></div><div class="cw" style="height:220px"><canvas id="c-proj-uutien"></canvas></div></div>
-  </div>
-  <!-- Hàng 2: Cảnh báo tiến độ + Cảnh báo công việc -->
-  <div class="g2">
+  <!-- 4 biểu đồ 1 hàng ngang -->
+  <div class="g4">
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🍩</span>Trạng thái công việc</div></div><div class="cw" style="height:200px"><canvas id="c-proj"></canvas></div></div>
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Phân loại ưu tiên</div></div><div class="cw" style="height:200px"><canvas id="c-proj-uutien"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">⚠</span>Cảnh báo tiến độ</div></div><div class="cw" style="height:200px"><canvas id="c-proj-tiendo"></canvas></div></div>
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🔔</span>Cảnh báo công việc</div></div><div class="cw" style="height:200px;overflow-y:auto"><div id="proj-cviec-gauges" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:12px;padding:8px 4px"></div></div></div>
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🔔</span>Cảnh báo công việc</div></div><div class="cw"><div id="proj-cviec-gauges"></div></div></div>
   </div>
   <!-- Hàng 3: Số việc theo nhân viên -->
   <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">👤</span>Số việc giao theo nhân viên (Pic triển khai)</div></div><div class="cw" style="height:200px"><canvas id="c-proj-pic"></canvas></div></div>
@@ -481,7 +478,7 @@ let DATA = {
 let projSorted = [];
 // 0=đỏ, 1=vàng, 2=xanh/bình thường, 3=hoàn thành
 const warnRank = p => {
-  const t = (p.trangThai||'').toLowerCase();
+  const t = (p.trangThai||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
   if(t.includes('hoan')||t.includes('xong')||t.includes('done')||t.includes('complete')) return 3;
   const v = ((p.canhBaoTienDo||'')+'|'+(p.canhBaoCViec||'')).toLowerCase()
               .normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
@@ -1626,28 +1623,34 @@ function renderProjectTab() {
 }
 
 function renderProjCard(p){
-  const tl=(p.trangThai||'').toLowerCase();
-  const cls=tl.includes('qu')||tl.includes('tre')?'late':tl.includes('hoan')||tl.includes('xong')||tl.includes('done')?'done':'doing';
+  const tl=(p.trangThai||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+  const isDone=tl.includes('hoan')||tl.includes('xong')||tl.includes('done')||tl.includes('complete');
+  const cls=tl.includes('qua')||tl.includes('tre')||tl.includes('delay')?'late':isDone?'done':'doing';
   const cbTD=p.canhBaoTienDo||'', cbCV=p.canhBaoCViec||'';
   const rnk=warnRank(p);
   const borderClr=rnk===0?'#C8372D':rnk===1?'#E5C200':rnk===3?'#0EA5E9':'#16A34A';
+  const cardBg=isDone?'#E6F9EE':'#F8F7F4';
   const udBg=p.mucDoUuTien&&p.mucDoUuTien.toLowerCase().includes('cao')?'#FDF0EF':'#FEF3E2';
   const udClr=p.mucDoUuTien&&p.mucDoUuTien.toLowerCase().includes('cao')?RED:ORANGE;
   const cbTDClr=((cbTD).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':RED;
-  const cbCVClr=((cbCV).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':rnk===3?'#0EA5E9':'#16A34A';
-  return `<div class="proj-card ${cls}" style="border-left-color:${borderClr}">
+  const cbCVClr=((cbCV).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':'#16A34A';
+  return `<div class="proj-card ${cls}" style="border-left-color:${borderClr};background:${cardBg}">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:8px">
-      <div style="font-size:13px;font-weight:600;line-height:1.4">${p.duAn}
-        ${p.mucDoUuTien?`<span style="font-size:18px;padding:2px 8px;border-radius:8px;background:${udBg};color:${udClr};margin-left:6px;vertical-align:middle">${p.mucDoUuTien}</span>`:''}
+      <div style="font-size:13px;font-weight:600;line-height:1.4;color:${isDone?'#1B6B3A':'#1A1A1A'}">
+        ${isDone?'✅ ':''}${p.duAn}
+        ${!isDone&&p.mucDoUuTien?`<span style="font-size:18px;padding:2px 8px;border-radius:8px;background:${udBg};color:${udClr};margin-left:6px;vertical-align:middle">${p.mucDoUuTien}</span>`:''}
       </div>
-      <span class="pill ${cls==='late'?'p-late':cls==='done'?'p-pass':'p-prog'}" style="white-space:nowrap;flex-shrink:0">${p.trangThai}</span>
+      <span class="pill ${cls==='late'?'p-late':cls==='done'?'p-pass':'p-prog'}"
+        style="white-space:nowrap;flex-shrink:0;${isDone?'font-size:20px;padding:4px 12px;font-weight:700;color:#1B6B3A;background:#C8F0D8;':''}">
+        ${p.trangThai}
+      </span>
     </div>
-    <div style="font-size:11px;color:#1A1A1A;margin-bottom:5px">${p.noiDung}</div>
+    <div style="font-size:11px;color:${isDone?'#276742':'#1A1A1A'};margin-bottom:5px">${p.noiDung}</div>
     <div style="font-size:10px;color:var(--gray);display:flex;flex-wrap:wrap;align-items:center;gap:4px">
       <span>PIC: <strong>${p.picTrienKhai||'--'}</strong></span>
       <span>| ${p.targetBD||'--'} → ${p.targetKT||'--'}</span>
-      ${cbTD?`<span style="padding:2px 8px;border-radius:4px;background:#FDF0EF;color:${cbTDClr};font-size:27px;font-weight:600">⚠ TD: ${cbTD}</span>`:''}
-      ${cbCV?`<span style="padding:2px 8px;border-radius:4px;background:#FEF3E2;color:${cbCVClr};font-size:27px;font-weight:600">🔔 CV: ${cbCV}</span>`:''}
+      ${!isDone&&cbTD?`<span style="padding:2px 8px;border-radius:4px;background:#FDF0EF;color:${cbTDClr};font-size:27px;font-weight:600">⚠ TD: ${cbTD}</span>`:''}
+      ${!isDone&&cbCV?`<span style="padding:2px 8px;border-radius:4px;background:#FEF3E2;color:${cbCVClr};font-size:27px;font-weight:600">🔔 CV: ${cbCV}</span>`:''}
     </div>
   </div>`;
 }
@@ -1718,6 +1721,55 @@ const barLabels = {
         if (!val) return;
         ctx.fillText(val, bar.x, bar.y-2);
       });
+    });
+    ctx.restore();
+  }
+};
+
+// ── DOUGHNUT CENTER TOTAL ─────────────────────────────────────
+const doughnutCenter = {
+  id: 'doughnutCenter',
+  afterDraw(chart) {
+    if (chart.config.type !== 'doughnut') return;
+    const {ctx, chartArea:{top,left,bottom,right}} = chart;
+    const cx=(left+right)/2, cy=(top+bottom)/2;
+    const total=chart.data.datasets[0].data.reduce((a,b)=>a+(+b||0),0);
+    ctx.save();
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.font='bold 20px Segoe UI,Arial';
+    ctx.fillStyle='#1A1A1A';
+    ctx.fillText(total, cx, cy-7);
+    ctx.font='10px Segoe UI,Arial';
+    ctx.fillStyle='#888';
+    ctx.fillText('công việc', cx, cy+9);
+    ctx.restore();
+  }
+};
+
+// ── DOUGHNUT OUTER LABELS (số lượng ngoài vòng) ────────────────
+const doughnutOuter = {
+  id: 'doughnutOuter',
+  afterDatasetsDraw(chart) {
+    if (chart.config.type !== 'doughnut') return;
+    const {ctx} = chart;
+    const meta = chart.getDatasetMeta(0);
+    ctx.save();
+    ctx.font='bold 10px Segoe UI,Arial';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    meta.data.forEach((arc, i) => {
+      const val = chart.data.datasets[0].data[i];
+      if (!val) return;
+      const mid = (arc.startAngle + arc.endAngle) / 2;
+      const r   = arc.outerRadius + 14;
+      const x   = arc.x + r * Math.cos(mid);
+      const y   = arc.y + r * Math.sin(mid);
+      const bg = chart.data.datasets[0].backgroundColor[i] || '#555';
+      ctx.fillStyle = bg.length > 7 ? bg.slice(0,7) : bg;
+      ctx.beginPath();
+      ctx.arc(x, y, 9, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.fillText(val, x, y);
     });
     ctx.restore();
   }
@@ -2082,8 +2134,10 @@ function initCharts() {
   charts.proj=new Chart(document.getElementById('c-proj'),{type:'doughnut',
     data:{labels:pSKeys,datasets:[{data:pSVals,backgroundColor:pColors,borderWidth:0}]},
     options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
+      layout:{padding:{top:14,bottom:4,left:14,right:14}},
       plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:4}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed}`}}}}
+        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} việc`}}}},
+    plugins:[doughnutCenter, doughnutOuter]
   });
 
   // ── Chart 2: Mức độ ưu tiên (bar) ──
@@ -2159,7 +2213,8 @@ function initCharts() {
   const gaugeDiv=document.getElementById('proj-cviec-gauges');
   if(gaugeDiv){
     gaugeDiv.innerHTML='';
-    gaugeDiv.style.cssText='display:flex;flex-wrap:wrap;justify-content:space-evenly;align-items:flex-start;gap:8px;padding:10px 4px;width:100%;box-sizing:border-box';
+    // ── Layout DỌC gọn — không scrollbar, vừa khung panel ──
+    gaugeDiv.style.cssText='display:flex;flex-direction:column;gap:5px;padding:4px 6px;width:100%;box-sizing:border-box';
     const cvOrder=['do','vang','xanh','binh thuong','ket thuc','hoan thanh'];
     const cvKeys=Object.keys(pCV).sort((a,b)=>{
       const ia=cvOrder.findIndex(x=>cvNorm(a).includes(x));
@@ -2170,59 +2225,82 @@ function initCharts() {
       const cnt=pCV[label];
       const pct=Math.min(100,Math.round(cnt/totalProj*100));
       const clr=cvColorFn(label);
-      const bgClr=clr+'28';
-      const cW=170;
-      const halfH=Math.round(cW/2)+22;
-      const wEl=document.createElement('div');
-      wEl.style.cssText='display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:150px;max-width:210px';
+      const cW=60;
+      const halfH=cW/2+8;
+
+      // Row: [mini gauge | label + count]
+      const rowEl=document.createElement('div');
+      rowEl.style.cssText=`display:flex;flex-direction:row;align-items:center;gap:7px;background:${clr}18;border-radius:7px;padding:3px 8px 3px 6px;border-left:3px solid ${clr};width:100%;box-sizing:border-box`;
+
+      // Trái: mini gauge
       const ccEl=document.createElement('div');
-      ccEl.style.cssText=`position:relative;width:${cW}px;height:${halfH}px;overflow:hidden`;
+      ccEl.style.cssText=`position:relative;width:${cW}px;height:${halfH}px;overflow:hidden;flex-shrink:0`;
       const cvs=document.createElement('canvas');
       cvs.width=cW; cvs.height=cW;
       ccEl.appendChild(cvs);
       const pEl=document.createElement('div');
-      pEl.style.cssText=`position:absolute;bottom:0;left:0;right:0;text-align:center;transform:translateX(1.5ch);font-size:45px;font-weight:700;color:${clr};line-height:1`;
+      pEl.style.cssText=`position:absolute;bottom:0;left:0;right:0;text-align:center;transform:translateX(3ch);font-size:15px;font-weight:700;color:${clr};line-height:1`;
       pEl.textContent=pct+'%';
       ccEl.appendChild(pEl);
-      wEl.appendChild(ccEl);
+      rowEl.appendChild(ccEl);
+
+      // Phải: label + count
+      const txtEl=document.createElement('div');
+      txtEl.style.cssText='display:flex;flex-direction:column;gap:1px;min-width:0;flex:1';
       const lEl=document.createElement('div');
-      lEl.style.cssText='font-size:14px;font-weight:600;text-align:center;color:#444;max-width:200px;line-height:1.3;margin-top:4px';
+      lEl.style.cssText='font-size:10px;font-weight:600;color:#333;line-height:1.25;white-space:normal';
       lEl.textContent=label;
-      wEl.appendChild(lEl);
       const nEl=document.createElement('div');
-      nEl.style.cssText=`font-size:15px;font-weight:700;color:${clr}`;
+      nEl.style.cssText=`font-size:12px;font-weight:700;color:${clr};line-height:1.2`;
       nEl.textContent=cnt+' việc';
-      wEl.appendChild(nEl);
-      gaugeDiv.appendChild(wEl);
+      txtEl.appendChild(lEl);
+      txtEl.appendChild(nEl);
+      rowEl.appendChild(txtEl);
+
+      gaugeDiv.appendChild(rowEl);
       new Chart(cvs,{
         type:'doughnut',
-        data:{datasets:[{
-          data:[pct,100-pct],
-          backgroundColor:[clr,bgClr],
-          borderWidth:0,
-          borderRadius:pct>0&&pct<100?[6,0]:0
-        }]},
-        options:{
-          circumference:180,rotation:180,
-          responsive:false,cutout:'68%',
-          plugins:{legend:{display:false},tooltip:{enabled:false}},
-          animation:{duration:700}
-        }
+        data:{datasets:[{data:[pct,100-pct],backgroundColor:[clr,clr+'28'],borderWidth:0,borderRadius:pct>0&&pct<100?[4,0]:0}]},
+        options:{circumference:180,rotation:180,responsive:false,cutout:'65%',
+          plugins:{legend:{display:false},tooltip:{enabled:false}},animation:{duration:600}}
       });
     });
   }
 
-  // ── Chart 5: Số việc theo PIC triển khai (bar) ──
+  // ── Chart 5: Số việc theo PIC triển khai — grouped bar 4 mức cảnh báo ──
   const pPIC={};
-  proj.forEach(p=>{const v=(p.picTrienKhai||'').trim(); if(v&&v!=='--') pPIC[v]=(pPIC[v]||0)+1;});
-  const pPKeys=Object.keys(pPIC).sort((a,b)=>pPIC[b]-pPIC[a]);
-  const pPVals=pPKeys.map(k=>pPIC[k]);
+  proj.forEach(p=>{
+    const v=(p.picTrienKhai||'').trim();
+    if(!v||v==='--') return;
+    if(!pPIC[v]) pPIC[v]={red:0,yellow:0,green:0,done:0};
+    const rnk=warnRank(p);
+    if(rnk===0) pPIC[v].red++;
+    else if(rnk===1) pPIC[v].yellow++;
+    else if(rnk===2) pPIC[v].green++;
+    else pPIC[v].done++;
+  });
+  const pPKeys=Object.keys(pPIC).sort((a,b)=>{
+    const wa=pPIC[a].red*4+pPIC[a].yellow*2+pPIC[a].green+pPIC[a].done;
+    const wb=pPIC[b].red*4+pPIC[b].yellow*2+pPIC[b].green+pPIC[b].done;
+    return wb-wa;
+  });
   if(document.getElementById('c-proj-pic')) {
     charts.projPIC=new Chart(document.getElementById('c-proj-pic'),{type:'bar',
-      data:{labels:pPKeys,datasets:[{data:pPVals,backgroundColor:NAVY+'CC',borderRadius:4}]},
+      data:{labels:pPKeys,datasets:[
+        {label:'🔴 Quá hạn',     data:pPKeys.map(k=>pPIC[k].red),    backgroundColor:'#C8372DCC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🟡 Cảnh báo',    data:pPKeys.map(k=>pPIC[k].yellow), backgroundColor:'#E5C200CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🟢 Bình thường', data:pPKeys.map(k=>pPIC[k].green),  backgroundColor:'#16A34ACC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🔵 Kết thúc',    data:pPKeys.map(k=>pPIC[k].done),   backgroundColor:'#0EA5E9CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+      ]},
       options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{x:{ticks:{font:{size:9},maxRotation:30}},y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1}}}},
+        plugins:{
+          legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+          tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} việc`}},
+        },
+        scales:{
+          x:{ticks:{font:{size:9},maxRotation:30},grid:{display:false}},
+          y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1},grid:{color:'#F0EEE8'}},
+        }},
       plugins:[barLabels]
     });
   }
