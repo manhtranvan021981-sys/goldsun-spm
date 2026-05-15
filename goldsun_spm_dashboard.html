@@ -240,12 +240,46 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     <div class="a-chip blue" onclick="goTab('progress',1)">✅ <span id="c-ok">--</span> Đúng/Trước hạn</div>
   </div>
   <div class="g7" id="metric-cards"></div>
-  <div class="ai-box">
-    <div class="ai-hd">
-      <div class="ai-lbl">🤖 AI Tóm tắt tình hình — <span id="ai-date">--</span></div>
-      <button class="ai-ref" onclick="refreshAI()">🔄 Làm mới</button>
+  <div class="ai-box" style="display:flex;gap:14px;align-items:stretch">
+    <!-- LEFT 1/3: AI summary text -->
+    <div style="flex:0 0 32%;min-width:0;display:flex;flex-direction:column">
+      <div class="ai-hd">
+        <div class="ai-lbl">🤖 AI Tóm tắt tình hình — <span id="ai-date">--</span></div>
+        <button class="ai-ref" onclick="refreshAI()">🔄 Làm mới</button>
+      </div>
+      <div class="ai-txt" id="ai-summary" style="flex:1">Đang phân tích dữ liệu...</div>
     </div>
-    <div class="ai-txt" id="ai-summary">Đang phân tích dữ liệu...</div>
+    <!-- RIGHT 2/3: Overdue mẫu table -->
+    <div style="flex:1;min-width:0;border-left:1px solid #B5D4F4;padding-left:14px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div class="ai-lbl" style="flex-shrink:0;color:var(--red)">🔴 Mẫu quá hạn — <span id="overdue-count">0</span> mẫu</div>
+        <div style="position:relative;flex:1;min-width:140px;max-width:260px">
+          <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none;color:var(--gray)">🔍</span>
+          <input id="overdue-search" type="text" placeholder="Tìm số YQ, KH, PIC..."
+            oninput="filterOverdueTable(this.value)"
+            style="width:100%;padding:4px 8px 4px 26px;font-size:10px;border:1px solid #B5D4F4;border-radius:8px;background:#fff;box-sizing:border-box;outline:none">
+        </div>
+        <span id="overdue-visible-count" style="font-size:10px;color:var(--gray)"></span>
+      </div>
+      <div style="overflow-y:auto;max-height:210px;overflow-x:auto;border:1px solid #E8E6E0;border-radius:8px">
+        <table class="dt" style="min-width:1000px;font-size:10px;white-space:nowrap" id="overdue-table">
+          <thead><tr>
+            <th>Số YC mẫu</th>
+            <th>Ngày duyệt HT(4)</th>
+            <th>DKHT(5)</th>
+            <th>Mã dòng hàng</th>
+            <th style="min-width:120px;white-space:normal">Tên SP mẫu</th>
+            <th style="min-width:120px;white-space:normal">Mô tả mẫu</th>
+            <th style="min-width:120px;white-space:normal">Quy trình SX</th>
+            <th>PIC</th>
+            <th style="min-width:130px;white-space:normal">Tên khách hàng</th>
+            <th>Phân loại KH</th>
+            <th>Ngày kéo lệnh(13)</th>
+          </tr></thead>
+          <tbody id="overdue-tbody"><tr><td colspan="11" style="text-align:center;padding:12px;color:var(--gray)">Đang tải...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
   </div>
   <div class="g2">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>YQ mẫu theo tuần</div></div><div class="cw" style="height:180px"><canvas id="c-weekly"></canvas></div></div>
@@ -330,9 +364,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     </div>
   </div>
   <div class="panel">
-    <div class="ph">
-      <div class="pt"><span class="pt-icon">📋</span>Chi tiết toàn bộ YQ mẫu</div>
-      <div style="display:flex;gap:6px">
+    <div class="ph" style="flex-wrap:wrap;gap:6px">
+      <div class="pt" style="flex-shrink:0"><span class="pt-icon">📋</span>Chi tiết toàn bộ YQ mẫu</div>
+      <div style="position:relative;flex:1;min-width:160px;max-width:280px">
+        <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none;color:var(--gray)">🔍</span>
+        <input id="f-search" type="text" placeholder="Tìm số YQ, tên SP, KH, PIC..."
+          oninput="renderMainTable()"
+          style="width:100%;padding:4px 8px 4px 26px;font-size:10px;border:1px solid #E8E6E0;border-radius:6px;background:#fff;box-sizing:border-box;outline:none">
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
         <select id="f-pic" onchange="renderMainTable()" style="font-size:10px;padding:3px 6px;border:1px solid #E8E6E0;border-radius:6px"><option value="">Tất cả PIC</option></select>
         <select id="f-nm"  onchange="renderMainTable()" style="font-size:10px;padding:3px 6px;border:1px solid #E8E6E0;border-radius:6px"><option value="">Tất cả NM</option><option>GS1</option><option>GS5</option><option>GS6</option></select>
         <select id="f-ts"  onchange="renderMainTable()" style="font-size:10px;padding:3px 6px;border:1px solid #E8E6E0;border-radius:6px"><option value="">Tất cả TT</option></select>
@@ -383,9 +423,24 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Cảnh báo theo PIC</div></div><div class="cw" style="height:180px"><canvas id="c-alert-pic"></canvas></div></div>
   </div>
   <div class="panel">
-    <div class="ph">
-      <div class="pt"><span class="pt-icon">🤖</span>Phân tích chi tiết</div>
-      <div style="display:flex;gap:5px">
+    <div class="ph" style="flex-wrap:wrap;gap:8px">
+      <div class="pt" style="flex-shrink:0"><span class="pt-icon">🤖</span>Phân tích chi tiết</div>
+      <!-- Search box -->
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:220px;max-width:340px">
+        <div style="position:relative;flex:1">
+          <span style="position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;opacity:0.5">🔍</span>
+          <input id="ai-search" type="text" placeholder="Tìm theo YC, KH, PIC, root cause..."
+            oninput="filterAISearch(this.value)"
+            style="width:100%;padding:5px 10px 5px 28px;font-size:11px;border:1px solid #DDD;
+                   border-radius:14px;outline:none;background:#FAFAFA;color:#333;
+                   font-family:inherit;transition:border-color .2s"
+            onfocus="this.style.borderColor='var(--navy)';this.style.background='#fff'"
+            onblur="this.style.borderColor='#DDD';this.style.background='#FAFAFA'">
+        </div>
+        <span id="ai-search-count" style="font-size:10px;color:var(--gray);white-space:nowrap;min-width:32px;text-align:right"></span>
+      </div>
+      <!-- Filter buttons -->
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
         <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;background:#F5F5F5;color:#333;font-weight:600;border:1px solid #CCC" onclick="filterAI('all',this)">Tất cả</span>
         <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('dangTK',this)">🔵 Đang triển khai</span>
         <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('htTruocHan',this)">✅ Trước hạn</span>
@@ -657,6 +712,8 @@ function parseDataNPI(table) {
     dienGiai:      F('dien giai','dien giai yq','mo ta yq'),
     quyTrinhSX:    F('quy trinh san xuat mau','quy trinh sx mau','quy trinh san xuat','quy trinh sx','quy trinh'),
     moTaMau:       F('noi dung phan hoi mau','noi dung phan hoi','phan hoi mau','mo ta mau','ly do lam lai','mo ta sp'),
+    ngayDuyetHT:   F('ngay duyet hoan thien','ngay duyet ht','ngay duyet','duyet hoan thien','ngay phe duyet','(4)','cot 4'),
+    ngayKeoLenh:   F('ngay keo lenh trien khai mau','ngay keo lenh mau','ngay keo lenh','keo lenh trien khai','ngay keo lenh (13)','(13)','cot 13'),
   };
 
   console.log('📊 Column mapping DATA_NPI:', C);
@@ -722,6 +779,8 @@ function parseDataNPI(table) {
       dienGiai:      String(get(C.dienGiai)||''),
       quyTrinhSX:    String(get(C.quyTrinhSX)||''),
       moTaMau:       String(get(C.moTaMau)||''),
+      ngayDuyetHT:   (function(){const c=C.ngayDuyetHT>=0&&cells[C.ngayDuyetHT]?cells[C.ngayDuyetHT]:null;const d=parseGvizDate(c);return d&&!isNaN(d)?d.toISOString().split('T')[0]:null;})(),
+      ngayKeoLenh:   (function(){const c=C.ngayKeoLenh>=0&&cells[C.ngayKeoLenh]?cells[C.ngayKeoLenh]:null;const d=parseGvizDate(c);return d&&!isNaN(d)?d.toISOString().split('T')[0]:null;})(),
     });
   });
   return records;
@@ -793,11 +852,13 @@ function parseAIAnalysis(table) {
     action:     F('ai action','action plan'),
     note:       F('management note','note'),
   };
-  // Position-based fallback: col6=Số YC mẫu, col16=Tên SP mẫu, col30=GHI CHÚ PHÂN TÍCH, col31=GIẢI PHÁP/HÀNH ĐỘNG
-  if (C.id < 0)         C.id = 6;
-  if (C.tenSanPham < 0) C.tenSanPham = 16;
-  if (C.ghiChu < 0)     C.ghiChu = 30;
-  if (C.giaiPhap < 0)   C.giaiPhap = 31;
+  // Position-based fallback (0-based) — cấu trúc chuẩn AI_ANALYSIS:
+  //   EXCEL_COLS (23 cột, 0-22):  STT(0)…Số YC mẫu(5)…Tên SP mẫu(15)…Nội dung phản hồi(22)
+  //   ANNA_COLS  ( 9 cột, 23-31): TTTH(23)…GHI CHÚ PT(29)…GIẢI PHÁP(30)…NGÀY CẬP NHẬT(31)
+  if (C.id < 0)         C.id         = 5;
+  if (C.tenSanPham < 0) C.tenSanPham = 15;
+  if (C.ghiChu < 0)     C.ghiChu     = 29;
+  if (C.giaiPhap < 0)   C.giaiPhap   = 30;
   console.log('🤖 AI_ANALYSIS headers (0-35):', headers.slice(0,35));
   console.log('🤖 Column mapping AI_ANALYSIS:', C);
   const map = {};
@@ -1177,7 +1238,7 @@ async function loadData() {
       gvizFetch(CFG.SYS_ID, 'ALERT_CONFIG'),
       gvizFetch(CFG.SYS_ID, 'OWNER_EMAIL'),
       gvizFetch(CFG.PROJ_ID, CFG.PROJ_TAB, CFG.PROJ_HR),
-      gvizFetch(CFG.AI_ID, CFG.AI_TAB),
+      gvizFetch(CFG.AI_ID, CFG.AI_TAB, 2),   // header ở row 2
       gvizFetch(CFG.AI_ID, 'AI-5TIEUCHI'),
     ]);
 
@@ -1264,6 +1325,39 @@ function renderAll() {
   setTimeout(initCharts, 100);
 }
 
+function renderOverdueTable(q) {
+  const today=new Date(); today.setHours(0,0,0,0);
+  const overdue=(DATA.records||[]).filter(r=>{
+    if(r.ngayBanGiao && !isNaN(new Date(r.ngayBanGiao))) return false;
+    if(!r.dkht) return false;
+    return today > new Date(r.dkht);
+  });
+  const countEl=document.getElementById('overdue-count');
+  const visEl=document.getElementById('overdue-visible-count');
+  if(countEl) countEl.textContent=overdue.length;
+  const norm=q?vnStr(q):'';
+  const rows=norm?overdue.filter(r=>[r.soYQ,r.tenKH,r.pic,r.maDongHang,r.tenSanPhamMau,r.moTaMau,r.phanLoai].some(v=>vnStr(v||'').includes(norm))):overdue;
+  if(visEl) visEl.textContent=norm?`${rows.length}/${overdue.length}`:'';
+  const tr=(s,n)=>{const t=String(s||'');return t.length>n?`<span title="${t.replace(/"/g,'&quot;')}">${t.slice(0,n)}…</span>`:t||'--';};
+  const tbody=document.getElementById('overdue-tbody');
+  if(!tbody) return;
+  tbody.innerHTML=rows.length?rows.map(r=>`
+    <tr>
+      <td style="font-family:monospace;color:var(--red);font-weight:600">${r.soYQ||'--'}</td>
+      <td>${fmtD(r.ngayDuyetHT)||'--'}</td>
+      <td style="color:var(--red);font-weight:600">${fmtD(r.dkht)||'--'}</td>
+      <td>${r.maDongHang||'--'}</td>
+      <td style="white-space:normal;max-width:130px">${tr(r.tenSanPhamMau,22)}</td>
+      <td style="white-space:normal;max-width:130px">${tr(r.moTaMau,22)}</td>
+      <td style="white-space:normal;max-width:130px">${tr(r.quyTrinhSX,22)}</td>
+      <td>${(r.pic||'--').split(' ').slice(-2).join(' ')}</td>
+      <td style="white-space:normal;max-width:150px">${tr(r.tenKH,24)}</td>
+      <td>${r.phanLoai||'--'}</td>
+      <td>${fmtD(r.ngayKeoLenh)||'--'}</td>
+    </tr>`).join(''):`<tr><td colspan="11" style="text-align:center;padding:14px;color:var(--gray)">✓ Không có mẫu quá hạn</td></tr>`;
+}
+function filterOverdueTable(q) { renderOverdueTable(q); }
+
 // ── HELPERS ────────────────────────────────────────────────────
 function fmtD(s) {
   if (!s) return '--';
@@ -1320,11 +1414,14 @@ function renderAISummary() {
   document.getElementById('ai-summary').innerHTML=`
     📋 <strong>Tổng quan:</strong> <span class="hi-o">${s.total} YQ mẫu</span> đang quản lý.
     Khách hàng <strong>${topKH?topKH[0]:'(chưa có)'}</strong> nhiều nhất với ${topKH?topKH[1]:0} mẫu.<br><br>
-    🔴 <strong>Cảnh báo:</strong> <span class="hi-r">${s.red} mẫu quá hạn DKHT</span>,
-    trong đó <span class="hi-r">${s.escalate} mẫu cần escalation ngay</span> lên quản lý.<br><br>
+    🔴 <strong>Cảnh báo:</strong> <span class="hi-r">${s.mauQuaHan||0} mẫu quá hạn DKHT</span>
+    (chưa bàn giao + hôm nay &gt; DKHT) — tất cả ${s.mauQuaHan||0} mẫu này cần <span class="hi-r">escalation ngay lên quản lý</span>.<br><br>
     📈 <strong>KPI nhóm:</strong> Lead time TB <span class="hi-g">${kpi.k5||0} ngày</span> — ${kpi.k5<=3?'<span class="hi-g">✓ Đạt target ≤3 ngày</span>':'<span class="hi-r">✗ Vượt target</span>'}.
     Pass lần đầu <strong>${kpi.k1||0}%</strong>. KPI tổng <strong>${kpi.kpiTotal||0}%</strong>.<br><br>
-    ⚡ <strong>Action ngay:</strong> Escalation <strong>${s.escalate}</strong> mẫu lên QL — liên hệ KH xác nhận phê duyệt trong 24h.`;
+    ⚡ <strong>Action ngay:</strong> Escalation <strong>${s.mauQuaHan||0}</strong> mẫu lên QL — liên hệ KH xác nhận phê duyệt trong 24h.`;
+  // Render overdue table (right panel)
+  const searchVal=document.getElementById('overdue-search')?.value||'';
+  renderOverdueTable(searchVal);
 }
 
 function renderOverviewTable() {
@@ -1342,7 +1439,7 @@ function renderActivity() {
     {col:NAVY, t:`${DATA.records?.length||0} records đọc từ DATA_NPI`, s:new Date().toLocaleDateString('vi-VN')+' — gviz API'},
     {col:GREEN, t:`KPI nhóm tháng: ${DATA.kpiGroup?.kpiTotal||0}%`, s:'Auto — '+new Date().toLocaleDateString('vi-VN')},
     {col:ORANGE,t:`${s.orange||0} mẫu sắp đến hạn (≤3 ngày)`, s:'Hôm nay — Theo dõi'},
-    {col:RED,   t:`${s.escalate||0} mẫu cần escalation ngay`, s:'Hôm nay — Action ngay'},
+    {col:RED,   t:`${s.mauQuaHan||0} mẫu quá hạn cần escalation ngay`, s:'Hôm nay — Action ngay'},
   ];
   document.getElementById('ov-activity').innerHTML=acts.map(a=>`
     <div class="tl-item">
@@ -1381,7 +1478,15 @@ function renderMainTable() {
   const pic=document.getElementById('f-pic').value;
   const nm=document.getElementById('f-nm').value;
   const ts=document.getElementById('f-ts').value;
-  const rows=(DATA.records||[]).filter(r=>(!pic||r.pic===pic)&&(!nm||r.nhaMay===nm)&&(!ts||r.tinhTrang===ts));
+  const sq=(document.getElementById('f-search')?.value||'').trim();
+  const sqN=sq?vnStr(sq):'';
+  const rows=(DATA.records||[]).filter(r=>{
+    if(pic&&r.pic!==pic) return false;
+    if(nm&&r.nhaMay!==nm) return false;
+    if(ts&&r.tinhTrang!==ts) return false;
+    if(sqN&&![r.soYQ,r.tenKH,r.pic,r.tenSanPhamMau,r.moTaMau,r.maDongHang,r.dienGiai].some(v=>vnStr(v||'').includes(sqN))) return false;
+    return true;
+  });
   const alBg={red:'rgba(200,55,45,0.05)',orange:'rgba(217,119,6,0.05)',green:'rgba(27,107,58,0.05)',ok:''};
   const trunc=(s,n)=>{const t=String(s||'');return t.length>n?t.slice(0,n)+'…':t;};
   document.getElementById('main-tbody').innerHTML=rows.map(r=>`
@@ -1516,7 +1621,9 @@ function renderAITab() {
   document.getElementById('ai-cards').innerHTML=allRecs.length?allRecs.map(a=>{
     const tth=a.tinhTrangTH||'dangTK';
     const tthClr=tthColorMap[tth]||NAVY;
-    return `<div class="panel" style="margin-bottom:8px;border-left:4px solid ${tthClr}" data-tth="${tth}">
+    const _st=vnStr([a.soYQ,a.tenKH,a.pic,a.tenSanPhamMau,
+                     a.ghiChuPhanTich,a.giaiPhap,a.tinhTrang].join(' '));
+    return `<div class="panel" style="margin-bottom:8px;border-left:4px solid ${tthClr}" data-tth="${tth}" data-search-text="${_st}">
       <div style="display:flex;align-items:flex-start;gap:10px">
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
@@ -1541,6 +1648,15 @@ function renderAITab() {
     <div style="font-size:14px;font-weight:600;color:var(--green);margin-bottom:6px">Chưa có dữ liệu</div>
     <div style="font-size:11px;color:var(--gray)">Mở F12 → Console để xem log chi tiết.</div>
   </div>`;
+
+  // Reset search state & hiển thị counter sau khi render xong
+  _aiCurrentTTH = 'all';
+  _aiCurrentQ   = '';
+  const aiSearchEl = document.getElementById('ai-search');
+  if (aiSearchEl) aiSearchEl.value = '';
+  const n = allRecs.length;
+  const counterEl = document.getElementById('ai-search-count');
+  if (counterEl) counterEl.textContent = n ? `${n}/${n}` : '';
 
   // Render Phân tích tổng quát 5 tiêu chí
   renderAI5Tieuchi(DATA.ai5Data||[]);
@@ -1643,15 +1759,6 @@ function renderAI5Tieuchi(rawTable) {
     </div>`;
 }
 
-function filterAI(type, el) {
-  document.querySelectorAll('[onclick*="filterAI"]').forEach(c=>{c.style.background='';c.style.color='var(--gray)';c.style.fontWeight='';c.style.border='1px solid #E8E6E0';});
-  el.style.background=type==='all'?'#FDF0EF':type==='red'?'#FDF0EF':'#EAF5EE';
-  el.style.color=type==='red'?RED:GREEN; el.style.fontWeight='600';
-  document.querySelectorAll('#ai-cards .panel').forEach(c=>{
-    c.style.display=type==='all'?'':type==='red'?c.dataset.lv==='red'?'':'none':c.dataset.esc==='true'?'':'none';
-  });
-}
-
 function renderProjectTab() {
   const proj=DATA.project||[];
   console.log('📁 Project records:', proj.length, proj.slice(0,2));
@@ -1734,18 +1841,39 @@ function renderProjList(q){
 
 function filterProjList(q){ renderProjList(q); }
 
+// ── Trạng thái bộ lọc AI tab ──────────────────────────────────
+let _aiCurrentTTH = 'all';
+let _aiCurrentQ   = '';
+
+function _applyAIFilters() {
+  const q = vnStr(_aiCurrentQ);
+  document.querySelectorAll('#ai-cards .panel').forEach(c => {
+    const matchTTH = _aiCurrentTTH === 'all' || c.dataset.tth === _aiCurrentTTH;
+    const matchQ   = !q || (c.dataset.searchText || '').includes(q);
+    c.style.display = (matchTTH && matchQ) ? '' : 'none';
+  });
+  const total   = document.querySelectorAll('#ai-cards .panel').length;
+  const visible = document.querySelectorAll('#ai-cards .panel:not([style*="none"])').length;
+  const counter = document.getElementById('ai-search-count');
+  if (counter) counter.textContent = `${visible}/${total}`;
+}
+
 function filterAI(type, el) {
+  _aiCurrentTTH = type;
   document.querySelectorAll('[onclick*="filterAI"]').forEach(c=>{
     c.style.background=''; c.style.color='var(--gray)'; c.style.fontWeight=''; c.style.border='1px solid #E8E6E0';
   });
   const cfg = TINH_TRANG_TH.find(c=>c.key===type);
-  el.style.background  = cfg ? cfg.bg  : '#F5F5F5';
-  el.style.color       = cfg ? cfg.color : '#333';
-  el.style.fontWeight  = '600';
-  el.style.border      = cfg ? '1px solid '+cfg.bc : '1px solid #CCC';
-  document.querySelectorAll('#ai-cards .panel').forEach(c=>{
-    c.style.display = type==='all' ? '' : (c.dataset.tth===type ? '' : 'none');
-  });
+  el.style.background = cfg ? cfg.bg  : '#F5F5F5';
+  el.style.color      = cfg ? cfg.color : '#333';
+  el.style.fontWeight = '600';
+  el.style.border     = cfg ? '1px solid '+cfg.bc : '1px solid #CCC';
+  _applyAIFilters();
+}
+
+function filterAISearch(q) {
+  _aiCurrentQ = q;
+  _applyAIFilters();
 }
 
 function renderOwners() {
