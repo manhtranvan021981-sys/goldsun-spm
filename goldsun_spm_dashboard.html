@@ -891,6 +891,9 @@ function computeStats(records) {
     lt18Sum:0, lt18Count:0, lt17Sum:0, lt17Count:0,
     gtLamMauSum:0, gtDHSum:0,
     pass1st:0, pass1stRate:0,   // Mẫu pass lần đầu (đủ 3 ĐK)
+    soMauDaGiao:0,              // Ngày bàn giao mẫu (7) ≠ rỗng
+    soMauKHPhanHoi:0,           // Tình trạng mẫu ∈ danh sách phản hồi
+    mauQuaHan:0,                // Chưa giao (cột 7 rỗng) VÀ Today > DKHT (5)
   };
   const khMap = {}, weekMap = {};
   const dhMap = {}, nmDetailMap = {};
@@ -944,6 +947,21 @@ function computeStats(records) {
     const dk2 = isPassStatus(r.tinhTrang);
     const dk3 = r.ngayBanGiao !== null && r.ngayBanGiao !== undefined && !isNaN(r.ngayBanGiao);
     if (dk1 && dk2 && dk3) s.pass1st++;
+
+    // Số mẫu đã giao: Ngày bàn giao mẫu (cột 7) ≠ rỗng
+    if (r.ngayBanGiao && !isNaN(r.ngayBanGiao)) s.soMauDaGiao++;
+
+    // Số mẫu KH đã phản hồi: tinhTrang ∈ danh sách phản hồi
+    const tsPH = vnStr(r.tinhTrang);
+    if (/ok, khach hang da duyet|lam lai mau|ok, cong ty duyet|ok, khong can lam mau|^huy$|khach hang huy/.test(tsPH)) s.soMauKHPhanHoi++;
+
+    // Mẫu quá hạn: chưa bàn giao (cột 7 rỗng) VÀ today > DKHT (cột 5)
+    const chuaGiao = !r.ngayBanGiao || isNaN(r.ngayBanGiao);
+    if (chuaGiao && r.dkht) {
+      const todayMs = new Date(); todayMs.setHours(0,0,0,0);
+      const dkhtMs  = new Date(r.dkht);
+      if (!isNaN(dkhtMs) && todayMs > dkhtMs) s.mauQuaHan++;
+    }
 
     // Weekly — đếm theo từng cột ngày riêng
     if (r.ngayYeuCau  && !isNaN(r.ngayYeuCau))  addWeek(r.ngayYeuCau,  'newCount');
@@ -1244,13 +1262,15 @@ function renderMetrics() {
   const s=DATA.stats, kpi=DATA.kpiGroup||{};
   const fmtBil = v => v >= 1e9 ? (v/1e9).toFixed(2)+' tỷ' : v >= 1e6 ? (v/1e6).toFixed(0)+' tr' : (v||0).toLocaleString('vi-VN');
   document.getElementById('metric-cards').innerHTML=[
-    {label:'Tổng YQ mẫu',        val:s.total,                          sub:`Cập nhật ${new Date().toLocaleDateString('vi-VN')}`,  badge:'',bc:''},
-    {label:'Cảnh báo đỏ',        val:s.red,                            sub:'Cần xử lý ngay',         badge:(s.escalate||0)+' Escalation',bc:'b-red'},
-    {label:'MẪU PASS LẦN ĐẦU',  val:s.pass1st,                        sub:'ĐK1: Lần thứ 1 | ĐK2: Đã duyệt | ĐK3: Có ngày BG', badge:s.pass1stRate+'% tổng YQ', bc: s.pass1stRate>=80?'b-green':s.pass1stRate>=60?'b-orange':'b-red'},
-    {label:'LEADTIME TB',         val:(s.lt18Avg||0)+' ngày',           sub:'Cột (18) = BG − YC (1)', badge:s.lt18Avg<=3?'✓ Đạt ≤3 ngày':s.lt18Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt18Avg<=3?'b-green':s.lt18Avg<=5?'b-orange':'b-red'},
-    {label:'LEADTIME TB ĐỦ ĐK',  val:(s.lt17Avg||0)+' ngày',           sub:'Cột (17) = BG − Duyệt (4)',badge:s.lt17Avg<=3?'✓ Đạt ≤3 ngày':s.lt17Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt17Avg<=3?'b-green':s.lt17Avg<=5?'b-orange':'b-red'},
-    {label:'GIÁ TRỊ LÀM MẪU',   val:fmtBil(s.gtLamMauSum),            sub:'Tổng "Giá trị làm mẫu dự kiến"',badge:'',bc:''},
-    {label:'GIÁ TRỊ ĐH',         val:fmtBil(s.gtDHSum),                sub:'Tổng "Giá trị đơn hàng dự kiến"',badge:'',bc:''},
+    {label:'Tổng YQ mẫu',              val:s.total,                          sub:`Cập nhật ${new Date().toLocaleDateString('vi-VN')}`,  badge:'',bc:''},
+    {label:'SỐ MẪU ĐÃ GIAO',           val:s.soMauDaGiao,                    sub:'Ngày bàn giao mẫu (cột 7) ≠ rỗng', badge:s.total?Math.round(s.soMauDaGiao/s.total*100)+'% tổng YQ':'', bc:'b-green'},
+    {label:'SỐ MẪU KH ĐÃ PHẢN HỒI',   val:s.soMauKHPhanHoi,                 sub:'OK duyệt / Làm lại / Hủy / KH hủy', badge:s.total?Math.round(s.soMauKHPhanHoi/s.total*100)+'% tổng YQ':'', bc:'b-green'},
+    {label:'MẪU QUÁ HẠN',              val:s.mauQuaHan,                      sub:'Chưa giao + Today > DKHT (cột 5)', badge:s.mauQuaHan>0?'⚠ Cần xử lý ngay':'✓ Không có', bc:s.mauQuaHan>0?'b-red':'b-green'},
+    {label:'MẪU PASS LẦN ĐẦU',         val:s.pass1st,                        sub:'ĐK1: Lần thứ 1 | ĐK2: Đã duyệt | ĐK3: Có ngày BG', badge:s.pass1stRate+'% tổng YQ', bc: s.pass1stRate>=80?'b-green':s.pass1stRate>=60?'b-orange':'b-red'},
+    {label:'LEADTIME TB',               val:(s.lt18Avg||0)+' ngày',           sub:'Cột (18) = BG − YC (1)', badge:s.lt18Avg<=3?'✓ Đạt ≤3 ngày':s.lt18Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt18Avg<=3?'b-green':s.lt18Avg<=5?'b-orange':'b-red'},
+    {label:'LEADTIME TB ĐỦ ĐK',        val:(s.lt17Avg||0)+' ngày',           sub:'Cột (17) = BG − Duyệt (4)',badge:s.lt17Avg<=3?'✓ Đạt ≤3 ngày':s.lt17Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt17Avg<=3?'b-green':s.lt17Avg<=5?'b-orange':'b-red'},
+    {label:'GIÁ TRỊ LÀM MẪU',         val:fmtBil(s.gtLamMauSum),            sub:'Tổng "Giá trị làm mẫu dự kiến"',badge:'',bc:''},
+    {label:'GIÁ TRỊ ĐH',               val:fmtBil(s.gtDHSum),                sub:'Tổng "Giá trị đơn hàng dự kiến"',badge:'',bc:''},
   ].map(m=>`<div class="mc"><div class="mc-label">${m.label}</div><div class="mc-val">${m.val}</div><div class="mc-sub">${m.sub}</div>${m.badge?`<span class="badge ${m.bc}">${m.badge}</span>`:''}</div>`).join('');
 }
 
