@@ -44,6 +44,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:12px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.g5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .g6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:12px}
 .g7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .mc{background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
@@ -368,7 +369,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 
 <!-- TAB AI -->
 <div class="tab-content" id="tab-ai">
-  <div class="g3" style="margin-bottom:14px" id="alert-big-cards"></div>
+  <div class="g5" style="margin-bottom:14px" id="alert-big-cards"></div>
   <!-- Phân tích tổng quát 5 tiêu chí -->
   <div class="panel" style="margin-bottom:14px">
     <div class="ph">
@@ -385,9 +386,12 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     <div class="ph">
       <div class="pt"><span class="pt-icon">🤖</span>Phân tích chi tiết</div>
       <div style="display:flex;gap:5px">
-        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;background:#FDF0EF;color:var(--red);font-weight:600;border:1px solid #F5C6C3" onclick="filterAI('all',this)">Tất cả</span>
-        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('red',this)">🔴 Đỏ</span>
-        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('esc',this)">⬆ Escalation</span>
+        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;background:#F5F5F5;color:#333;font-weight:600;border:1px solid #CCC" onclick="filterAI('all',this)">Tất cả</span>
+        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('dangTK',this)">🔵 Đang triển khai</span>
+        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('htTruocHan',this)">✅ Trước hạn</span>
+        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('htDungHan',this)">🟢 Đúng hạn</span>
+        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('htSauHan',this)">🟡 Sau hạn</span>
+        <span style="font-size:10px;padding:4px 10px;border-radius:12px;cursor:pointer;border:1px solid #E8E6E0;color:var(--gray)" onclick="filterAI('quaHanCHT',this)">🔴 Quá hạn CHT</span>
       </div>
     </div>
     <div id="ai-cards"></div>
@@ -883,6 +887,30 @@ function isPassStatus(ts) {
   return PASS_STATUS.some(p => n === p || n.includes(p) || p.includes(n));
 }
 
+// ── TÌNH TRẠNG TỔNG HỢP — 5 trạng thái chuẩn ──────────────────
+const TINH_TRANG_TH = [
+  {key:'dangTK',     label:'Đang triển khai',          bg:'#EEF4FB', bc:'#1A4B8C', color:'#1A4B8C', icon:'🔵'},
+  {key:'htTruocHan', label:'Hoàn thành trước hạn',     bg:'#EAF5EE', bc:'#2D7D46', color:'#2D7D46', icon:'✅'},
+  {key:'htDungHan',  label:'Hoàn thành đúng hạn',      bg:'#EAF5EE', bc:'#2D7D46', color:'#2D7D46', icon:'🟢'},
+  {key:'htSauHan',   label:'Hoàn thành sau hạn',       bg:'#FEF3E2', bc:'#B07D00', color:'#B07D00', icon:'🟡'},
+  {key:'quaHanCHT',  label:'Quá hạn chưa hoàn thành',  bg:'#FDF0EF', bc:'#C8372D', color:'#C8372D', icon:'🔴'},
+];
+function computeTinhTrangTH(r) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const daGiao = r.ngayBanGiao && !isNaN(r.ngayBanGiao);
+  const dkhtDate = r.dkht ? new Date(r.dkht) : null;
+  if (!daGiao) {
+    if (dkhtDate && !isNaN(dkhtDate) && today > dkhtDate) return 'quaHanCHT';
+    return 'dangTK';
+  }
+  if (!dkhtDate || isNaN(dkhtDate)) return 'htDungHan';
+  const bg = new Date(r.ngayBanGiao); bg.setHours(0,0,0,0);
+  const dk = new Date(dkhtDate);      dk.setHours(0,0,0,0);
+  if (bg < dk) return 'htTruocHan';
+  if (bg.getTime() === dk.getTime()) return 'htDungHan';
+  return 'htSauHan';
+}
+
 function computeStats(records) {
   const s = {
     total: records.length, red:0, orange:0, green:0, ok:0, escalate:0,
@@ -894,6 +922,7 @@ function computeStats(records) {
     soMauDaGiao:0,              // Ngày bàn giao mẫu (7) ≠ rỗng
     soMauKHPhanHoi:0,           // Tình trạng mẫu ∈ danh sách phản hồi
     mauQuaHan:0,                // Chưa giao (cột 7 rỗng) VÀ Today > DKHT (5)
+    tthCounts:{dangTK:0, htTruocHan:0, htDungHan:0, htSauHan:0, quaHanCHT:0},
   };
   const khMap = {}, weekMap = {};
   const dhMap = {}, nmDetailMap = {};
@@ -962,6 +991,10 @@ function computeStats(records) {
       const dkhtMs  = new Date(r.dkht);
       if (!isNaN(dkhtMs) && todayMs > dkhtMs) s.mauQuaHan++;
     }
+
+    // Tình trạng tổng hợp — đếm 5 loại
+    const tth = r.tinhTrangTH || computeTinhTrangTH(r);
+    if (s.tthCounts[tth] !== undefined) s.tthCounts[tth]++;
 
     // Weekly — đếm theo từng cột ngày riêng
     if (r.ngayYeuCau  && !isNaN(r.ngayYeuCau))  addWeek(r.ngayYeuCau,  'newCount');
@@ -1158,6 +1191,16 @@ async function loadData() {
     const ai5Data = ai5Sheet.status==='fulfilled' ? ai5Sheet.value : null;
     console.log('🔬 AI-5TIEUCHI raw table rows:', ai5Data?.rows?.length ?? 0);
 
+    // Enrich ALL records: tinhTrangTH + AI fields (ghiChuPhanTich, giaiPhap)
+    records.forEach(r => {
+      r.tinhTrangTH     = computeTinhTrangTH(r);
+      r.ghiChuPhanTich  = aiMap[r.soYQ]?.ghiChuPhanTich || '';
+      r.giaiPhap        = aiMap[r.soYQ]?.giaiPhap || '';
+      r.rootCause       = aiMap[r.soYQ]?.ghiChuPhanTich || aiMap[r.soYQ]?.rootCause || '';
+      r.actionSuggest   = aiMap[r.soYQ]?.giaiPhap || aiMap[r.soYQ]?.actionSuggest || '';
+      r.tenSanPhamMau   = aiMap[r.soYQ]?.tenSanPhamMau || r.tenSanPhamMau || '';
+    });
+
     const stats = computeStats(records);
     const {groupKPI, kpiByPIC} = computeKPI(records);
     const kpiByWeek  = computeKPIByWeek(records);
@@ -1167,13 +1210,7 @@ async function loadData() {
     const alerts = records
       .filter(r=>r.level!=='ok')
       .sort((a,b)=>{const o={red:0,orange:1,green:2};return (o[a.level]||3)-(o[b.level]||3)||b.daysFromDeadline-a.daysFromDeadline;})
-      .map(r=>({...r,
-        rootCause:      aiMap[r.soYQ]?.ghiChuPhanTich || aiMap[r.soYQ]?.rootCause || 'Chưa có phân tích AI',
-        actionSuggest:  aiMap[r.soYQ]?.giaiPhap || aiMap[r.soYQ]?.actionSuggest || 'Liên hệ PIC cập nhật tiến độ',
-        tenSanPhamMau:  aiMap[r.soYQ]?.tenSanPhamMau || r.tenSanPhamMau || '',
-        ghiChuPhanTich: aiMap[r.soYQ]?.ghiChuPhanTich || '',
-        giaiPhap:       aiMap[r.soYQ]?.giaiPhap || '',
-      }));
+      .map(r=>({...r}));
 
     DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project, aiMap, ai5Data};
     renderAll();
@@ -1431,59 +1468,66 @@ function renderKPISection() {
 
 function renderAITab() {
   const s=DATA.stats;
-  document.getElementById('alert-big-cards').innerHTML=[
-    {lv:'red',icon:'🔴',cnt:s.red,    title:'Cảnh báo đỏ',  desc:'Quá hạn DKHT — Escalation ngay!'},
-    {lv:'orange',icon:'🟡',cnt:s.orange,title:'Cảnh báo vàng',desc:'Còn ≤3 ngày — Theo dõi chặt'},
-    {lv:'green',icon:'✅',cnt:(s.ok||0)+(s.green||0),title:'An toàn',desc:'Đúng/Trước hạn'},
-  ].map(c=>`<div style="background:${c.lv==='red'?'#FDF0EF':c.lv==='orange'?'#FEF3E2':'#EAF5EE'};
-    border:2px solid ${c.lv==='red'?'#F5C6C3':c.lv==='orange'?'#FCD88A':'#A3D9B4'};
-    border-radius:12px;padding:18px;text-align:center">
-    <div style="font-size:32px;margin-bottom:6px">${c.icon}</div>
-    <div style="font-size:32px;font-weight:700;color:${c.lv==='red'?RED:c.lv==='orange'?ORANGE:GREEN}">${c.cnt}</div>
-    <div style="font-size:14px;font-weight:600;color:${c.lv==='red'?RED:c.lv==='orange'?ORANGE:GREEN};margin:4px 0">${c.title}</div>
-    <div style="font-size:11px;color:var(--gray)">${c.desc}</div></div>`).join('');
-
-  const picMap={};
-  (DATA.records||[]).forEach(r=>{
-    if(!picMap[r.pic])picMap[r.pic]={pic:r.pic,total:0,red:0,ok:0};
-    picMap[r.pic].total++;
-    if(r.level==='red')picMap[r.pic].red++;
-    else if(r.level==='ok')picMap[r.pic].ok++;
-  });
-  const pics=Object.values(picMap).sort((a,b)=>(b.ok/b.total)-(a.ok/a.total));
-  document.getElementById('rank-best').innerHTML=pics.map((p,i)=>`
-    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #F0EEE8">
-      <div style="width:20px;font-size:11px;font-weight:600;color:var(--gray);text-align:center">${i+1}</div>
-      <div style="flex:1;font-size:11px">${p.pic.split(' ').slice(-2).join(' ')}</div>
-      <div style="width:70px;height:5px;background:#F0EEE8;border-radius:3px;overflow:hidden">
-        <div style="height:100%;background:${GREEN};border-radius:3px;width:${Math.round(p.ok/p.total*100)}%"></div></div>
-      <div style="font-size:11px;font-weight:600;color:${GREEN};width:36px;text-align:right">${Math.round(p.ok/p.total*100)}%</div>
+  // 5 thẻ Tình trạng tổng hợp — 1 hàng ngang
+  const tthC = s.tthCounts || {};
+  document.getElementById('alert-big-cards').innerHTML = TINH_TRANG_TH.map(c=>`
+    <div style="background:${c.bg};border:2px solid ${c.bc};border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:box-shadow 0.15s"
+         onclick="filterAI('${c.key}',this)" title="${c.label}">
+      <div style="font-size:26px;margin-bottom:4px">${c.icon}</div>
+      <div style="font-size:28px;font-weight:700;color:${c.color}">${tthC[c.key]||0}</div>
+      <div style="font-size:10px;font-weight:600;color:${c.color};margin:3px 0;line-height:1.3">${c.label}</div>
     </div>`).join('');
 
-  // Debug: log alerts and records for diagnosis
-  console.log('🔔 Alerts:', DATA.alerts?.length, '| Records:', DATA.records?.length,
-    '| Red:', DATA.stats?.red, '| Orange:', DATA.stats?.orange, '| Green:', DATA.stats?.green,
-    '| Ok:', DATA.stats?.ok);
-  console.log('🔍 Sample records (first 3):', (DATA.records||[]).slice(0,3).map(r=>({
-    soYQ:r.soYQ, tinhTrang:r.tinhTrang, dkht:r.dkht, level:r.level, gtDH:r.gtDH, gtLamMau:r.gtLamMau
-  })));
+  // Ranking PIC — dùng tinhTrangTH
+  const picMap={};
+  (DATA.records||[]).forEach(r=>{
+    const tth = r.tinhTrangTH || 'dangTK';
+    if(!picMap[r.pic]) picMap[r.pic]={pic:r.pic,total:0,dangTK:0,htTruocHan:0,htDungHan:0,htSauHan:0,quaHanCHT:0};
+    picMap[r.pic].total++;
+    picMap[r.pic][tth]=(picMap[r.pic][tth]||0)+1;
+  });
+  const pics=Object.values(picMap).sort((a,b)=>{
+    const scoreA=(a.htTruocHan+a.htDungHan)/Math.max(a.total,1);
+    const scoreB=(b.htTruocHan+b.htDungHan)/Math.max(b.total,1);
+    return scoreB-scoreA;
+  });
+  document.getElementById('rank-best').innerHTML=pics.map((p,i)=>{
+    const htDungTruoc=(p.htTruocHan||0)+(p.htDungHan||0);
+    const pct=Math.round(htDungTruoc/Math.max(p.total,1)*100);
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #F0EEE8">
+      <div style="width:20px;font-size:11px;font-weight:600;color:var(--gray);text-align:center">${i+1}</div>
+      <div style="flex:1;font-size:11px">${p.pic.split(' ').slice(-2).join(' ')}</div>
+      <div style="font-size:9px;color:var(--gray)">${p.total} YQ</div>
+      <div style="width:60px;height:5px;background:#F0EEE8;border-radius:3px;overflow:hidden">
+        <div style="height:100%;background:${GREEN};border-radius:3px;width:${pct}%"></div></div>
+      <div style="font-size:11px;font-weight:600;color:${GREEN};width:34px;text-align:right">${pct}%</div>
+    </div>`;
+  }).join('');
 
-  const totalRec = (DATA.records||[]).length;
-  const noAlerts = !(DATA.alerts||[]).length;
-  document.getElementById('ai-cards').innerHTML=(DATA.alerts||[]).map(a=>`
-    <div class="panel" style="margin-bottom:8px;border-left:4px solid ${a.level==='red'?RED:a.level==='orange'?ORANGE:GREEN}" data-lv="${a.level}" data-esc="${a.escalate}">
+  console.log('🔔 Records:', DATA.records?.length, '| tthCounts:', DATA.stats?.tthCounts);
+
+  // Chi tiết — hiển thị ALL records, filter by tinhTrangTH
+  const tthColorMap={dangTK:NAVY,htTruocHan:GREEN,htDungHan:GREEN,htSauHan:GOLD,quaHanCHT:RED};
+  const tthLabelMap=Object.fromEntries(TINH_TRANG_TH.map(c=>[c.key,c.icon+' '+c.label]));
+  const allRecs=(DATA.records||[]).slice().sort((a,b)=>{
+    const ord={quaHanCHT:0,htSauHan:1,dangTK:2,htDungHan:3,htTruocHan:4};
+    return (ord[a.tinhTrangTH]??2)-(ord[b.tinhTrangTH]??2)||(b.daysFromDeadline||0)-(a.daysFromDeadline||0);
+  });
+  document.getElementById('ai-cards').innerHTML=allRecs.length?allRecs.map(a=>{
+    const tth=a.tinhTrangTH||'dangTK';
+    const tthClr=tthColorMap[tth]||NAVY;
+    return `<div class="panel" style="margin-bottom:8px;border-left:4px solid ${tthClr}" data-tth="${tth}">
       <div style="display:flex;align-items:flex-start;gap:10px">
         <div style="flex:1">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap">
-            ${dotHtml(a.level)}
+            <span style="font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;background:${tthClr}18;color:${tthClr};border:1px solid ${tthClr}44">${tthLabelMap[tth]||tth}</span>
             <span style="font-size:13px;font-weight:600">${a.soYQ||'--'} — ${a.tenKH||'--'}</span>
-            ${a.escalate?'<span style="font-size:10px;padding:2px 7px;border-radius:4px;background:#FDF0EF;color:var(--red);font-weight:600">⬆ Escalation</span>':''}
-            ${a.daysFromDeadline>0?`<span style="font-size:11px;color:var(--red);font-weight:600">Quá ${a.daysFromDeadline} ngày</span>`:''}
+            ${a.daysFromDeadline>0?`<span style="font-size:11px;color:${RED};font-weight:600">Quá ${a.daysFromDeadline} ngày</span>`:''}
           </div>
           <div style="font-size:10px;color:var(--navy);font-weight:600;margin-bottom:4px;font-family:monospace;background:#EEF4FB;display:inline-block;padding:2px 8px;border-radius:6px">
             ${a.soYQ||'--'} / Lần ${a.lanThu||1}${a.tenSanPhamMau?' / '+a.tenSanPhamMau:''}
           </div>
-          <div style="font-size:11px;color:var(--gray);margin-bottom:6px;margin-top:4px">PIC: <strong>${a.pic||'--'}</strong> | DKHT: ${fmtD(a.dkht)}</div>
+          <div style="font-size:11px;color:var(--gray);margin-bottom:6px;margin-top:4px">PIC: <strong>${a.pic||'--'}</strong> | DKHT: ${fmtD(a.dkht)} | BG: ${a.ngayBanGiao?fmtD(a.ngayBanGiao):'Chưa giao'}</div>
           <div style="font-size:11px;padding:8px;background:#F8F7F4;border-radius:8px;line-height:1.7">
             <span style="color:var(--navy);font-weight:600">Root cause:</span> ${a.ghiChuPhanTich||'—'}<br>
             <span style="color:var(--gold);font-weight:600">Giải pháp:</span> ${a.giaiPhap||'—'}
@@ -1491,11 +1535,12 @@ function renderAITab() {
         </div>
         <div>${pillTs(a.tinhTrang)}</div>
       </div>
-    </div>`).join('') || `<div style="padding:20px;text-align:center;color:var(--gray)">
-      <div style="font-size:28px;margin-bottom:8px">✓</div>
-      <div style="font-size:14px;font-weight:600;color:var(--green);margin-bottom:6px">Không có cảnh báo tồn đọng</div>
-      <div style="font-size:11px;color:var(--gray)">Tổng ${totalRec} bản ghi — Tất cả đã hoàn thành hoặc chưa đến hạn cảnh báo (≤5 ngày).<br>Mở F12 → Console để xem chi tiết phân tích cột dữ liệu.</div>
     </div>`;
+  }).join(''):`<div style="padding:20px;text-align:center;color:var(--gray)">
+    <div style="font-size:28px;margin-bottom:8px">📋</div>
+    <div style="font-size:14px;font-weight:600;color:var(--green);margin-bottom:6px">Chưa có dữ liệu</div>
+    <div style="font-size:11px;color:var(--gray)">Mở F12 → Console để xem log chi tiết.</div>
+  </div>`;
 
   // Render Phân tích tổng quát 5 tiêu chí
   renderAI5Tieuchi(DATA.ai5Data||[]);
@@ -1688,6 +1733,20 @@ function renderProjList(q){
 }
 
 function filterProjList(q){ renderProjList(q); }
+
+function filterAI(type, el) {
+  document.querySelectorAll('[onclick*="filterAI"]').forEach(c=>{
+    c.style.background=''; c.style.color='var(--gray)'; c.style.fontWeight=''; c.style.border='1px solid #E8E6E0';
+  });
+  const cfg = TINH_TRANG_TH.find(c=>c.key===type);
+  el.style.background  = cfg ? cfg.bg  : '#F5F5F5';
+  el.style.color       = cfg ? cfg.color : '#333';
+  el.style.fontWeight  = '600';
+  el.style.border      = cfg ? '1px solid '+cfg.bc : '1px solid #CCC';
+  document.querySelectorAll('#ai-cards .panel').forEach(c=>{
+    c.style.display = type==='all' ? '' : (c.dataset.tth===type ? '' : 'none');
+  });
+}
 
 function renderOwners() {
   const pics=DATA.kpiByPIC||[];
@@ -2113,15 +2172,29 @@ function initCharts() {
     }
   }
 
-  const picNames=Object.values((()=>{const m={};(DATA.records||[]).forEach(r=>{if(!m[r.pic])m[r.pic]={pic:r.pic,red:0,orange:0,ok:0};m[r.pic][r.level==='red'?'red':r.level==='orange'?'orange':'ok']++;});return m;})());
+  // Biểu đồ PIC — grouped 5 cột theo tinhTrangTH
+  const picTTH={};
+  (DATA.records||[]).forEach(r=>{
+    const tth=r.tinhTrangTH||'dangTK';
+    if(!picTTH[r.pic]) picTTH[r.pic]={pic:r.pic,dangTK:0,htTruocHan:0,htDungHan:0,htSauHan:0,quaHanCHT:0};
+    picTTH[r.pic][tth]=(picTTH[r.pic][tth]||0)+1;
+  });
+  const picTTHArr=Object.values(picTTH);
+  const picLabels=picTTHArr.map(p=>p.pic.split(' ').slice(-1)[0]);
   charts.alertPic=mkChart('c-alert-pic',{type:'bar',
-    data:{labels:picNames.map(p=>p.pic.split(' ').slice(-1)[0]),datasets:[
-      {label:'Đỏ',  data:picNames.map(p=>p.red),   backgroundColor:RED+'AA',  borderRadius:3},
-      {label:'Vàng',data:picNames.map(p=>p.orange),backgroundColor:GOLD+'AA', borderRadius:3},
-      {label:'OK',  data:picNames.map(p=>p.ok),    backgroundColor:GREEN+'AA',borderRadius:3},
+    data:{labels:picLabels,datasets:[
+      {label:'🔵 Đang TK',      data:picTTHArr.map(p=>p.dangTK),     backgroundColor:'#1A4B8CCC', borderRadius:3, barPercentage:0.6, categoryPercentage:0.85},
+      {label:'✅ HT trước hạn', data:picTTHArr.map(p=>p.htTruocHan), backgroundColor:'#2D7D46CC', borderRadius:3, barPercentage:0.6, categoryPercentage:0.85},
+      {label:'🟢 HT đúng hạn',  data:picTTHArr.map(p=>p.htDungHan),  backgroundColor:'#16A34ACC', borderRadius:3, barPercentage:0.6, categoryPercentage:0.85},
+      {label:'🟡 HT sau hạn',   data:picTTHArr.map(p=>p.htSauHan),   backgroundColor:'#B07D00CC', borderRadius:3, barPercentage:0.6, categoryPercentage:0.85},
+      {label:'🔴 Quá hạn CHT',  data:picTTHArr.map(p=>p.quaHanCHT),  backgroundColor:'#C8372DCC', borderRadius:3, barPercentage:0.6, categoryPercentage:0.85},
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}}},
-      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9},stepSize:1}}}}
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:4}}},
+      scales:{
+        x:{ticks:{font:{size:9}},grid:{display:false}},
+        y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1},grid:{color:'#F0EEE8'}}
+      }}
   });
 
   const proj=DATA.project||[];
