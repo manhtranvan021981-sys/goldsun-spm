@@ -352,9 +352,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
         <th class="sub">Trước hạn</th><th class="sub">Đúng hạn</th><th class="sub">Chậm</th>
         <th class="sub">GS1</th><th class="sub">GS5</th><th class="sub">GS6</th></tr>
     </thead><tbody id="bct-body"></tbody></table></div>
-    <div class="g2">
+    <div style="display:grid;grid-template-columns:1fr 1fr 2fr;gap:12px;margin-bottom:12px">
       <div><div style="font-size:11px;font-weight:600;margin-bottom:8px">Phân bổ tình trạng</div><div class="cw" style="height:200px"><canvas id="c-bct-doughnut"></canvas></div></div>
       <div><div style="font-size:11px;font-weight:600;margin-bottom:8px">Tình trạng theo nhóm KH</div><div class="cw" style="height:200px"><canvas id="c-bct-bar"></canvas></div></div>
+      <div><div style="font-size:11px;font-weight:600;margin-bottom:8px">📊 PIC triển khai mẫu — Tổng nhận / Hoàn thành / Quá hạn</div><div class="cw" style="height:200px"><canvas id="c-pic-npi"></canvas></div></div>
     </div>
   </div>
   <div class="panel">
@@ -2258,6 +2259,48 @@ function initCharts() {
       scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,beginAtZero:true,ticks:{font:{size:9},stepSize:1}}}}
   });
 
+  // ── Chart PIC NPI — Tổng nhận / Hoàn thành / Quá hạn ──
+  {
+    const recs = DATA.records || [];
+    const picNpiMap = {};
+    recs.forEach(r => {
+      const pic = (r.pic || '').trim();
+      if (!pic) return;
+      if (!picNpiMap[pic]) picNpiMap[pic] = {total:0, done:0, overdue:0};
+      picNpiMap[pic].total++;
+      const tth = r.tinhTrangTH || computeTinhTrangTH(r);
+      if (tth === 'htTruocHan' || tth === 'htDungHan' || tth === 'htSauHan') picNpiMap[pic].done++;
+      if (tth === 'quaHanCHT') picNpiMap[pic].overdue++;
+    });
+    const picNpiKeys = Object.keys(picNpiMap).sort((a,b) => picNpiMap[b].total - picNpiMap[a].total);
+    if (picNpiKeys.length && document.getElementById('c-pic-npi')) {
+      charts.picNPI = mkChart('c-pic-npi', {
+        type: 'bar',
+        data: {
+          labels: picNpiKeys,
+          datasets: [
+            {label:'Tổng nhận',    data: picNpiKeys.map(k=>picNpiMap[k].total),   backgroundColor: NAVY+'BB',  borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+            {label:'Hoàn thành',   data: picNpiKeys.map(k=>picNpiMap[k].done),    backgroundColor: GREEN+'BB', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+            {label:'Quá hạn',      data: picNpiKeys.map(k=>picNpiMap[k].overdue), backgroundColor: RED+'BB',   borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          layout: {padding: {top: 16}},
+          plugins: {
+            legend: {position:'bottom', labels:{font:{size:9}, boxWidth:10, padding:5}},
+            tooltip: {callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} YQ`}},
+          },
+          scales: {
+            x: {ticks:{font:{size:9}, maxRotation:30}, grid:{display:false}},
+            y: {beginAtZero:true, ticks:{font:{size:9}, stepSize:1}, grid:{color:'#F0EEE8'}},
+          }
+        },
+        plugins: [barLabels]
+      });
+    }
+  }
+
   const top5=s.byKH||[];
   charts.top5=mkChart('c-top5',{type:'bar',
     data:{labels:top5.map(k=>k.kh),datasets:[{data:top5.map(k=>k.cnt),backgroundColor:[RED,GREEN,NAVY+'BB',GOLD,'#9C27B0'],borderRadius:4}]},
@@ -2582,23 +2625,23 @@ function initCharts() {
 
       // Row: [mini gauge | label + count]
       const rowEl=document.createElement('div');
-      rowEl.style.cssText=`display:flex;flex-direction:row;align-items:center;gap:7px;background:${clr}18;border-radius:7px;padding:3px 8px 3px 6px;border-left:3px solid ${clr};width:100%;box-sizing:border-box`;
+      rowEl.style.cssText=`display:flex;flex-direction:row;align-items:center;gap:10px;background:${clr}18;border-radius:7px;padding:3px 8px 3px 6px;border-left:3px solid ${clr};width:100%;box-sizing:border-box`;
 
-      // Trái: mini gauge
+      // Trái: mini gauge — % nằm tại tâm cung tròn (canvas center y≈28)
       const ccEl=document.createElement('div');
       ccEl.style.cssText=`position:relative;width:${cW}px;height:${halfH}px;overflow:hidden;flex-shrink:0`;
       const cvs=document.createElement('canvas');
       cvs.width=cW; cvs.height=cW;
       ccEl.appendChild(cvs);
       const pEl=document.createElement('div');
-      pEl.style.cssText=`position:absolute;bottom:0;left:0;right:0;text-align:center;transform:translateX(3ch);font-size:15px;font-weight:700;color:${clr};line-height:1`;
+      pEl.style.cssText=`position:absolute;left:0;right:0;top:28px;transform:translateY(-50%);text-align:center;font-size:12px;font-weight:700;color:${clr};line-height:1;pointer-events:none`;
       pEl.textContent=pct+'%';
       ccEl.appendChild(pEl);
       rowEl.appendChild(ccEl);
 
-      // Phải: label + count
+      // Phải: label + count — thêm padding-left để tránh che lấp
       const txtEl=document.createElement('div');
-      txtEl.style.cssText='display:flex;flex-direction:column;gap:1px;min-width:0;flex:1';
+      txtEl.style.cssText='display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;padding-left:4px';
       const lEl=document.createElement('div');
       lEl.style.cssText='font-size:10px;font-weight:600;color:#333;line-height:1.25;white-space:normal';
       lEl.textContent=label;
