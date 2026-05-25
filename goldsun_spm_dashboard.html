@@ -464,8 +464,26 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">⚠</span>Cảnh báo tiến độ</div></div><div class="cw" style="height:200px"><canvas id="c-proj-tiendo"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🔔</span>Cảnh báo công việc</div></div><div class="cw"><div id="proj-cviec-gauges"></div></div></div>
   </div>
-  <!-- Hàng 3: Số việc theo nhân viên -->
-  <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">👤</span>Số việc giao theo nhân viên (Pic triển khai)</div></div><div class="cw" style="height:200px"><canvas id="c-proj-pic"></canvas></div></div>
+  <!-- Hàng 3: Số việc theo nhân viên — 3 biểu đồ ngang -->
+  <div class="panel">
+    <div class="ph"><div class="pt"><span class="pt-icon">👤</span>Số việc giao theo nhân viên (PIC triển khai)</div></div>
+    <div style="display:flex;gap:12px;align-items:flex-start">
+      <div style="width:35%;flex-shrink:0">
+        <div style="font-size:9px;font-weight:600;color:#5F5E5A;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px">Phân loại cảnh báo</div>
+        <div class="cw" style="height:260px"><canvas id="c-proj-pic"></canvas></div>
+      </div>
+      <div style="flex:1;display:flex;gap:10px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:9px;font-weight:600;color:#5F5E5A;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px">📊 Pipeline công việc</div>
+          <div class="cw" style="height:260px"><canvas id="c-proj-pipeline"></canvas></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:9px;font-weight:600;color:#5F5E5A;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.3px">📈 Tỉ lệ hoàn thành (%)</div>
+          <div class="cw" style="height:260px"><canvas id="c-proj-rate"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- AI + Danh sách -->
   <div class="ai-box" style="margin-bottom:12px">
     <div class="ai-hd"><div class="ai-lbl">🤖 AI Phân tích dự án</div></div>
@@ -1822,8 +1840,16 @@ function renderProjCard(p){
   const cardBg=isDone?'#E6F9EE':'#F8F7F4';
   const udBg=p.mucDoUuTien&&p.mucDoUuTien.toLowerCase().includes('cao')?'#FDF0EF':'#FEF3E2';
   const udClr=p.mucDoUuTien&&p.mucDoUuTien.toLowerCase().includes('cao')?RED:ORANGE;
-  const cbTDClr=((cbTD).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':RED;
-  const cbCVClr=((cbCV).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d')).includes('vang')?'#E5C200':'#16A34A';
+  const _cbNorm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+  const cbTDn = _cbNorm(cbTD), cbCVn = _cbNorm(cbCV);
+  // TD: 3 mức — đỏ (do/qua han) → vàng (vang/chu y) → xanh (mặc định)
+  const cbTDClr = cbTDn.includes('do')||cbTDn.includes('qua han') ? RED
+                : cbTDn.includes('vang')||cbTDn.includes('chu y') ? '#E5C200'
+                : '#16A34A';
+  // CV: 3 mức — đỏ → vàng → xanh
+  const cbCVClr = cbCVn.includes('do')||cbCVn.includes('qua han') ? RED
+                : cbCVn.includes('vang')||cbCVn.includes('chu y') ? '#E5C200'
+                : '#16A34A';
   return `<div class="proj-card ${cls}" style="border-left-color:${borderClr};background:${cardBg}">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;gap:8px">
       <div style="font-size:13px;font-weight:600;line-height:1.4;color:${isDone?'#1B6B3A':'#1A1A1A'}">
@@ -1839,8 +1865,8 @@ function renderProjCard(p){
     <div style="font-size:10px;color:var(--gray);display:flex;flex-wrap:wrap;align-items:center;gap:4px">
       <span>PIC: <strong>${p.picTrienKhai||'--'}</strong></span>
       <span>| ${p.targetBD||'--'} → ${p.targetKT||'--'}</span>
-      ${!isDone&&cbTD?`<span style="padding:2px 8px;border-radius:4px;background:#FDF0EF;color:${cbTDClr};font-size:27px;font-weight:600">⚠ TD: ${cbTD}</span>`:''}
-      ${!isDone&&cbCV?`<span style="padding:2px 8px;border-radius:4px;background:#FEF3E2;color:${cbCVClr};font-size:27px;font-weight:600">🔔 CV: ${cbCV}</span>`:''}
+      ${!isDone&&cbTD?`<span style="padding:3px 10px;border-radius:5px;background:${cbTDClr}28;color:${cbTDClr};font-size:16px;font-weight:700;border:1px solid ${cbTDClr}55">⚠ TD: ${cbTD}</span>`:''}
+      ${!isDone&&cbCV?`<span style="padding:3px 10px;border-radius:20px;background:${cbCVClr}28;color:${cbCVClr};font-size:16px;font-weight:700;border:1px solid ${cbCVClr}55;display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:50%;background:${cbCVClr};flex-shrink:0;display:inline-block;box-shadow:0 0 0 2px ${cbCVClr}44"></span>${cbCV}</span>`:''}
     </div>
   </div>`;
 }
@@ -1941,10 +1967,18 @@ const barLabels = {
       ctx.fillStyle='#333';
       ctx.textAlign='center';
       ctx.textBaseline='bottom';
+      const isHoriz = chart.options.indexAxis==='y';
       meta.data.forEach((bar,i) => {
         const val = ds.data[i];
         if (!val) return;
-        ctx.fillText(val, bar.x, bar.y-2);
+        const lbl = ds._pctLabel ? val+'%' : val;
+        if(isHoriz){
+          ctx.textAlign='left'; ctx.textBaseline='middle';
+          ctx.fillText(lbl, bar.x+3, bar.y);
+        } else {
+          ctx.textAlign='center'; ctx.textBaseline='bottom';
+          ctx.fillText(lbl, bar.x, bar.y-2);
+        }
       });
     });
     ctx.restore();
@@ -2506,7 +2540,7 @@ function initCharts() {
   if (!proj.length) {
     const gdiv=document.getElementById('proj-cviec-gauges');
     if(gdiv) gdiv.innerHTML='<div style="color:var(--gray);font-size:12px;padding:20px;text-align:center">⚠ Chưa có dữ liệu cảnh báo</div>';
-    ['c-proj','c-proj-uutien','c-proj-tiendo','c-proj-pic'].forEach(id=>{
+    ['c-proj','c-proj-uutien','c-proj-tiendo','c-proj-pic','c-proj-pipeline','c-proj-rate'].forEach(id=>{
       const el=document.getElementById(id);
       if(!el) return;
       const ctx=el.getContext('2d');
@@ -2634,14 +2668,14 @@ function initCharts() {
       cvs.width=cW; cvs.height=cW;
       ccEl.appendChild(cvs);
       const pEl=document.createElement('div');
-      pEl.style.cssText=`position:absolute;left:0;right:0;top:28px;transform:translateY(-50%);text-align:center;font-size:12px;font-weight:700;color:${clr};line-height:1;pointer-events:none`;
+      pEl.style.cssText=`position:absolute;left:0;right:0;top:28px;transform:translateX(2ch) translateY(-50%);text-align:center;font-size:12px;font-weight:700;color:${clr};line-height:1;pointer-events:none`;
       pEl.textContent=pct+'%';
       ccEl.appendChild(pEl);
       rowEl.appendChild(ccEl);
 
       // Phải: label + count — thêm padding-left để tránh che lấp
       const txtEl=document.createElement('div');
-      txtEl.style.cssText='display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;padding-left:4px';
+      txtEl.style.cssText='display:flex;flex-direction:column;gap:1px;min-width:0;flex:1;margin-left:5ch';
       const lEl=document.createElement('div');
       lEl.style.cssText='font-size:10px;font-weight:600;color:#333;line-height:1.25;white-space:normal';
       lEl.textContent=label;
@@ -2655,19 +2689,23 @@ function initCharts() {
       gaugeDiv.appendChild(rowEl);
       new Chart(cvs,{
         type:'doughnut',
-        data:{datasets:[{data:[pct,100-pct],backgroundColor:[clr,clr+'28'],borderWidth:0,borderRadius:pct>0&&pct<100?[4,0]:0}]},
-        options:{circumference:180,rotation:180,responsive:false,cutout:'65%',
+        data:{datasets:[{data:[pct,100-pct],backgroundColor:[clr,clr+'66'],borderWidth:0,borderRadius:pct>0&&pct<100?[4,0]:0}]},
+        options:{circumference:180,rotation:180,responsive:false,cutout:'58%',
           plugins:{legend:{display:false},tooltip:{enabled:false}},animation:{duration:600}}
       });
     });
   }
 
-  // ── Chart 5: Số việc theo PIC triển khai — grouped bar 4 mức cảnh báo ──
+  // ── Chart 5: Số việc theo PIC — 3 biểu đồ: cảnh báo / pipeline / tỉ lệ HT ──
   const pPIC={};
+  const _ptn = s => (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
   proj.forEach(p=>{
     const v=(p.picTrienKhai||'').trim();
     if(!v||v==='--') return;
-    if(!pPIC[v]) pPIC[v]={red:0,yellow:0,green:0,done:0};
+    if(!pPIC[v]) pPIC[v]={red:0,yellow:0,green:0,done:0,paused:0,cancelled:0};
+    const tnorm=_ptn(p.trangThai);
+    if(tnorm.includes('tam dung')||tnorm.includes('pause')||tnorm.includes('hold')) { pPIC[v].paused++; return; }
+    if(tnorm.includes('huy')||tnorm.includes('cancel')) { pPIC[v].cancelled++; return; }
     const rnk=warnRank(p);
     if(rnk===0) pPIC[v].red++;
     else if(rnk===1) pPIC[v].yellow++;
@@ -2675,26 +2713,106 @@ function initCharts() {
     else pPIC[v].done++;
   });
   const pPKeys=Object.keys(pPIC).sort((a,b)=>{
-    const wa=pPIC[a].red*4+pPIC[a].yellow*2+pPIC[a].green+pPIC[a].done;
-    const wb=pPIC[b].red*4+pPIC[b].yellow*2+pPIC[b].green+pPIC[b].done;
-    return wb-wa;
+    const tot=d=>d.red+d.yellow+d.green+d.done+d.paused+d.cancelled;
+    return tot(pPIC[b])-tot(pPIC[a]);
   });
+
+  // 5a: Grouped bar — phân loại cảnh báo (35%)
   if(document.getElementById('c-proj-pic')) {
     charts.projPIC=new Chart(document.getElementById('c-proj-pic'),{type:'bar',
       data:{labels:pPKeys,datasets:[
-        {label:'🔴 Quá hạn',     data:pPKeys.map(k=>pPIC[k].red),    backgroundColor:'#C8372DCC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
-        {label:'🟡 Cảnh báo',    data:pPKeys.map(k=>pPIC[k].yellow), backgroundColor:'#E5C200CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
-        {label:'🟢 Bình thường', data:pPKeys.map(k=>pPIC[k].green),  backgroundColor:'#16A34ACC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
-        {label:'🔵 Kết thúc',    data:pPKeys.map(k=>pPIC[k].done),   backgroundColor:'#0EA5E9CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🔴 Quá hạn',    data:pPKeys.map(k=>pPIC[k].red),       backgroundColor:'#C8372DCC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🟡 Cảnh báo',   data:pPKeys.map(k=>pPIC[k].yellow),    backgroundColor:'#E5C200CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🟢 Bình thường',data:pPKeys.map(k=>pPIC[k].green),     backgroundColor:'#16A34ACC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🔵 Kết thúc',   data:pPKeys.map(k=>pPIC[k].done),      backgroundColor:'#0EA5E9CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'⏸ Tạm dừng',   data:pPKeys.map(k=>pPIC[k].paused),    backgroundColor:'#9C27B0CC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
+        {label:'🚫 Hủy',        data:pPKeys.map(k=>pPIC[k].cancelled), backgroundColor:'#607D8BCC', borderRadius:3, barPercentage:0.7, categoryPercentage:0.8},
       ]},
       options:{responsive:true,maintainAspectRatio:false,
+        layout:{padding:{top:14}},
         plugins:{
-          legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:5}},
+          legend:{position:'bottom',labels:{font:{size:8},boxWidth:8,padding:4}},
           tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} việc`}},
         },
         scales:{
-          x:{ticks:{font:{size:9},maxRotation:30},grid:{display:false}},
-          y:{beginAtZero:true,ticks:{font:{size:9},stepSize:1},grid:{color:'#F0EEE8'}},
+          x:{ticks:{font:{size:8},maxRotation:35},grid:{display:false}},
+          y:{beginAtZero:true,ticks:{font:{size:8},stepSize:1},grid:{color:'#F0EEE8'}},
+        }},
+      plugins:[barLabels]
+    });
+  }
+
+  // 5b: Pipeline — horizontal stacked bar (% tổng từng nhân viên)
+  if(document.getElementById('c-proj-pipeline')) {
+    charts.projPipeline=new Chart(document.getElementById('c-proj-pipeline'),{type:'bar',
+      data:{labels:pPKeys,datasets:[
+        {label:'Quá hạn',    data:pPKeys.map(k=>pPIC[k].red),       backgroundColor:'#C8372DDD', barPercentage:0.65, categoryPercentage:0.85},
+        {label:'Cảnh báo',   data:pPKeys.map(k=>pPIC[k].yellow),    backgroundColor:'#E5C200DD', barPercentage:0.65, categoryPercentage:0.85},
+        {label:'Bình thường',data:pPKeys.map(k=>pPIC[k].green),     backgroundColor:'#16A34ADD', barPercentage:0.65, categoryPercentage:0.85},
+        {label:'Kết thúc',   data:pPKeys.map(k=>pPIC[k].done),      backgroundColor:'#0EA5E9DD', barPercentage:0.65, categoryPercentage:0.85},
+        {label:'Tạm dừng',   data:pPKeys.map(k=>pPIC[k].paused),    backgroundColor:'#9C27B0DD', barPercentage:0.65, categoryPercentage:0.85},
+        {label:'Hủy',        data:pPKeys.map(k=>pPIC[k].cancelled), backgroundColor:'#607D8BDD', barPercentage:0.65, categoryPercentage:0.85},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        indexAxis:'y',
+        layout:{padding:{right:32}},
+        plugins:{
+          legend:{position:'bottom',labels:{font:{size:8},boxWidth:8,padding:4}},
+          tooltip:{mode:'index',callbacks:{
+            footer:items=>`Tổng: ${items.reduce((s,i)=>s+i.raw,0)} việc`
+          }},
+        },
+        scales:{
+          x:{stacked:true,beginAtZero:true,ticks:{font:{size:8},stepSize:5},grid:{color:'#F0EEE8'}},
+          y:{stacked:true,ticks:{font:{size:8}}},
+        }},
+      plugins:[{
+        id:'pipelineTotal',
+        afterDatasetsDraw(chart){
+          const {ctx}=chart;
+          ctx.save();
+          const meta0=chart.getDatasetMeta(chart.data.datasets.length-1);
+          chart.data.labels.forEach((_,i)=>{
+            const bar=meta0.data[i];
+            if(!bar) return;
+            const tot=chart.data.datasets.reduce((s,ds)=>s+(ds.data[i]||0),0);
+            if(!tot) return;
+            ctx.font='bold 9px Segoe UI,Arial'; ctx.fillStyle='#333';
+            ctx.textAlign='left'; ctx.textBaseline='middle';
+            ctx.fillText(tot+' CV', bar.x+4, bar.y);
+          });
+          ctx.restore();
+        }
+      }]
+    });
+  }
+
+  // 5c: Tỉ lệ hoàn thành = (done+paused+cancelled)/tổng × 100%
+  if(document.getElementById('c-proj-rate')) {
+    const rateData=pPKeys.map(k=>{
+      const d=pPIC[k];
+      const total=d.red+d.yellow+d.green+d.done+d.paused+d.cancelled;
+      return total>0?Math.round((d.done+d.paused+d.cancelled)/total*100):0;
+    });
+    const rateColors=rateData.map(v=>v>=80?'#16A34ADD':v>=50?'#E5C200DD':'#C8372DDD');
+    charts.projRate=new Chart(document.getElementById('c-proj-rate'),{type:'bar',
+      data:{labels:pPKeys,datasets:[{
+        label:'Tỉ lệ HT (%)',
+        data:rateData,
+        backgroundColor:rateColors,
+        borderRadius:4,
+        barPercentage:0.65, categoryPercentage:0.8,
+        _pctLabel:true,
+      }]},
+      options:{responsive:true,maintainAspectRatio:false,
+        layout:{padding:{top:16}},
+        plugins:{
+          legend:{display:false},
+          tooltip:{callbacks:{label:ctx=>`Hoàn thành: ${ctx.raw}%`}},
+        },
+        scales:{
+          x:{ticks:{font:{size:8},maxRotation:35},grid:{display:false}},
+          y:{beginAtZero:true,max:100,ticks:{font:{size:8},stepSize:20,callback:v=>v+'%'},grid:{color:'#F0EEE8'}},
         }},
       plugins:[barLabels]
     });
