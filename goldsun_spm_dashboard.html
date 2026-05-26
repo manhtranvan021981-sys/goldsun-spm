@@ -115,6 +115,32 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .sdesc{font-size:11px;color:var(--gray);margin-top:2px;line-height:1.6}
 .cblock{font-family:monospace;font-size:10px;background:#1A1A1A;color:#7CFC00;border-radius:8px;padding:8px 12px;margin-top:6px;white-space:pre;overflow-x:auto}
 
+/* ══════════════════════════════════════════
+   2-LEVEL NAV — Brand bar + L1 BP + L2 sub-tabs
+══════════════════════════════════════════ */
+.topbar-brand{background:var(--green);padding:0 16px;display:flex;align-items:center;gap:12px;height:48px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+.brand-divider{width:1px;height:26px;background:rgba(255,255,255,0.2);flex-shrink:0}
+.nav-l1{background:var(--green);padding:5px 14px;display:flex;gap:5px;align-items:stretch;overflow-x:auto;border-top:1px solid rgba(255,255,255,0.12);position:sticky;top:48px;z-index:99}
+.nav-l1::-webkit-scrollbar{height:3px}
+.nav-l1::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.2);border-radius:2px}
+.l1-btn{flex:1;min-width:90px;padding:5px 7px;border:1.5px solid rgba(255,255,255,0.28);border-radius:7px;background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.85);font-size:10px;font-weight:600;text-align:center;line-height:1.35;cursor:pointer;transition:all 0.18s;white-space:normal;position:relative;font-family:inherit}
+.l1-btn:hover{background:rgba(255,255,255,0.18);color:#fff;border-color:rgba(255,255,255,0.6)}
+.l1-btn.active{background:var(--gold);color:#fff;border-color:var(--gold);box-shadow:0 2px 8px rgba(200,149,42,0.4)}
+.l1-btn .bp-badge{position:absolute;top:3px;right:5px;font-size:8px;padding:1px 4px;border-radius:7px;font-weight:700;line-height:1.4}
+.l1-btn.active .bp-badge{background:rgba(0,0,0,0.18);color:#fff}
+.l1-btn:not(.active) .bp-badge{background:rgba(255,255,255,0.22);color:rgba(255,255,255,0.9)}
+.nav-l2-outer{background:#fff;border-bottom:2px solid #E0DED9;position:sticky;top:98px;z-index:98}
+.nav-l2-wrap{overflow:hidden;max-height:0;transition:max-height 0.25s ease;padding:0 16px}
+.nav-l2-wrap.open{max-height:50px}
+.nav-l2{display:flex;gap:0;overflow-x:auto;padding:2px 0}
+.nav-l2::-webkit-scrollbar{height:2px}
+.l2-btn{padding:7px 14px;font-size:11px;color:var(--gray);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.15s;font-weight:500;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit;display:inline-flex;align-items:center;gap:4px}
+.l2-btn:hover{color:var(--navy);border-bottom-color:#C8C6C0}
+.l2-btn.active{color:var(--navy);border-bottom-color:var(--red);font-weight:700}
+/* BP placeholder — hiện khi chọn BP chưa có dữ liệu */
+.bp-ph{display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;min-height:55vh}
+.bp-ph.show{display:flex}
+
 /* ── RESPONSIVE BREAKPOINTS ── */
 /* Tablet rộng ≤1400px */
 @media (max-width:1400px){
@@ -205,20 +231,30 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   <div class="loading-bar"><div class="loading-fill"></div></div>
 </div>
 
-<div class="topbar">
-  <div class="logo">
-    <div class="logo-badge">GS</div>
-    <div><div class="logo-text">SPM Dashboard</div><div class="logo-sub">Phát triển sản phẩm mới</div></div>
+<!-- ════ BRAND BAR ════ -->
+<div class="topbar-brand">
+  <svg width="36" height="36" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+    <rect width="34" height="34" rx="7" fill="#fff"/>
+    <path d="M 29.12,10 A 14,14 0 1,0 29.12,24" fill="none" stroke="#1B6B3A" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M 26.09,11.75 A 10.5,10.5 0 1,0 26.09,22.25" fill="none" stroke="#1B6B3A" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 23.06,13.5 A 7,7 0 1,0 23.06,20.5" fill="none" stroke="#1B6B3A" stroke-width="1.6" stroke-linecap="round"/>
+    <g transform="translate(17,17)">
+      <polygon fill="#C8952A" points="0,-5.8 1.2,-1.2 5.8,0 1.2,1.2 0,5.8 -1.2,1.2 -5.8,0 -1.2,-1.2"/>
+      <polygon fill="#C8952A" transform="rotate(45)" points="0,-5.8 1.2,-1.2 5.8,0 1.2,1.2 0,5.8 -1.2,1.2 -5.8,0 -1.2,-1.2" opacity="0.7"/>
+      <circle r="2.2" fill="#C8952A"/>
+    </g>
+  </svg>
+  <div>
+    <div style="font-size:13px;font-weight:600;color:#fff;line-height:1.2">GoldSun Dashboard</div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.65)">Khối Công nghệ — Technology HO</div>
   </div>
-  <nav class="nav">
-    <div class="nav-item active" onclick="goTab('overview',0)">📊 Tổng quan</div>
-    <div class="nav-item" onclick="goTab('progress',1)">📋 Tiến độ mẫu</div>
-    <div class="nav-item" onclick="goTab('kpi',2)">📈 KPI</div>
-    <div class="nav-item" onclick="goTab('ai',3)">🤖 AI Phân tích</div>
-    <div class="nav-item" onclick="goTab('project',4)">💼 Dự án</div>
-    <div class="nav-item" onclick="goTab('setup',5)">⚙️ Cài đặt</div>
-  </nav>
-  <div class="topbar-right">
+  <div class="brand-divider"></div>
+  <div style="font-size:11px;color:rgba(255,255,255,0.6);white-space:nowrap">🏭 Quế Võ 1 · GS1 · GS5 · GS6</div>
+  <div class="brand-divider"></div>
+  <div style="font-size:16px;font-weight:700;color:#E2AF3A;letter-spacing:0.6px;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 6px rgba(226,175,58,0.35)">
+    GSP NEXT 30 &nbsp;·&nbsp; CUỘC CHUYỂN ĐỔI LỚN ĐÃ BẮT ĐẦU &nbsp;·&nbsp; TƯ DUY MỚI - HỆ THỐNG MỚI
+  </div>
+  <div class="topbar-right" style="margin-left:auto">
     <select class="period-sel" id="period-sel">
       <option value="week">Tuần này</option>
       <option value="month">Tháng này</option>
@@ -229,7 +265,34 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   </div>
 </div>
 
+<!-- ════ LEVEL-1 NAV — Các Bộ phận ════ -->
+<div class="nav-l1" id="navL1">
+  <button class="l1-btn" data-bp="tqkh" onclick="selectDashBP(this)">🏠 Tổng quan<br>khối CN</button>
+  <button class="l1-btn" data-bp="thietke" onclick="selectDashBP(this)">🎨 BP Thiết kế<br>— Chế bản<span class="bp-badge">2</span></button>
+  <button class="l1-btn active" data-bp="spmnpi" onclick="selectDashBP(this)">⚙️ BP CN triển khai<br>&amp; tối ưu SX<span class="bp-badge">6</span></button>
+  <button class="l1-btn" data-bp="data" onclick="selectDashBP(this)">🗄️ BP Dữ liệu CN<br>&amp; Hệ thống<span class="bp-badge">4</span></button>
+  <button class="l1-btn" data-bp="dev" onclick="selectDashBP(this)">💻 BP Phát triển CN<br>&amp; Ứng dụng<span class="bp-badge">2</span></button>
+  <button class="l1-btn" data-bp="std" onclick="selectDashBP(this)">📋 Tiêu chuẩn<br>Qui định</button>
+  <button class="l1-btn" data-bp="issuelog" onclick="selectDashBP(this)">🚨 Issue Log</button>
+  <button class="l1-btn" data-bp="setup_bp" onclick="selectDashBP(this)">⚙ Cài đặt</button>
+</div>
+
+<!-- ════ LEVEL-2 NAV — Sub-tabs ════ -->
+<div class="nav-l2-outer" id="navL2Outer">
+  <div class="nav-l2-wrap" id="navL2Wrap">
+    <div class="nav-l2" id="navL2"></div>
+  </div>
+</div>
+
 <div class="content">
+
+<!-- BP PLACEHOLDER — hiện khi chọn BP chưa tích hợp -->
+<div class="bp-ph" id="bpPlaceholder">
+  <div style="font-size:52px;margin-bottom:16px" id="bpPhIcon">📋</div>
+  <div style="font-size:20px;font-weight:700;color:var(--navy);margin-bottom:10px" id="bpPhTitle">Module đang phát triển</div>
+  <div style="font-size:13px;color:var(--gray);line-height:1.8;max-width:520px" id="bpPhDesc">Nội dung bộ phận này đang được xây dựng trong khuôn khổ GSP NEXT 30 và sẽ được tích hợp trong các phiên bản tiếp theo của GoldSun Dashboard.</div>
+  <div style="margin-top:24px;padding:9px 22px;background:#FEF3E2;border-radius:20px;font-size:12px;font-weight:700;color:var(--gold);border:1px solid #FCD88A">🔜 Sắp ra mắt — GSP NEXT 30</div>
+</div>
 
 <!-- TAB TỔNG QUAN -->
 <div class="tab-content active" id="tab-overview">
@@ -1935,10 +1998,16 @@ function refreshAI() {
 }
 
 function goTab(id,idx) {
+  // Hiện tab nội dung
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  document.querySelectorAll('.nav-item')[idx].classList.add('active');
+  // Ẩn BP placeholder
+  const ph = document.getElementById('bpPlaceholder');
+  if(ph) ph.classList.remove('show');
+  // Sync trạng thái active L2 nav
+  document.querySelectorAll('.l2-btn').forEach(b=>b.classList.toggle('active', b.dataset.sub===id));
+  // Đảm bảo L1 spmnpi đang active
+  document.querySelectorAll('.l1-btn').forEach(b=>b.classList.toggle('active', b.dataset.bp==='spmnpi'));
 }
 
 // ── LINEAR REGRESSION ──────────────────────────────────────────
@@ -2839,6 +2908,79 @@ function renderFunnels() {
       <div class="fn-cnt">${p.cnt}</div>
     </div>`).join('');
 }
+
+// ── 2-LEVEL NAV — BP CONFIG & FUNCTIONS ─────────────────────────
+const DASH_BPS = {
+  tqkh:     {label:'Tổng quan khối CN',              icon:'🏠', subtabs:[]},
+  thietke:  {label:'BP Thiết kế – Chế bản',          icon:'🎨', subtabs:[]},
+  spmnpi:   {label:'BP CN triển khai & tối ưu SX',   icon:'⚙️', subtabs:[
+    {id:'overview', label:'📊 Tổng quan'},
+    {id:'progress', label:'📋 Tiến độ mẫu'},
+    {id:'kpi',      label:'🏅 KPI'},
+    {id:'ai',       label:'🤖 AI Phân tích'},
+    {id:'project',  label:'💼 Dự án'},
+    {id:'setup',    label:'⚙️ Cài đặt'},
+  ]},
+  data:     {label:'BP Dữ liệu CN & Hệ thống',      icon:'🗄️', subtabs:[]},
+  dev:      {label:'BP Phát triển CN & Ứng dụng',    icon:'💻', subtabs:[]},
+  std:      {label:'Tiêu chuẩn, Qui định',            icon:'📋', subtabs:[]},
+  issuelog: {label:'Issue Log',                       icon:'🚨', subtabs:[]},
+  setup_bp: {label:'Cài đặt hệ thống',               icon:'⚙',  subtabs:[]},
+};
+
+function selectDashBP(btn) {
+  document.querySelectorAll('.l1-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const bpId = btn.dataset.bp;
+  const cfg = DASH_BPS[bpId];
+  if(!cfg) return;
+  const wrap = document.getElementById('navL2Wrap');
+  const l2   = document.getElementById('navL2');
+  const ph   = document.getElementById('bpPlaceholder');
+
+  if(bpId === 'spmnpi') {
+    // BP có dữ liệu thực — hiện L2 + tab đầu tiên
+    ph.classList.remove('show');
+    wrap.classList.add('open');
+    l2.innerHTML = cfg.subtabs.map((t,i)=>
+      `<button class="l2-btn ${i===0?'active':''}" data-sub="${t.id}" onclick="selectDashL2(this,'spmnpi')">${t.label}</button>`
+    ).join('');
+    goTab(cfg.subtabs[0].id, 0);
+  } else if(bpId === 'setup_bp') {
+    // Cài đặt — chuyển thẳng đến tab setup, không cần L2
+    ph.classList.remove('show');
+    wrap.classList.remove('open');
+    l2.innerHTML = '';
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab-setup').classList.add('active');
+  } else {
+    // BP chưa tích hợp — hiện placeholder
+    wrap.classList.remove('open');
+    l2.innerHTML = '';
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    ph.classList.add('show');
+    document.getElementById('bpPhIcon').textContent  = cfg.icon;
+    document.getElementById('bpPhTitle').textContent = cfg.label + ' — Module đang phát triển';
+    document.getElementById('bpPhDesc').textContent  = 'Nội dung bộ phận này đang được xây dựng trong khuôn khổ GSP NEXT 30 và sẽ được tích hợp trong các phiên bản tiếp theo của GoldSun Dashboard.';
+  }
+}
+
+function selectDashL2(btn, bpId) {
+  document.querySelectorAll('.l2-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  goTab(btn.dataset.sub, 0);
+}
+
+// ── INIT 2-LEVEL NAV — mặc định spmnpi + sub-tab Tổng quan ──────
+(function initNav(){
+  const wrap = document.getElementById('navL2Wrap');
+  const l2   = document.getElementById('navL2');
+  if(!wrap || !l2) return;
+  wrap.classList.add('open');
+  l2.innerHTML = DASH_BPS.spmnpi.subtabs.map((t,i)=>
+    `<button class="l2-btn ${i===0?'active':''}" data-sub="${t.id}" onclick="selectDashL2(this,'spmnpi')">${t.label}</button>`
+  ).join('');
+})();
 
 // ── START ───────────────────────────────────────────────────────
 loadData();
