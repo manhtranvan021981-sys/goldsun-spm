@@ -141,6 +141,33 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .bp-ph{display:none;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;text-align:center;min-height:55vh}
 .bp-ph.show{display:flex}
 
+/* ── RAG CHIPS ── */
+.rag-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}
+.rag-chip{background:#fff;border:2px solid #E8E6E0;border-radius:12px;padding:11px 8px 9px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden}
+.rag-chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12)}
+.rag-icon{font-size:16px;margin-bottom:3px;line-height:1}
+.rag-count{font-size:28px;font-weight:700;line-height:1;margin-bottom:3px}
+.rag-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px}
+.rag-desc{font-size:8.5px;color:var(--gray);line-height:1.35}
+.rag-bar{position:absolute;bottom:0;left:0;right:0;height:4px;border-radius:0 0 10px 10px}
+.rag-xanh{border-color:#A3D9B4}.rag-xanh .rag-count{color:#16A34A}.rag-xanh .rag-label{color:#16A34A}.rag-xanh .rag-bar{background:#16A34A}
+.rag-xanhdai{border-color:#B7DFB9}.rag-xanhdai .rag-count{color:#2E7D32}.rag-xanhdai .rag-label{color:#2E7D32}.rag-xanhdai .rag-bar{background:#4CAF50}
+.rag-vang{border-color:#FCD88A}.rag-vang .rag-count{color:#B45309}.rag-vang .rag-label{color:#B45309}.rag-vang .rag-bar{background:#E5C200}
+.rag-do{border-color:#F5C6C3}.rag-do .rag-count{color:var(--red)}.rag-do .rag-label{color:var(--red)}.rag-do .rag-bar{background:var(--red)}
+.rag-do2tuan{border-color:#E87B77}.rag-do2tuan .rag-count{color:#B91C1C}.rag-do2tuan .rag-label{color:#B91C1C}.rag-do2tuan .rag-bar{background:#B91C1C}
+.rag-nghiem{border-color:#991B1B}.rag-nghiem .rag-count{color:#7F1D1D}.rag-nghiem .rag-label{color:#7F1D1D}.rag-nghiem .rag-bar{background:#7F1D1D}
+/* ── ORDER BOXES ── */
+.ob{border-radius:12px;padding:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);display:flex;flex-direction:column;justify-content:center}
+.ob-green{background:linear-gradient(135deg,#EAF5EE,#E0F2E8);border:1px solid #A3D9B4}
+.ob-blue{background:linear-gradient(135deg,#EEF4FB,#E4F0FC);border:1px solid #B5D4F4}
+.ob-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px}
+.ob-val{font-size:24px;font-weight:700;line-height:1.1;margin-bottom:2px}
+.ob-sub{font-size:9px;margin-top:2px}
+.ob-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(0,0,0,0.07)}
+.ob-row:last-child{border-bottom:none}
+.ob-nm{font-size:9px;color:var(--gray);width:80px;flex-shrink:0}
+.ob-nv{font-size:14px;font-weight:700}
+
 /* ── RESPONSIVE BREAKPOINTS ── */
 /* Tablet rộng ≤1400px */
 @media (max-width:1400px){
@@ -296,11 +323,50 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 
 <!-- TAB TỔNG QUAN -->
 <div class="tab-content active" id="tab-overview">
-  <div class="alert-strip">
-    <div class="a-chip red" onclick="goTab('ai',3)">🔴 <span id="c-red">--</span> Quá hạn</div>
-    <div class="a-chip orange" onclick="goTab('ai',3)">🟡 <span id="c-orange">--</span> Sắp hạn ≤3 ngày</div>
-    <div class="a-chip green" onclick="goTab('ai',3)">🟢 <span id="c-green">--</span> Theo dõi 3–5 ngày</div>
-    <div class="a-chip blue" onclick="goTab('progress',1)">✅ <span id="c-ok">--</span> Đúng/Trước hạn</div>
+  <!-- RAG STRIP — 6 loại theo bảng điều kiện -->
+  <div class="rag-strip">
+    <div class="rag-chip rag-xanh" title="Col7 ≠ Rỗng — đã bàn giao">
+      <div class="rag-icon">🟢</div>
+      <div class="rag-count" id="rag-xanh">--</div>
+      <div class="rag-label">XANH</div>
+      <div class="rag-desc">Đã bàn giao mẫu<br>(Col7 ≠ Rỗng)</div>
+      <div class="rag-bar"></div>
+    </div>
+    <div class="rag-chip rag-xanhdai" title="Col7=Rỗng, Today < DKHT, còn > 3 ngày">
+      <div class="rag-icon">🟢🟢</div>
+      <div class="rag-count" id="rag-xanhdai">--</div>
+      <div class="rag-label">XANH DÀI</div>
+      <div class="rag-desc">Chưa giao,<br>còn &gt;3 ngày</div>
+      <div class="rag-bar"></div>
+    </div>
+    <div class="rag-chip rag-vang" title="Col7=Rỗng, Today < DKHT, còn ≤ 3 ngày">
+      <div class="rag-icon">🟡</div>
+      <div class="rag-count" id="rag-vang">--</div>
+      <div class="rag-label">VÀNG</div>
+      <div class="rag-desc">Chưa giao,<br>còn ≤3 ngày</div>
+      <div class="rag-bar"></div>
+    </div>
+    <div class="rag-chip rag-do" title="Col7=Rỗng, Today > DKHT, quá ≤7 ngày" onclick="goTab('ai',3)">
+      <div class="rag-icon">🔴</div>
+      <div class="rag-count" id="rag-do">--</div>
+      <div class="rag-label">ĐỎ</div>
+      <div class="rag-desc">Quá hạn<br>1–7 ngày</div>
+      <div class="rag-bar"></div>
+    </div>
+    <div class="rag-chip rag-do2tuan" title="Col7=Rỗng, Today > DKHT, quá 7–14 ngày" onclick="goTab('ai',3)">
+      <div class="rag-icon">🔴🔴</div>
+      <div class="rag-count" id="rag-do2tuan">--</div>
+      <div class="rag-label">ĐỎ 2 TUẦN</div>
+      <div class="rag-desc">Quá hạn<br>7–14 ngày</div>
+      <div class="rag-bar"></div>
+    </div>
+    <div class="rag-chip rag-nghiem" title="Col7=Rỗng, Today > DKHT, quá > 14 ngày" onclick="goTab('ai',3)">
+      <div class="rag-icon">🔴⚠</div>
+      <div class="rag-count" id="rag-nghiem">--</div>
+      <div class="rag-label">Nghiêm trọng</div>
+      <div class="rag-desc">Quá hạn<br>&gt;14 ngày</div>
+      <div class="rag-bar"></div>
+    </div>
   </div>
   <div class="g7" id="metric-cards"></div>
   <div id="metric-row2" style="display:flex;gap:8px;margin-bottom:12px"></div>
@@ -345,18 +411,34 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
       </div>
     </div>
   </div>
-  <div class="g2">
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>YQ mẫu theo tuần</div></div><div class="cw" style="height:180px"><canvas id="c-weekly"></canvas></div></div>
+  <!-- 3 biểu đồ — 1 hàng, chia đều 1/3 mỗi cái -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>YQ mẫu theo tuần</div></div><div class="cw" style="height:175px"><canvas id="c-weekly"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Tình trạng mẫu</div></div>
-      <div class="status-flex" style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
-        <div style="flex:1;min-width:200px"><div class="cw" style="height:180px"><canvas id="c-status"></canvas></div></div>
-        <div style="width:200px;max-width:100%;max-height:190px;overflow-y:auto" id="status-table"></div>
+      <div class="cw" style="height:175px"><canvas id="c-status"></canvas></div>
+    </div>
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📉</span>Pipeline YC → OK</div></div><div id="fn-pipeline" style="padding-top:2px"></div></div>
+  </div>
+  <!-- 2 panels — 35% Phân bổ NM | 65% Tổng hợp NM -->
+  <div style="display:grid;grid-template-columns:35fr 65fr;gap:12px;margin-bottom:12px">
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Phân bổ nhà máy GS1/GS5/GS6</div></div><div class="cw" style="height:160px"><canvas id="c-factory"></canvas></div></div>
+    <div class="panel">
+      <div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Tổng hợp theo Nhà máy</div></div>
+      <div class="nm-flex" style="display:flex;gap:14px;align-items:flex-start">
+        <div style="flex:0 0 auto;overflow-x:auto">
+          <table style="border-collapse:collapse;font-size:11px;min-width:280px">
+            <thead><tr style="background:#F3F2EF">
+              <th style="padding:6px 10px;text-align:left;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Nhà máy</th>
+              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Số mẫu</th>
+              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Tỷ lệ lại</th>
+              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">LT TB</th>
+            </tr></thead>
+            <tbody id="nhamay-detail-tbody"></tbody>
+          </table>
+        </div>
+        <div style="flex:1;min-width:0"><div style="height:160px"><canvas id="c-nhamay-bar"></canvas></div></div>
       </div>
     </div>
-  </div>
-  <div class="g2">
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📉</span>Pipeline YC → OK</div></div><div id="fn-pipeline"></div></div>
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Phân bổ nhà máy GS1/GS5/GS6</div></div><div class="cw" style="height:160px"><canvas id="c-factory"></canvas></div></div>
   </div>
   <!-- Leadtime theo Dòng hàng -->
   <div class="panel" style="margin-bottom:12px">
@@ -368,30 +450,6 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
           <thead><tr><th>Dòng hàng</th><th>LT TB</th><th>Tỷ lệ lại</th></tr></thead>
           <tbody id="lt-donghang-tbody"></tbody>
         </table>
-      </div>
-    </div>
-  </div>
-  <!-- Bảng tổng hợp Nhà máy + biểu đồ -->
-  <div class="panel" style="margin-bottom:12px">
-    <div class="ph"><div class="pt"><span class="pt-icon">🏭</span>Tổng hợp theo Nhà máy</div></div>
-    <div class="nm-flex" style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
-      <!-- Bảng compact -->
-      <div style="flex:0 0 auto;overflow-x:auto;max-width:100%">
-        <table style="border-collapse:collapse;font-size:11px;min-width:300px;max-width:100%">
-          <thead>
-            <tr style="background:#F3F2EF">
-              <th style="padding:6px 10px;text-align:left;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Nhà máy</th>
-              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Số mẫu</th>
-              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Tỷ lệ làm lại</th>
-              <th style="padding:6px 10px;text-align:right;border-bottom:2px solid #E8E6E0;font-size:10px;white-space:nowrap">Leadtime TB</th>
-            </tr>
-          </thead>
-          <tbody id="nhamay-detail-tbody"></tbody>
-        </table>
-      </div>
-      <!-- Biểu đồ cột -->
-      <div style="flex:1;min-width:0">
-        <div style="height:160px"><canvas id="c-nhamay-bar"></canvas></div>
       </div>
     </div>
   </div>
@@ -609,13 +667,18 @@ const CFG = {
   PROJ_ID:   '1PtSaH6m10bFJRnpc9uIVpNGRgbMl2HneBqxR4lfJQu4',
   PROJ_TAB:  '00_Task_Schedule',
   PROJ_HR:   3,   // Header ở hàng 3 (dòng 1-2 là title và label)
+
+  // Nguồn 5: PHANTICH_MAU_DONHANG — Phân tích mẫu thành đơn hàng V4
+  PH_ID:     '1V9kJpx6Ae-jWYSMYOjnfOoR1QxIlLsqKU5UXaQLKdGc',
+  PH_TAB:    '✅ TỔNG HỢP V4',
 };
 
 const RED='#C8372D', GREEN='#1B6B3A', NAVY='#1A2B4A', GOLD='#C8952A', ORANGE='#D97706';
 let DATA = {
   stats:{total:0,red:0,orange:0,green:0,ok:0,escalate:0,byKH:[],byFactory:{GS1:0,GS5:0,GS6:0},byWeek:[]},
   records:[], alerts:[], kpiGroup:{k1:0,k2:0,k3:100,k4:0,k5:0,k5Score:0,kpiTotal:0},
-  kpiByPIC:[], kpiByWeek:[], kpiByMonth:[], bcTomtat:[], project:[], ai5Data:null
+  kpiByPIC:[], kpiByWeek:[], kpiByMonth:[], bcTomtat:[], project:[], ai5Data:null,
+  phantich:{yq:0,ord:0,val:0,tot:0}, rag:{xanh:0,xanhDai:0,vang:0,do:0,do2tuan:0,nghiemTrong:0},
 };
 let projSorted = [];
 // 0=đỏ, 1=vàng, 2=xanh/bình thường, 3=hoàn thành
@@ -628,6 +691,43 @@ const warnRank = p => {
   if(v.includes('vang')||v.includes('chu y')) return 1;
   return 2;
 };
+// ── COMPUTE RAG (6 loại theo bảng điều kiện) ────────────────────
+// XANH        : Col7 <> Rỗng (đã bàn giao — bất kể sớm/muộn)
+// XANH DÀI    : Col7=Rỗng, Today < DKHT, (DKHT-Today) > 3 ngày
+// VÀNG        : Col7=Rỗng, Today < DKHT, (DKHT-Today) <= 3 ngày
+// ĐỎ          : Col7=Rỗng, Today > DKHT, (Today-DKHT) <= 7 ngày
+// ĐỎ 2 TUẦN  : Col7=Rỗng, Today > DKHT, 7 < (Today-DKHT) <= 14
+// NGHIÊM TRỌNG: Col7=Rỗng, Today > DKHT, (Today-DKHT) > 14
+function computeRAG(records) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const rag = {xanh:0, xanhDai:0, vang:0, do:0, do2tuan:0, nghiemTrong:0};
+  records.forEach(r => {
+    const daGiao = r.ngayBanGiao && !isNaN(r.ngayBanGiao);
+    if (daGiao) { rag.xanh++; return; }           // XANH: col7 <> rỗng
+    const dk = r.dkht ? new Date(r.dkht) : null;
+    if (!dk || isNaN(dk)) return;
+    dk.setHours(0,0,0,0);
+    const diff = (dk.getTime() - today.getTime()) / 86400000; // dương = còn hạn
+    if (diff > 3)  { rag.xanhDai++; return; }     // XANH DÀI
+    if (diff >= 0) { rag.vang++;    return; }      // VÀNG
+    const od = -diff;                               // ngày quá hạn
+    if (od <= 7)  rag.do++;
+    else if (od <= 14) rag.do2tuan++;
+    else rag.nghiemTrong++;
+  });
+  return rag;
+}
+
+// ── COMPUTE PHANTICH STATS ───────────────────────────────────────
+function computePhantichStats(rows) {
+  let yq=0, ord=0, val=0, tot=rows.length;
+  rows.forEach(r => {
+    const sd = parseVNNum(r['Số dòng ĐH']||0);
+    if (sd > 0) { yq++; ord += sd; val += parseVNNum(r['Tổng giá trị']||0); }
+  });
+  return {yq, ord, val, tot};
+}
+
 let charts = {};
 
 // ── GVIZ FETCH ─────────────────────────────────────────────────
@@ -1324,8 +1424,8 @@ async function loadData() {
   // Chỉ dùng class để hiện/ẩn — KHÔNG set inline style để tránh ghi đè CSS
   loadEl.classList.remove('hide');
   try {
-    sub.textContent = 'Đang đọc DATA_NPI...';
-    const [dataNPI, kpiSheet, alertSheet, ownerSheet, projSheet, aiSheet, ai5Sheet] = await Promise.allSettled([
+    sub.textContent = 'Đang đọc DATA_NPI + PHANTICH...';
+    const [dataNPI, kpiSheet, alertSheet, ownerSheet, projSheet, aiSheet, ai5Sheet, phSheet] = await Promise.allSettled([
       gvizFetch(CFG.DATA_ID, CFG.DATA_TAB, CFG.DATA_HR),
       gvizFetch(CFG.SYS_ID, 'KPI_NPI'),
       gvizFetch(CFG.SYS_ID, 'ALERT_CONFIG'),
@@ -1333,6 +1433,7 @@ async function loadData() {
       gvizFetch(CFG.PROJ_ID, CFG.PROJ_TAB, CFG.PROJ_HR),
       gvizFetch(CFG.AI_ID, CFG.AI_TAB, 2),   // header ở row 2
       gvizFetch(CFG.AI_ID, 'AI-5TIEUCHI'),
+      gvizFetch(CFG.PH_ID, CFG.PH_TAB, 1),   // PHANTICH_MAU_DONHANG
     ]);
 
     if (dataNPI.status === 'rejected') throw new Error('DATA_NPI: ' + dataNPI.reason?.message);
@@ -1366,7 +1467,12 @@ async function loadData() {
       .sort((a,b)=>{const o={red:0,orange:1,green:2};return (o[a.level]||3)-(o[b.level]||3)||b.daysFromDeadline-a.daysFromDeadline;})
       .map(r=>({...r}));
 
-    DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project, aiMap, ai5Data};
+    // Tính RAG + PHANTICH stats
+    const rag = computeRAG(records);
+    const phRows = phSheet.status==='fulfilled' ? tblObj(phSheet.value).filter(r=>r['Số YC']||r['STT']) : [];
+    const phantich = computePhantichStats(phRows);
+
+    DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project, aiMap, ai5Data, rag, phantich};
     renderAll();
     document.getElementById('last-upd').textContent = 'Cập nhật: ' + new Date().toLocaleString('vi-VN');
   } catch(e) {
@@ -1475,11 +1581,20 @@ function kpiColor(val,tgt){return val===null?'#B4B2A9':val>=tgt?GREEN:val>=tgt*0
 
 // ── RENDER FUNCTIONS ───────────────────────────────────────────
 function renderAlerts() {
-  const s=DATA.stats;
-  document.getElementById('c-red').textContent    = s.red||0;
-  document.getElementById('c-orange').textContent = s.orange||0;
-  document.getElementById('c-green').textContent  = s.green||0;
-  document.getElementById('c-ok').textContent     = s.ok||0;
+  const rag = DATA.rag || {};
+  const fN = n => (n||0).toLocaleString('vi-VN');
+  const set = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=fN(v); };
+  set('rag-xanh',     rag.xanh);
+  set('rag-xanhdai',  rag.xanhDai);
+  set('rag-vang',     rag.vang);
+  set('rag-do',       rag.do);
+  set('rag-do2tuan',  rag.do2tuan);
+  set('rag-nghiem',   rag.nghiemTrong);
+  // Giữ tương thích các chỗ cũ còn dùng c-red/c-orange
+  const s=DATA.stats||{};
+  const setOld=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v||0;};
+  setOld('c-red',rag.do+(rag.do2tuan||0)+(rag.nghiemTrong||0));
+  setOld('c-orange',rag.vang||0);setOld('c-green',rag.xanhDai||0);setOld('c-ok',rag.xanh||0);
 }
 
 function renderMetrics() {
@@ -1494,14 +1609,31 @@ function renderMetrics() {
     {label:'LEADTIME TB',               val:(s.lt18Avg||0)+' ngày',           sub:'Cột (18) = BG − YC (1)', badge:s.lt18Avg<=3?'✓ Đạt ≤3 ngày':s.lt18Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt18Avg<=3?'b-green':s.lt18Avg<=5?'b-orange':'b-red'},
     {label:'LEADTIME TB ĐỦ ĐK',        val:(s.lt17Avg||0)+' ngày',           sub:'Cột (17) = BG − Duyệt (4)',badge:s.lt17Avg<=3?'✓ Đạt ≤3 ngày':s.lt17Avg<=5?'⚠ Chú ý':'✗ Vượt target',bc:s.lt17Avg<=3?'b-green':s.lt17Avg<=5?'b-orange':'b-red'},
   ].map(m=>`<div class="mc"><div class="mc-label">${m.label}</div><div class="mc-val">${m.val}</div><div class="mc-sub">${m.sub}</div>${m.badge?`<span class="badge ${m.bc}">${m.badge}</span>`:''}</div>`).join('');
-  const colW = 'calc(100% / 7 * 1.2)';
-  const mcStyle = `flex:0 0 ${colW};max-width:${colW};min-width:0;background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)`;
+  const mcStyle = `flex:0 0 auto;min-width:100px;background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)`;
+  const ph = DATA.phantich || {yq:0,ord:0,val:0,tot:0};
+  const convRate = s.total ? Math.round(ph.yq/s.total*100)+'%' : '--';
   document.getElementById('metric-row2').innerHTML =
-    `<div style="${mcStyle}"><div class="mc-label">GIÁ TRỊ LÀM MẪU</div><div class="mc-val">${fmtBil(s.gtLamMauSum)}</div><div class="mc-sub">Tổng "Giá trị làm mẫu dự kiến"</div></div>`
-  + `<div style="${mcStyle}"><div class="mc-label">GIÁ TRỊ ĐH</div><div class="mc-val">${fmtBil(s.gtDHSum)}</div><div class="mc-sub">Tổng "Giá trị đơn hàng dự kiến"</div></div>`
-  + `<div style="flex:1;min-width:0;background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 14px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">`
-  + `<div class="mc-label" style="margin-bottom:6px">YQ NHẬN &amp; BÀN GIAO THEO THÁNG — LINE + TRENDLINE</div>`
-  + `<div style="height:110px"><canvas id="c-monthly-yq"></canvas></div></div>`;
+  // ── Trái 50%: Giá trị LM + Giá trị ĐH + Line chart
+    `<div style="flex:0 0 50%;min-width:0;display:flex;gap:8px">`
+  + `<div style="${mcStyle}"><div class="mc-label">GIÁ TRỊ LÀM MẪU</div><div class="mc-val">${fmtBil(s.gtLamMauSum)}</div><div class="mc-sub">GT làm mẫu dự kiến</div></div>`
+  + `<div style="${mcStyle}"><div class="mc-label">GIÁ TRỊ ĐH</div><div class="mc-val">${fmtBil(s.gtDHSum)}</div><div class="mc-sub">GT đơn hàng dự kiến</div></div>`
+  + `<div style="flex:1;min-width:0;background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">`
+  + `<div class="mc-label" style="margin-bottom:5px">YQ NHẬN &amp; BÀN GIAO THEO THÁNG — LINE + TRENDLINE</div>`
+  + `<div style="height:100px"><canvas id="c-monthly-yq"></canvas></div></div></div>`
+  // ── Phải 50%: 2 order boxes từ PHANTICH_MAU_DONHANG
+  + `<div style="flex:1;min-width:0;display:flex;gap:8px">`
+  + `<div class="ob ob-green" style="flex:1;min-width:0">`
+  + `<div class="ob-lbl" style="color:var(--green)">🔄 YQ → Đơn hàng</div>`
+  + `<div class="ob-val" style="color:var(--green)">${(ph.yq||0).toLocaleString('vi-VN')}</div>`
+  + `<div class="ob-sub" style="color:#2D8A50">YQ mẫu đã chuyển thành ĐH</div>`
+  + `<div style="margin-top:7px;padding-top:7px;border-top:1px solid rgba(27,107,58,0.2)">`
+  + `<div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px">Tỷ lệ chuyển đổi</div>`
+  + `<div style="font-size:16px;font-weight:700;color:var(--green)">${convRate}</div></div></div>`
+  + `<div class="ob ob-blue" style="flex:1;min-width:0">`
+  + `<div class="ob-lbl" style="color:#1A4B8C">📦 Tổng đơn hàng</div>`
+  + `<div class="ob-row"><div class="ob-nm">Số dòng ĐH</div><div class="ob-nv" style="color:#1A4B8C">${(ph.ord||0).toLocaleString('vi-VN')}</div></div>`
+  + `<div class="ob-row"><div class="ob-nm">Tổng giá trị</div><div class="ob-nv" style="color:#1A4B8C;font-size:15px">${fmtBil(ph.val||0)}</div></div>`
+  + `</div></div>`;
 }
 
 function renderAISummary() {
@@ -1524,22 +1656,46 @@ function renderAISummary() {
 }
 
 function renderOverviewTable() {
-  document.getElementById('ov-table').innerHTML=(DATA.alerts||[]).slice(0,5).map(a=>`
-    <tr><td>${dotHtml(a.level)} ${a.daysFromDeadline>0?`<span style="color:var(--red);font-size:9px">+${a.daysFromDeadline}d</span>`:''}</td>
-    <td style="font-family:monospace;font-size:10px">${a.soYQ||'--'}</td>
-    <td>${a.tenKH||'--'}</td>
-    <td style="font-size:10px">${(a.pic||'').split(' ').slice(-1)[0]}</td>
-    <td>${fmtD(a.dkht)}</td><td>${pillTs(a.tinhTrang)}</td></tr>`).join('');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const alerts = (DATA.records||[]).filter(r => {
+    const chuaGiao = !r.ngayBanGiao || isNaN(r.ngayBanGiao);
+    if (!chuaGiao || !r.dkht) return false;
+    const dk = new Date(r.dkht); dk.setHours(0,0,0,0);
+    return (dk.getTime() - today.getTime()) / 86400000 <= 3; // quá hạn + sắp hạn ≤3 ngày
+  }).map(r => {
+    const dk = new Date(r.dkht); dk.setHours(0,0,0,0);
+    return {...r, _diff: (dk.getTime()-today.getTime())/86400000};
+  }).sort((a,b) => a._diff - b._diff).slice(0,8);
+
+  document.getElementById('ov-table').innerHTML = alerts.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;padding:10px;color:var(--gray)">✅ Không có mẫu cần chú ý</td></tr>'
+    : alerts.map(a => {
+        const isOd = a._diff < 0;
+        const days = Math.round(Math.abs(a._diff));
+        const clr  = isOd ? (days>14?'#7F1D1D':days>7?'#B91C1C':'var(--red)') : '#D97706';
+        const sign = isOd ? `+${days}d` : `-${days}d`;
+        return `<tr>
+          <td><span style="color:${clr};font-weight:700;font-size:10px">${sign}</span></td>
+          <td style="font-family:monospace;font-size:10px;font-weight:600">${a.soYQ||'--'}</td>
+          <td style="max-width:90px;white-space:normal;font-size:10px">${a.tenKH||'--'}</td>
+          <td style="font-size:10px">${(a.pic||'').split(' ').slice(-1)[0]||'--'}</td>
+          <td>${fmtD(a.dkht)}</td>
+          <td>${pillTs(a.tinhTrang)}</td></tr>`;
+      }).join('');
 }
 
 function renderActivity() {
-  const s=DATA.stats;
+  const rag = DATA.rag || {};
+  const fN  = n => (n||0).toLocaleString('vi-VN');
+  const today = new Date().toLocaleDateString('vi-VN');
   const acts=[
-    {col:NAVY, t:`${DATA.records?.length||0} records đọc từ DATA_NPI`, s:new Date().toLocaleDateString('vi-VN')+' — gviz API'},
-    {col:GREEN, t:`KPI nhóm tháng: ${DATA.kpiGroup?.kpiTotal||0}%`, s:'Auto — '+new Date().toLocaleDateString('vi-VN')},
-    {col:ORANGE,t:`${s.orange||0} mẫu sắp đến hạn (≤3 ngày)`, s:'Hôm nay — Theo dõi'},
-    {col:RED,   t:`${s.mauQuaHan||0} mẫu quá hạn cần escalation ngay`, s:'Hôm nay — Action ngay'},
-  ];
+    {col:NAVY,   t:`${DATA.records?.length||0} YQ mẫu đọc từ DATA_NPI`, s:`Cập nhật: ${today} — gviz API`},
+    {col:'#16A34A', t:`${fN(rag.xanh)} mẫu đã bàn giao (XANH)`, s:`Còn ${fN(rag.xanhDai)} mẫu chưa giao — còn >3 ngày`},
+    {col:'#E5A000',  t:`${fN(rag.vang)} mẫu sắp đến hạn — VÀNG (≤3 ngày)`, s:'Theo dõi chặt — liên hệ PIC ngay'},
+    {col:RED,        t:`${fN(rag.do)} mẫu quá hạn ĐỎ (1–7 ngày)`, s:'Action ngay — escalation'},
+    {col:'#B91C1C',  t:`${fN(rag.do2tuan)} mẫu ĐỎ 2 TUẦN (7–14 ngày)`, s:'Báo cáo QL — cần giải pháp'},
+    {col:'#7F1D1D',  t:`${fN(rag.nghiemTrong)} mẫu NGHIÊM TRỌNG (>14 ngày)`, s:'⚠ Escalation ngay lên Ban Giám đốc'},
+  ].filter(a=>!a.t.startsWith('0 '));
   document.getElementById('ov-activity').innerHTML=acts.map(a=>`
     <div class="tl-item">
       <div style="width:8px;height:8px;border-radius:50%;background:${a.col};margin-top:4px;flex-shrink:0"></div>
