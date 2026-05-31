@@ -556,11 +556,11 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
         <span style="font-size:10px;color:var(--gray)">S&#7855;p x&#7871;p: t&#7927; l&#7879; % cao &rarr; th&#7845;p</span>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px" class="pl-kpi">
-      <div class="mc"><div class="mc-label">T&#7893;ng YC L&#224;m M&#7851;u</div><div class="mc-val" style="color:var(--navy)">857</div><div class="mc-sub">64 kh&aacute;ch h&agrave;ng &middot; DATA_NPI</div></div>
-      <div class="mc"><div class="mc-label">YC Chuy&#7875;n Th&agrave;nh &#272;&#417;n</div><div class="mc-val" style="color:var(--green)">283</div><div class="mc-sub">35 kh&aacute;ch h&agrave;ng &middot; T&#7892;NG H&#7906;P V4</div></div>
-      <div class="mc"><div class="mc-label">T&#7927; L&#7879; Chuy&#7875;n &#272;&#7893;i</div><div class="mc-val" style="color:var(--red)">33.0<span style="font-size:13px;font-weight:400">%</span></div><div class="mc-sub">= 283 / 857 YC l&agrave;m m&#7851;u</div><span class="badge b-orange">C&#7847;n c&#7843;i thi&#7879;n</span></div>
-      <div class="mc"><div class="mc-label">T&#7893;ng Gi&aacute; Tr&#7883; &#272;&#417;n H&agrave;ng</div><div class="mc-val" style="color:var(--gold)">301.6<span style="font-size:13px;font-weight:400"> t&#7927;</span></div><div class="mc-sub">VN&#272; &middot; t&#7915; YC m&#7851;u chuy&#7875;n &#273;&#7893;i</div></div>
+    <div id="pl-kpi-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px" class="pl-kpi">
+      <div class="mc"><div class="mc-label">T&#7893;ng YC L&#224;m M&#7851;u</div><div class="mc-val" style="color:var(--navy)" id="plKpiTotal">—</div><div class="mc-sub" id="plKpiTotalSub">DATA_NPI</div></div>
+      <div class="mc"><div class="mc-label">YC Chuy&#7875;n Th&agrave;nh &#272;&#417;n</div><div class="mc-val" style="color:var(--green)" id="plKpiYQ">—</div><div class="mc-sub" id="plKpiYQSub">T&#7892;NG H&#7906;P V4</div></div>
+      <div class="mc"><div class="mc-label">T&#7927; L&#7879; Chuy&#7875;n &#272;&#7893;i</div><div class="mc-val" style="color:var(--red)" id="plKpiRate">—<span style="font-size:13px;font-weight:400">%</span></div><div class="mc-sub" id="plKpiRateSub"></div><span class="badge b-orange" id="plKpiRateBadge">C&#7847;n c&#7843;i thi&#7879;n</span></div>
+      <div class="mc"><div class="mc-label">T&#7893;ng Gi&aacute; Tr&#7883; &#272;&#417;n H&agrave;ng</div><div class="mc-val" style="color:var(--gold)" id="plKpiVal">—<span style="font-size:13px;font-weight:400"> t&#7927;</span></div><div class="mc-sub">VN&#272; &middot; t&#7915; YC m&#7851;u chuy&#7875;n &#273;&#7893;i</div></div>
     </div>
     <div class="pl-grid" style="display:grid;grid-template-columns:1fr 330px;gap:12px">
       <div>
@@ -929,6 +929,31 @@ function computePhantichStats(rows) {
     if (sd > 0) { yq++; ord += sd; val += parseVNNum(r['Tổng giá trị']||0); }
   });
   return {yq, ord, val, tot};
+}
+
+// ── RENDER PL KPI PIPELINE (global, dùng dữ liệu ph từ 313 rows sheet) ──
+function renderPLKpi(ph, statsTot, statsKH) {
+  const el = id => document.getElementById(id);
+  if (!el('plKpiTotal')) return;
+  const yq  = ph.yq  || 0;
+  const val = ph.val || 0;
+  const tot = statsTot || ph.tot || 0;
+  const kh  = statsKH  || 0;
+  const rate = tot > 0 ? (yq / tot * 100).toFixed(1) : '--';
+  const rateNum = parseFloat(rate);
+  const badgeCls = rateNum >= 60 ? 'b-green' : rateNum >= 30 ? 'b-orange' : 'b-red';
+  const badgeTxt = rateNum >= 60 ? '✓ Tốt' : 'Cần cải thiện';
+
+  el('plKpiTotal').textContent = tot.toLocaleString('vi-VN');
+  el('plKpiTotalSub').textContent = kh.toLocaleString('vi-VN') + ' khách hàng · DATA_NPI';
+  el('plKpiYQ').textContent = yq.toLocaleString('vi-VN');
+  el('plKpiYQSub').innerHTML = '✅ TỔNG HỢP V4 · <b>' + ph.tot + '</b> dòng';
+  el('plKpiRate').innerHTML = rate + '<span style="font-size:13px;font-weight:400">%</span>';
+  el('plKpiRateSub').textContent = '= ' + yq + ' / ' + tot + ' YC làm mẫu';
+  const badgeEl = el('plKpiRateBadge');
+  if (badgeEl) { badgeEl.className = 'badge ' + badgeCls; badgeEl.textContent = badgeTxt; }
+  const gtBil = (val / 1e9).toFixed(1);
+  el('plKpiVal').innerHTML = gtBil + '<span style="font-size:13px;font-weight:400"> tỷ</span>';
 }
 
 let charts = {};
@@ -1457,6 +1482,7 @@ function computeStats(records) {
     if (r.ngayBanGiao && !isNaN(r.ngayBanGiao)) { addWeek(r.ngayBanGiao, 'banGiao');  addMonth(r.ngayBanGiao, 'banGiao');  }
   });
 
+  s.totalKH = Object.keys(khMap).length;
   s.byKH   = Object.values(khMap).sort((a,b)=>b.cnt-a.cnt).slice(0,5);
   s.lt18Avg = s.lt18Count ? Math.round(s.lt18Sum / s.lt18Count * 10) / 10 : 0;
   s.lt17Avg = s.lt17Count ? Math.round(s.lt17Sum / s.lt17Count * 10) / 10 : 0;
@@ -1676,6 +1702,7 @@ async function loadData() {
     const phantich = computePhantichStats(phRows);
 
     DATA = {success:true, records, stats, kpiGroup:groupKPI, kpiByPIC, kpiByWeek, kpiByMonth, bcTomtat, alerts, project, aiMap, ai5Data, rag, phantich};
+    renderPLKpi(phantich, stats.total, stats.totalKH);
     renderAll();
     document.getElementById('last-upd').textContent = 'Cập nhật: ' + new Date().toLocaleString('vi-VN');
   } catch(e) {
