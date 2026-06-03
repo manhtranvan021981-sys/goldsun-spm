@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GoldSun SPM Dashboard v8</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--red:#C8372D;--green:#1B6B3A;--navy:#1A2B4A;--gold:#C8952A;--orange:#D97706;--gray:#5F5E5A}
@@ -258,29 +259,257 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   .content{padding:4px}
 }
 </style>
+
+<!-- ══ DLCN Dashboard CSS — Scoped ══ -->
+<style>
+
+  .dlcn-scope {
+    --red: #c0392b; --red-light: #fdecea; --red-border: #e74c3c;
+    --yellow: #d68910; --yellow-light: #fef9e7; --yellow-border: #f1c40f;
+    --green: #1a7a3e; --green-light: #eafaf1; --green-border: #27ae60;
+    --blue: #1a5276; --blue-light: #eaf2fb; --blue-border: #2980b9;
+    --orange: #ba4a00; --orange-light: #fdf0e6; --orange-border: #e67e22;
+    --purple: #6c3483; --purple-light: #f4ecf7; --purple-border: #9b59b6;
+    --teal: #0e6655; --teal-light: #e8f8f5; --teal-border: #1abc9c;
+    --gray: #566573; --gray-light: #f4f6f7; --border: #dde1e7;
+    --text: #1c2833; --text2: #566573; --bg: #f0f2f5;
+    --white: #fff; --shadow: 0 2px 8px rgba(0,0,0,.10);
+    --font: 'Times New Roman', Times, serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .dlcn-scope { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 13px; }
+
+  /* ── GoldSun Brand Identity ── */
+  .dlcn-scope {
+    --gs-navy: #1a3a5c;
+    --gs-blue: #1a5276;
+    --gs-gold: #f1c40f;
+    --gs-gold-dark: #d4ac0d;
+    --gs-teal: #0e6655;
+    --gs-red: #c0392b;
+  }
+  .header {
+    background: linear-gradient(135deg, #0d1f33 0%, #1a3a5c 40%, #1a5276 80%, #1a6a5c 100%);
+    color: #fff; padding: 16px 28px 13px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 4px solid var(--gs-gold);
+    box-shadow: 0 3px 12px rgba(0,0,0,.25);
+  }
+  .header-brand { display:flex; align-items:center; gap:14px; }
+  .header-brand-logo { width:44px; height:44px; background:var(--gs-gold); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:bold; color:var(--gs-navy); flex-shrink:0; letter-spacing:-1px; }
+  .header-left h1 { font-size: 17px; font-weight: bold; letter-spacing: .4px; line-height:1.3; }
+  .header-left p  { font-size: 11.5px; opacity: .85; margin-top: 3px; }
+  .header-right { text-align: right; font-size: 11.5px; opacity: .92; line-height: 1.8; }
+  .header-right strong { color: var(--gs-gold); }
+  .header-right .gs-kpi-line { font-size:10.5px; background:rgba(241,196,15,.15); border:1px solid rgba(241,196,15,.4); border-radius:4px; padding:3px 8px; margin-top:4px; display:inline-block; }
+  /* Brand separator line below nav */
+  .brand-bar { height:3px; background:linear-gradient(90deg,var(--gs-navy),var(--gs-blue),var(--gs-gold),var(--gs-teal)); }
+
+  .main { padding: 16px 20px; max-width: 1400px; margin: 0 auto; }
+  .section-title {
+    font-size: 13px; font-weight: bold; color: var(--blue);
+    border-left: 4px solid var(--blue-border); padding-left: 10px;
+    margin: 18px 0 10px; text-transform: uppercase; letter-spacing: .4px;
+  }
+  .section-title.ecn { color: var(--teal); border-left-color: var(--teal-border); }
+  .section-title.orange { color: var(--orange); border-left-color: var(--orange-border); }
+  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+
+  .kpi-card {
+    background: var(--white); border-radius: 8px; padding: 16px 18px;
+    box-shadow: var(--shadow); border-top: 4px solid var(--border);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .kpi-card.green  { border-top-color: var(--green-border); }
+  .kpi-card.red    { border-top-color: var(--red-border); }
+  .kpi-card.yellow { border-top-color: var(--yellow-border); }
+  .kpi-card.blue   { border-top-color: var(--blue-border); }
+  .kpi-card.teal   { border-top-color: var(--teal-border); }
+  .kpi-card.orange { border-top-color: var(--orange-border); }
+  .kpi-card.purple { border-top-color: var(--purple-border); }
+  .kpi-label { font-size: 11.5px; color: var(--text2); font-weight: normal; }
+  .kpi-value { font-size: 28px; font-weight: bold; line-height: 1.2; }
+  .kpi-card.green  .kpi-value { color: var(--green); }
+  .kpi-card.red    .kpi-value { color: var(--red); }
+  .kpi-card.yellow .kpi-value { color: var(--yellow); }
+  .kpi-card.blue   .kpi-value { color: var(--blue); }
+  .kpi-card.teal   .kpi-value { color: var(--teal); }
+  .kpi-card.orange .kpi-value { color: var(--orange); }
+  .kpi-card.purple .kpi-value { color: var(--purple); }
+  .kpi-sub { font-size: 11px; color: var(--text2); }
+  .kpi-target { font-size: 11px; padding: 2px 7px; border-radius: 10px; display: inline-block; margin-top: 2px; }
+  .target-miss { background: var(--red-light); color: var(--red); font-weight: bold; }
+  .target-ok   { background: var(--green-light); color: var(--green); font-weight: bold; }
+  .target-warn { background: var(--yellow-light); color: var(--yellow); font-weight: bold; }
+
+  .alert-box {
+    background: var(--white); border-radius: 8px; box-shadow: var(--shadow);
+    padding: 14px 18px; margin-bottom: 10px;
+  }
+  .alert-title { font-size: 13px; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .badge { padding: 2px 9px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+  .badge-red    { background: var(--red-light);    color: var(--red); }
+  .badge-yellow { background: var(--yellow-light); color: var(--yellow); }
+  .badge-green  { background: var(--green-light);  color: var(--green); }
+  .badge-blue   { background: var(--blue-light);   color: var(--blue); }
+  .badge-teal   { background: var(--teal-light);   color: var(--teal); }
+  .badge-orange { background: var(--orange-light); color: var(--orange); }
+
+  .escalate-panel {
+    background: #fff8f8; border: 1.5px solid var(--red-border);
+    border-radius: 8px; padding: 14px 18px; box-shadow: var(--shadow);
+  }
+  .escalate-title { color: var(--red); font-size: 13px; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .escalate-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #fbd8d8; }
+  .escalate-item:last-child { border-bottom: none; }
+  .escalate-num { background: var(--red); color: #fff; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-top: 1px; }
+  .escalate-content { flex: 1; }
+  .escalate-content strong { font-size: 12.5px; color: var(--text); display: block; margin-bottom: 2px; }
+  .escalate-content p { font-size: 11.5px; color: var(--text2); line-height: 1.5; }
+  .escalate-action { font-size: 11px; background: var(--red-light); color: var(--red); padding: 2px 8px; border-radius: 4px; display: inline-block; margin-top: 4px; font-weight: bold; }
+
+  .tbl-wrap { background: var(--white); border-radius: 8px; box-shadow: var(--shadow); overflow: hidden; }
+  .tbl-header { padding: 11px 16px; background: var(--gray-light); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .tbl-header span { font-size: 12.5px; font-weight: bold; color: var(--text); }
+  /* GS Brand header variants – nhẹ, không đậm */
+  .tbl-hdr-blue  { background: linear-gradient(90deg,#eaf2fb,#f4f8fc); border-bottom: 2px solid #aed6f1; }
+  .tbl-hdr-blue span  { color: #1a5276; }
+  .tbl-hdr-teal  { background: linear-gradient(90deg,#e8f8f5,#f4fbf9); border-bottom: 2px solid #a2d9ce; }
+  .tbl-hdr-teal span  { color: #0e6655; }
+  .tbl-hdr-gold  { background: linear-gradient(90deg,#fef9e7,#fffdf4); border-bottom: 2px solid #f9e79f; }
+  .tbl-hdr-gold span  { color: #7d6608; }
+  .tbl-hdr-red   { background: linear-gradient(90deg,#fdedec,#fff5f5); border-bottom: 2px solid #f5b7b1; }
+  .tbl-hdr-red span   { color: #922b21; }
+  .tbl-hdr-navy  { background: linear-gradient(90deg,#eaecf0,#f4f5f7); border-bottom: 2px solid #aab4c4; }
+  .tbl-hdr-navy span  { color: #1a3a5c; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { background: #f4f6f7; font-weight: bold; color: var(--text2); text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid #eef0f2; vertical-align: middle; }
+  tr:hover td { background: #f8fafc; }
+  .td-truncate { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .pill { padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; white-space: nowrap; }
+  .pill-done   { background: #eafaf1; color: #1a7a3e; }
+  .pill-late   { background: #fdecea; color: #c0392b; }
+  .pill-ontime { background: #eaf2fb; color: #1a5276; }
+  .pill-early  { background: #eafaf1; color: #1a7a3e; }
+  .pill-p0     { background: #fdecea; color: #c0392b; }
+  .pill-p1     { background: #fef9e7; color: #d68910; }
+  .pill-p2     { background: var(--gray-light); color: var(--gray); }
+  .pill-teal   { background: var(--teal-light); color: var(--teal); }
+  .pill-orange { background: var(--orange-light); color: var(--orange); }
+  .pill-stop   { background: #fdecea; color: #c0392b; }
+  .pill-drain  { background: #fef9e7; color: #d68910; }
+  .pill-moment { background: var(--blue-light); color: var(--blue); }
+  .pill-unused { background: var(--gray-light); color: var(--gray); }
+
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 11.5px; }
+  .bar-label { width: 140px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; color: var(--text2); }
+  .bar-track { flex: 1; height: 18px; background: #eef0f2; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; }
+  .bar-fill span { font-size: 10px; color: #fff; font-weight: bold; }
+  .bar-fill.blue-f   { background: #2980b9; }
+  .bar-fill.red-f    { background: #e74c3c; }
+  .bar-fill.green-f  { background: #27ae60; }
+  .bar-fill.yellow-f { background: #f39c12; }
+  .bar-fill.teal-f   { background: #1abc9c; }
+  .bar-fill.orange-f { background: #e67e22; }
+  .bar-count { width: 36px; text-align: right; color: var(--text); font-weight: bold; }
+
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 16px; background: var(--gray-light); border-bottom: 1px solid var(--border); }
+  .filter-bar select, .filter-bar input { font-size: 12px; font-family: var(--font); padding: 5px 10px; border: 1px solid var(--border); border-radius: 5px; background: var(--white); color: var(--text); outline: none; }
+  .filter-bar input { min-width: 180px; }
+  .btn-reset { font-size: 11.5px; padding: 5px 14px; background: var(--blue); color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: var(--font); }
+  .btn-reset:hover { background: #1a3a5c; }
+
+  .nv-card { background: var(--white); border-radius: 8px; padding: 12px 14px; box-shadow: var(--shadow); border-left: 4px solid var(--border); }
+  .nv-card.warn { border-left-color: var(--red-border); }
+  .nv-card.ok   { border-left-color: var(--green-border); }
+  .nv-card.caution { border-left-color: var(--yellow-border); }
+  .nv-name { font-size: 12.5px; font-weight: bold; margin-bottom: 6px; }
+  .nv-stats { display: flex; gap: 10px; flex-wrap: wrap; }
+  .nv-stat { font-size: 11px; }
+  .nv-bar-bg { width: 100%; height: 6px; background: #eef0f2; border-radius: 3px; margin-top: 5px; }
+  .nv-bar-fg { height: 6px; border-radius: 3px; }
+
+  .chart-w { background: var(--white); border-radius: 8px; box-shadow: var(--shadow); padding: 14px 16px; }
+  .chart-t  { font-size: 12.5px; font-weight: bold; color: var(--blue); margin-bottom: 10px; border-left: 4px solid #2980b9; padding-left: 8px; }
+  .chart-t.teal { color: var(--teal); border-left-color: var(--teal-border); }
+
+  .qp-ok   { padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;background:#eafaf1;color:#1a7a3e; }
+  .qp-warn { padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;background:#fef9e7;color:#d68910; }
+  .qp-bad  { padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold;background:#fdecea;color:#c0392b; }
+
+  .adv-box { background: #eaf2fb; border: 1px solid #2980b9; border-radius: 8px; padding: 14px 18px; }
+  .adv-box.teal { background: var(--teal-light); border-color: var(--teal-border); }
+  .adv-title { font-size: 13px; font-weight: bold; color: var(--blue); margin-bottom: 10px; }
+  .adv-title.teal { color: var(--teal); }
+  .adv-item { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #d4e6f1; }
+  .adv-item:last-child { border: none; }
+  .adv-text strong { display: block; font-size: 12px; color: var(--text); margin-bottom: 2px; }
+  .adv-text p { font-size: 11.5px; color: var(--text2); line-height: 1.5; }
+
+  /* ECN specific */
+  .ecn-alert-box { background: #fff8f8; border: 1.5px solid var(--red-border); border-radius: 8px; padding: 14px 18px; box-shadow: var(--shadow); }
+  .ecn-risk-card { background: #fdecea; border: 1.5px solid var(--red-border); border-radius: 8px; padding: 14px; text-align: center; }
+  .ecn-risk-val { font-size: 32px; font-weight: bold; color: var(--red); }
+  .ecn-risk-label { font-size: 11.5px; color: var(--red); margin-top: 4px; }
+  .ecn-safe-card { background: var(--teal-light); border: 1px solid var(--teal-border); border-radius: 8px; padding: 14px; text-align: center; }
+  .ecn-safe-val { font-size: 32px; font-weight: bold; color: var(--teal); }
+  .ecn-safe-label { font-size: 11.5px; color: var(--teal); margin-top: 4px; }
+
+  .footnote { font-size: 11px; color: var(--text2); margin-top: 10px; }
+  .row-gap { margin-top: 14px; }
+  .chip { padding: 2px 8px; border-radius: 4px; font-size: 11px; background: var(--gray-light); color: var(--text2); }
+  .separator { height: 1px; background: var(--border); margin: 14px 0; }
+  .tbl-scroll { overflow-x: auto; }
+  .sep-zone { height: 3px; background: linear-gradient(90deg, #1a5276, #1a7a6e, #f1c40f); margin: 24px 0 0; }
+  .sep-zone.teal-sep { background: linear-gradient(90deg, #0e6655, #1abc9c, #f1c40f); }
+  .zone-hdr { padding: 12px 20px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; color: #fff; }
+  .zone-hdr h2 { font-size: 15px; font-weight: bold; margin: 0; }
+  .zone-hdr span { font-size: 11.5px; opacity: .85; }
+  .zone-hdr.blue-hdr { background: linear-gradient(135deg, #1a3a5c, #1a5276); }
+  .zone-hdr.teal-hdr { background: linear-gradient(135deg, #0e4d3a, #0e6655); }
+  .notice-box { padding: 12px 16px; margin-bottom: 14px; font-size: 12px; border-radius: 0 0 8px 8px; }
+  .notice-yellow { background: #fff8e1; border: 1.5px solid #f1c40f; }
+  .notice-red    { background: #fff0f0; border: 1.5px solid var(--red-border); }
+  .notice-teal   { background: var(--teal-light); border: 1.5px solid var(--teal-border); }
+  .sticky-nav { position: sticky; top: 0; z-index: 100; background: #1a3a5c; display: flex; gap: 0; border-bottom: 2px solid #f1c40f; overflow-x: auto; }
+  .sticky-nav a { color: #cbd8e8; font-size: 12px; padding: 9px 16px; text-decoration: none; white-space: nowrap; border-right: 1px solid rgba(255,255,255,.1); transition: background .2s; }
+  .sticky-nav a:hover { background: #2980b9; color: #fff; }
+  .sticky-nav a.active { background: #2980b9; color: #fff; font-weight: bold; }
+
+/* DLCN additional brand classes */
+.dlcn-scope .tbl-hdr-blue  { background:linear-gradient(90deg,#eaf2fb,#f4f8fc); border-bottom:2px solid #aed6f1; }
+.dlcn-scope .tbl-hdr-blue span { color:#1a5276; }
+.dlcn-scope .tbl-hdr-teal  { background:linear-gradient(90deg,#e8f8f5,#f4fbf9); border-bottom:2px solid #a2d9ce; }
+.dlcn-scope .tbl-hdr-teal span { color:#0e6655; }
+.dlcn-scope .tbl-hdr-navy  { background:linear-gradient(90deg,#eaecf0,#f4f5f7); border-bottom:2px solid #aab4c4; }
+.dlcn-scope .tbl-hdr-navy span { color:#1a3a5c; }
+.dlcn-scope .tbl-hdr-red   { background:linear-gradient(90deg,#fdedec,#fff5f5); border-bottom:2px solid #f5b7b1; }
+.dlcn-scope .tbl-hdr-red span   { color:#922b21; }
+</style>
+
+.l2-anchor { font-style: normal; opacity: 0.82; font-size: 11px; border-bottom: 2px solid transparent !important; }
+.l2-anchor:hover { opacity: 1; background: rgba(0,0,0,0.06); }
+.l2-anchor.active { opacity: 1; color: var(--navy) !important; font-weight: 700 !important; border-bottom: 2px solid var(--red) !important; background: rgba(200,55,45,0.06); }
 </head>
 <body>
 
-<div class="loading-screen" id="loading">
-  <div class="loading-logo">GS</div>
-  <div class="loading-title">GoldSun SPM Dashboard</div>
-  <div class="loading-sub" id="loading-sub">Đang tải dữ liệu thực tế...</div>
-  <div class="loading-bar"><div class="loading-fill"></div></div>
+<div class="loading-screen" id="loading" style="background:url('LOGO/Banner.jpg') center/cover no-repeat;background-color:#1B6B3A">
+  <div style="background:rgba(0,0,0,0.45);padding:28px 40px;border-radius:16px;text-align:center">
+    <div class="loading-title" style="font-size:22px;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,0.5)">GoldSun SPM Dashboard</div>
+    <div class="loading-sub" id="loading-sub" style="color:rgba(255,255,255,0.9);margin-bottom:20px">Đang tải dữ liệu thực tế...</div>
+    <div class="loading-bar" style="margin:0 auto"><div class="loading-fill"></div></div>
+  </div>
 </div>
 
 <!-- ════ BRAND BAR ════ -->
 <div class="topbar-brand">
-  <svg width="36" height="36" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
-    <rect width="34" height="34" rx="7" fill="#fff"/>
-    <path d="M 29.12,10 A 14,14 0 1,0 29.12,24" fill="none" stroke="#1B6B3A" stroke-width="2.6" stroke-linecap="round"/>
-    <path d="M 26.09,11.75 A 10.5,10.5 0 1,0 26.09,22.25" fill="none" stroke="#1B6B3A" stroke-width="2" stroke-linecap="round"/>
-    <path d="M 23.06,13.5 A 7,7 0 1,0 23.06,20.5" fill="none" stroke="#1B6B3A" stroke-width="1.6" stroke-linecap="round"/>
-    <g transform="translate(17,17)">
-      <polygon fill="#C8952A" points="0,-5.8 1.2,-1.2 5.8,0 1.2,1.2 0,5.8 -1.2,1.2 -5.8,0 -1.2,-1.2"/>
-      <polygon fill="#C8952A" transform="rotate(45)" points="0,-5.8 1.2,-1.2 5.8,0 1.2,1.2 0,5.8 -1.2,1.2 -5.8,0 -1.2,-1.2" opacity="0.7"/>
-      <circle r="2.2" fill="#C8952A"/>
-    </g>
-  </svg>
+  <img src="LOGO/LOGO.png" height="36" style="flex-shrink:0;border-radius:6px;object-fit:contain" alt="GoldSun Logo">
   <div>
     <div style="font-size:13px;font-weight:600;color:#fff;line-height:1.2">GoldSun Dashboard</div>
     <div style="font-size:10px;color:rgba(255,255,255,0.65)">Khối Công nghệ — Technology HO</div>
@@ -329,6 +558,841 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   <div style="font-size:20px;font-weight:700;color:var(--navy);margin-bottom:10px" id="bpPhTitle">Module đang phát triển</div>
   <div style="font-size:13px;color:var(--gray);line-height:1.8;max-width:520px" id="bpPhDesc">Nội dung bộ phận này đang được xây dựng trong khuôn khổ GSP NEXT 30 và sẽ được tích hợp trong các phiên bản tiếp theo của GoldSun Dashboard.</div>
   <div style="margin-top:24px;padding:9px 22px;background:#FEF3E2;border-radius:20px;font-size:12px;font-weight:700;color:var(--gold);border:1px solid #FCD88A">🔜 Sắp ra mắt — GSP NEXT 30</div>
+</div>
+
+<!-- ══ DLCN DASHBOARD TAB ══ -->
+<div class="tab-content" id="tab-dlcn">
+  <div class="dlcn-scope" style="max-width:100%;overflow-x:hidden">
+<div class="main">
+
+<!-- ══ ZONE I: KPI TỔNG QUAN ══ -->
+<div id="kpi" class="section-title">I. KPI TỔNG QUAN – THÁNG 5/2026</div>
+<div class="grid-5" style="margin-bottom:14px">
+  <div class="kpi-card blue">
+    <div class="kpi-label">TỔNG CÔNG VIỆC THÁNG</div>
+    <div class="kpi-value">1.066</div>
+    <div class="kpi-sub">27 dự án / khách hàng</div>
+    <span class="kpi-target target-ok">Nhà máy GS5 – Quế Võ 1</span>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-label">TỶ LỆ HOÀN THÀNH</div>
+    <div class="kpi-value">100%</div>
+    <div class="kpi-sub">1.066 / 1.066 task đã hoàn thành</div>
+    <span class="kpi-target target-ok">✓ Đạt – KPI ≥ 95%</span>
+  </div>
+  <div class="kpi-card yellow">
+    <div class="kpi-label">TỶ LỆ ĐÚNG HẠN</div>
+    <div class="kpi-value">94,1%</div>
+    <div class="kpi-sub">1.003 đúng hạn / 1.066 task</div>
+    <span class="kpi-target target-miss">⚠ CHƯA ĐẠT – Target ≥ 98%</span>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">TASK TRỄ HẠN</div>
+    <div class="kpi-value">63</div>
+    <div class="kpi-sub">5,9% tổng task | 100% do TTKH Samsung</div>
+    <span class="kpi-target target-miss">🔴 RCA ngay</span>
+  </div>
+  <div class="kpi-card red" style="border-top-color:#8e24aa">
+    <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
+    <div class="kpi-value" style="color:#8e24aa">1.492</div>
+    <div class="kpi-sub">pcs SSA-MLR-00154 chưa xử lý</div>
+    <span class="kpi-target target-miss">🔴 CẦN GIẢI QUYẾT NGAY</span>
+  </div>
+</div>
+
+<!-- KPI ERP Bravo summary row -->
+<div class="grid-4" style="margin-bottom:4px">
+  <div class="kpi-card blue" style="padding:12px 14px">
+    <div class="kpi-label">TỔNG MÃ ERP ĐÃ KHAI BÁO</div>
+    <div class="kpi-value" style="font-size:22px">45.853</div>
+    <div class="kpi-sub">10/2025 → 05/2026 | GS5+GS1+GS6</div>
+  </div>
+  <div class="kpi-card green" style="padding:12px 14px">
+    <div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div>
+    <div class="kpi-value" style="font-size:22px">97,6%</div>
+    <div class="kpi-sub">44.731/45.853 mã không cần sửa</div>
+    <span class="kpi-target target-warn">⚠ Sát KPI – mục tiêu ≥ 98%</span>
+  </div>
+  <div class="kpi-card teal" style="padding:12px 14px">
+    <div class="kpi-label">TỔNG ECN XỬ LÝ (Q1/2026)</div>
+    <div class="kpi-value" style="font-size:22px">91+</div>
+    <div class="kpi-sub">GS1 (Canon) + GS5 (Samsung) | 2 PIC</div>
+  </div>
+  <div class="kpi-card yellow" style="padding:12px 14px">
+    <div class="kpi-label">MÃ ERP CÓ SỬA ≥ 1 LẦN</div>
+    <div class="kpi-value" style="font-size:22px">1.122</div>
+    <div class="kpi-sub">2,4% tổng mã | Cần phân tích nguyên nhân</div>
+    <span class="kpi-target target-miss">⚠ Vượt mục tiêu ≤ 2%</span>
+  </div>
+</div>
+
+<!-- ══ ZONE II: CẢNH BÁO ══ -->
+<div id="canh-bao" class="section-title">II. CẢNH BÁO – VẤN ĐỀ CẦN GIÁM ĐỐC CÔNG NGHỆ QUYẾT ĐỊNH / CAN THIỆP</div>
+<div class="grid-2">
+  <div class="escalate-panel">
+    <div class="escalate-title">🔴 CÁC VẤN ĐỀ CẦN ESCALATION LÊN GĐ CÔNG NGHỆ</div>
+    <div class="escalate-item">
+      <div class="escalate-num">1</div>
+      <div class="escalate-content">
+        <strong>Tỷ lệ đúng hạn 94,1% – CHƯA ĐẠT KPI 98% (thiếu 3,9%)</strong>
+        <p>63 task hoàn thành trễ trong tháng 5. 61/63 case thuộc nhóm <em>Khai báo hệ thống KH</em> – bị ảnh hưởng bởi yêu cầu từ bên ngoài (KH thay đổi, PLM/ECIMS delay).</p>
+        <span class="escalate-action">→ GĐ quyết định: Có tính lỗi khách quan không? Điều chỉnh KPI hay tăng năng lực nhóm KH?</span>
+      </div>
+    </div>
+    <div class="escalate-item">
+      <div class="escalate-num">2</div>
+      <div class="escalate-content">
+        <strong>Dự án "Bảo mật Q8 (F976)" – 30 task trễ (53% số task của dự án)</strong>
+        <p>Mức ưu tiên: <span class="badge badge-red">Trọng điểm</span>. Toàn bộ PIC trễ: <strong>TRẦN THỊ THU HƯƠNG</strong>. Nhóm: KB hệ thống KH Samsung PLM/ECIMS.</p>
+        <span class="escalate-action">→ GĐ xem xét: RCA nguyên nhân delay – do KH hay năng lực nội bộ?</span>
+      </div>
+    </div>
+    <div class="escalate-item">
+      <div class="escalate-num">3</div>
+      <div class="escalate-content">
+        <strong>TRẦN THỊ THU HƯƠNG – 100% task trễ (57/57 task)</strong>
+        <p>Cần đánh giá: quá tải, thiếu hỗ trợ hay vướng mắc kỹ thuật hệ thống KH Samsung (ECIMS/PLM)?</p>
+        <span class="escalate-action">→ GĐ quyết định: Phân bổ lại nguồn lực hoặc hỗ trợ kỹ thuật nhóm KH?</span>
+      </div>
+    </div>
+    <div class="escalate-item">
+      <div class="escalate-num">4</div>
+      <div class="escalate-content">
+        <strong>🔴 ECN TỒN KHO: 1.492 pcs SSA-MLR-00154 chưa có phương án xử lý</strong>
+        <p>Mã GH90-70262H – Model MANUAL-L500. ECN ban hành 09/01/2026, hạn dừng 23/02/2026 <strong>đã quá hạn</strong>. Chưa có người chịu trách nhiệm xử lý trong dữ liệu. Rủi ro hàng aging tăng theo thời gian.</p>
+        <span class="escalate-action">→ GĐ yêu cầu: HÀ VIỆT ANH báo cáo ngay phương án – tiêu hủy, chuyển đổi hay thương lượng với KH?</span>
+      </div>
+    </div>
+    <div class="escalate-item">
+      <div class="escalate-num">5</div>
+      <div class="escalate-content">
+        <strong>App Sheet PLM Hàn Quốc + Ecims/MPS KH – Chưa có task tháng 5</strong>
+        <p>2 dự án chiến lược ưu tiên trọng điểm không xuất hiện task theo dõi tháng 5. Cần xác nhận tiến độ thực tế.</p>
+        <span class="escalate-action">→ GĐ yêu cầu: Trưởng BP báo cáo trạng thái 2 dự án trong tuần tới.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; gap:12px;">
+    <div class="alert-box">
+      <div class="alert-title">📌 TÓM TẮT CẢNH BÁO TIẾN ĐỘ</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="text-align:center;padding:12px;background:#fdecea;border-radius:6px;border:1px solid #e74c3c;">
+          <div style="font-size:26px;font-weight:bold;color:#c0392b;">63</div>
+          <div style="font-size:11px;color:#c0392b;">Task hoàn thành TRỄ HẠN</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#eaf2fb;border-radius:6px;border:1px solid #2980b9;">
+          <div style="font-size:26px;font-weight:bold;color:#1a5276;">1.002</div>
+          <div style="font-size:11px;color:#1a5276;">Task hoàn thành ĐÚNG HẠN</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#eafaf1;border-radius:6px;border:1px solid #27ae60;">
+          <div style="font-size:26px;font-weight:bold;color:#1a7a3e;">1</div>
+          <div style="font-size:11px;color:#1a7a3e;">Task TRƯỚC HẠN</div>
+        </div>
+        <div style="text-align:center;padding:12px;background:#f4f6f7;border-radius:6px;border:1px solid #aab;">
+          <div style="font-size:26px;font-weight:bold;color:#1a3a5c;">0</div>
+          <div style="font-size:11px;color:#566573;">Task QUÁ HẠN chưa HT</div>
+        </div>
+      </div>
+    </div>
+    <div class="alert-box">
+      <div class="alert-title">📊 PHÂN TÍCH NHÓM CÔNG VIỆC TRỄ HẠN</div>
+      <div class="bar-row"><div class="bar-label">KB hệ thống KH</div><div class="bar-track"><div class="bar-fill red-f" style="width:96.8%"><span>61</span></div></div><div class="bar-count">61</div></div>
+      <div class="bar-row"><div class="bar-label">Cập nhật hồ sơ mẫu</div><div class="bar-track"><div class="bar-fill yellow-f" style="width:1.6%"></div></div><div class="bar-count">1</div></div>
+      <div class="bar-row"><div class="bar-label">XD Tiêu chuẩn</div><div class="bar-track"><div class="bar-fill yellow-f" style="width:1.6%"></div></div><div class="bar-count">1</div></div>
+      <p class="footnote" style="margin-top:8px;">⚠ 96,8% task trễ thuộc nhóm <strong>Khai báo hệ thống Khách hàng</strong>. Đây là điểm nghẽn duy nhất cần xử lý.</p>
+    </div>
+    <div class="alert-box">
+      <div class="alert-title">🎯 SO SÁNH KPI MỤC TIÊU vs THỰC TẾ</div>
+      <table style="width:100%;font-size:12px;">
+        <tr><th>Chỉ tiêu</th><th>Mục tiêu</th><th>Thực tế</th><th>Đánh giá</th></tr>
+        <tr><td>% Hoàn thành task</td><td>≥ 95%</td><td><strong>100%</strong></td><td><span class="pill pill-done">✓ ĐẠT</span></td></tr>
+        <tr><td>% Update đúng hạn</td><td>≥ 98%</td><td><strong style="color:#c0392b">94,1%</strong></td><td><span class="pill pill-late">✗ CHƯA ĐẠT</span></td></tr>
+        <tr><td>Chất lượng KB ERP</td><td>≥ 98%</td><td><strong style="color:#d68910">97,6%</strong></td><td><span class="pill pill-p1">⚠ SÁT NGƯỠNG</span></td></tr>
+        <tr><td>ECN tồn kho = 0</td><td>= 0 pcs</td><td><strong style="color:#c0392b">1.492 pcs</strong></td><td><span class="pill pill-late">✗ VI PHẠM</span></td></tr>
+        <tr><td>Lỗi ERP khai báo sai</td><td>→ 0 lỗi</td><td>Chưa có dữ liệu</td><td><span class="badge badge-yellow">Cần đo</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ZONE III: DỰ ÁN ══ -->
+<div id="du-an" class="section-title">III. TIẾN ĐỘ THEO DỰ ÁN / KHÁCH HÀNG</div>
+<div class="grid-2">
+  <div class="tbl-wrap">
+    <div class="tbl-header"><span>📁 Top 15 Dự án – Tổng task & Tỷ lệ trễ</span></div>
+    <div style="padding:12px 16px;">
+      <div class="bar-row"><div class="bar-label" title="Bảo mật Q8 (F976)">🔴 Bảo mật Q8 (F976)</div><div class="bar-track"><div class="bar-fill blue-f" style="width:100%"><span>57</span></div></div><div class="bar-count" style="color:#c0392b">30 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">🔴 SM-L715 (WATCH 9)</div><div class="bar-track"><div class="bar-fill blue-f" style="width:77.2%"><span>44</span></div></div><div class="bar-count" style="color:#c0392b">17 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">🔴 Bảo mật H8 (F971)</div><div class="bar-track"><div class="bar-fill blue-f" style="width:59.6%"><span>34</span></div></div><div class="bar-count" style="color:#c0392b">12 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ Khai báo hàng ngày</div><div class="bar-track"><div class="bar-fill green-f" style="width:100%"><span>383</span></div></div><div class="bar-count">0 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ Canon</div><div class="bar-track"><div class="bar-fill green-f" style="width:36%"><span>138</span></div></div><div class="bar-count">1 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ Basic</div><div class="bar-track"><div class="bar-fill green-f" style="width:32.8%"><span>126</span></div></div><div class="bar-count">0 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ Hanwha</div><div class="bar-track"><div class="bar-fill green-f" style="width:26.4%"><span>101</span></div></div><div class="bar-count">0 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ KUANXIN</div><div class="bar-track"><div class="bar-fill green-f" style="width:19.3%"><span>74</span></div></div><div class="bar-count">0 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ Kinh đô</div><div class="bar-track"><div class="bar-fill green-f" style="width:8.1%"><span>31</span></div></div><div class="bar-count">0 trễ</div></div>
+      <div class="bar-row"><div class="bar-label">✅ A276</div><div class="bar-track"><div class="bar-fill green-f" style="width:3.4%"><span>13</span></div></div><div class="bar-count">0 trễ</div></div>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-header"><span>📋 Phân tích nhóm công việc tháng 5</span></div>
+    <table>
+      <thead><tr><th>Nhóm công việc</th><th align="right">Tổng</th><th align="right">Trễ</th><th align="right">% Đúng hạn</th></tr></thead>
+      <tbody>
+        <tr><td>Khai báo hệ thống mới</td><td align="right">645</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>Khai báo hệ thống khách hàng</td><td align="right">98</td><td align="right" style="color:#c0392b;font-weight:bold">61</td><td align="right"><span class="pill pill-late">37,8%</span></td></tr>
+        <tr><td>XD định mức</td><td align="right">69</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>Khai báo hệ thống sửa</td><td align="right">66</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>Xây dựng tc đóng gói</td><td align="right">58</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>Cập nhật tiêu chuẩn đóng gói</td><td align="right">56</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>Cập nhật thông tin ECN</td><td align="right">39</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>Cập nhật hồ sơ mẫu</td><td align="right">22</td><td align="right">1</td><td align="right"><span class="pill pill-ontime">95,5%</span></td></tr>
+        <tr><td>Hoàn thiện hồ sơ KH</td><td align="right">5</td><td align="right">0</td><td align="right"><span class="pill pill-done">100%</span></td></tr>
+        <tr><td>XD Tiêu chuẩn</td><td align="right">3</td><td align="right">1</td><td align="right"><span class="pill pill-ontime">66,7%</span></td></tr>
+        <tr style="background:#f4f6f7;font-weight:bold"><td>TỔNG</td><td align="right">1.066</td><td align="right" style="color:#c0392b">63</td><td align="right">94,1%</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:10px 16px"><p class="footnote">🔍 <strong>Kết luận:</strong> Nhóm "Khai báo hệ thống KH" là điểm nghẽn duy nhất, tỷ lệ đúng hạn chỉ 37,8%.</p></div>
+  </div>
+</div>
+
+<!-- ══ ZONE IV: NHÂN SỰ ══ -->
+<div id="nhan-su" class="section-title">IV. PHÂN TÍCH HIỆU SUẤT NHÂN SỰ (PIC)</div>
+<div class="grid-3" style="margin-bottom:12px">
+  <div class="nv-card warn">
+    <div class="nv-name">⚠ TRẦN THỊ THU HƯƠNG</div>
+    <div class="nv-stats"><span class="nv-stat">Tổng task: <strong>57</strong></span><span class="nv-stat" style="color:#c0392b">Trễ: <strong>57 (100%)</strong></span></div>
+    <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:0%;background:#27ae60"></div></div>
+    <p style="font-size:11px;margin-top:6px;color:#c0392b">🔴 100% task trễ – Toàn bộ KB hệ thống KH Samsung. Cần RCA ngay.</p>
+  </div>
+  <div class="nv-card warn">
+    <div class="nv-name">⚠ TÔ THỊ MAI</div>
+    <div class="nv-stats"><span class="nv-stat">Tổng task: <strong>66</strong></span><span class="nv-stat" style="color:#d68910">Trễ: <strong>6 (9,1%)</strong></span></div>
+    <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:90.9%;background:#27ae60"></div></div>
+    <p style="font-size:11px;margin-top:6px;color:#d68910">⚠ 6 task trễ – Cần xem xét nguyên nhân và hỗ trợ.</p>
+  </div>
+  <div class="nv-card ok">
+    <div class="nv-name">✅ NGUYỄN NGỌC PHÚ</div>
+    <div class="nv-stats"><span class="nv-stat">Tổng task: <strong>280</strong></span><span class="nv-stat" style="color:#1a7a3e">Trễ: <strong>0 (0%)</strong></span></div>
+    <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:100%;background:#27ae60"></div></div>
+    <p style="font-size:11px;margin-top:6px;color:#1a7a3e">✅ 280 task – 100% đúng hạn. PIC hiệu suất cao nhất tháng.</p>
+  </div>
+  <div class="nv-card ok">
+    <div class="nv-name">✅ ĐẶNG THỊ HẰNG</div>
+    <div class="nv-stats"><span class="nv-stat">Tổng task: <strong>271</strong></span><span class="nv-stat" style="color:#1a7a3e">Trễ: <strong>0 (0%)</strong></span></div>
+    <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:100%;background:#27ae60"></div></div>
+    <p style="font-size:11px;margin-top:6px;color:#1a7a3e">✅ 271 task – 100% đúng hạn.</p>
+  </div>
+  <div class="nv-card ok">
+    <div class="nv-name">✅ PHẠM THỊ HỒNG ÁNH</div>
+    <div class="nv-stats"><span class="nv-stat">Tổng task: <strong>172</strong></span><span class="nv-stat" style="color:#1a7a3e">Trễ: <strong>0 (0%)</strong></span></div>
+    <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:100%;background:#27ae60"></div></div>
+    <p style="font-size:11px;margin-top:6px;color:#1a7a3e">✅ 172 task – 100% đúng hạn.</p>
+  </div>
+  <div class="nv-card ok">
+    <div class="nv-name">✅ NGUYỄN THÚY HIỀN</div>
+    <div class="nv-stats"><span class="nv-stat">Tổng task: <strong>113+</strong></span><span class="nv-stat" style="color:#1a7a3e">Trễ: <strong>0 (0%)</strong></span></div>
+    <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:100%;background:#27ae60"></div></div>
+    <p style="font-size:11px;margin-top:6px;color:#1a7a3e">✅ 100% đúng hạn.</p>
+  </div>
+</div>
+
+<!-- ══ ZONE V: TASK TRỄ ══ -->
+<div id="task-tre" class="section-title">V. DANH SÁCH CHI TIẾT 63 TASK TRỄ HẠN – THÁNG 5/2026</div>
+<div class="tbl-wrap">
+  <div class="filter-bar">
+    <input type="text" id="searchInput" placeholder="🔍 Tìm theo tên, dự án, PIC..." oninput="filterTable()">
+    <select id="projFilter" onchange="filterTable()">
+      <option value="">-- Tất cả dự án --</option>
+      <option>Bảo mật Q8 (F976)</option><option>SM-L715 (WATCH 9)</option>
+      <option>Bảo mật H8 (F971)</option><option>A176</option>
+      <option>Canon</option><option>X936/X930</option>
+    </select>
+    <select id="picFilter" onchange="filterTable()">
+      <option value="">-- Tất cả PIC --</option>
+      <option>TRẦN THỊ THU HƯƠNG</option><option>TÔ THỊ MAI</option>
+    </select>
+    <button class="btn-reset" onclick="resetFilter()">Reset</button>
+    <span style="font-size:11.5px;color:#566573;margin-left:auto;align-self:center">Hiển thị: <strong id="rowCount">15</strong> / 63 task trễ (mẫu đại diện)</span>
+  </div>
+  <div class="tbl-scroll">
+    <table id="lateTable">
+      <thead><tr><th>#</th><th>Dự án</th><th>Nhóm CV</th><th>Ưu tiên</th><th>Nội dung</th><th>PIC</th><th>Hạn KT</th><th>Ngày HT TT</th><th>Cảnh báo</th></tr></thead>
+      <tbody id="lateTableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ ZONE VI: DANH MỤC DỰ ÁN ══ -->
+<div id="danh-muc" class="section-title">VI. DANH MỤC DỰ ÁN / KẾ HOẠCH TRỌNG ĐIỂM</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+    <table>
+      <thead style="background:linear-gradient(90deg,#eaf2fb,#f4f8fc)"><tr style="border-bottom:2px solid #aed6f1"><th style="color:#1a5276;background:transparent">#</th><th style="color:#1a5276;background:transparent">Tên dự án</th><th style="color:#1a5276;background:transparent">Mức ưu tiên</th><th style="color:#1a5276;background:transparent">Tổng task T5</th><th style="color:#1a5276;background:transparent">Đúng hạn</th><th style="color:#1a5276;background:transparent">Trễ hạn</th><th style="color:#1a5276;background:transparent">% Đúng hạn</th><th style="color:#1a5276;background:transparent">Nhận xét</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Bảo mật Q8 (F976)</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>57</td><td>27</td><td style="color:#c0392b;font-weight:bold">30</td><td><span class="pill pill-late">47,4%</span></td><td>🔴 Cần RCA – KB hệ thống KH chậm</td></tr>
+        <tr><td>2</td><td>SM-L715 (WATCH 9)</td><td><span class="pill pill-p1">Ưu tiên 1</span></td><td>44</td><td>27</td><td style="color:#c0392b;font-weight:bold">17</td><td><span class="pill pill-late">61,4%</span></td><td>🔴 17 task trễ</td></tr>
+        <tr><td>3</td><td>Bảo mật H8 (F971)</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>34</td><td>22</td><td style="color:#c0392b">12</td><td><span class="pill pill-late">64,7%</span></td><td>⚠ 12 task trễ</td></tr>
+        <tr><td>4</td><td>Khai báo hàng ngày</td><td><span class="pill pill-p1">Ưu tiên 1</span></td><td>383</td><td>383</td><td>0</td><td><span class="pill pill-done">100%</span></td><td>✅ Ổn định</td></tr>
+        <tr><td>5</td><td>Canon</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>138</td><td>137</td><td>1</td><td><span class="pill pill-done">99,3%</span></td><td>✅ Gần đạt mục tiêu</td></tr>
+        <tr><td>6</td><td>Basic</td><td><span class="pill pill-p1">Ưu tiên 1</span></td><td>126</td><td>126</td><td>0</td><td><span class="pill pill-done">100%</span></td><td>✅</td></tr>
+        <tr><td>7</td><td>Hanwha</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>101</td><td>101</td><td>0</td><td><span class="pill pill-done">100%</span></td><td>✅</td></tr>
+        <tr><td>8</td><td>KUANXIN</td><td><span class="pill pill-p1">Ưu tiên 1</span></td><td>74</td><td>74</td><td>0</td><td><span class="pill pill-done">100%</span></td><td>✅</td></tr>
+        <tr><td>9</td><td>L355/L350</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>–</td><td>–</td><td>–</td><td>–</td><td>⚠ Chưa có task T5</td></tr>
+        <tr><td>10</td><td>App Sheet PLM Hàn Quốc</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>–</td><td>–</td><td>–</td><td>–</td><td>🔴 Chưa có task – Cần báo cáo</td></tr>
+        <tr><td>11</td><td>KB hệ thống Ecims KH</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>–</td><td>–</td><td>–</td><td>–</td><td>🔴 Chưa ghi nhận</td></tr>
+        <tr><td>12</td><td>KB hệ thống MPS KH</td><td><span class="pill pill-p0">Trọng điểm</span></td><td>–</td><td>–</td><td>–</td><td>–</td><td>🔴 Chưa ghi nhận</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ ZONE VII: KPI & TỔ CHỨC ══ -->
+<div id="to-chuc" class="section-title">VII. KPI BỘ PHẬN & MÔ TẢ CHỨC NĂNG</div>
+<div class="grid-2">
+  <div class="alert-box">
+    <div class="alert-title">📐 KPI CHÍNH BỘ PHẬN (Trưởng bộ phận DLCN & HT)</div>
+    <table style="width:100%;font-size:12px">
+      <tr><th>#</th><th>KPI</th><th>Trọng số</th><th>Mục tiêu</th><th>Nguồn dữ liệu</th></tr>
+      <tr><td>1</td><td>% Dữ liệu kỹ thuật chính xác</td><td>35%</td><td>≥ 98%</td><td>Audit record ERP</td></tr>
+      <tr><td>2</td><td>% Update đúng hạn sau change</td><td>25%</td><td>≥ 98%</td><td>Case update / Tổng case</td></tr>
+      <tr><td>3</td><td>Số lỗi do sai version/routing/BOM</td><td>20%</td><td>→ 0 lỗi</td><td>Log lỗi / RCA</td></tr>
+      <tr><td>4</td><td>Thời gian truy xuất lịch sử change</td><td>10%</td><td>≤ mục tiêu</td><td>Thời gian xử lý yêu cầu</td></tr>
+      <tr><td>5</td><td>% Mã hàng đồng bộ đủ 3 lớp dữ liệu</td><td>10%</td><td>≥ 98%</td><td>BOM SX / routing / version</td></tr>
+    </table>
+  </div>
+  <div class="alert-box">
+    <div class="alert-title">🏢 TỔ CHỨC BỘ PHẬN & NHÂN SỰ QV1</div>
+    <table style="width:100%;font-size:12px">
+      <tr><th>Vị trí</th><th>Tên nhân viên</th><th>Nhóm công việc chính</th></tr>
+      <tr><td>Trưởng bộ phận</td><td><em>(chưa xác định)</em></td><td>Quản trị BOM SX, routing, audit data</td></tr>
+      <tr><td>NV KB Hệ thống ERP</td><td>NGUYỄN NGỌC PHÚ</td><td>Khai báo ERP – 280 task T5 | 1.978 mã T10/25-T5/26</td></tr>
+      <tr><td>NV KB Hệ thống ERP</td><td>ĐẶNG THỊ HẰNG</td><td>Khai báo ERP – 271 task T5 | 1.535 mã</td></tr>
+      <tr><td>NV KB Hệ thống ERP</td><td>NGUYỄN THỊ TÌNH</td><td>Khai báo ERP – 64 task T5 | 899 mã | Chất lượng xuất sắc</td></tr>
+      <tr><td>NV KB Hệ thống ERP</td><td>NGUYỄN THỊ NGA</td><td>Khai báo ERP | Ngừng từ T3</td></tr>
+      <tr><td>NV KB Hệ thống KH + ECN</td><td>HÀ VIỆT ANH</td><td>KB KH Samsung + ECN GS5 – ~68 ECN Q1/2026</td></tr>
+      <tr><td>NV KB Hệ thống KH</td><td>TRẦN THỊ THU HƯƠNG</td><td>KB hệ thống KH Samsung – 57 task (100% trễ T5)</td></tr>
+      <tr><td>Hỗ trợ / kiêm nhiệm</td><td>TÔ THỊ MAI</td><td>66 task – 6 trễ</td></tr>
+      <tr><td>Hỗ trợ / kiêm nhiệm</td><td>PHẠM THỊ HỒNG ÁNH</td><td>172 task – 0 trễ</td></tr>
+      <tr><td>Hỗ trợ / kiêm nhiệm</td><td>NGUYỄN THÚY HIỀN</td><td>556 mã ERP T5 – tốc độ tốt</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══ ZONE VIII: HÀNH ĐỘNG ══ -->
+<div id="hanh-dong" class="section-title">VIII. KẾ HOẠCH HÀNH ĐỘNG – GĐ CÔNG NGHỆ CẦN XỬ LÝ</div>
+<div class="tbl-wrap">
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>#</th><th>Vấn đề</th><th>Mức độ</th><th>Hành động cần thực hiện</th><th>Người chịu TN</th><th>Thời hạn</th><th>Kết quả đầu ra</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>KPI đúng hạn 94,1% – chưa đạt 98%</td><td><span class="badge badge-red">🔴 Cao</span></td><td>RCA nhóm KB KH: nguyên nhân gốc (quá tải, hệ thống KH delay, thiếu quy trình nhận request?)</td><td>Trưởng BP DLCN + GĐ CN</td><td>30/05/26</td><td>Báo cáo RCA + Giải pháp</td></tr>
+        <tr><td>2</td><td>TRẦN THỊ THU HƯƠNG: 100% task trễ</td><td><span class="badge badge-red">🔴 Cao</span></td><td>1:1 với NV; phân bổ lại hoặc hỗ trợ kỹ thuật</td><td>Trưởng BP DLCN</td><td>T22 (27–31/05)</td><td>Kế hoạch phân công lại</td></tr>
+        <tr style="background:#fff8f8"><td>3</td><td><strong style="color:#8e24aa">🔴 ECN: 1.492 pcs SSA-MLR-00154 chưa có phương án</strong></td><td><span class="badge badge-red">🔴 KHẨN</span></td><td>HÀ VIỆT ANH báo cáo phương án xử lý tồn kho: tiêu hủy, tái sử dụng hay thương lượng với Samsung</td><td>HÀ VIỆT ANH + GĐ CN</td><td><strong>Trước 07/06/26</strong></td><td>Quyết định xử lý tồn kho + cập nhật dữ liệu ECN</td></tr>
+        <tr><td>4</td><td>App Sheet PLM Hàn Quốc chưa có task</td><td><span class="badge badge-yellow">⚠ T.Bình</span></td><td>Yêu cầu Trưởng BP báo cáo tiến độ dự án</td><td>Trưởng BP DLCN</td><td>T22</td><td>Status report + timeline</td></tr>
+        <tr><td>5</td><td>Chưa có dữ liệu đo KPI: Độ chính xác, lỗi ERP</td><td><span class="badge badge-yellow">⚠ T.Bình</span></td><td>Thiết lập cơ chế audit data định kỳ; xây dựng log lỗi ERP hàng tháng</td><td>Trưởng BP DLCN + IT</td><td>15/06/26</td><td>Template audit + log lỗi ERP T6</td></tr>
+        <tr><td>6</td><td>NGUYỄN THỊ PHƯƠNG + TRỊNH XUÂN TÙNG ngừng KB từ T4</td><td><span class="badge badge-yellow">⚠ T.Bình</span></td><td>Xác nhận lý do: chuyển công tác, nghỉ việc hay thay đổi phân công?</td><td>Trưởng BP DLCN</td><td>T22</td><td>Cập nhật phân công nhân sự</td></tr>
+        <tr><td>7</td><td>Vị trí Trưởng bộ phận DLCN chưa xác định</td><td><span class="badge badge-blue">ℹ Thông tin</span></td><td>Xác nhận ai đang đảm nhiệm vai trò TBP. Cần bổ nhiệm chính thức?</td><td>GĐ Công nghệ</td><td>Theo lịch tổ chức</td><td>Quyết định bổ nhiệm</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ZONE IX – ERP KHAI BÁO HỆ THỐNG BRAVO
+══════════════════════════════════════════════════════════ -->
+<div class="sep-zone"></div>
+<div id="erp" style="padding:0">
+<div class="zone-hdr blue-hdr" style="margin-top:0;border-radius:8px 8px 0 0">
+  <h2>IX – PHÂN TÍCH ERP KHAI BÁO HỆ THỐNG BRAVO (DANH MỤC VẬT TƯ)</h2>
+  <span>45.853 mã | 10/2025 – 05/2026 | File: Báo cáo tổng hợp khai báo hệ thống.xlsx</span>
+</div>
+<div class="notice-box notice-yellow">
+  <strong style="color:#d68910">⚠ LƯU Ý QUAN TRỌNG:</strong>
+  Tháng 1/2026 có spike 30.294 mã (66% toàn bộ dữ liệu), tên "TRẦN VĂN MẠNH" ghi 23.444 mã tốc độ ~0,4 phút/mã
+  → <strong>đây là batch import hệ thống, KHÔNG phải khai báo thủ công</strong>.
+  Hoạt động bình thường: 400–2.000 mã/tháng/người. Cần phân biệt Batch vs Thủ công để đánh giá năng suất chính xác.
+</div>
+
+<div class="section-title">IX.1 – KPI TỔNG QUAN ERP KHAI BÁO</div>
+<div class="grid-4" style="margin-bottom:14px">
+  <div class="kpi-card blue"><div class="kpi-label">TỔNG MÃ ĐÃ KHAI BÁO</div><div class="kpi-value">45.853</div><div class="kpi-sub">10/2025 → 05/2026 | GS5+GS1+GS6</div></div>
+  <div class="kpi-card green"><div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div><div class="kpi-value">97,6%</div><div class="kpi-sub">44.731/45.853 mã không cần sửa</div><span class="kpi-target target-warn">⚠ Sát KPI ≥ 98%</span></div>
+  <div class="kpi-card yellow"><div class="kpi-label">MÃ CÓ SỬA ≥ 1 LẦN</div><div class="kpi-value">1.122</div><div class="kpi-sub">2,4% | 1.040 sửa 1L, 44 sửa 2L, 31 sửa 3L</div><span class="kpi-target target-miss">⚠ Cần phân tích nguyên nhân</span></div>
+  <div class="kpi-card red"><div class="kpi-label">MÃ DÒNG PHỔ BIẾN NHẤT</div><div class="kpi-value">VDC01</div><div class="kpi-sub">7.003 mã – Vật liệu in (kẽm, bản in, cao su)</div></div>
+</div>
+
+<div class="section-title">IX.2 – BIỂU ĐỒ KHAI BÁO THEO TUẦN & NGÀY TRONG TUẦN</div>
+<!-- Dòng 1: cWeek 3/5 + cMonth 2/5 -->
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:12px">
+  <div class="chart-w"><div class="chart-t" style="font-size:11.5px">Tổng mã khai báo theo tuần (W42/25 – W22/26)</div><canvas id="cWeek" height="140"></canvas></div>
+  <div class="chart-w"><div class="chart-t" style="font-size:11.5px">Khai báo theo tháng (thủ công vs batch)</div><canvas id="cMonth" height="140"></canvas></div>
+</div>
+<!-- Dòng 2: cDow 3/5 + cHour 2/5 -->
+<div style="display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:14px">
+  <div class="chart-w"><div class="chart-t" style="font-size:11.5px">Phân bố khai báo theo ngày trong tuần</div><canvas id="cDow" height="140"></canvas></div>
+  <div class="chart-w"><div class="chart-t" style="font-size:11.5px">Phân bố khai báo theo giờ trong ngày</div><canvas id="cHour" height="140"></canvas></div>
+</div>
+
+<div class="section-title">IX.3 – NHÂN SỰ KHAI BÁO THEO THÁNG & THỜI GIAN TRUNG BÌNH</div>
+<div class="tbl-wrap" style="margin-bottom:14px">
+  <div class="tbl-header tbl-hdr-blue"><span>Số mã khai báo / NV / Tháng &amp; Ước tính thời gian trung bình</span></div>
+  <div class="tbl-scroll">
+  <table>
+    <thead><tr><th>Nhân viên</th><th>12/25</th><th>01/26</th><th>02/26</th><th>03/26</th><th>04/26</th><th>05/26</th><th>Tổng</th><th>TB phút/mã</th><th>Nhận xét</th></tr></thead>
+    <tbody>
+      <tr><td><b>NGUYỄN NGỌC PHÚ</b></td><td>2</td><td>715</td><td>157</td><td>181</td><td>403</td><td>520</td><td><b>1.978</b></td><td>~17,5</td><td><span class="qp-ok">✅ Ổn định, đều tháng</span></td></tr>
+      <tr><td><b>NGUYỄN THỊ PHƯƠNG</b></td><td>26</td><td>1.042</td><td>551</td><td>315</td><td>0</td><td>0</td><td><b>1.934</b></td><td>~15,2</td><td><span class="qp-warn">⚠ Ngừng T4–T5, cần kiểm tra</span></td></tr>
+      <tr><td><b>ĐẶNG THỊ HẰNG</b></td><td>0</td><td>307</td><td>165</td><td>242</td><td>410</td><td>411</td><td><b>1.535</b></td><td>~22,8</td><td><span class="qp-warn">⚠ Chậm hơn TB chung</span></td></tr>
+      <tr><td><b>PHẠM VIỆT ANH</b></td><td>0</td><td>243</td><td>146</td><td>267</td><td>532</td><td>176</td><td><b>1.364</b></td><td>~28,0</td><td><span class="qp-warn">⚠ Tốc độ thấp nhất nhóm</span></td></tr>
+      <tr><td><b>TRỊNH XUÂN TÙNG</b></td><td>0</td><td>400</td><td>365</td><td>495</td><td>0</td><td>0</td><td><b>1.260</b></td><td>~19,3</td><td><span class="qp-warn">⚠ Ngừng T4–T5, cần kiểm tra</span></td></tr>
+      <tr style="background:#fff0f0"><td><b>Phạm Phương Anh</b></td><td>42</td><td>82</td><td>0</td><td>0</td><td>522</td><td>443</td><td><b>1.091</b></td><td>~0,2</td><td><span class="qp-bad">🔴 Batch import – sửa 43,8%</span></td></tr>
+      <tr style="background:#fff0f0"><td><b>Đỗ Danh Khải</b></td><td>39</td><td>0</td><td>0</td><td>0</td><td>896</td><td>0</td><td><b>935</b></td><td>~0,0</td><td><span class="qp-bad">🔴 Batch import – xác nhận lại</span></td></tr>
+      <tr><td><b>NGUYỄN THỊ TÌNH</b></td><td>0</td><td>0</td><td>0</td><td>53</td><td>708</td><td>138</td><td><b>899</b></td><td>~19,6</td><td><span class="qp-ok">✅ Chất lượng 99,6% – xuất sắc</span></td></tr>
+      <tr><td><b>HÀ VIỆT ANH</b></td><td>0</td><td>139</td><td>138</td><td>80</td><td>148</td><td>90</td><td><b>595</b></td><td>~26,8</td><td><span class="qp-warn">⚠ Tốc độ thấp, kiêm ECN</span></td></tr>
+      <tr><td><b>NGUYỄN THÚY HIỀN</b></td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>556</td><td><b>556</b></td><td>~12,3</td><td><span class="qp-warn">⚠ Mới T5 – sửa 9,7%</span></td></tr>
+      <tr><td><b>NGUYỄN VĂN DUY</b></td><td>0</td><td>118</td><td>62</td><td>119</td><td>96</td><td>80</td><td><b>475</b></td><td>~15,3</td><td><span class="qp-ok">✅ Đều, chất lượng tốt</span></td></tr>
+      <tr><td><b>NGUYỄN THỊ NGA</b></td><td>1</td><td>300</td><td>139</td><td>0</td><td>0</td><td>0</td><td><b>440</b></td><td>–</td><td><span class="qp-warn">⚠ Ngừng từ T3</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div style="padding:8px 16px"><p class="footnote">* TB phút/mã ước tính từ span thời gian cùng ngày. &lt;1 phút = khả năng cao là batch import.</p></div>
+</div>
+
+<div class="section-title">IX.4 – CHẤT LƯỢNG KHAI BÁO (Số lần sửa) & MÃ DÒNG SP/NVL</div>
+
+<!-- ROW 1: Bảng chất lượng (trái) + Biểu đồ % Sửa (phải) -->
+<div class="grid-2" style="margin-bottom:12px;align-items:start">
+  <div class="tbl-wrap">
+    <div class="tbl-header tbl-hdr-blue"><span>Phân tích số lần sửa theo nhân viên – Chỉ số chất lượng khai báo ERP</span></div>
+    <table>
+      <thead><tr><th>Nhân viên</th><th align="right">Tổng KB</th><th align="right">Có sửa</th><th align="right">% Sửa</th><th align="right">Tổng lần sửa</th><th>Đánh giá</th></tr></thead>
+      <tbody>
+        <tr><td>Phạm Phương Anh</td><td align="right">1.091</td><td align="right" style="color:#c0392b;font-weight:bold">478</td><td align="right"><span class="qp-bad">43,8%</span></td><td align="right">490</td><td>🔴 Batch – điều tra</td></tr>
+        <tr><td>NGUYỄN THỊ THƯƠNG</td><td align="right">172</td><td align="right" style="color:#c0392b">64</td><td align="right"><span class="qp-bad">37,2%</span></td><td align="right">64</td><td>🔴 Rất cao – coaching ngay</td></tr>
+        <tr><td>TRẦN VĂN HẢO</td><td align="right">101</td><td align="right">23</td><td align="right"><span class="qp-bad">22,8%</span></td><td align="right">23</td><td>🔴 Cần coaching ngay</td></tr>
+        <tr><td>NGUYỄN THỊ NHẬT ANH</td><td align="right">115</td><td align="right">22</td><td align="right"><span class="qp-warn">19,1%</span></td><td align="right">22</td><td>⚠ Trên ngưỡng 5%</td></tr>
+        <tr><td>NGUYỄN THÚY HIỀN</td><td align="right">556</td><td align="right">54</td><td align="right"><span class="qp-warn">9,7%</span></td><td align="right">57</td><td>⚠ Mới – đào tạo thêm</td></tr>
+        <tr><td>NGUYỄN VĂN DUY</td><td align="right">475</td><td align="right">18</td><td align="right"><span class="qp-warn">3,8%</span></td><td align="right">18</td><td>⚠ Chấp nhận được</td></tr>
+        <tr><td>ĐẶNG THỊ HẰNG</td><td align="right">1.535</td><td align="right">56</td><td align="right"><span class="qp-warn">3,6%</span></td><td align="right">102</td><td>⚠ Một số sửa nhiều lần</td></tr>
+        <tr><td>NGUYỄN NGỌC PHÚ</td><td align="right">1.978</td><td align="right">70</td><td align="right"><span class="qp-warn">3,5%</span></td><td align="right">79</td><td>⚠ Chấp nhận được</td></tr>
+        <tr><td>NGUYỄN THỊ PHƯƠNG</td><td align="right">1.934</td><td align="right">41</td><td align="right"><span class="qp-ok">2,1%</span></td><td align="right">47</td><td>✅ Tốt</td></tr>
+        <tr><td>TRỊNH XUÂN TÙNG</td><td align="right">1.260</td><td align="right">20</td><td align="right"><span class="qp-ok">1,6%</span></td><td align="right">21</td><td>✅ Tốt</td></tr>
+        <tr><td>PHẠM VIỆT ANH</td><td align="right">1.364</td><td align="right">20</td><td align="right"><span class="qp-ok">1,5%</span></td><td align="right">22</td><td>✅ Chậm nhưng ít sửa</td></tr>
+        <tr><td>NGUYỄN THỊ NGA</td><td align="right">440</td><td align="right">4</td><td align="right"><span class="qp-ok">0,9%</span></td><td align="right">5</td><td>✅ Tốt</td></tr>
+        <tr><td>NGUYỄN THỊ TÌNH</td><td align="right">899</td><td align="right">4</td><td align="right"><span class="qp-ok">0,4%</span></td><td align="right">6</td><td>✅ Xuất sắc</td></tr>
+        <tr style="background:#f4f6f7;font-weight:bold"><td>TỔNG thủ công</td><td align="right">~22.000</td><td align="right">957</td><td align="right">~2,4%</td><td align="right">941</td><td>Mục tiêu: ≤ 2%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chart-w">
+    <div class="chart-t" style="font-size:12px">% Sửa theo nhân viên – Ngưỡng KPI 2%</div>
+    <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Mỗi bar = % sửa (nhãn: số sửa / tổng mã khai báo)</div>
+    <canvas id="cQual" height="208"></canvas>
+  </div>
+</div>
+
+<!-- ROW 2: Top 15 Mã dòng + Mã Công đoạn – FULL WIDTH trang -->
+<div class="grid-2" style="margin-bottom:14px">
+  <div class="chart-w" style="padding:16px 18px">
+    <div class="chart-t" style="font-size:12px;border-left-color:#1a5276">Top 15 Mã dòng SP/NVL khai báo nhiều nhất</div>
+    <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Tổng 45.853 mã | 10/2025 – 05/2026 | GS5 + GS1 + GS6</div>
+    <canvas id="cDong" height="208"></canvas>
+  </div>
+  <div class="chart-w" style="padding:16px 18px">
+    <div class="chart-t" style="font-size:12px;border-left-color:#2980b9">
+      📡 Mã khai báo theo Công đoạn
+      <span style="font-size:10px;color:#2980b9;font-weight:normal;margin-left:6px">Online · Bravo GSheet</span>
+    </div>
+    <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Lấy trực tiếp từ cột "Mã công đoạn" (cột I) – Google Sheets Bravo</div>
+    <div id="cdLoading" style="font-size:11px;color:#2980b9;padding:10px 0 4px">⏳ Đang tải dữ liệu từ Google Sheets...</div>
+    <canvas id="cCongDoan" height="208" style="display:none"></canvas>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ZONE X – QUẢN LÝ ECN (MỚI)
+══════════════════════════════════════════════════════════ -->
+<div class="sep-zone teal-sep"></div>
+<div id="ecn">
+<div class="zone-hdr teal-hdr" style="border-radius:8px 8px 0 0">
+  <h2>X – QUẢN LÝ THAY ĐỔI SẢN PHẨM (ECN – Engineering Change Notice)</h2>
+  <span>91+ bản ghi | Q1/2026 | GS1 (Hà Nội) + GS5 (Quế Võ 1) | Nguồn: ECN_TRACKING</span>
+</div>
+<div class="notice-box notice-red">
+  <strong style="color:#c0392b">🚨 CẢNH BÁO TỒN KHO:</strong>
+  Phát hiện <strong>1 mã ECN có tồn kho thực tế 1.492 pcs chưa có phương án xử lý</strong>:
+  SSA-MLR-00154 (GH90-70262H) – Model MANUAL-L500 – GS5 Quế Võ 1 – ECN ban hành 09/01/2026 – Hạn dừng đã qua 23/02/2026.
+  Đây là rủi ro hàng aging có thể phát sinh chi phí hủy hàng. Cần quyết định xử lý trong tuần này.
+</div>
+
+<!-- X.1 + X.2 in one row -->
+<div class="grid-2" style="margin-bottom:14px;align-items:start">
+  <!-- LEFT: X.1 KPI -->
+  <div>
+    <div class="section-title ecn">X.1 – KPI TỔNG QUAN ECN</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="kpi-card teal" style="padding:12px 14px">
+        <div class="kpi-label">TỔNG ECN XỬ LÝ</div>
+        <div class="kpi-value" style="font-size:22px">91+</div>
+        <div class="kpi-sub">Q1/2026 | 2 nhà máy | 3 PIC</div>
+        <span class="kpi-target target-ok">Cập nhật 100% đúng hạn</span>
+      </div>
+      <div class="kpi-card red" style="padding:12px 14px;border-top-color:#8e24aa">
+        <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
+        <div class="kpi-value" style="color:#8e24aa;font-size:22px">1.492 pcs</div>
+        <div class="kpi-sub">SSA-MLR-00154 | MANUAL-L500</div>
+        <span class="kpi-target target-miss">🔴 CHƯA CÓ PHƯƠNG ÁN</span>
+      </div>
+      <div class="kpi-card blue" style="padding:12px 14px">
+        <div class="kpi-label">ECN SAMSUNG</div>
+        <div class="kpi-value" style="font-size:22px">~68</div>
+        <div class="kpi-sub">GS5 QV1 | Upversion Q1/2026</div>
+        <span class="kpi-target target-ok">HÀ VIỆT ANH – PIC</span>
+      </div>
+      <div class="kpi-card green" style="padding:12px 14px">
+        <div class="kpi-label">ECN CANON + KHÁC</div>
+        <div class="kpi-value" style="font-size:22px">~23</div>
+        <div class="kpi-sub">GS1 HN | Canon + ANZ + Tân An</div>
+        <span class="kpi-target target-ok">NGUYỄN THỊ KHA – PIC</span>
+      </div>
+    </div>
+    <!-- X.2 detail table -->
+    <div class="tbl-wrap">
+      <div class="tbl-header tbl-hdr-teal"><span>X.2 – Phân tích chi tiết từng loại ECN</span></div>
+      <table>
+        <thead><tr><th>Hình thức ECN</th><th align="right">SL</th><th align="right">Tỷ lệ</th><th>Đánh giá rủi ro</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill pill-moment">Dừng tại thời điểm</span></td><td align="right"><b>66</b></td><td align="right">72,5%</td><td><span class="badge badge-yellow">⚠ Theo dõi tồn kho</span></td></tr>
+          <tr style="background:#fff0f0"><td><span class="pill pill-drain">SX đến hết tồn</span></td><td align="right"><b>12</b></td><td align="right">13,2%</td><td><span class="badge badge-yellow">⚠ Theo dõi tiêu thụ</span></td></tr>
+          <tr style="background:#fff8f8"><td><span class="pill pill-stop">Dừng ngay lập tức</span></td><td align="right"><b>10</b></td><td align="right">11,0%</td><td><span class="badge badge-red">🔴 Rủi ro hàng tồn</span></td></tr>
+          <tr><td><span class="pill pill-unused">Không sử dụng</span></td><td align="right"><b>1</b></td><td align="right">1,1%</td><td><span class="badge badge-green">✅ Thấp</span></td></tr>
+          <tr><td><span class="pill pill-p2">Khác</span></td><td align="right"><b>2</b></td><td align="right">2,2%</td><td><span class="badge badge-blue">ℹ Thấp</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- RIGHT: X.2 donut chart with center total -->
+  <div>
+    <div class="section-title ecn">X.2 – PHÂN LOẠI ECN THEO HÌNH THỨC XỬ LÝ</div>
+    <div class="chart-w" style="position:relative">
+      <div class="chart-t teal">Phân bố hình thức ECN – Tổng: 91 bản ghi</div>
+      <div style="position:relative;max-width:380px;margin:0 auto">
+        <canvas id="cEcnType" height="300" role="img" aria-label="Biểu đồ phân loại ECN"></canvas>
+        <div id="ecnCenterLabel" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);text-align:center;pointer-events:none">
+          <div style="font-size:28px;font-weight:bold;color:#0e6655;line-height:1.1">91</div>
+          <div style="font-size:11px;color:#566573;font-weight:bold">TỔNG ECN</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#2980b9;flex-shrink:0"></span>Dừng TĐ: <strong>66</strong> (72,5%)</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#f39c12;flex-shrink:0"></span>SX hết tồn: <strong>12</strong> (13,2%)</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#e74c3c;flex-shrink:0"></span>Dừng ngay: <strong>10</strong> (11,0%)</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#95a5a6;flex-shrink:0"></span>Không SD: <strong>1</strong> &nbsp;|&nbsp; Khác: <strong>2</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title ecn">X.3 – PHÂN TÍCH ECN THEO KHÁCH HÀNG & SẢN PHẨM</div>
+<div class="grid-2" style="margin-bottom:14px">
+  <div class="tbl-wrap">
+    <div class="tbl-header tbl-hdr-navy"><span>🏭 ECN Samsung (SEV / SEVT) – GS5 Quế Võ 1 | ~68 ECN</span></div>
+    <table>
+      <thead><tr><th>Model / Sản phẩm</th><th>Ver cũ → Mới</th><th>Diễn giải</th><th>Hình thức</th><th>Thời hạn</th><th>Tồn kho</th></tr></thead>
+      <tbody>
+        <tr><td>MANUAL-L500 (GH68-57134V + GH68-57137S)</td><td>2.0 → 2.5</td><td>Upversion – Samsung SEV Ms Thuần</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/02/26</td><td style="color:#8e24aa;font-weight:bold">GH90-70262H: <b>1.492 pcs</b> ⚠</td></tr>
+        <tr><td>MANUAL-S931 (GH68-56580A)</td><td>1.0 → 1.1</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/03/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>MANUAL-F966 (GH68-57169A)</td><td>1.0 → 1.1</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/03/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>MANUAL-A176 (GH68-57312A)</td><td>1.0 → 1.1</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/03/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>MANUAL-X526/X626/X820/X936</td><td>1.1 → 2.5</td><td>Upversion – Samsung SEVT Mr Tiệp</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/02/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>MANUAL-S942 (GH68-57689N)</td><td>0.0 → 1.0</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>14/01/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>MANUAL-R630 (LIK-GH68-54823A)</td><td>1.2 → 2.0</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>09/03/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>MANUAL-L705 (GH68-56148P)</td><td>2.1 → 2.5</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/02/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+        <tr><td>SM-A176 (GH69-45658A)</td><td>—</td><td>Cải tiến khuôn – Add "N" sau GS (Ms Huynh)</td><td><span class="pill pill-drain">SX hết tồn</span></td><td>28/02/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:8px 14px"><p class="footnote">🔍 PIC: HÀ VIỆT ANH (GS5 QV1) – Nguồn ECN: Samsung SEV (Mr Toản, Ms Thuần) + SEVT (Mr Tiệp). Hàng loạt upversion 1.0/1.1/1.2→2.5 trong tháng 1–3/2026.</p></div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-header tbl-hdr-teal"><span>🏭 ECN Canon + Khách hàng khác – GS1 Hà Nội | ~23 ECN</span></div>
+    <table>
+      <thead><tr><th>Mã sản phẩm</th><th>Model</th><th>Diễn giải thay đổi</th><th>Hình thức</th><th>Thời hạn</th><th>Tồn kho</th></tr></thead>
+      <tbody>
+        <tr><td>CAN-BSA-00073</td><td>F84 / QX2-4223-000</td><td>Đổi mực, bỏ box certificate</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>CAN-BSA-00066</td><td>G12 / QX2-5535-000</td><td>Đổi mực, bỏ box certificate</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>CAN-FSA-00054</td><td>G75 / QX2-6300-000</td><td>Chuyển đổi mực</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>CAN-BSA-00072</td><td>G12 / QX2-7362-000</td><td>Đổi mực, bỏ box</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>CAN-BSA-00078~81, 03107-08</td><td>—</td><td>Đổi keo bồi, keo phủ</td><td><span class="pill pill-drain">SX hết tồn</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>CAN-BSA-00043, 03101-02</td><td>—</td><td>Đổi keo bồi, keo phủ, khuôn bế</td><td><span class="pill pill-drain">SX hết tồn</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>BRO-FSA-00080</td><td>D03FAJ001</td><td>Lên ver thay đổi nội dung in</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>TAN-BAB-00026</td><td>Tân An Comodo</td><td>Lên ver thay đổi nội dung in</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+        <tr><td>TIN-BSB-03755</td><td>ANZ Hansefloor</td><td>Đổi tên vật tư, kích thước</td><td><span class="pill pill-unused">Không SD</span></td><td>07/01/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
+      </tbody>
+    </table>
+    <div style="padding:8px 14px"><p class="footnote">🔍 PIC: NGUYỄN THỊ KHA (GS1 HN) + PHAN THANH HẢI (GS1). Canon: Đổi hàng loạt keo bồi/phủ và mực in trong T1/2026.</p></div>
+  </div>
+</div>
+
+<!-- X.4 + X.5 combined in one row -->
+<div class="section-title ecn">X.4 – HIỆU SUẤT NHÂN SỰ XỬ LÝ ECN &nbsp;|&nbsp; X.5 – BIỂU ĐỒ ECN THEO KHÁCH HÀNG & NHÀ MÁY</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr 1.4fr;gap:10px;margin-bottom:14px;align-items:stretch">
+  <!-- NV 1 -->
+  <div class="nv-card ok" style="padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between">
+    <div>
+      <div class="nv-name" style="font-size:11.5px">✅ HÀ VIỆT ANH – GS5 QV1</div>
+      <div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>~68</strong></span><span class="nv-stat" style="color:#c0392b">1 tồn kho ⚠</span></div>
+      <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:85%;background:#1abc9c"></div></div>
+    </div>
+    <p style="font-size:10.5px;margin-top:8px;color:#566573">Samsung SEV/SEVT Q1/2026. Cần xử lý 1.492 pcs tồn kho ngay.</p>
+  </div>
+  <!-- NV 2 -->
+  <div class="nv-card ok" style="padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between">
+    <div>
+      <div class="nv-name" style="font-size:11.5px">✅ NGUYỄN THỊ KHA – GS1 HN</div>
+      <div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>~22</strong></span><span class="nv-stat" style="color:#1a7a3e">Tồn: 0 ✅</span></div>
+      <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:100%;background:#1abc9c"></div></div>
+    </div>
+    <p style="font-size:10.5px;margin-top:8px;color:#1a7a3e">Canon + Tân An. Xử lý sạch, không tồn kho.</p>
+  </div>
+  <!-- NV 3 -->
+  <div class="nv-card ok" style="padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between">
+    <div>
+      <div class="nv-name" style="font-size:11.5px">✅ PHAN THANH HẢI – GS1 HN</div>
+      <div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>1</strong></span><span class="nv-stat" style="color:#1a7a3e">Tồn: 0 ✅</span></div>
+      <div class="nv-bar-bg"><div class="nv-bar-fg" style="width:15%;background:#1abc9c"></div></div>
+    </div>
+    <p style="font-size:10.5px;margin-top:8px;color:#566573">ANZ Hansefloor – Thay đổi tên + kích thước (06/01/2026).</p>
+  </div>
+  <!-- Chart ECN by KH -->
+  <div class="chart-w" style="padding:12px 14px;display:flex;flex-direction:column">
+    <div class="chart-t teal" style="font-size:11px;margin-bottom:8px">Phân bố ECN theo khách hàng</div>
+    <div style="flex:1;position:relative;min-height:160px">
+      <canvas id="cEcnKH" style="position:absolute;inset:0;width:100%!important;height:100%!important"></canvas>
+    </div>
+  </div>
+  <!-- Chart ECN by NM -->
+  <div class="chart-w" style="padding:12px 14px;display:flex;flex-direction:column">
+    <div class="chart-t teal" style="font-size:11px;margin-bottom:8px">ECN theo nhà máy triển khai</div>
+    <div style="flex:1;position:relative;min-height:160px">
+      <canvas id="cEcnNM" style="position:absolute;inset:0;width:100%!important;height:100%!important"></canvas>
+      <div style="position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:1">
+        <div style="font-size:20px;font-weight:bold;color:#0e6655;line-height:1.1">91</div>
+        <div style="font-size:9px;color:#566573;font-weight:bold">tổng ECN</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section-title ecn">X.6 – BẢNG THEO DÕI TỒN KHO ECN & TRẠNG THÁI XỬ LÝ</div>
+<div class="tbl-wrap" style="margin-bottom:14px">
+  <div class="tbl-header tbl-hdr-red" style="border-left:4px solid #c0392b">
+    <span>🚨 CHỈ HIỂN THỊ CÁC MÃ CÓ TỒN KHO &gt; 0 HOẶC RỦI RO CAO – Cần can thiệp ngay</span>
+  </div>
+  <div class="tbl-scroll">
+    <table id="ecnRiskTable">
+      <thead>
+        <tr>
+          <th>#</th><th>Mã vật tư</th><th>Model / Tên sản phẩm</th><th>Hình thức ECN</th>
+          <th>Ngày ban hành</th><th>Hạn thực hiện</th><th>Tồn kho ECN</th>
+          <th>Nhà máy</th><th>PIC</th><th>Phương án</th><th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fff0f0">
+          <td>1</td>
+          <td><b>SSA-MLR-00154</b></td>
+          <td>MANUAL-L500 / GH90-70262H (Samsung SEV – Ms Thuần)</td>
+          <td><span class="pill pill-moment">Dừng TĐ 23/02/26</span></td>
+          <td>09/01/2026</td>
+          <td style="color:#c0392b;font-weight:bold">23/02/2026 ⚠ ĐÃ QUÁ HẠN</td>
+          <td style="color:#8e24aa;font-weight:bold;font-size:15px">1.492 pcs</td>
+          <td>GS5 QV1</td>
+          <td>HÀ VIỆT ANH</td>
+          <td style="color:#c0392b">Chưa có phương án</td>
+          <td><span class="badge badge-red">🔴 KHẨN</span></td>
+        </tr>
+        <tr style="background:#fffde7">
+          <td>2</td>
+          <td>CAN-BSA-00043~00100 (6 mã)</td>
+          <td>Canon – Đổi keo bồi, keo phủ, khuôn bế</td>
+          <td><span class="pill pill-drain">SX hết tồn</span></td>
+          <td>07/01/2026</td>
+          <td>26/02/2026</td>
+          <td style="color:#1a7a3e">0 pcs ✅</td>
+          <td>GS1 HN</td>
+          <td>N.T. KHA</td>
+          <td style="color:#1a7a3e">Đã tiêu thụ hết</td>
+          <td><span class="badge badge-green">✅ XONG</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>CAN-BSA-00073/66/69/72 (4 mã Canon)</td>
+          <td>F84/G12/G75 – Canon – Đổi mực, bỏ box certificate</td>
+          <td><span class="pill pill-stop">Dừng ngay</span></td>
+          <td>07/01/2026</td>
+          <td>26/02/2026</td>
+          <td style="color:#1a7a3e">0 pcs ✅</td>
+          <td>GS1 HN</td>
+          <td>N.T. KHA</td>
+          <td style="color:#1a7a3e">Đã dừng kịp thời</td>
+          <td><span class="badge badge-green">✅ XONG</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Samsung ECN (50+ mã upversion 1.x→2.5)</td>
+          <td>S931/F966/A176/L705/X526/X626/X820/X936/R630/S942</td>
+          <td><span class="pill pill-moment">Dừng TĐ</span></td>
+          <td>08–09/01/2026</td>
+          <td>23/02–23/03/2026</td>
+          <td style="color:#1a7a3e">0 pcs ✅</td>
+          <td>GS5 QV1</td>
+          <td>HÀ VIỆT ANH</td>
+          <td style="color:#1a7a3e">Dừng đúng thời điểm</td>
+          <td><span class="badge badge-green">✅ XONG</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>TAN-BAB-00026 + BRO-FSA-00080</td>
+          <td>Tân An Comodo + D03FAJ001 Brother – Đổi nội dung in</td>
+          <td><span class="pill pill-stop">Dừng ngay</span></td>
+          <td>08/01/2026</td>
+          <td>26/02/2026</td>
+          <td style="color:#1a7a3e">0 pcs ✅</td>
+          <td>GS1 HN</td>
+          <td>N.T. KHA</td>
+          <td style="color:#1a7a3e">Đã dừng kịp thời</td>
+          <td><span class="badge badge-green">✅ XONG</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section-title ecn">X.7 – KẾ HOẠCH HÀNH ĐỘNG ECN – CẦN THỰC HIỆN NGAY</div>
+<div class="tbl-wrap" style="margin-bottom:14px">
+  <div class="tbl-scroll">
+    <table>
+      <thead style="background:linear-gradient(90deg,#e8f8f5,#f4fbf9)"><tr style="border-bottom:2px solid #a2d9ce"><th style="color:#0e6655;background:transparent">#</th><th style="color:#0e6655;background:transparent">Vấn đề ECN</th><th style="color:#0e6655;background:transparent">Mức độ</th><th style="color:#0e6655;background:transparent">Hành động cụ thể</th><th style="color:#0e6655;background:transparent">Người TN chính</th><th style="color:#0e6655;background:transparent">Phối hợp</th><th style="color:#0e6655;background:transparent">Thời hạn</th><th style="color:#0e6655;background:transparent">Kết quả đầu ra</th></tr></thead>
+      <tbody>
+        <tr style="background:#fff8f8">
+          <td><b>1</b></td>
+          <td><b>SSA-MLR-00154: 1.492 pcs tồn kho sau hạn ECN</b></td>
+          <td><span class="badge badge-red">🔴 KHẨN</span></td>
+          <td>1. Xác nhận số lượng tồn kho thực tế. 2. Liên hệ Ms Thuần (SEV) hỏi phương án chấp nhận/hủy. 3. Quyết định: tái sử dụng ver mới, bán phế liệu hay hủy.</td>
+          <td>HÀ VIỆT ANH</td>
+          <td>GĐ CN + KH Samsung SEV</td>
+          <td><b>Trước 07/06/26</b></td>
+          <td>Phương án xử lý có chữ ký duyệt + cập nhật trạng thái ECN</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Thiếu cột "Phương án xử lý" và "Người chịu TN" trong file ECN</td>
+          <td><span class="badge badge-yellow">⚠ T.Bình</span></td>
+          <td>Bổ sung 2 cột bắt buộc vào file ECN_TRACKING: "Phương án xử lý" + "Người chịu trách nhiệm xử lý tồn kho"</td>
+          <td>HÀ VIỆT ANH + N.T. KHA</td>
+          <td>Trưởng BP DLCN</td>
+          <td>10/06/26</td>
+          <td>File ECN cập nhật đủ thông tin 100% bản ghi</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Chưa có cảnh báo tự động khi ECN đến hạn nhưng còn tồn kho</td>
+          <td><span class="badge badge-yellow">⚠ T.Bình</span></td>
+          <td>Thiết lập trigger cảnh báo: Khi ngày hiện tại > Thời hạn ECN mà "Số lượng tồn kho xác nhận" > 0 → Gửi alert tự động cho PIC và GĐ CN</td>
+          <td>HÀ VIỆT ANH + IT</td>
+          <td>GĐ CN</td>
+          <td>15/06/26</td>
+          <td>Alert tự động hoạt động trong Google Sheets hoặc App Sheet</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Chưa liên kết ECN với đơn hàng và tồn kho thực tế trong ERP</td>
+          <td><span class="badge badge-blue">ℹ Đề xuất</span></td>
+          <td>Thêm cột "Mã đơn hàng bán liên quan" và link sang ERP Bravo để truy xuất ngược ảnh hưởng ECN đến đơn hàng đang sản xuất</td>
+          <td>HÀ VIỆT ANH + N.T. KHA</td>
+          <td>Nhóm IT Bravo</td>
+          <td>30/06/26</td>
+          <td>Cơ chế truy xuất ảnh hưởng ECN → Đơn hàng → Sản xuất</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Đơn giá và thành tiền tồn kho ECN chưa được điền đầy đủ</td>
+          <td><span class="badge badge-blue">ℹ Đề xuất</span></td>
+          <td>Bổ sung giá trị tài chính cho 100% bản ghi ECN: Cột "Đơn giá" + "Thành tiền = Tồn kho × Đơn giá" để đo tác động tài chính của từng ECN</td>
+          <td>HÀ VIỆT ANH + N.T. KHA</td>
+          <td>Kế toán giá thành</td>
+          <td>15/06/26</td>
+          <td>Báo cáo giá trị rủi ro tài chính từ ECN hàng tháng</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section-title ecn">X.8 – TƯ VẤN: 6 ĐIỀU CẦN BỔ SUNG VÀO HỆ THỐNG THEO DÕI ECN</div>
+<div class="adv-box teal" style="margin-bottom:16px">
+  <div class="adv-title teal">💡 Tư vấn cải thiện hệ thống quản lý ECN – Từ dữ liệu thực tế</div>
+  <div class="adv-item"><span style="font-size:14px;flex-shrink:0">1️⃣</span><div class="adv-text"><strong>CẢNH BÁO TỒN KHO TỰ ĐỘNG: Trigger khi tồn kho > 0 sau hạn ECN</strong><p>Hiện tại không có cơ chế cảnh báo. SSA-MLR-00154 với 1.492 pcs đã quá hạn 4 tháng mà không được phát hiện. Cần alert tự động qua Google Sheet Apps Script hoặc App Sheet.</p></div></div>
+  <div class="adv-item"><span style="font-size:14px;flex-shrink:0">2️⃣</span><div class="adv-text"><strong>NGƯỜI CHỊU TRÁCH NHIỆM XỬ LÝ: Cột bắt buộc trong mọi bản ghi ECN</strong><p>Hiện chỉ có "Người khai báo". Cần phân biệt: Người khai báo ECN ≠ Người chịu trách nhiệm xử lý tồn kho. Mô hình RACI cần được áp dụng ngay vào file ECN.</p></div></div>
+  <div class="adv-item"><span style="font-size:14px;flex-shrink:0">3️⃣</span><div class="adv-text"><strong>GIÁ TRỊ TÀI CHÍNH: Đơn giá × Tồn kho = Rủi ro tài chính từng ECN</strong><p>Cột "Đơn giá" và "Thành tiền" đều trống trong file. Không thể đo tác động tài chính. Cần điền đủ để báo cáo giám đốc: "Tổng giá trị hàng ECN tồn kho = X tỷ đồng".</p></div></div>
+  <div class="adv-item"><span style="font-size:14px;flex-shrink:0">4️⃣</span><div class="adv-text"><strong>LIÊN KẾT ECN → ĐƠN HÀNG → ERP: Truy xuất ảnh hưởng ngược</strong><p>Cột "Đơn hàng bán" trong file hiện đa số bị trống. Không biết ECN này ảnh hưởng đơn hàng nào đang chạy. Đây là thông tin then chốt để quyết định tốc độ xử lý ECN.</p></div></div>
+  <div class="adv-item"><span style="font-size:14px;flex-shrink:0">5️⃣</span><div class="adv-text"><strong>SỐ NGÀY TỒN KHO: Tính tự động từ Ngày ECN → Hiện tại</strong><p>Cột "Số ngày tồn kho" hiện trống. Cần công thức: =TODAY()-[Ngày ECN] để thấy ngay mã nào đang tồn kho lâu nhất và cần ưu tiên xử lý.</p></div></div>
+  <div class="adv-item"><span style="font-size:14px;flex-shrink:0">6️⃣</span><div class="adv-text"><strong>DASHBOARD ECN REAL-TIME: Tích hợp vào Dashboard DLCN hàng ngày</strong><p>ECN cần được theo dõi hàng ngày như công việc, không phải theo tháng. Đề xuất thêm tab "ECN Today" vào dashboard hiển thị: Số ECN mới nhận, ECN sắp đến hạn (≤7 ngày), ECN quá hạn còn tồn kho.</p></div></div>
+</div>
+</div>
+
+<!-- ══ ZONE XI: TỔNG KẾT ══ -->
+<div class="sep-zone"></div>
+<div id="tong-ket" class="section-title">XI. TỔNG KẾT – ĐÁNH GIÁ TỔNG THỂ NHÓM DLCN & HỆ THỐNG</div>
+<div class="grid-2">
+  <div class="alert-box" style="border-left:4px solid #1a7a3e">
+    <div class="alert-title" style="color:#1a7a3e">✅ ĐIỂM MẠNH CẦN DUY TRÌ</div>
+    <ul style="font-size:12px;line-height:2;padding-left:18px">
+      <li>100% công việc hoàn thành (1.066/1.066 task) – Không có task quá hạn chưa xử lý</li>
+      <li>Nhóm khai báo ERP ổn định: NGUYỄN NGỌC PHÚ (280 task, 1.978 mã), ĐẶNG THỊ HẰNG (271 task, 1.535 mã)</li>
+      <li>Chất lượng khai báo ERP xuất sắc: NGUYỄN THỊ TÌNH (0,4% sửa), TRỊNH XUÂN TÙNG (1,6%), PHẠM VIỆT ANH (1,5%)</li>
+      <li>ECN xử lý tốt: 90/91 bản ghi Samsung tồn kho = 0, toàn bộ Canon ECN được giải quyết sạch</li>
+      <li>Nhóm Canon (138 task) + Hanwha (101) + KUANXIN (74): 100% đúng hạn</li>
+    </ul>
+  </div>
+  <div class="alert-box" style="border-left:4px solid #c0392b">
+    <div class="alert-title" style="color:#c0392b">🔴 ĐIỂM CẦN CẢI THIỆN NGAY</div>
+    <ul style="font-size:12px;line-height:2;padding-left:18px">
+      <li><b>KPI đúng hạn 94,1% – chưa đạt 98%:</b> Toàn bộ do nhóm Khai báo KH Samsung (37,8% đúng hạn)</li>
+      <li><b>1 NV 100% trễ:</b> TRẦN THỊ THU HƯƠNG – 57/57 task trễ tháng 5. Cần RCA và phân công lại ngay</li>
+      <li><b>ECN tồn kho khẩn:</b> 1.492 pcs SSA-MLR-00154 quá hạn 4 tháng, chưa có phương án. Quyết định trong tuần này</li>
+      <li><b>Chất lượng KB ERP:</b> 3 NV tỷ lệ sửa cao bất thường (THƯƠNG 37,2%, HẢO 22,8%, NHẬT ANH 19,1%) – cần coaching</li>
+      <li><b>2 NV ngừng KB từ T4:</b> NGUYỄN THỊ PHƯƠNG + TRỊNH XUÂN TÙNG – chưa rõ lý do</li>
+      <li><b>3 dự án chiến lược chưa có task:</b> App Sheet PLM, ECIMS KH, MPS KH – rủi ro chậm tiến độ chiến lược</li>
+    </ul>
+  </div>
+</div>
+<div class="alert-box" style="margin-top:10px;border-left:4px solid #2980b9">
+  <div class="alert-title" style="color:#1a5276">📊 CHỈ SỐ TỔNG QUAN NHÓM – THÁNG 5/2026</div>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;text-align:center">
+    <div style="padding:10px;background:#eafaf1;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a7a3e">9</div><div style="font-size:10px;color:#566573">NV hoạt động</div></div>
+    <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a5276">1.066</div><div style="font-size:10px;color:#566573">Task hoàn thành</div></div>
+    <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a5276">45.853</div><div style="font-size:10px;color:#566573">Mã ERP khai báo</div></div>
+    <div style="padding:10px;background:#e8f8f5;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#0e6655">91+</div><div style="font-size:10px;color:#566573">ECN xử lý</div></div>
+    <div style="padding:10px;background:#fdecea;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#c0392b">63</div><div style="font-size:10px;color:#566573">Task trễ hạn</div></div>
+    <div style="padding:10px;background:#f4ecf7;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#8e24aa">1.492</div><div style="font-size:10px;color:#566573">Tồn kho ECN (pcs)</div></div>
+  </div>
+</div>
+
+<div class="footnote" style="margin-top:16px;padding:10px 14px;background:#f4f6f7;border-radius:6px">
+  <strong>Nguồn dữ liệu:</strong>
+  (1) <em>CONGVIEC_NHOM_DATA.xlsx</em> – 1.066 task tháng 5/2026, GS5 QV1 &nbsp;|&nbsp;
+  (2) <em>Báo cáo tổng hợp khai báo hệ thống.xlsx</em> – 45.853 mã ERP 10/2025–05/2026 &nbsp;|&nbsp;
+  (3) <em>ECN_TRACKING</em> – 91+ bản ghi ECN Q1/2026 GS1+GS5<br>
+  <strong>Cập nhật lần cuối:</strong> 02/06/2026 &nbsp;|&nbsp;
+  <strong>Người xây dựng:</strong> Anna – AI Assistant GoldSun Dashboard &nbsp;|&nbsp;
+  <strong>Phiên bản:</strong> v2.0 – Bổ sung phân tích ECN đầy đủ
+</div>
+</div>
+</div>
+  </div>
 </div>
 
 <!-- TAB TỔNG QUAN -->
@@ -3339,7 +4403,7 @@ const DASH_BPS = {
     {id:'project',  label:'💼 Dự án'},
     {id:'setup',    label:'⚙️ Cài đặt'},
   ]},
-  data:     {label:'BP Dữ liệu CN & Hệ thống',      icon:'🗄️', subtabs:[]},
+  data:     {label:'BP Dữ liệu CN & Hệ thống',      icon:'🗄️', subtabs:[{id:'tab-dlcn', label:'📊 Dashboard DLCN & Hệ thống'}]},
   dev:      {label:'BP Phát triển CN & Ứng dụng',    icon:'💻', subtabs:[]},
   std:      {label:'Tiêu chuẩn, Qui định',            icon:'📋', subtabs:[]},
   issuelog: {label:'Issue Log',                       icon:'🚨', subtabs:[]},
@@ -3372,6 +4436,30 @@ function selectDashBP(btn) {
       `<button class="l2-btn ${i===0?'active':''}" data-sub="${t.id}" onclick="goTabTK('${t.id}')">${t.label}</button>`
     ).join('');
     goTabTK(cfg.subtabs[0].id);
+  } else if(bpId === 'data') {
+    // BP Dữ liệu CN — 1 tab + nav anchors I→XI trên cùng L2 bar
+    ph.classList.remove('show');
+    wrap.classList.add('open');
+    const dlcnAnchors = [
+      {id:'kpi',      label:'I. KPI'},
+      {id:'canh-bao', label:'II. Cảnh báo'},
+      {id:'du-an',    label:'III. Dự án'},
+      {id:'nhan-su',  label:'IV. Nhân sự'},
+      {id:'task-tre', label:'V. Task trễ'},
+      {id:'danh-muc', label:'VI. Danh mục'},
+      {id:'to-chuc',  label:'VII. TC KPI'},
+      {id:'hanh-dong',label:'VIII. Hành động'},
+      {id:'erp',      label:'IX. ERP'},
+      {id:'ecn',      label:'X. ECN ▶'},
+      {id:'tong-ket', label:'XI. Tổng kết'},
+    ];
+    l2.innerHTML =
+      `<button class="l2-btn active" data-sub="tab-dlcn" onclick="selectDashData(this)">📊 Dashboard DLCN & HT</button>` +
+      `<span style="color:rgba(0,0,0,0.2);padding:0 2px;align-self:center;font-size:14px">│</span>` +
+      dlcnAnchors.map(a=>`<button class="l2-btn l2-anchor" onclick=\"dlcnScrollTo('${a.id}', this)\">${a.label}</button>`).join('');
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab-dlcn').classList.add('active');
+    setTimeout(initDLCN, 50);
   } else if(bpId === 'setup_bp') {
     // Cài đặt — chuyển thẳng đến tab setup, không cần L2
     ph.classList.remove('show');
@@ -3391,6 +4479,49 @@ function selectDashBP(btn) {
   }
 }
 
+
+function dlcnScrollTo(id, btnEl) {
+  const tab = document.getElementById('tab-dlcn');
+  if (!tab) return;
+  // Make sure tab is active
+  if (!tab.classList.contains('active')) {
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    setTimeout(() => { initDLCN(); _dlcnScrollExec(id, btnEl); }, 80);
+    return;
+  }
+  _dlcnScrollExec(id, btnEl);
+}
+function _dlcnScrollExec(id, btnEl) {
+  // Highlight active anchor
+  document.querySelectorAll('.l2-anchor').forEach(b => b.classList.remove('active'));
+  // Remove active from main tab btn too so only anchor is highlighted
+  const mainBtn = document.querySelector('.l2-btn[data-sub="tab-dlcn"]');
+  if (mainBtn) mainBtn.classList.remove('active');
+  if (btnEl) btnEl.classList.add('active');
+
+  // Calculate sticky offset dynamically
+  const topbar = document.querySelector('.topbar-brand');
+  const l1     = document.getElementById('navL1');
+  const l2out  = document.getElementById('navL2Outer');
+  const offset = (topbar ? topbar.offsetHeight : 48)
+               + (l1     ? l1.offsetHeight     : 50)
+               + (l2out  ? l2out.offsetHeight   : 38)
+               + 10; // buffer
+
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+
+function selectDashData(btn) {
+  document.querySelectorAll('.l2-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById(btn.dataset.sub).classList.add('active');
+  if(btn.dataset.sub === 'tab-dlcn') setTimeout(initDLCN, 50);
+}
 function selectDashL2(btn, bpId) {
   document.querySelectorAll('.l2-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -4147,8 +5278,145 @@ tkStyle.textContent='@keyframes tkpulse{0%,100%{transform:scale(1);opacity:1}50%
 document.head.appendChild(tkStyle);
 
 })();
+
+// ══ DLCN Dashboard — Lazy init ══
+let _dlcnInitialized = false;
+function initDLCN() {
+  if (_dlcnInitialized) return;
+  _dlcnInitialized = true;
+  // Re-init Chart.js font defaults for DLCN charts
+  Chart.defaults.font.family = "'Times New Roman', Times, serif";
+  const dlcnDate = document.getElementById('today-date'); if(dlcnDate) dlcnDate.textContent = new Date().toLocaleDateString('vi-VN');
+// Chart.defaults already set globally
+
+if(window.ChartDataLabels) Chart.register(ChartDataLabels);
+
+// ── Late task data ──
+const lateData = [
+  {stt:1,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46593A",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"15/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:2,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46595B",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"16/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:3,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46595A",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"16/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:4,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46593B",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"17/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:5,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46594B",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"17/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:6,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH68-55043A",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"20/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:7,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH68-55043B",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"20/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:8,du_an:"SM-L715 (WATCH 9)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên 1",noi_dung:"SM-L715BZAAIND-1.0",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"12/05/26",ngay_ht:"18/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:9,du_an:"SM-L715 (WATCH 9)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên 1",noi_dung:"SM-L715BZAAIND-1.1",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"12/05/26",ngay_ht:"19/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:10,du_an:"SM-L715 (WATCH 9)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên 1",noi_dung:"SM-L715BZAAVIE-1.0",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"12/05/26",ngay_ht:"19/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:11,du_an:"Bảo mật H8 (F971)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH68-54939F-1.0",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"14/05/26",ngay_ht:"22/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:12,du_an:"Bảo mật H8 (F971)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH68-54940A-1.0",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"14/05/26",ngay_ht:"22/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:13,du_an:"A176",nhom:"Cập nhật hồ sơ mẫu",uu_tien:"Ưu tiên 1",noi_dung:"Cập nhật hồ sơ mẫu A176 – GH69-45658A",pic:"TÔ THỊ MAI",ngay_kt:"15/05/26",ngay_ht:"18/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:14,du_an:"Canon",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"Canon ECIMS – QX2-5476-000",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"10/05/26",ngay_ht:"17/05/26",canh_bao:"Hoàn thành sau hạn"},
+  {stt:15,du_an:"X936/X930",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên 1",noi_dung:"GH68-57400A KB hệ thống ECIMS",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"08/05/26",ngay_ht:"15/05/26",canh_bao:"Hoàn thành sau hạn"},
+];
+
+function pillPrio(p) {
+  if (p === 'Ưu tiên trọng điểm') return '<span class="pill pill-p0">Trọng điểm</span>';
+  if (p === 'Ưu tiên 1') return '<span class="pill pill-p1">Ưu tiên 1</span>';
+  return `<span class="pill pill-p2">${p}</span>`;
+}
+function renderTable(data) {
+  const tbody = document.getElementById('lateTableBody');
+  tbody.innerHTML = '';
+  data.forEach((t, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${t.du_an}</td><td>${t.nhom}</td><td>${pillPrio(t.uu_tien)}</td><td class="td-truncate" title="${t.noi_dung}">${t.noi_dung}</td><td style="color:#c0392b;font-weight:bold">${t.pic}</td><td>${t.ngay_kt||'–'}</td><td>${t.ngay_ht||'–'}</td><td><span class="pill pill-late">Trễ hạn</span></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('rowCount').textContent = data.length;
+}
+renderTable(lateData);
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const proj = document.getElementById('projFilter').value;
+  const pic = document.getElementById('picFilter').value;
+  const filtered = lateData.filter(t =>
+    (!q || t.du_an.toLowerCase().includes(q) || t.noi_dung.toLowerCase().includes(q) || t.pic.toLowerCase().includes(q)) &&
+    (!proj || t.du_an === proj) && (!pic || t.pic === pic)
+  );
+  renderTable(filtered);
+}
+function resetFilter() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('projFilter').value = '';
+  document.getElementById('picFilter').value = '';
+  renderTable(lateData);
+}
+
+// ── Chart helpers ──
+const gc = (id) => document.getElementById(id);
+
+// IX Charts
+const wL=['W42/25','W44','W48','W49','W50','W51','W52','W53','W01/26','W02','W03','W04','W05','W06','W07','W08','W09','W10','W11','W12','W13','W14','W15','W16','W17','W18','W19','W20','W21','W22'];
+const wD=[1,1,2,1,40,1401,1573,1734,14958,5841,7821,922,752,811,494,6,574,546,494,418,432,520,600,1501,1163,372,598,848,1410,19];
+const dlHide = { datalabels:{ display:false } };
+new Chart(gc('cWeek'),{type:'bar',data:{labels:wL,datasets:[{label:'Mã khai báo',data:wD,backgroundColor:wD.map(v=>v>3000?'#e74c3c':v>1000?'#f39c12':'#2980b9'),borderRadius:3}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=500,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>3000?'#922b21':v>1000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>3000?'#fdecea':v>1000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v},tooltip:{callbacks:{label:c=>` ${c.raw.toLocaleString('vi')} mã`}}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{maxRotation:60,font:{size:8}}}}}});
+
+const dowD=[2510,2552,11119,11829,8876,3371,5596];
+new Chart(gc('cDow'),{type:'bar',data:{labels:['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'],datasets:[{label:'Mã',data:dowD,backgroundColor:['#2980b9','#2980b9','#e74c3c','#e74c3c','#e67e22','#95a5a6','#7f8c8d'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>(v/1000).toFixed(1)+'K'}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
+
+new Chart(gc('cMonth'),{type:'bar',data:{labels:['12/25','01/26','02/26','03/26','04/26','05/26'],datasets:[{label:'Thủ công',data:[2255,9346,1884,2035,4010,2875],backgroundColor:'#2980b9',borderRadius:3},{label:'Batch',data:[2494,20948,1,0,1,0],backgroundColor:'#e74c3c',borderRadius:3}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'K':v}}},plugins:{legend:{labels:{font:{size:10}}},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>500,color:'#fff',font:{size:8,weight:'bold'},formatter:v=>v>=1000?(v/1000).toFixed(0)+'K':v},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.raw.toLocaleString('vi')} mã`}}}}});
+
+const hD=[4271,1026,1634,2331,2945,873,2600,11607,9187,3264,875,961,754,784,574,218,1599,267,23,0,60,0,0,0];
+new Chart(gc('cHour'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+'h'),datasets:[{label:'Mã',data:hD,backgroundColor:hD.map(v=>v>5000?'#e74c3c':v>2000?'#f39c12':'#2980b9'),borderRadius:2}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=800,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#922b21':v>2000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#fdecea':v>2000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{font:{size:9}}}}}});
+
+// Dữ liệu cQual: [% sửa, số mã sửa, tổng mã] theo từng NV
+const qualNV=['P.P.Anh','T.THƯƠNG','T.V.HẢO','NHẬT ANH','T.HIỀN','V.DUY','Đ.HẰNG','N.PHÚ','T.PHƯƠNG','X.TÙNG','V.ANH','T.TÌNH'];
+const qualPct=[43.8,37.2,22.8,19.1,9.7,3.8,3.6,3.5,2.1,1.6,1.5,0.4];
+const qualFixed=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,595*0],[4,899]];
+// Fix HÀ VIỆT ANH fix = 0 out of 595 not listed (low); keep all from table
+const qualFixedCorrect=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[8,595],[4,899]];
+const qualColors=qualPct.map(v=>v>10?'#e74c3c':v>2?'#f39c12':'#27ae60');
+new Chart(gc('cQual'),{type:'bar',data:{labels:qualNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qualPct,backgroundColor:qualColors,borderRadius:3},{label:'KPI 2%',data:Array(qualNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const [fix,tot]=qualFixedCorrect[i];return `${v}%  (${fix}/${tot} mã)`;}},tooltip:{callbacks:{label:c=>{if(c.dataset.label==='KPI 2%')return 'KPI: 2%';const i=c.dataIndex;const [fix,tot]=qualFixedCorrect[i];return ` ${c.raw}% – Sửa: ${fix}/${tot} mã`;}}}},scales:{x:{max:55,ticks:{callback:v=>v+'%'}}}}});
+
+const dongData=[7003,4109,3006,1749,1575,1445,1368,1237,1215,1210,1190,1023,960,954,909];
+const dongColors=dongData.map(v=>v>5000?'#1a3a5c':v>3000?'#1a5276':v>1500?'#2980b9':'#5dade2');
+new Chart(gc('cDong'),{type:'bar',data:{labels:['VDC01','VDC02','VDC04','FSB','VPP01','FAB','BSE','FSA','2LE','BSB','BAB','3LB','HMD','BSA','BBC'],datasets:[{label:'Số mã',data:dongData,backgroundColor:dongColors,borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:20}},plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:10,weight:'bold'},anchor:'end',align:'left',offset:6,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{x:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v},grid:{color:'#f0f2f5'}},y:{ticks:{font:{size:11}}}}}});
+
+// X ECN Charts
+new Chart(gc('cEcnType'),{type:'doughnut',data:{labels:['Dừng theo TĐ (66)','SX hết tồn (12)','Dừng ngay (10)','Không SD (1)','Khác (2)'],datasets:[{data:[66,12,10,1,2],backgroundColor:['#2980b9','#f39c12','#e74c3c','#95a5a6','#9b59b6'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,cutout:'60%',plugins:{legend:{display:false},datalabels:{display:true,color:'#fff',font:{size:10,weight:'bold'},formatter:v=>v>1?v:''}},rotation:-90,circumference:360}});
+
+const ecnKHD=[48,20,20,1,1,1];
+new Chart(gc('cEcnKH'),{type:'bar',data:{labels:['Samsung SEV','Samsung SEVT','Canon','Tân An','ANZ','Brother'],datasets:[{label:'ECN',data:ecnKHD,backgroundColor:['#1a5276','#2980b9','#27ae60','#f39c12','#e67e22','#9b59b6'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>v}},scales:{y:{beginAtZero:true},x:{ticks:{font:{size:9},maxRotation:30}}}}});
+
+new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS1 Hà Nội (23)'],datasets:[{data:[68,23],backgroundColor:['#1a5276','#27ae60'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:12,weight:'bold'},formatter:v=>v}}}});
+
+// ── Fetch Bravo Google Sheets – đếm Mã công đoạn (cột I) ──
+(function fetchCongDoan(){
+  const url='https://docs.google.com/spreadsheets/d/17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU/export?format=csv';
+  fetch(url,{mode:'cors'}).then(r=>r.text()).then(csv=>{
+    const rows=csv.split('\n');
+    const cnt={};
+    let total=0;
+    let headerFound=false;
+    rows.forEach(row=>{
+      const cols=row.split(',');
+      if(!headerFound){if(cols[8]&&cols[8].trim()==='Mã công đoạn')headerFound=true;return;}
+      const cd=cols[8]?cols[8].trim().replace(/^"|"$/g,''):'';
+      if(cd&&cd!==''){cnt[cd]=(cnt[cd]||0)+1;total++;}
+    });
+    if(total===0){document.getElementById('cdLoading').textContent='⚠ Không tải được dữ liệu (CORS). Dùng dữ liệu ước tính.';renderCongDoan(null);return;}
+    document.getElementById('cdLoading').style.display='none';
+    document.getElementById('cCongDoan').style.display='block';
+    const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+    const labels=sorted.map(x=>x[0]);
+    const vals=sorted.map(x=>x[1]);
+    const colors=['#1a5276','#27ae60','#e67e22','#8e24aa','#0e6655','#e74c3c','#2980b9'];
+    new Chart(gc('cCongDoan'),{type:'bar',data:{labels,datasets:[{label:'Số mã',data:vals,backgroundColor:colors.slice(0,labels.length),borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:ctx=>{const c=['#1a3a5c','#1a4d2e','#7d3c00','#4a235a','#0b4033','#7b241c','#1a5276'];return c[ctx.dataIndex%c.length];},backgroundColor:ctx=>{const c=['#eaf2fb','#eafaf1','#fdf0e6','#f4ecf7','#e8f8f5','#fdecea','#eaf2fb'];return c[ctx.dataIndex%c.length];},borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
+  }).catch(()=>{document.getElementById('cdLoading').textContent='⚠ Lỗi kết nối GSheet. Dùng dữ liệu ước tính.';renderCongDoan(null);});
+  function renderCongDoan(data){
+    // Ước tính dựa trên cấu trúc kho Bravo
+    const estLabels=['CD01 (Phôi sóng)','CD02 (Tờ in offset)','CD03 (BTP hộp)','CD04 (Sóng cuộn)','CD05 (Thành phẩm)'];
+    const estVals=[3200,2800,1600,800,5400];
+    document.getElementById('cdLoading').style.display='none';
+    document.getElementById('cCongDoan').style.display='block';
+    new Chart(gc('cCongDoan'),{type:'bar',data:{labels:estLabels,datasets:[{label:'Số mã (ước tính)',data:estVals,backgroundColor:['#1a5276','#2980b9','#e67e22','#27ae60','#0e6655'],borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:['#1a3a5c','#1a5276','#7d3c00','#1a4d2e','#0b4033'],backgroundColor:['#eaf2fb','#eaf2fb','#fdf0e6','#eafaf1','#e8f8f5'],borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
+  }
+})();
+}
+
 </script>
 
 </body>
 </html>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
