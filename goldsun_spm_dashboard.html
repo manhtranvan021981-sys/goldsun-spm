@@ -1916,6 +1916,10 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 </div><!-- end content -->
 
 <script>
+// Datalabels OFF by default — chỉ DLCN charts bật tường minh
+if(window.ChartDataLabels && window.Chart) { Chart.defaults.plugins.datalabels = Chart.defaults.plugins.datalabels || {}; Chart.defaults.plugins.datalabels.display = false; }
+
+
 // ================================================================
 // CONFIG — Chỉ chỉnh sửa phần này khi đổi nguồn dữ liệu
 // ================================================================
