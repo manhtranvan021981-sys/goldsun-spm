@@ -2392,11 +2392,12 @@ let charts = {};
 
 // ── GVIZ FETCH ─────────────────────────────────────────────────
 // JSONP — hoạt động cả file:// lẫn https://, không bị CORS
-function gvizFetch(sheetId, tabName, startRow) {
+function gvizFetch(sheetId, tabName, startRow, tqQuery) {
   return new Promise((resolve, reject) => {
     const cbName = '_gviz_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     const rangePart = startRow ? `&range=A${startRow}:ZZ` : '';  // ZZ đủ rộng mọi cột
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(tabName)}&headers=1${rangePart}`;
+    const tqPart = tqQuery ? `&tq=${encodeURIComponent(tqQuery)}` : '';  // optional: override row limit (VD: 'select * limit 10000')
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(tabName)}&headers=1${rangePart}${tqPart}`;
 
     const timeout = setTimeout(() => {
       cleanup();
@@ -5561,7 +5562,7 @@ window.TK_loadData = async function(){
   if(ts) ts.textContent='Đang đồng bộ từ Google Sheet...';
   try{
     if(typeof gvizFetch!=='function') throw new Error('gvizFetch không khả dụng. Đảm bảo SPM dashboard đã tải đầy đủ.');
-    const table=await gvizFetch(TK_SHEET_ID,TK_SHEET_TAB,3);
+    const table=await gvizFetch(TK_SHEET_ID,TK_SHEET_TAB,3,'select * limit 10000');  // limit cao để đọc hết toàn bộ dòng
     // Map header labels → column index
     const hdr={};
     table.cols.forEach((col,i)=>{
