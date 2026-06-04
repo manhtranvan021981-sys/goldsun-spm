@@ -498,6 +498,51 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .dlcn-scope .tbl-hdr-red span   { color:#922b21; }
 </style>
 
+
+<!-- ══ TDT V5.9 CSS — Scoped ══ -->
+<style>
+
+.tct-scope{
+  --gs-green:#006b3f;--gs-green2:#0b7d4c;--gs-dark:#073b2c;--gs-gold:#f4c542;
+  --blue:#155e9f;--blue2:#eaf3ff;--red:#c0392b;--red2:#fdecea;--yellow:#c98500;--yellow2:#fff4d6;
+  --green:#16803a;--green2:#e9f8ee;--purple:#7b2cbf;--purple2:#f3e8ff;--gray:#697386;--bg:#f4f6f8;
+  --line:#dfe5ec;--text:#1f2937;--muted:#667085;--card:#fff;--shadow:0 10px 24px rgba(15,23,42,.08);
+  --font:'Times New Roman',Times,serif;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:var(--font);font-size:13px;color:var(--text)}
+.header{background:linear-gradient(135deg,var(--gs-dark),var(--gs-green2));color:#fff;padding:18px 24px;border-bottom:5px solid var(--gs-gold);position:sticky;top:0;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.hrow{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:12px;background:#b92124;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.18)}
+h1{margin:0;font-size:20px;letter-spacing:.2px}.subtitle{font-size:12px;opacity:.9;margin-top:5px;line-height:1.45}.hdr-right{text-align:right;font-size:12px;line-height:1.6}.hdr-right strong{color:var(--gs-gold)}
+.nav{display:flex;gap:0;overflow-x:auto;background:#0b513d;border-bottom:2px solid var(--gs-gold);position:sticky;top:86px;z-index:45}.nav a{color:#d9efe7;text-decoration:none;padding:10px 15px;border-right:1px solid rgba(255,255,255,.12);white-space:nowrap;font-size:12px}.nav a:hover{background:#118055;color:#fff}.nav a.p0{color:#fff4c7;font-weight:bold}.wrap{max-width:1500px;margin:auto;padding:16px 18px 36px}.section{margin-top:18px}.sec-title{font-size:14px;text-transform:uppercase;font-weight:bold;color:var(--gs-dark);border-left:5px solid var(--gs-green);padding-left:10px;margin:14px 0 10px;letter-spacing:.3px}.sec-title.red{border-left-color:var(--red);color:var(--red)}.sec-title.blue{border-left-color:var(--blue);color:var(--blue)}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:1.15fr .85fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px}.card.flat{box-shadow:none}.card.red{border-left:5px solid var(--red);background:#fffafa}.card.yellow{border-left:5px solid var(--yellow);background:#fffdfa}.card.green{border-left:5px solid var(--green)}.card.blue{border-left:5px solid var(--blue)}.card.purple{border-left:5px solid var(--purple)}
+.metric{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow);min-height:105px}.mlabel{font-size:11px;text-transform:uppercase;color:var(--muted);font-weight:bold;line-height:1.25}.mval{font-size:28px;font-weight:900;margin:7px 0 4px;color:var(--gs-dark)}.msub{font-size:11px;color:var(--muted);line-height:1.35}.mred .mval{color:var(--red)}.myellow .mval{color:var(--yellow)}.mgreen .mval{color:var(--green)}.mblue .mval{color:var(--blue)}.mpurple .mval{color:var(--purple)}
+.badge{display:inline-block;border-radius:999px;padding:3px 9px;font-size:11px;font-weight:bold;white-space:nowrap}.b-red{background:var(--red2);color:var(--red)}.b-yellow{background:var(--yellow2);color:var(--yellow)}.b-green{background:var(--green2);color:var(--green)}.b-blue{background:var(--blue2);color:var(--blue)}.b-purple{background:var(--purple2);color:var(--purple)}.b-gray{background:#eef1f5;color:var(--gray)}
+.command{display:grid;grid-template-columns:280px 1fr;gap:12px}.health{border-radius:16px;padding:18px;background:radial-gradient(circle at top right,#fff2bd,transparent 35%),linear-gradient(135deg,#fff,#edf7f1);border:1px solid #cbded2;box-shadow:var(--shadow);text-align:center}.health .score{font-size:54px;font-weight:900;color:var(--yellow);line-height:1}.health .score small{font-size:20px;color:var(--muted)}.health h2{font-size:14px;margin:8px 0 4px;color:var(--gs-dark)}.health p{font-size:12px;color:var(--muted);line-height:1.5;margin:0}.question-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.qcard{border-radius:14px;border:1px solid var(--line);background:#fff;padding:12px;min-height:130px}.qtitle{font-size:12px;font-weight:bold;color:var(--gs-dark);margin-bottom:8px}.qcard ul{margin:0;padding-left:18px;line-height:1.55;font-size:11.5px}.qcard li{margin-bottom:3px}
+table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f0f3f6;color:#3b4656;text-align:left;padding:8px;border-bottom:2px solid var(--line);white-space:nowrap}td{padding:8px;border-bottom:1px solid #edf0f4;vertical-align:top}tr:hover td{background:#fafcff}.tbl-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff}.tbl-title{font-weight:bold;font-size:13px;padding:11px 13px;border-bottom:1px solid var(--line);background:#fbfcfe;display:flex;justify-content:space-between;align-items:center;color:var(--gs-dark)}
+.priority{font-weight:bold;text-align:center;width:46px;border-radius:8px;padding:5px 8px;color:#fff;display:inline-block}.p0{background:var(--red)}.p1{background:var(--yellow)}.p2{background:var(--blue)}
+.person{display:grid;grid-template-columns:1.15fr .85fr;gap:8px;align-items:center}.pname{font-weight:bold;font-size:12.5px;color:var(--gs-dark)}.pmeta{font-size:11px;color:var(--muted);line-height:1.45}.bars{display:grid;gap:5px}.barline{display:grid;grid-template-columns:72px 1fr 34px;gap:6px;align-items:center;font-size:10.5px;color:var(--muted)}.track{height:8px;background:#edf0f4;border-radius:999px;overflow:hidden}.fill{height:100%;border-radius:999px;background:var(--green)}.fill.red{background:var(--red)}.fill.yellow{background:var(--yellow)}.fill.blue{background:var(--blue)}
+.swim{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.lane{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow)}.lane h3{font-size:13px;margin:0 0 10px;color:var(--gs-dark)}.lane .item{padding:8px;border-radius:10px;margin-bottom:7px;background:#f8fafc;border-left:4px solid var(--line);font-size:11.5px;line-height:1.45}.lane .item.red{border-left-color:var(--red);background:#fff5f5}.lane .item.yellow{border-left-color:var(--yellow);background:#fffaf0}.lane .item.green{border-left-color:var(--green);background:#f1fbf4}
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.filterbar input,.filterbar select{font-family:var(--font);font-size:12px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}.filterbar button{font-family:var(--font);font-size:12px;padding:7px 12px;border:0;border-radius:9px;background:var(--gs-green);color:#fff;cursor:pointer}.filterbar button:hover{background:var(--gs-dark)}
+.matrix{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.mcell{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px}.mcell h4{font-size:12.5px;margin:0 0 7px;color:var(--gs-dark)}.mcell ul{margin:0;padding-left:17px;font-size:11.5px;line-height:1.55}.formula{font-family:Consolas,monospace;background:#101828;color:#d1fadf;border-radius:12px;padding:12px;white-space:pre-wrap;font-size:11px;line-height:1.6}.note{font-size:11.5px;color:var(--muted);line-height:1.55}.footer{margin-top:18px;padding:12px 14px;background:#eef7f3;border:1px solid #cde7dc;border-radius:12px;color:#38564b;font-size:11.5px;line-height:1.55}
+@media(max-width:1180px){.g5,.g6{grid-template-columns:repeat(3,1fr)}.g4,.question-grid,.swim,.matrix{grid-template-columns:repeat(2,1fr)}.g2,.command{grid-template-columns:1fr}.nav{top:110px}}@media(max-width:760px){.g3,.g4,.g5,.g6,.question-grid,.swim,.matrix{grid-template-columns:1fr}.hrow{flex-direction:column}.hdr-right{text-align:left}.nav{top:128px}.person{grid-template-columns:1fr}}
+
+.livebar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:10px 12px}.livebar button{font-family:var(--font);font-size:12px;padding:7px 12px;border:0;border-radius:9px;background:var(--gs-green);color:#fff;cursor:pointer}.livebar button.secondary{background:#eef1f5;color:#344054}.livebar input{font-family:var(--font);font-size:12px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:#fff;min-width:260px;flex:1}.live-status{font-size:11.5px;color:var(--muted);line-height:1.45}.mini-source{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.src-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px;box-shadow:var(--shadow);border-left:5px solid var(--gs-green)}.src-card h4{font-size:12px;margin:0 0 6px;color:var(--gs-dark)}.src-card p{font-size:11.5px;margin:0;color:var(--muted);line-height:1.5}.compact td,.compact th{font-size:11px;padding:7px}.hidden-row{display:none}@media(max-width:900px){.mini-source{grid-template-columns:1fr}.livebar input{min-width:160px}}
+
+
+  /* ── AI REAL ANALYSIS V5.1 ── */
+  .ai-summary-box{background:linear-gradient(135deg,#eef6ff,#f8fbff);border:1px solid #b7d4f4;border-left:5px solid var(--blue);border-radius:14px;padding:14px 16px;margin:10px 0 14px;font-size:13px;line-height:1.7;color:#17324d}
+  .ai-grid-real .card{min-height:176px;display:flex;flex-direction:column;gap:8px}
+  .ai-grid-real .card b{font-size:14px;letter-spacing:.2px}
+  .ai-kpi-line{display:flex;gap:7px;flex-wrap:wrap;margin:3px 0 4px}
+  .ai-chip{display:inline-block;font-size:11px;border-radius:999px;padding:3px 8px;background:#f4f6f8;color:#243447;font-weight:700}
+  .ai-chip.red{background:#fdecea;color:#c0392b}.ai-chip.yellow{background:#fef9e7;color:#a26000}.ai-chip.green{background:#eafaf1;color:#1a7a3e}.ai-chip.blue{background:#eaf2fb;color:#1a5276}.ai-chip.purple{background:#f4ecf7;color:#6c3483}
+  .ai-card-body{font-size:12.5px;line-height:1.6;color:#334155}
+  .ai-card-action{font-size:12px;line-height:1.55;background:#fff;border:1px dashed #ccd7e5;border-radius:10px;padding:8px;margin-top:auto;color:#111827}
+  .ai-analysis-table td{vertical-align:top;line-height:1.45}
+
+
+</style>
 </head>
 <body>
 
@@ -560,6 +605,323 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   <div style="font-size:20px;font-weight:700;color:var(--navy);margin-bottom:10px" id="bpPhTitle">Module đang phát triển</div>
   <div style="font-size:13px;color:var(--gray);line-height:1.8;max-width:520px" id="bpPhDesc">Nội dung bộ phận này đang được xây dựng trong khuôn khổ GSP NEXT 30 và sẽ được tích hợp trong các phiên bản tiếp theo của GoldSun Dashboard.</div>
   <div style="margin-top:24px;padding:9px 22px;background:#FEF3E2;border-radius:20px;font-size:12px;font-weight:700;color:var(--gold);border:1px solid #FCD88A">🔜 Sắp ra mắt — GSP NEXT 30</div>
+</div>
+
+
+<!-- ══ TDT TAB — Tóm tắt điều hành ══ -->
+<div class="tab-content" id="tab-tdt">
+  <div class="tct-scope" style="max-width:100%;overflow-x:hidden">
+
+<main class="wrap">
+
+<div class="livebar">
+  <button onclick="refreshLiveV5()">🔄 Kéo dữ liệu LIVE từ 3 Google Sheet</button>
+  <button class="secondary" onclick="renderV5(SNAPSHOT,'snapshot')">↩ Dùng snapshot đã tính</button>
+  <input id="globalSearchV5" placeholder="Tìm nhanh trong bảng nguồn: PIC, dự án, mã vật tư..." oninput="filterSourceTables()" />
+  <span class="live-status" id="liveStatus">Đang dùng snapshot tính sẵn. Bấm “Kéo dữ liệu LIVE” để thử đọc trực tiếp 3 Google Sheet qua gviz CSV.</span>
+</div>
+
+<div class="livebar" style="border-left:5px solid var(--purple)">
+  <b style="color:var(--purple);font-size:12px">🤖 AI ENGINE TỰ ĐỘNG</b>
+  <input id="appScriptUrl" value="https://script.google.com/macros/s/AKfycbxoXcUnXM2EFQ57i8bDDNLv3WdErHlYb8X9uoShmocKJU97i80yshFXJfAHWahxFNi2_Q/exec" placeholder="Apps Script Web App URL đã lưu sẵn trong file HTML..." />
+  <button class="secondary" onclick="saveEngineUrl()">💾 Lưu URL</button>
+  <button onclick="loadEngineSummary()">📥 Tải kết quả AI từ Master</button>
+  <button onclick="runEngineNow()">⚡ Chạy AI Engine ngay</button>
+  <span class="live-status" id="engineStatus">AI Engine URL đã nhúng sẵn. V5.9 dùng cơ chế xếp hàng chạy AI để tránh timeout khi Engine chạy lâu.</span>
+</div>
+<div class="livebar" style="border-left:5px solid #566573;background:#fff">
+  <b style="font-size:12px;color:#566573">🧪 KẾT NỐI / LOG</b>
+  <button class="secondary" onclick="testEnginePing()">Test Ping</button>
+  <button class="secondary" onclick="clearEngineLog()">Xóa log</button>
+  <span class="live-status" id="engineLog">Chưa test. V5.9 đã nhúng sẵn Web App URL và sửa nút Chạy AI Engine theo cơ chế Queue.</span>
+</div>
+
+<section id="cmd" class="section">
+  <div class="sec-title red">00. Command Center — Màn hình mở đầu cho GĐ Công nghệ</div>
+  <div class="command">
+    <div class="health">
+      <div class="score">74<small>/100</small></div>
+      <h2>Điểm điều hành tạm tính: VÀNG ĐẬM / Cận Đỏ</h2>
+      <p>Điểm này là chỉ số tổng hợp để nhìn nhanh: hoàn thành 100%, nhưng đúng hạn 94,1%, chất lượng ERP 97,6% và ECN tồn kho 1.492 pcs đang kéo rủi ro xuống.</p>
+      <div style="margin-top:10px"><span class="badge b-red">P0: 3 việc</span> <span class="badge b-yellow">P1: 5 việc</span></div>
+    </div>
+    <div class="question-grid">
+      <div class="qcard">
+        <div class="qtitle">1) Hôm nay anh phải quyết gì?</div>
+        <ul>
+          <li>Phương án xử lý 1.492 pcs ECN SSA-MLR-00154.</li>
+          <li>RCA nhóm khai báo KH Samsung trễ 61/63 task.</li>
+          <li>Có điều chỉnh KPI do delay từ hệ thống KH hay không.</li>
+        </ul>
+      </div>
+      <div class="qcard">
+        <div class="qtitle">2) Ai cần hỗ trợ / kiểm soát?</div>
+        <ul>
+          <li>Trần Thị Thu Hương: 57/57 task trễ.</li>
+          <li>Hà Việt Anh: ECN còn tồn kho cần đóng.</li>
+          <li>Nhóm sửa ERP cao: Thương, Hảo, Nhật Anh.</li>
+        </ul>
+      </div>
+      <div class="qcard">
+        <div class="qtitle">3) Việc nào đang tốt?</div>
+        <ul>
+          <li>1.066/1.066 task đã hoàn thành.</li>
+          <li>Nguyễn Ngọc Phú, Đặng Thị Hằng, Hồng Ánh: 100% đúng hạn.</li>
+          <li>Canon/Hanwha/KUANXIN ổn định.</li>
+        </ul>
+      </div>
+      <div class="qcard">
+        <div class="qtitle">4) Hệ thống thiếu gì?</div>
+        <ul>
+          <li>Thiếu audit log lỗi ERP theo tháng.</li>
+          <li>Thiếu owner xử lý tồn kho ECN tách khỏi người khai báo.</li>
+          <li>Dự án PLM/ECIMS/MPS chưa thấy task live.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kpi" class="section">
+  <div class="sec-title blue">01. KPI ngày / tuần / tháng — nhìn tổng thể trong 60 giây</div>
+  <div class="grid g6">
+    <div class="metric mblue"><div class="mlabel">Tổng công việc tháng</div><div class="mval">1.066</div><div class="msub">27 dự án / khách hàng</div></div>
+    <div class="metric mgreen"><div class="mlabel">Hoàn thành</div><div class="mval">100%</div><div class="msub">1.066/1.066 task</div></div>
+    <div class="metric myellow"><div class="mlabel">Đúng hạn</div><div class="mval">94,1%</div><div class="msub">Target ≥ 98% → chưa đạt</div></div>
+    <div class="metric mred"><div class="mlabel">Task trễ</div><div class="mval">63</div><div class="msub">96,8% thuộc KB hệ thống KH</div></div>
+    <div class="metric mblue"><div class="mlabel">Mã ERP Bravo</div><div class="mval">45.853</div><div class="msub">10/2025 → 05/2026</div></div>
+    <div class="metric mpurple"><div class="mlabel">ECN tồn kho rủi ro</div><div class="mval">1.492</div><div class="msub">pcs chưa có phương án xử lý</div></div>
+  </div>
+  <div class="grid g4" style="margin-top:12px">
+    <div class="card green"><b>Chất lượng khai báo ERP:</b> 97,6% đúng lần đầu, sát mục tiêu ≥98%. Không nên vỗ tay sớm; còn 1.122 mã có sửa.</div>
+    <div class="card yellow"><b>Điểm nghẽn:</b> Khai báo hệ thống khách hàng đúng hạn chỉ 37,8%. Cần tách nguyên nhân khách quan/chuẩn nội bộ.</div>
+    <div class="card red"><b>Rủi ro tài chính:</b> ECN có tồn kho nhưng thiếu đơn giá/thành tiền, chưa lượng hóa chi phí aging/hủy.</div>
+    <div class="card blue"><b>Dữ liệu nhân sự:</b> Có người làm nhiều và tốt; cũng có người lỗi/trễ cao. Không được đánh đồng cả nhóm.</div>
+  </div>
+</section>
+
+<section id="action" class="section">
+  <div class="sec-title red">02. Action Center — việc cần can thiệp ngay</div>
+  <div class="filterbar">
+    <input id="searchAction" placeholder="Tìm vấn đề / owner / output..." oninput="filterActions()" />
+    <select id="prioFilter" onchange="filterActions()"><option value="">Tất cả mức độ</option><option value="P0">P0</option><option value="P1">P1</option><option value="P2">P2</option></select>
+    <button onclick="resetActions()">Reset</button>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-title"><span>Danh sách quyết định và hành động điều hành</span><span class="badge b-red">Không để P0 quá 24h</span></div>
+    <table id="actionTable">
+      <thead><tr><th>Mức</th><th>Vấn đề</th><th>Quyết định / hành động</th><th>Owner chính</th><th>Deadline</th><th>Output bắt buộc</th><th>Tiêu chí đóng</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="people" class="section">
+  <div class="sec-title blue">03. Năng lực từng nhân sự — không chỉ xem số lượng, phải xem rủi ro tạo ra</div>
+  <div class="grid g3" id="peopleCards"></div>
+  <div class="tbl-wrap" style="margin-top:12px">
+    <div class="tbl-title"><span>Scorecard nhân sự — tổng hợp từ 3 nguồn</span><span class="badge b-blue" id="peopleCount">-- người</span></div>
+    <table class="compact" id="peopleTable"><thead><tr><th>Nhân sự</th><th>Bravo</th><th>Task</th><th>Trễ</th><th>% sửa</th><th>ECN</th><th>Tồn rủi ro</th><th>Score</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="card" style="margin-top:12px">
+    <b>Nguyên tắc đánh giá nhân sự:</b> Không xếp hạng chỉ bằng số task. Score phải gồm <b>Volume</b> + <b>Đúng hạn</b> + <b>Chất lượng dữ liệu</b> + <b>Độ khó công việc</b> + <b>Rủi ro còn mở</b>. Người làm hệ thống khách hàng có thể bị phụ thuộc khách hàng, nên dashboard phải có cột “lý do khách quan” và “bằng chứng delay”.
+  </div>
+</section>
+
+<section id="flow" class="section">
+  <div class="sec-title blue">04. Luồng công việc điều hành hằng ngày</div>
+  <div class="swim">
+    <div class="lane"><h3>1. Nhận việc</h3><div class="item green">Request khai báo ERP / KH / ECN được ghi vào một log duy nhất.</div><div class="item yellow">Thiếu spec → trả lại ngay, không để treo mập mờ.</div></div>
+    <div class="lane"><h3>2. Phân loại</h3><div class="item red">P0: ảnh hưởng giao hàng, ECN tồn kho, task quá hạn.</div><div class="item yellow">P1: việc sắp hạn ≤3 ngày hoặc chất lượng sửa cao.</div></div>
+    <div class="lane"><h3>3. Thực hiện</h3><div class="item green">PIC update tiến độ cuối ngày.</div><div class="item yellow">Nếu chờ khách hàng/PLM/ECIMS phải có bằng chứng.</div></div>
+    <div class="lane"><h3>4. Kiểm soát</h3><div class="item green">Leader audit mẫu 5–10% record/ngày.</div><div class="item red">Sai version/BOM/routing → mở RCA ngay.</div></div>
+    <div class="lane"><h3>5. Đóng việc</h3><div class="item green">Đóng khi có output + thời gian + người xác nhận.</div><div class="item yellow">Việc đóng muộn vẫn phải giữ nhãn “hoàn thành sau hạn”.</div></div>
+  </div>
+</section>
+
+<section id="governance" class="section">
+  <div class="sec-title red">05. Governance — nhịp điều hành, RAG và quyền quyết định</div>
+  <div class="grid g2">
+    <div class="tbl-wrap">
+      <div class="tbl-title">Nhịp vận hành đề xuất</div>
+      <table>
+        <thead><tr><th>Thời điểm</th><th>Nội dung</th><th>Owner</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>08:15–08:30 hằng ngày</td><td>Daily huddle: hôm qua xong gì, hôm nay làm gì, blocker nào.</td><td>Trưởng BP DLCN</td><td>Danh sách P0/P1 trong ngày</td></tr>
+          <tr><td>16:30 hằng ngày</td><td>Chốt task ngày, cập nhật trạng thái RAG, ghi lý do trễ.</td><td>Từng PIC</td><td>Task log cập nhật</td></tr>
+          <tr><td>Thứ Tư 16:00</td><td>Khóa dữ liệu weekly update.</td><td>Dashboard Owner</td><td>Weekly data cut-off</td></tr>
+          <tr><td>Thứ Năm</td><td>GĐ Công nghệ review dashboard và quyết định escalation.</td><td>Anh Mạnh</td><td>Decision log</td></tr>
+          <tr><td>Cuối tháng</td><td>Đánh giá năng lực cá nhân: đúng hạn, chất lượng, volume, rủi ro.</td><td>GĐ CN + HR</td><td>Scorecard nhân sự</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card red">
+      <b>Luật RAG bắt buộc</b>
+      <div class="matrix" style="grid-template-columns:1fr;margin-top:10px">
+        <div class="mcell"><h4><span class="badge b-green">Green</span> Xanh</h4><ul><li>Đúng hạn, đủ output, không còn rủi ro mở.</li></ul></div>
+        <div class="mcell"><h4><span class="badge b-yellow">Yellow</span> Vàng</h4><ul><li>Sắp trễ, thiếu dữ liệu, phụ thuộc khách hàng, cần hỗ trợ trong tuần.</li></ul></div>
+        <div class="mcell"><h4><span class="badge b-red">Red</span> Đỏ</h4><ul><li>Trễ deadline, lệch KPI lớn, ECN tồn kho, sai dữ liệu ảnh hưởng sản xuất.</li><li>Escalation trong 24h.</li></ul></div>
+        <div class="mcell"><h4><span class="badge b-purple">Escalate</span> Đỏ kéo dài</h4><ul><li>Đỏ 2 tuần liên tiếp hoặc quá hạn >7 ngày → đưa vào review cấp trên.</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="data" class="section">
+  <div class="sec-title blue">06. Data Contract — điều kiện để dashboard chạy thật, không thành báo cáo thủ công</div>
+  <div class="grid g2">
+    <div class="card">
+      <b>6 bảng dữ liệu tối thiểu cần nối live</b>
+      <div class="matrix" style="margin-top:10px">
+        <div class="mcell"><h4>01_TASK_LOG</h4><ul><li>Task ID, nhóm việc, PIC, ngày nhận, deadline, ngày hoàn thành, trạng thái.</li></ul></div>
+        <div class="mcell"><h4>02_ERP_BRAVO_LOG</h4><ul><li>Mã vật tư, người khai báo, ngày tạo, số lần sửa, mã dòng, nhà máy.</li></ul></div>
+        <div class="mcell"><h4>03_ECN_TRACKING</h4><ul><li>ECN ID, mã vật tư, ngày ban hành, hạn dừng, tồn kho, owner xử lý.</li></ul></div>
+        <div class="mcell"><h4>04_PEOPLE_SCORE</h4><ul><li>Volume, đúng hạn, chất lượng, độ khó, cảnh báo năng lực.</li></ul></div>
+        <div class="mcell"><h4>05_RISK_ISSUE</h4><ul><li>Risk ID, issue, mức độ, owner, deadline, trạng thái đóng.</li></ul></div>
+        <div class="mcell"><h4>06_DECISION_LOG</h4><ul><li>Việc cần GĐ quyết, phương án, người đề xuất, ngày quyết, kết quả.</li></ul></div>
+      </div>
+    </div>
+    <div class="formula">RAG_TASK =
+IF(Status = "Done" AND Finish_Date <= Due_Date, "Green",
+IF(Status = "Done" AND Finish_Date > Due_Date, "Yellow-Late",
+IF(Today > Due_Date, "Red",
+IF(Due_Date - Today <= 3, "Yellow", "Green"))))
+
+RAG_ECN =
+IF(Stock_Qty > 0 AND Today > ECN_Stop_Date, "Red",
+IF(Stock_Qty > 0 AND ECN_Stop_Date - Today <= 7, "Yellow", "Green"))
+
+PEOPLE_SCORE =
+30% Volume + 30% OnTime + 25% DataQuality + 15% RiskControl
+</div>
+  </div>
+</section>
+
+
+<section id="liveSource" class="section">
+  <div class="sec-title blue">08. Live Source — dữ liệu thật kéo từ 3 nguồn</div>
+  <div class="mini-source">
+    <div class="src-card"><h4>01. Bravo khai báo hệ thống</h4><p id="srcBravo">--</p></div>
+    <div class="src-card"><h4>02. Công việc hằng ngày</h4><p id="srcTasks">--</p></div>
+    <div class="src-card"><h4>03. ECN thay đổi sản phẩm</h4><p id="srcEcn">--</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="tbl-wrap"><div class="tbl-title"><span>Top dự án / nhóm việc gây trễ</span><span class="badge b-red">Task source</span></div><table class="compact" id="taskSourceTable"><thead><tr><th>Nhóm/Dự án</th><th>Tổng</th><th>Trễ</th><th>% trễ</th><th>Ghi chú</th></tr></thead><tbody></tbody></table></div>
+    <div class="tbl-wrap"><div class="tbl-title"><span>Chất lượng khai báo Bravo</span><span class="badge b-yellow">ERP source</span></div><table class="compact" id="bravoSourceTable"><thead><tr><th>Người khai báo</th><th>Tổng mã</th><th>Mã sửa</th><th>% sửa</th><th>Tổng lần sửa</th></tr></thead><tbody></tbody></table></div>
+  </div>
+  <div class="tbl-wrap" style="margin-top:12px"><div class="tbl-title"><span>ECN tồn kho / rủi ro</span><span class="badge b-purple">ECN source</span></div><table class="compact" id="ecnSourceTable"><thead><tr><th>Mã vật tư</th><th>Model</th><th>Loại ECN</th><th>Hạn</th><th>Tồn kho</th><th>Nhà máy</th><th>PIC</th><th>Phương án</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="ai" class="section ai-deep">
+  <div class="sec-title blue">07. AI PHÂN TÍCH THẬT TỪ 3 NGUỒN DỮ LIỆU — KẾT LUẬN / RCA / QUYẾT ĐỊNH</div>
+
+  <div class="ai-summary-box" style="border-left-color:#c0392b;background:linear-gradient(135deg,#fff7f7,#f8fbff)">
+    <b>AI đã thực hiện phân tích dữ liệu thật, không còn là mô tả chức năng.</b><br>
+    AI đọc đồng thời 3 nguồn: <b>Bravo ERP 45.853 mã</b>, <b>công việc ngày 1.066 task</b>, và <b>ECN 91+ bản ghi</b>. Kết luận điều hành: bộ phận hoàn thành việc nhưng chưa đạt chuẩn quản trị đúng hạn; điểm nghẽn lớn nhất là <b>Khai báo hệ thống khách hàng</b> với <b>61/63 task trễ</b>; rủi ro khẩn nhất là <b>ECN SSA-MLR-00154 còn 1.492 pcs sau hạn</b>; chất lượng Bravo đạt khoảng <b>97,6% đúng lần đầu</b> nhưng có nhóm người/mã cần audit vì tỷ lệ sửa cao bất thường.
+  </div>
+
+  <div id="aiExecutiveSummary" class="ai-summary-box">
+    <b>Kết luận AI:</b> Hệ thống đang <b>hoàn thành việc</b> nhưng chưa đạt chuẩn <b>đúng hạn và kiểm soát rủi ro</b>. Điểm nghẽn lớn nhất là <b>Khai báo hệ thống khách hàng</b> với <b>61 / 63 task trễ</b>, chiếm <b>96,8%</b> tổng task trễ. Rủi ro khẩn nhất là ECN <b>SSA-MLR-00154</b> còn <b>1.492 pcs</b> sau hạn. Chất lượng Bravo đạt <b>97,6% đúng lần đầu</b>, sát ngưỡng nhưng chưa đủ an toàn.
+  </div>
+
+  <div class="grid g3 ai-grid-real">
+    <div class="card blue" id="aiBottleneck">
+      <b>AI Bottleneck — điểm nghẽn tiến độ</b>
+      <div class="ai-kpi-line"><span class="ai-chip red">63 task trễ</span><span class="ai-chip red">61 task do KB hệ thống KH</span><span class="ai-chip red">96,8% task trễ</span></div>
+      <div class="ai-card-body">AI xác định bottleneck không nằm ở toàn bộ bộ phận, mà tập trung gần như tuyệt đối ở nhóm <b>Khai báo hệ thống khách hàng</b>. Dự án kéo tụt rõ nhất là <b>Bảo mật Q8 (F976)</b> với khoảng <b>30 task trễ</b>.</div>
+      <div class="ai-card-action"><b>AI đề xuất:</b> RCA riêng nhóm KB hệ thống KH, tách nguyên nhân do khách hàng/PLM-ECIMS delay, thiếu spec đầu vào và thiếu backup nội bộ.</div>
+    </div>
+    <div class="card yellow" id="aiPeopleRisk">
+      <b>AI People Risk — rủi ro nhân sự</b>
+      <div class="ai-kpi-line"><span class="ai-chip yellow">TRẦN THỊ THU HƯƠNG</span><span class="ai-chip yellow">57 task trễ</span><span class="ai-chip yellow">Score 35</span></div>
+      <div class="ai-card-body">AI không kết luận cảm tính rằng nhân sự yếu. Dữ liệu cho thấy <b>TRẦN THỊ THU HƯƠNG</b> đang là điểm tập trung rủi ro tiến độ: 57 task trễ, chủ yếu thuộc hệ thống khách hàng. Cần kiểm tra tải việc, quyền thao tác, phụ thuộc khách hàng và điều kiện đầu vào.</div>
+      <div class="ai-card-action"><b>AI đề xuất:</b> 1:1 trong 24h, lập bảng phân loại lỗi khách quan/chủ quan, bố trí backup nếu quá tải.</div>
+    </div>
+    <div class="card red" id="aiEcnAlert">
+      <b>AI ECN Alert — rủi ro thay đổi sản phẩm</b>
+      <div class="ai-kpi-line"><span class="ai-chip red">SSA-MLR-00154</span><span class="ai-chip red">1.492 pcs</span><span class="ai-chip red">HÀ VIỆT ANH</span></div>
+      <div class="ai-card-body">ECN <b>SSA-MLR-00154 / MANUAL-L500 / GH90-70262H</b> còn tồn <b>1.492 pcs</b> sau hạn dừng. Dữ liệu chưa có phương án xử lý và chưa có giá trị tài chính. Đây là P0 vì có thể phát sinh aging, sai version, hủy hàng hoặc COPQ.</div>
+      <div class="ai-card-action"><b>AI đề xuất:</b> Chốt ngay 1 trong 4 hướng: dùng tiếp, đổi version, hủy, hoặc thương lượng khách hàng; bổ sung đơn giá × tồn kho.</div>
+    </div>
+    <div class="card green" id="aiQualityAudit">
+      <b>AI Quality Audit — chất lượng khai báo Bravo</b>
+      <div class="ai-kpi-line"><span class="ai-chip green">45.853 mã</span><span class="ai-chip green">1.122 mã sửa</span><span class="ai-chip green">2,45% sửa</span></div>
+      <div class="ai-card-body">Bravo đang đạt khoảng <b>97,6% đúng lần đầu</b>, sát KPI nhưng chưa đủ chắc. Nhóm cần audit gồm các trường hợp tỷ lệ sửa cao như <b>Phạm Phương Anh 43,8%</b>, <b>Nguyễn Thị Thương 37,2%</b>, <b>Trần Văn Hảo 22,8%</b>, <b>Nguyễn Thị Nhật Anh 19,1%</b>. Cần loại trừ batch import trước khi đánh giá năng suất cá nhân.</div>
+      <div class="ai-card-action"><b>AI đề xuất:</b> Audit 20 mã/người với nhóm sửa >8%, khóa nguyên nhân sửa: sai BOM, routing, version, quy cách hay thông tin thiếu.</div>
+    </div>
+    <div class="card blue" id="aiMissingProject">
+      <b>AI Missing Project — dự án thiếu task live</b>
+      <div class="ai-kpi-line"><span class="ai-chip blue">PLM AppSheet</span><span class="ai-chip blue">ECIMS KH</span><span class="ai-chip blue">MPS KH</span></div>
+      <div class="ai-card-body">AI phát hiện một số dự án trọng điểm được nêu trong danh mục nhưng chưa có task live rõ trên tracker tháng. Đây là lỗi quản trị: dự án có tên nhưng không có owner, deadline, RAG và output nghiệm thu thì dashboard không thể điều hành thật.</div>
+      <div class="ai-card-action"><b>AI đề xuất:</b> Mở task log bắt buộc cho từng dự án: owner, milestone tuần, deadline, blocker, output nghiệm thu.</div>
+    </div>
+    <div class="card purple" id="aiDecisionDraft">
+      <b>AI Decision Draft — quyết định cần anh chốt</b>
+      <div class="ai-kpi-line"><span class="ai-chip purple">2 P0</span><span class="ai-chip purple">3 P1</span><span class="ai-chip purple">7 quyết định</span></div>
+      <div class="ai-card-body">AI draft các quyết định cần đưa vào daily/weekly: xử lý tồn ECN, phân tải nhóm KB hệ thống KH, chuẩn KPI khách quan/chủ quan, audit Bravo, mở tracker cho PLM/ECIMS/MPS, và khóa data contract để dashboard tự cảnh báo.</div>
+      <div class="ai-card-action"><b>AI đề xuất:</b> Không để trạng thái “đang xem xét”. Mỗi quyết định phải có A/B/C, owner và deadline.</div>
+    </div>
+  </div>
+
+  <div class="tbl-wrap" style="margin-top:12px">
+    <div class="tbl-title"><span>AI phân tích chi tiết theo 6 góc nhìn điều hành</span><span class="badge b-blue">AI RCA thật từ dữ liệu</span></div>
+    <table class="compact ai-analysis-table" id="aiAnalysisTable">
+      <thead>
+        <tr>
+          <th>Góc nhìn AI</th>
+          <th>Dữ liệu thực tế AI đọc được</th>
+          <th>Kết luận / rủi ro</th>
+          <th>Hành động khuyến nghị</th>
+          <th>Owner</th>
+          <th>Deadline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><b>Bottleneck tiến độ</b></td><td>KB hệ thống KH: 61 task trễ; chiếm 96,8% tổng task trễ.</td><td>KPI đúng hạn bị kéo xuống bởi một nhóm việc duy nhất, không phải lỗi toàn bộ bộ phận.</td><td>RCA nhóm KB hệ thống KH; tách lỗi khách quan/chủ quan; thiết lập SLA đầu vào.</td><td>Trưởng BP DLCN + GĐ CN</td><td>3 ngày</td></tr>
+        <tr><td><b>Rủi ro nhân sự</b></td><td>TRẦN THỊ THU HƯƠNG: 57 task trễ.</td><td>Có dấu hiệu quá tải/phụ thuộc hệ thống KH/thiếu điều kiện đầu vào. Không nên quy lỗi cá nhân trước khi RCA.</td><td>1:1, review workload, phân bổ backup, chuẩn hóa checklist nhận yêu cầu.</td><td>Trưởng BP DLCN</td><td>24h</td></tr>
+        <tr><td><b>ECN tồn kho</b></td><td>SSA-MLR-00154 còn 1.492 pcs; hạn 23/02/2026.</td><td>Rủi ro aging/hủy hàng/không kiểm soát version; dữ liệu thiếu phương án và giá trị tài chính.</td><td>Yêu cầu PIC nhập phương án xử lý, đơn giá, thành tiền, trạng thái duyệt.</td><td>HÀ VIỆT ANH + Kế toán GT</td><td>24h</td></tr>
+        <tr><td><b>Chất lượng Bravo</b></td><td>1.122 mã sửa / 45.853 mã; 2,45% sửa.</td><td>Chỉ số đúng lần đầu sát ngưỡng; nhóm sửa cao có thể làm sai BOM/routing/version nếu không audit.</td><td>Audit 5–10% record/ngày; coaching người có tỷ lệ sửa >8%; loại batch import khỏi ranking.</td><td>Data Owner + IT Bravo</td><td>7 ngày</td></tr>
+        <tr><td><b>Dự án thiếu task</b></td><td>PLM AppSheet / ECIMS KH / MPS KH chưa có task live rõ.</td><td>Dự án chiến lược không nằm trong task log thì không có quản trị tiến độ thật.</td><td>Mở Project Task Log chuẩn: task, owner, deadline, RAG, output nghiệm thu.</td><td>Trưởng BP DLCN</td><td>7 ngày</td></tr>
+        <tr><td><b>Quyết định quản trị</b></td><td>2 P0; 3 P1; 7 nhóm hành động.</td><td>Nếu không chốt quyết định, dashboard chỉ là báo cáo, không thành công cụ điều hành.</td><td>Đưa các quyết định vào daily/weekly; việc đỏ phải có owner và deadline mới.</td><td>GĐ Công nghệ</td><td>Daily</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid g2" style="margin-top:12px">
+    <div class="tbl-wrap">
+      <div class="tbl-title"><span>Top nguyên nhân AI đề xuất RCA</span><span class="badge b-yellow">Root cause candidates</span></div>
+      <table class="compact" id="aiRootCauseTable">
+        <thead><tr><th>#</th><th>Giả thuyết nguyên nhân</th><th>Bằng chứng dữ liệu</th><th>Cách kiểm chứng</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Thiếu chuẩn SLA đầu vào từ khách hàng/hệ thống KH</td><td>KB hệ thống KH chiếm 96,8% task trễ</td><td>Lấy 10 case trễ gần nhất, check ngày nhận đủ spec và ngày hệ thống KH phản hồi</td></tr>
+          <tr><td>2</td><td>Quá tải hoặc thiếu backup ở PIC xử lý hệ thống KH</td><td>TRẦN THỊ THU HƯƠNG có 57 task trễ</td><td>So sánh workload/ngày, số lượng request, thời gian chờ phê duyệt và quyền thao tác</td></tr>
+          <tr><td>3</td><td>Thiếu rule ECN quá hạn còn tồn kho</td><td>SSA-MLR-00154 còn 1.492 pcs</td><td>Bổ sung trigger: Today > hạn ECN và tồn kho > 0 thì gửi cảnh báo</td></tr>
+          <tr><td>4</td><td>Chưa tách batch import khỏi năng suất thủ công Bravo</td><td>Bravo có 45.853 mã, trong đó có batch lớn</td><td>Tag batch import, không dùng để đánh giá tốc độ cá nhân</td></tr>
+          <tr><td>5</td><td>Dự án chiến lược chưa bị ép vào tracker vận hành</td><td>PLM/ECIMS/MPS chưa có task live rõ</td><td>Yêu cầu mỗi dự án có tối thiểu 1 owner, 1 milestone tuần, 1 output nghiệm thu</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tbl-wrap">
+      <div class="tbl-title"><span>Danh sách quyết định AI draft cho GĐ Công nghệ</span><span class="badge b-purple">Decision draft</span></div>
+      <table class="compact" id="aiDecisionTable">
+        <thead><tr><th>#</th><th>Quyết định cần chốt</th><th>Phương án AI đề xuất</th><th>Rủi ro nếu chậm</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Xử lý 1.492 pcs ECN SSA-MLR-00154</td><td>A: thương lượng KH/đổi version; B: dùng nội bộ/tái chế; C: hủy có phê duyệt</td><td>Tồn kho aging, sai version, phát sinh COPQ</td></tr>
+          <tr><td>2</td><td>Phân tải nhóm KB hệ thống KH</td><td>Tách luồng Samsung/Canon; mỗi luồng có backup; request thiếu spec trả lại ngay</td><td>KPI đúng hạn tiếp tục dưới 98%</td></tr>
+          <tr><td>3</td><td>Chuẩn KPI trễ khách quan/chủ quan</td><td>KPI chính vẫn đo tổng; phụ KPI tách nguyên nhân khách quan để công bằng</td><td>Đánh giá nhân sự sai và không xử lý đúng nguyên nhân</td></tr>
+          <tr><td>4</td><td>Audit nhóm sửa Bravo cao</td><td>Audit 20 mã/người với nhóm >8% sửa; batch import không tính vào lỗi cá nhân</td><td>Sai BOM/routing/version lọt sang sản xuất</td></tr>
+          <tr><td>5</td><td>Bắt buộc tracker dự án PLM/ECIMS/MPS</td><td>Không có task live = xem như RAG vàng/đỏ tùy quá hạn</td><td>Dự án chiến lược trôi mà dashboard không cảnh báo</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  <b>Ghi chú thiết kế:</b> Đây là bản V5 giữ nguyên thiết kế Daily Executive Control Tower v3, nhưng có snapshot dữ liệu thật và live connector 3 Google Sheet. Nếu Google Sheet cho phép đọc CSV bằng trình duyệt, nút LIVE sẽ kéo dữ liệu mới và render lại KPI/action/people/source table. Nếu bị chặn quyền/CORS, dashboard vẫn chạy bằng snapshot đã tính.
+</div>
+</main>
+  </div>
 </div>
 
 <!-- ══ DLCN DASHBOARD TAB ══ -->
@@ -4460,12 +4822,13 @@ function selectDashBP(btn) {
       {id:'tong-ket', label:'XI. Tổng kết'},
     ];
     l2.innerHTML =
-      `<button class="l2-btn active" data-sub="tab-dlcn" onclick="selectDashData(this)">📊 Dashboard DLCN & HT</button>` +
+      `<button class="l2-btn active" data-sub="tab-tdt" onclick="selectDashData(this)">📋 Tóm tắt điều hành</button>` +
+      `<button class="l2-btn" data-sub="tab-dlcn" onclick="selectDashData(this)">📊 Dashboard DLCN & HT</button>` +
       `<span style="color:rgba(0,0,0,0.2);padding:0 2px;align-self:center;font-size:14px">│</span>` +
       dlcnAnchors.map(a=>`<button class="l2-btn l2-anchor" onclick=\"dlcnScrollTo('${a.id}', this)\">${a.label}</button>`).join('');
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
-    document.getElementById('tab-dlcn').classList.add('active');
-    setTimeout(initDLCN, 50);
+    document.getElementById('tab-tdt').classList.add('active');
+    setTimeout(initTDT, 50);
   } else if(bpId === 'setup_bp') {
     // Cài đặt — chuyển thẳng đến tab setup, không cần L2
     ph.classList.remove('show');
@@ -4527,6 +4890,7 @@ function selectDashData(btn) {
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.getElementById(btn.dataset.sub).classList.add('active');
   if(btn.dataset.sub === 'tab-dlcn') setTimeout(initDLCN, 50);
+  if(btn.dataset.sub === 'tab-tdt') setTimeout(initTDT, 50);
 }
 function selectDashL2(btn, bpId) {
   document.querySelectorAll('.l2-btn').forEach(b=>b.classList.remove('active'));
@@ -5419,6 +5783,390 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
     new Chart(gc('cCongDoan'),{type:'bar',data:{labels:estLabels,datasets:[{label:'Số mã (ước tính)',data:estVals,backgroundColor:['#1a5276','#2980b9','#e67e22','#27ae60','#0e6655'],borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:['#1a3a5c','#1a5276','#7d3c00','#1a4d2e','#0b4033'],backgroundColor:['#eaf2fb','#eaf2fb','#fdf0e6','#eafaf1','#e8f8f5'],borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
   }
 })();
+}
+
+// ══ TDT V5.9 — IIFE scope (tránh xung đột với SPM charts) ══
+(function() {
+const SNAPSHOT = {"generated_at": "2026-06-03 06:15", "sources": {"bravo": {"id": "17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU", "title": "KHAIBAO_HETHONG_BRAVO", "rows": 45853, "modified": "2026-06-02 15:40"}, "tasks": {"id": "1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ", "title": "CONGVIEC_NHOM_DATA", "rows": 1065, "modified": "local snapshot"}, "ecn": {"id": "1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg", "title": "BC_THEODOI_ECN_V2", "rows": "91+", "modified": "2026-06-02 16:27"}}, "bravo": {"total": 45853, "edited": 1122, "edit_rate": 2.45, "total_edits": 1253, "date_from": "2025-10-16", "date_to": "2026-05-24", "by_month": [{"label": "2025-10", "value": 2}, {"label": "2025-11", "value": 2}, {"label": "2025-12", "value": 4749}, {"label": "2026-01", "value": 30294}, {"label": "2026-02", "value": 1885}, {"label": "2026-03", "value": 2035}, {"label": "2026-04", "value": 4011}, {"label": "2026-05", "value": 2875}], "by_week": [{"label": "2025-W42", "value": 1}, {"label": "2025-W44", "value": 1}, {"label": "2025-W48", "value": 2}, {"label": "2025-W49", "value": 1}, {"label": "2025-W50", "value": 40}, {"label": "2025-W51", "value": 1598}, {"label": "2025-W52", "value": 1463}, {"label": "2026-W01", "value": 21250}, {"label": "2026-W02", "value": 1263}, {"label": "2026-W03", "value": 7758}, {"label": "2026-W04", "value": 945}, {"label": "2026-W05", "value": 739}, {"label": "2026-W06", "value": 810}, {"label": "2026-W07", "value": 481}, {"label": "2026-W08", "value": 6}, {"label": "2026-W09", "value": 574}, {"label": "2026-W10", "value": 548}, {"label": "2026-W11", "value": 495}, {"label": "2026-W12", "value": 425}, {"label": "2026-W13", "value": 439}, {"label": "2026-W14", "value": 528}, {"label": "2026-W15", "value": 577}, {"label": "2026-W16", "value": 1515}, {"label": "2026-W17", "value": 1147}, {"label": "2026-W18", "value": 375}, {"label": "2026-W19", "value": 597}, {"label": "2026-W20", "value": 1289}, {"label": "2026-W21", "value": 986}], "by_dow": [{"label": "T2", "value": 2510}, {"label": "T3", "value": 2552}, {"label": "T4", "value": 11119}, {"label": "T5", "value": 11829}, {"label": "T6", "value": 8876}, {"label": "T7", "value": 3371}, {"label": "CN", "value": 5596}], "by_hour": [{"label": "0", "value": 4271}, {"label": "1", "value": 1026}, {"label": "2", "value": 1634}, {"label": "3", "value": 2331}, {"label": "4", "value": 2945}, {"label": "5", "value": 873}, {"label": "6", "value": 2600}, {"label": "7", "value": 11607}, {"label": "8", "value": 9187}, {"label": "9", "value": 3264}, {"label": "10", "value": 875}, {"label": "11", "value": 961}, {"label": "12", "value": 754}, {"label": "13", "value": 784}, {"label": "14", "value": 574}, {"label": "15", "value": 218}, {"label": "16", "value": 1599}, {"label": "17", "value": 267}, {"label": "18", "value": 23}, {"label": "19", "value": 0}, {"label": "20", "value": 60}, {"label": "21", "value": 0}, {"label": "22", "value": 0}, {"label": "23", "value": 0}], "top_creators": [{"name": "TRẦN VĂN MẠNH", "total": 23444, "edited": 165, "edit_rate": 0.7038048114656202, "total_edits": 181, "avg_min": 6.493150684931507, "batch_days": 8}, {"name": "Không rõ", "total": 7667, "edited": 44, "edit_rate": 0.5738880918220947, "total_edits": 59, "avg_min": 1.2908163265306123, "batch_days": 11}, {"name": "NGUYỄN NGỌC PHÚ", "total": 1978, "edited": 70, "edit_rate": 3.538928210313448, "total_edits": 79, "avg_min": 18.700000000000003, "batch_days": 4}, {"name": "NGUYỄN THỊ PHƯƠNG", "total": 1934, "edited": 41, "edit_rate": 2.1199586349534645, "total_edits": 47, "avg_min": 18.391304347826086, "batch_days": 0}, {"name": "ĐẶNG THỊ HẰNG", "total": 1535, "edited": 56, "edit_rate": 3.6482084690553744, "total_edits": 102, "avg_min": 21.61904761904762, "batch_days": 1}, {"name": "PHẠM VIỆT ANH", "total": 1364, "edited": 20, "edit_rate": 1.466275659824047, "total_edits": 22, "avg_min": 25.235294117647058, "batch_days": 7}, {"name": "TRỊNH XUÂN TÙNG", "total": 1260, "edited": 20, "edit_rate": 1.5873015873015872, "total_edits": 21, "avg_min": 19.682307692307692, "batch_days": 2}, {"name": "Phạm Phương Anh", "total": 1091, "edited": 478, "edit_rate": 43.81301558203483, "total_edits": 490, "avg_min": 0.18330062610970937, "batch_days": 3}, {"name": "Đỗ Danh Khải", "total": 935, "edited": 10, "edit_rate": 1.0695187165775402, "total_edits": 14, "avg_min": 0.039019574175824176, "batch_days": 2}, {"name": "NGUYỄN THỊ TÌNH", "total": 899, "edited": 4, "edit_rate": 0.44493882091212456, "total_edits": 6, "avg_min": 16.79310344827586, "batch_days": 2}, {"name": "HÀ VIỆT ANH", "total": 595, "edited": 1, "edit_rate": 0.16806722689075632, "total_edits": 1, "avg_min": 17.666666666666668, "batch_days": 0}, {"name": "NGUYỄN THÚY HIỀN", "total": 556, "edited": 54, "edit_rate": 9.712230215827338, "total_edits": 57, "avg_min": 11.95, "batch_days": 0}, {"name": "NGUYỄN VĂN DUY", "total": 475, "edited": 18, "edit_rate": 3.789473684210526, "total_edits": 18, "avg_min": 6.153846153846154, "batch_days": 5}, {"name": "NGUYỄN THỊ NGA", "total": 440, "edited": 4, "edit_rate": 0.9090909090909091, "total_edits": 5, "avg_min": 27.2, "batch_days": 0}, {"name": "NGUYỄN THỊ HUẾ", "total": 326, "edited": 4, "edit_rate": 1.2269938650306749, "total_edits": 4, "avg_min": 7.416666666666666, "batch_days": 10}, {"name": "NGUYỄN THỊ OANH", "total": 246, "edited": 0, "edit_rate": 0.0, "total_edits": 0, "avg_min": 15.863793103448275, "batch_days": 2}, {"name": "NGUYỄN HỮU CHIẾN", "total": 225, "edited": 0, "edit_rate": 0.0, "total_edits": 0, "avg_min": 8.777777777777779, "batch_days": 3}, {"name": "NGUYỄN THỊ THƯƠNG", "total": 172, "edited": 64, "edit_rate": 37.2093023255814, "total_edits": 64, "avg_min": 4.0, "batch_days": 6}, {"name": "NGUYỄN THỊ NHẬT ANH", "total": 115, "edited": 22, "edit_rate": 19.130434782608695, "total_edits": 22, "avg_min": 15.068965517241379, "batch_days": 0}, {"name": "TRẦN VĂN HẢO", "total": 101, "edited": 23, "edit_rate": 22.77227722772277, "total_edits": 32, "avg_min": 23.5, "batch_days": 1}], "quality": [{"name": "Phạm Phương Anh", "total": 1091, "edited": 478, "edit_rate": 43.81301558203483, "total_edits": 490, "avg_min": 0.18330062610970937, "batch_days": 3}, {"name": "NGUYỄN THỊ THƯƠNG", "total": 172, "edited": 64, "edit_rate": 37.2093023255814, "total_edits": 64, "avg_min": 4.0, "batch_days": 6}, {"name": "TRẦN THỊ THU HƯƠNG", "total": 22, "edited": 8, "edit_rate": 36.36363636363637, "total_edits": 11, "avg_min": 30.88888888888889, "batch_days": 0}, {"name": "TRẦN VĂN HẢO", "total": 101, "edited": 23, "edit_rate": 22.77227722772277, "total_edits": 32, "avg_min": 23.5, "batch_days": 1}, {"name": "NGUYỄN THỊ NHẬT ANH", "total": 115, "edited": 22, "edit_rate": 19.130434782608695, "total_edits": 22, "avg_min": 15.068965517241379, "batch_days": 0}, {"name": "PHẠM THỊ HỒNG ÁNH", "total": 27, "edited": 3, "edit_rate": 11.11111111111111, "total_edits": 3, "avg_min": 9.075, "batch_days": 2}, {"name": "Nguyễn Thành Vinh", "total": 38, "edited": 4, "edit_rate": 10.526315789473685, "total_edits": 4, "avg_min": 0.1, "batch_days": 3}, {"name": "NGUYỄN ĐÌNH BÌNH", "total": 30, "edited": 3, "edit_rate": 10.0, "total_edits": 3, "avg_min": 16.5, "batch_days": 0}, {"name": "NGUYỄN THÚY HIỀN", "total": 556, "edited": 54, "edit_rate": 9.712230215827338, "total_edits": 57, "avg_min": 11.95, "batch_days": 0}, {"name": "LÊ VĂN THỦY", "total": 70, "edited": 3, "edit_rate": 4.285714285714286, "total_edits": 3, "avg_min": 21.823529411764707, "batch_days": 0}, {"name": "NGUYỄN VĂN DUY", "total": 475, "edited": 18, "edit_rate": 3.789473684210526, "total_edits": 18, "avg_min": 6.153846153846154, "batch_days": 5}, {"name": "ĐẶNG THỊ HẰNG", "total": 1535, "edited": 56, "edit_rate": 3.6482084690553744, "total_edits": 102, "avg_min": 21.61904761904762, "batch_days": 1}, {"name": "NGUYỄN NGỌC PHÚ", "total": 1978, "edited": 70, "edit_rate": 3.538928210313448, "total_edits": 79, "avg_min": 18.700000000000003, "batch_days": 4}, {"name": "NGUYỄN VĂN KHIÊM", "total": 35, "edited": 1, "edit_rate": 2.857142857142857, "total_edits": 2, "avg_min": 11.903225806451612, "batch_days": 0}, {"name": "NGUYỄN THỊ PHƯƠNG", "total": 1934, "edited": 41, "edit_rate": 2.1199586349534645, "total_edits": 47, "avg_min": 18.391304347826086, "batch_days": 0}, {"name": "KIỀU BÁ SƠN", "total": 60, "edited": 1, "edit_rate": 1.6666666666666667, "total_edits": 1, "avg_min": 24.043478260869566, "batch_days": 0}, {"name": "TRỊNH XUÂN TÙNG", "total": 1260, "edited": 20, "edit_rate": 1.5873015873015872, "total_edits": 21, "avg_min": 19.682307692307692, "batch_days": 2}, {"name": "PHẠM VIỆT ANH", "total": 1364, "edited": 20, "edit_rate": 1.466275659824047, "total_edits": 22, "avg_min": 25.235294117647058, "batch_days": 7}, {"name": "PHẠM HOÀNG ANH", "total": 74, "edited": 1, "edit_rate": 1.3513513513513513, "total_edits": 2, "avg_min": 11.777777777777779, "batch_days": 0}, {"name": "NGUYỄN THỊ HUẾ", "total": 326, "edited": 4, "edit_rate": 1.2269938650306749, "total_edits": 4, "avg_min": 7.416666666666666, "batch_days": 10}], "top_lines": [{"label": "VDC01", "value": 7003}, {"label": "VDC02", "value": 4109}, {"label": "VDC04", "value": 3006}, {"label": "FSB", "value": 1749}, {"label": "VPP01", "value": 1575}, {"label": "FAB", "value": 1445}, {"label": "BSE", "value": 1368}, {"label": "FSA", "value": 1237}, {"label": "2LE", "value": 1215}, {"label": "BSB", "value": 1210}, {"label": "BAB", "value": 1190}, {"label": "3LB", "value": 1023}, {"label": "HMD", "value": 960}, {"label": "BSA", "value": 954}, {"label": "BBC", "value": 909}, {"label": "MFD", "value": 864}, {"label": "3LE", "value": 842}, {"label": "3LA", "value": 758}, {"label": "HMI", "value": 750}, {"label": "HC2", "value": 724}], "risky_rows": [{"edits": 8, "creator": "", "last_editor": "TRẦN VĂN MẠNH", "code": "PHO-3LA-00688", "name": "( Không dùng khôi phục xử lý dữ liệu ) Phôi-FLX-3A-TKC150-CA125+CA150-NPK280-715", "line": "3LA", "created": "2025-12-20", "modified": "2026-05-20"}, {"edits": 4, "creator": "TRẦN VĂN HẢO", "last_editor": "TRẦN VĂN HẢO", "code": "WIN-KHD-00002", "name": "DELL-2YPMJ-13-Đen-R1", "line": "KHD", "created": "2026-02-27", "modified": "2026-05-22"}, {"edits": 4, "creator": "Đỗ Danh Khải", "last_editor": "Nguyễn Văn Việt", "code": "VER-FSE-00021", "name": "27805313-02-INS-VNF", "line": "FSE", "created": "2026-04-17", "modified": "2026-05-23"}, {"edits": 4, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00037", "name": "0203032718C-Trắng", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 4, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00044", "name": "0203032718B-Trắng", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 4, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00045", "name": "0203032713B-Trắng", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 4, "creator": "NGUYỄN NGỌC PHÚ", "last_editor": "NGUYỄN NGỌC PHÚ", "code": "TIN-MTG-00620", "name": "IB FO101C 522000749-01-1+2", "line": "MTG", "created": "2026-05-22", "modified": "2026-05-22"}, {"edits": 3, "creator": "", "last_editor": "Nguyễn Văn Việt", "code": "BRO-BLB-00009", "name": "D0273G001", "line": "BLB", "created": "2025-12-26", "modified": "2026-05-20"}, {"edits": 3, "creator": "", "last_editor": "TRẦN THỊ HUỆ", "code": "BRO-BLB-00012", "name": "D0275E001", "line": "BLB", "created": "2025-12-26", "modified": "2026-05-20"}, {"edits": 3, "creator": "TRẦN VĂN MẠNH", "last_editor": "NGUYỄN THỊ NGỌC NINH", "code": "VLP-05148", "name": "Vít M6x110 (Bulong M6x110)", "line": "VLP11", "created": "2025-12-29", "modified": "2026-05-22"}, {"edits": 3, "creator": "TRẦN VĂN MẠNH", "last_editor": "PHẠM VIỆT ANH", "code": "HAN-FSE-00067", "name": "PM02-005995A", "line": "FSE", "created": "2025-12-31", "modified": "2026-05-18"}, {"edits": 3, "creator": "TRẦN VĂN MẠNH", "last_editor": "PHẠM VIỆT ANH", "code": "HAN-FSE-00132", "name": "PM02-003860N", "line": "FSE", "created": "2025-12-31", "modified": "2026-05-21"}, {"edits": 3, "creator": "TRẦN VĂN MẠNH", "last_editor": "NGUYỄN THỊ NGỌC NINH", "code": "BTP-HMI-00005", "name": "GH69-44269A", "line": "HMI", "created": "2026-01-02", "modified": "2026-05-22"}, {"edits": 3, "creator": "", "last_editor": "PHẠM VIỆT ANH", "code": "PHO-5AB-01931", "name": "Phôi SBA-980X980(MINHAN125/MINHAN125/MINHAN125/MINHAN125/TKV150)", "line": "5BA", "created": "2026-01-04", "modified": "2026-05-21"}, {"edits": 3, "creator": "NGUYỄN THỊ PHƯƠNG", "last_editor": "PHẠM VIỆT ANH", "code": "LIK-FAB-00193", "name": "PACS04-0009A - OUT BOTTOM BOX", "line": "FAB", "created": "2026-02-05", "modified": "2026-05-18"}, {"edits": 3, "creator": "NGUYỄN THỊ PHƯƠNG", "last_editor": "NGUYỄN MỸ KIỂU", "code": "TIN-BSB-03941", "name": "Jupiter - 471142313 - BOX - MẶT A - 580x730", "line": "BSB", "created": "2026-02-24", "modified": "2026-05-15"}, {"edits": 3, "creator": "TRẦN VĂN HẢO", "last_editor": "TRẦN VĂN HẢO", "code": "CIN-IGC-00007", "name": "Cuộn in Gia công in giấy 1 lớp KT: 1060x1225mm (Châu Thái Sơn)", "line": "IGC", "created": "2026-03-04", "modified": "2026-05-18"}, {"edits": 3, "creator": "TRẦN VĂN HẢO", "last_editor": "TRẦN VĂN HẢO", "code": "CIN-IGC-00008", "name": "Cuộn in Gia công in giấy 1 lớp KT: 1060x1117mm (Châu Thái Sơn)", "line": "IGC", "created": "2026-03-04", "modified": "2026-05-18"}, {"edits": 3, "creator": "Phạm Phương Anh", "last_editor": "PHẠM VIỆT ANH", "code": "LIK-FSB-00451", "name": "DELL-P2725QE-BOX-3A02C2Y00(A)", "line": "FSB", "created": "2026-04-24", "modified": "2026-05-21"}, {"edits": 3, "creator": "Phạm Phương Anh", "last_editor": "PHẠM VIỆT ANH", "code": "LIK-FSB-00452", "name": "DELL-P2725D_DE_QE-3A120FM00 - Phụ kiện 1", "line": "FSB", "created": "2026-04-24", "modified": "2026-05-21"}, {"edits": 3, "creator": "Phạm Phương Anh", "last_editor": "PHẠM VIỆT ANH", "code": "LIK-FSB-00453", "name": "DELL-P2725D_DE_QE-3A120FM00 - Phụ kiện 2", "line": "FSB", "created": "2026-04-24", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "NGUYỄN NGỌC PHÚ", "code": "BGC-HMM-00028", "name": "GH69-46686A", "line": "HMM", "created": "2026-05-14", "modified": "2026-05-22"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00028", "name": "0203032717C-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00029", "name": "0203032717D-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00030", "name": "0203032712A-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00031", "name": "0203032717E-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00032", "name": "203032717-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00033", "name": "203032712-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00034", "name": "0203032717A-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}, {"edits": 3, "creator": "ĐẶNG THỊ HẰNG", "last_editor": "ĐẶNG THỊ HẰNG", "code": "KUX-HMD-00035", "name": "0203032717B-Xanh", "line": "HMD", "created": "2026-05-20", "modified": "2026-05-21"}]}, "tasks": {"total": 1065, "completed": 1065, "completion_rate": 100.0, "ontime_rate": 94.1, "late": 63, "ontime": 1002, "early": 0, "overdue_open": 0, "project_stats": [{"project": "Bảo mật Q8 (F976)", "total": 56, "late": 30, "ontime_rate": 46.42857142857143}, {"project": "SM-L715 (WATCH 9)", "total": 44, "late": 17, "ontime_rate": 61.36363636363637}, {"project": "Bảo mật H8 (F971)", "total": 34, "late": 12, "ontime_rate": 64.70588235294117}, {"project": "A176", "total": 8, "late": 2, "ontime_rate": 75.0}, {"project": "Canon", "total": 138, "late": 1, "ontime_rate": 99.27536231884058}, {"project": "X936/X930", "total": 4, "late": 1, "ontime_rate": 75.0}, {"project": "Khai báo hàng ngày", "total": 383, "late": 0, "ontime_rate": 100.0}, {"project": "Basic", "total": 126, "late": 0, "ontime_rate": 100.0}, {"project": "Hanwha", "total": 101, "late": 0, "ontime_rate": 100.0}, {"project": "KUANXIN", "total": 74, "late": 0, "ontime_rate": 100.0}, {"project": "Kinh đô", "total": 31, "late": 0, "ontime_rate": 100.0}, {"project": "A276", "total": 13, "late": 0, "ontime_rate": 100.0}, {"project": "Dream plastic", "total": 12, "late": 0, "ontime_rate": 100.0}, {"project": "Basic International", "total": 12, "late": 0, "ontime_rate": 100.0}, {"project": "R540", "total": 5, "late": 0, "ontime_rate": 100.0}, {"project": "DOOSUN", "total": 5, "late": 0, "ontime_rate": 100.0}, {"project": "BASIC", "total": 4, "late": 0, "ontime_rate": 100.0}, {"project": "Túi giấy", "total": 3, "late": 0, "ontime_rate": 100.0}, {"project": "Hàng test", "total": 2, "late": 0, "ontime_rate": 100.0}, {"project": "SYV", "total": 2, "late": 0, "ontime_rate": 100.0}], "group_stats": [{"group": "Khai báo hệ thống khách hàng", "total": 98, "late": 61, "ontime_rate": 37.755102040816325}, {"group": "Cập nhật hồ sơ mẫu", "total": 22, "late": 1, "ontime_rate": 95.45454545454545}, {"group": "XD Tiêu chuẩn", "total": 3, "late": 1, "ontime_rate": 66.66666666666667}, {"group": "Khai báo hệ thống mới", "total": 645, "late": 0, "ontime_rate": 100.0}, {"group": "XD định mức", "total": 69, "late": 0, "ontime_rate": 100.0}, {"group": "Khai báo hệ thống sửa", "total": 66, "late": 0, "ontime_rate": 100.0}, {"group": "Xây dựng tc đóng gói", "total": 58, "late": 0, "ontime_rate": 100.0}, {"group": "Cập nhật tiêu chuẩn đóng gói", "total": 56, "late": 0, "ontime_rate": 100.0}, {"group": "Cập nhật thông tin ECN", "total": 39, "late": 0, "ontime_rate": 100.0}, {"group": "Hoàn thiện hồ sơ KH", "total": 5, "late": 0, "ontime_rate": 100.0}, {"group": "Khai báo hệ thống", "total": 1, "late": 0, "ontime_rate": 100.0}, {"group": "Cập nhật dữ liệu NVL", "total": 1, "late": 0, "ontime_rate": 100.0}, {"group": "", "total": 1, "late": 0, "ontime_rate": 100.0}, {"group": "Bổ sung thông tin khai báo", "total": 1, "late": 0, "ontime_rate": 100.0}], "pic_stats": [{"name": "TRẦN THỊ THU HƯƠNG", "tasks": 74, "late": 57, "ontime_rate": 22.972972972972972}, {"name": "TÔ THỊ MAI", "tasks": 66, "late": 6, "ontime_rate": 90.9090909090909}, {"name": "NGUYỄN NGỌC PHÚ", "tasks": 280, "late": 0, "ontime_rate": 100.0}, {"name": "ĐẶNG THỊ HẰNG", "tasks": 271, "late": 0, "ontime_rate": 100.0}, {"name": "PHẠM THỊ HỒNG ÁNH", "tasks": 172, "late": 0, "ontime_rate": 100.0}, {"name": "NGUYỄN THÚY HIỀN", "tasks": 138, "late": 0, "ontime_rate": 100.0}, {"name": "NGUYỄN THỊ TÌNH", "tasks": 64, "late": 0, "ontime_rate": 100.0}], "late_tasks": [{"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46690A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-18", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46690A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46690A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46783A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46783A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46783A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46750A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46750A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46750A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-19", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46593A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46593A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46593A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46595B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46595B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46595B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46595A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46595A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46595A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-16", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46593B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46593B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46593B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46496A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46496A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46496A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-21", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46495A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46495A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46495A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46494B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46494B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46494B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46494A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46494A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46494A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46493B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46493B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46493B", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46493A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46493A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật Q8 (F976)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46493A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46687A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46687A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46687A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46688A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46688A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH69-46688A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46776A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46776A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46776A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46775A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46775A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46775A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46531A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46531A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46531A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46530A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46530A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Bảo mật H8 (F971)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên trọng điểm", "content": "GH69-46530A", "pic": "TRẦN THỊ THU HƯƠNG", "due": "2026-05-14", "actual": "2026-05-22", "alert": "Hoàn thành sau hạn"}, {"project": "Canon", "group": "Cập nhật hồ sơ mẫu", "priority": "Ưu tiên trọng điểm", "content": "RX1-7434-000_002-_T1_G295", "pic": "TÔ THỊ MAI", "due": "2026-12-05", "actual": "2026-05-13", "alert": "Hoàn thành sau hạn"}, {"project": "X936/X930", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH90-72929A", "pic": "TÔ THỊ MAI", "due": "2026-05-13", "actual": "2026-05-15", "alert": "Hoàn thành sau hạn"}, {"project": "A176", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH68-57672C", "pic": "TÔ THỊ MAI", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "A176", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH68-57672C", "pic": "TÔ THỊ MAI", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "Khai báo hệ thống khách hàng", "priority": "Ưu tiên 1", "content": "GH90-72666A", "pic": "TÔ THỊ MAI", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}, {"project": "SM-L715 (WATCH 9)", "group": "XD Tiêu chuẩn", "priority": "Ưu tiên 1", "content": "GH90-72666A", "pic": "TÔ THỊ MAI", "due": "2026-05-15", "actual": "2026-05-18", "alert": "Hoàn thành sau hạn"}]}, "ecn": {"total": 186, "legacy_total_display": "91+", "risk_inventory": 1492, "risk_item": "SSA-MLR-00154", "risk_model": "MANUAL-L500 / GH90-70262H", "risk_pic": "HÀ VIỆT ANH", "risk_factory": "GS5", "risk_due": "2026-02-23", "types": [{"label": "Dừng tại thời điểm", "value": 66}, {"label": "Sản xuất đến hết tồn", "value": 12}, {"label": "Dừng ngay lập tức", "value": 10}, {"label": "Không sử dụng", "value": 1}, {"label": "Khác", "value": 2}], "customers": [{"label": "Samsung SEV/SEVT", "value": 68}, {"label": "Canon", "value": 20}, {"label": "Tân An/Brother/ANZ", "value": 3}], "people": [{"name": "HÀ VIỆT ANH", "ecn": 68, "risk": 1492}, {"name": "NGUYỄN THỊ KHA", "ecn": 22, "risk": 0}, {"name": "PHAN THANH HẢI", "ecn": 1, "risk": 0}], "risk_rows": [{"code": "SSA-MLR-00154", "model": "MANUAL-L500 / GH90-70262H", "type": "Dừng tại thời điểm", "due": "2026-02-23", "stock": 1492, "factory": "GS5", "pic": "HÀ VIỆT ANH", "action": "Chưa có phương án xử lý"}]}, "people": [{"name": "TRẦN THỊ THU HƯƠNG", "bravo": 22, "task": 74, "late": 57, "edit_rate": 36.4, "ecn": 0, "risk_stock": 0, "score": 35}, {"name": "HÀ VIỆT ANH", "bravo": 595, "task": 0, "late": 0, "edit_rate": 0.2, "ecn": 68, "risk_stock": 1492, "score": 75}, {"name": "NGUYỄN THỊ NHẬT ANH", "bravo": 115, "task": 0, "late": 0, "edit_rate": 19.1, "ecn": 0, "risk_stock": 0, "score": 75}, {"name": "NGUYỄN THỊ THƯƠNG", "bravo": 172, "task": 0, "late": 0, "edit_rate": 37.2, "ecn": 0, "risk_stock": 0, "score": 75}, {"name": "PHẠM PHƯƠNG ANH", "bravo": 1091, "task": 0, "late": 0, "edit_rate": 43.8, "ecn": 0, "risk_stock": 0, "score": 75}, {"name": "TRẦN VĂN HẢO", "bravo": 101, "task": 0, "late": 0, "edit_rate": 22.8, "ecn": 0, "risk_stock": 0, "score": 75}, {"name": "PHẠM THỊ HỒNG ÁNH", "bravo": 27, "task": 172, "late": 0, "edit_rate": 11.1, "ecn": 0, "risk_stock": 0, "score": 82}, {"name": "NGUYỄN THÀNH VINH", "bravo": 38, "task": 0, "late": 0, "edit_rate": 10.5, "ecn": 0, "risk_stock": 0, "score": 83}, {"name": "NGUYỄN ĐÌNH BÌNH", "bravo": 30, "task": 0, "late": 0, "edit_rate": 10.0, "ecn": 0, "risk_stock": 0, "score": 84}, {"name": "NGUYỄN THÚY HIỀN", "bravo": 556, "task": 138, "late": 0, "edit_rate": 9.7, "ecn": 0, "risk_stock": 0, "score": 85}, {"name": "TÔ THỊ MAI", "bravo": 3, "task": 66, "late": 6, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 88}, {"name": "CHU TIẾN MẠNH", "bravo": 7, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "HOÀNG VĂN TUẤN", "bravo": 2, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "LÃ THỊ YẾN", "bravo": 5, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "LÊ VĂN THỦY", "bravo": 70, "task": 0, "late": 0, "edit_rate": 4.3, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "NGUYỄN NHƯ THANH", "bravo": 1, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "NGUYỄN VĂN VIỆT", "bravo": 3, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "PHAN THANH HẢI", "bravo": 0, "task": 0, "late": 0, "edit_rate": 0, "ecn": 1, "risk_stock": 0, "score": 95}, {"name": "TRẦN THỊ HUỆ", "bravo": 3, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "ĐỖ THẾ ANH HÀO", "bravo": 8, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 95}, {"name": "NGUYỄN VĂN DUY", "bravo": 475, "task": 0, "late": 0, "edit_rate": 3.8, "ecn": 0, "risk_stock": 0, "score": 96}, {"name": "NGUYỄN NGỌC PHÚ", "bravo": 1978, "task": 280, "late": 0, "edit_rate": 3.5, "ecn": 0, "risk_stock": 0, "score": 97}, {"name": "ĐẶNG THỊ HẰNG", "bravo": 1535, "task": 271, "late": 0, "edit_rate": 3.6, "ecn": 0, "risk_stock": 0, "score": 97}, {"name": "NGUYỄN VĂN KHIÊM", "bravo": 35, "task": 0, "late": 0, "edit_rate": 2.9, "ecn": 0, "risk_stock": 0, "score": 98}, {"name": "HÀ HOÀNG CÔNG", "bravo": 20, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "KHÔNG RÕ", "bravo": 7667, "task": 0, "late": 0, "edit_rate": 0.6, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "KIỀU BÁ SƠN", "bravo": 60, "task": 0, "late": 0, "edit_rate": 1.7, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN HỮU CHIẾN", "bravo": 225, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN THỊ HUẾ", "bravo": 326, "task": 0, "late": 0, "edit_rate": 1.2, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN THỊ KHA", "bravo": 0, "task": 0, "late": 0, "edit_rate": 0, "ecn": 22, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN THỊ NGA", "bravo": 440, "task": 0, "late": 0, "edit_rate": 0.9, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN THỊ OANH", "bravo": 246, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN THỊ PHƯƠNG", "bravo": 1934, "task": 0, "late": 0, "edit_rate": 2.1, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "NGUYỄN THỊ TÌNH", "bravo": 899, "task": 64, "late": 0, "edit_rate": 0.4, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "PHẠM HOÀNG ANH", "bravo": 74, "task": 0, "late": 0, "edit_rate": 1.4, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "PHẠM VIỆT ANH", "bravo": 1364, "task": 0, "late": 0, "edit_rate": 1.5, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "TRẦN VĂN MẠNH", "bravo": 23444, "task": 0, "late": 0, "edit_rate": 0.7, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "TRỊNH XUÂN TÙNG", "bravo": 1260, "task": 0, "late": 0, "edit_rate": 1.6, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "TẠ VĂN HẢO", "bravo": 48, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "VŨ MINH HIẾU", "bravo": 39, "task": 0, "late": 0, "edit_rate": 0.0, "ecn": 0, "risk_stock": 0, "score": 100}, {"name": "ĐỖ DANH KHẢI", "bravo": 935, "task": 0, "late": 0, "edit_rate": 1.1, "ecn": 0, "risk_stock": 0, "score": 100}], "actions": [{"level": "P0", "issue": "ECN SSA-MLR-00154 còn tồn 1.492 pcs sau hạn dừng", "owner": "HÀ VIỆT ANH + GĐ CN", "deadline": "24h", "output": "Phương án xử lý tồn kho: dùng tiếp / đổi version / hủy / thương lượng KH"}, {"level": "P0", "issue": "TRẦN THỊ THU HƯƠNG 57/57 task trễ", "owner": "Trưởng BP DLCN", "deadline": "24h", "output": "RCA + quyết định phân tải/hỗ trợ kỹ thuật"}, {"level": "P1", "issue": "KPI đúng hạn 94,1% < 98%", "owner": "Trưởng BP DLCN + GĐ CN", "deadline": "3 ngày", "output": "RCA nhóm Khai báo hệ thống KH; phân loại lỗi khách quan/chủ quan"}, {"level": "P1", "issue": "Chất lượng khai báo Bravo 97,6%, chưa đạt 98%", "owner": "Data Owner + IT Bravo", "deadline": "7 ngày", "output": "Audit log lỗi ERP + danh sách nhân sự/cột dữ liệu cần coaching"}, {"level": "P1", "issue": "Dự án AppSheet PLM / ECIMS / MPS chưa có task live", "owner": "Trưởng BP DLCN", "deadline": "7 ngày", "output": "Bổ sung tracker với owner/deadline/gate nghiệm thu"}, {"level": "P2", "issue": "Chuẩn hóa Data Contract và rule cảnh báo tự động", "owner": "IT/Data Owner", "deadline": "15 ngày", "output": "Google Sheet/API đọc được bởi dashboard; RAG tự động"}, {"level": "P2", "issue": "Bổ sung đơn giá/thành tiền vào ECN", "owner": "ECN PIC + KT giá thành", "deadline": "15 ngày", "output": "Giá trị rủi ro tài chính ECN hàng tháng"}]};
+const LIVE_SOURCES = {
+  bravo: {id:'17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU', name:'Bravo khai báo hệ thống'},
+  tasks: {id:'1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ', name:'Công việc hằng ngày'},
+  ecn: {id:'1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', name:'ECN thay đổi sản phẩm'}
+};
+let CURRENT = SNAPSHOT;
+let currentActions = [];
+function fmt(n){ if(n===undefined||n===null||n==='') return '--'; if(typeof n==='string') return n; return Number(n).toLocaleString('vi-VN'); }
+function pct(n,d=1){ if(n===undefined||n===null||isNaN(n)) return '--'; return Number(n).toFixed(d).replace('.',',')+'%'; }
+function esc(s){ return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m])); }
+function norm(s){ return String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim(); }
+function setText(sel,txt){ const el=document.querySelector(sel); if(el) el.textContent=txt; }
+function setHTML(sel,html){ const el=document.querySelector(sel); if(el) el.innerHTML=html; }
+function healthScore(s){
+  const t=s.tasks||{}, b=s.bravo||{}, e=s.ecn||{};
+  const completion=Math.min(100,t.completion_rate||0);
+  const ontime=Math.min(100,t.ontime_rate||0);
+  const quality=Math.max(0,100-(b.edit_rate||0)*10);
+  const ecnScore=(e.risk_inventory||0)>0?35:100;
+  return Math.round(completion*0.25+ontime*0.30+quality*0.25+ecnScore*0.20);
+}
+function renderMetrics(s){
+  const t=s.tasks,b=s.bravo,e=s.ecn;
+  const vals=[fmt(t.total_log_rows||t.total),pct(t.completion_rate,0),pct(t.ontime_rate,1),fmt(t.late),fmt(b.total),fmt(e.risk_inventory)];
+  const subs=[`${fmt(t.project_stats?.length||27)} dự án / khách hàng`,`${fmt(t.completed)}/${fmt(t.total_log_rows||t.total)} task`,`Target ≥ 98% → ${(t.ontime_rate||0)>=98?'đạt':'chưa đạt'}`,`${t.group_stats?.[0]?.late?fmt(t.group_stats[0].late):'61'} thuộc KB hệ thống KH`,`${b.date_from||''} → ${b.date_to||''}`,`pcs · ${e.risk_item||''}`];
+  document.querySelectorAll('#kpi .metric .mval').forEach((el,i)=>el.textContent=vals[i]||'--');
+  document.querySelectorAll('#kpi .metric .msub').forEach((el,i)=>el.textContent=subs[i]||'');
+  const q=100-(b.edit_rate||0); const h=healthScore(s);
+  setHTML('.health .score', `${h}<small>/100</small>`);
+  setText('.health h2', h>=85?'Điểm điều hành: XANH / ổn định':h>=70?'Điểm điều hành: VÀNG ĐẬM / Cận Đỏ':'Điểm điều hành: ĐỎ / cần can thiệp ngay');
+  setText('.health p', `Điểm tổng hợp từ 3 nguồn: hoàn thành ${pct(t.completion_rate,0)}, đúng hạn ${pct(t.ontime_rate,1)}, chất lượng Bravo ${pct(100-(b.edit_rate||0),1)} và ECN tồn kho ${fmt(e.risk_inventory)} pcs.`);
+  const p0=(s.actions||[]).filter(a=>(a.level||a.p)==='P0').length, p1=(s.actions||[]).filter(a=>(a.level||a.p)==='P1').length;
+  const healthBadge=document.querySelector('.health div[style*="margin-top:10px"]'); if(healthBadge) healthBadge.innerHTML=`<span class="badge b-red">P0: ${p0} việc</span> <span class="badge b-yellow">P1: ${p1} việc</span>`;
+  const insight=document.querySelectorAll('#kpi .grid.g4 .card');
+  if(insight[0]) insight[0].innerHTML=`<b>Chất lượng khai báo ERP:</b> ${pct(100-(b.edit_rate||0),1)} đúng lần đầu; còn ${fmt(b.edited)} mã có sửa / ${fmt(b.total)} mã.`;
+  if(insight[1]) insight[1].innerHTML=`<b>Điểm nghẽn:</b> ${esc(t.group_stats?.[0]?.group||'Khai báo hệ thống khách hàng')} chiếm ${fmt(t.group_stats?.[0]?.late||61)} task trễ. Cần tách khách quan/chủ quan.`;
+  if(insight[2]) insight[2].innerHTML=`<b>Rủi ro tài chính:</b> ECN ${esc(e.risk_item)} còn ${fmt(e.risk_inventory)} pcs; cần bổ sung đơn giá/thành tiền để lượng hóa.`;
+  if(insight[3]) insight[3].innerHTML=`<b>Dữ liệu nhân sự:</b> ${fmt((s.people||[]).length)} người có record từ Bravo/Task/ECN. Score phải dựa trên volume + đúng hạn + chất lượng + rủi ro.`;
+}
+function renderCommandQuestions(s){
+  const t=s.tasks,b=s.bravo,e=s.ecn;
+  const qcards=document.querySelectorAll('.qcard ul');
+  if(qcards[0]) qcards[0].innerHTML=`<li>Phương án xử lý ${fmt(e.risk_inventory)} pcs ECN ${esc(e.risk_item)}.</li><li>RCA nhóm ${esc(t.group_stats?.[0]?.group||'KB hệ thống KH')} trễ ${fmt(t.group_stats?.[0]?.late||61)} task.</li><li>Quyết định KPI: trễ do khách quan hay năng lực nội bộ.</li>`;
+  const riskPeople=(s.people||[]).filter(p=>p.late>0||p.edit_rate>8||p.risk_stock>0).slice(0,3).map(p=>`<li>${esc(p.name)}: ${p.late?fmt(p.late)+' task trễ':p.risk_stock?fmt(p.risk_stock)+' pcs ECN':pct(p.edit_rate,1)+' mã sửa'}.</li>`).join('');
+  if(qcards[1]) qcards[1].innerHTML=riskPeople;
+  const best=(s.people||[]).filter(p=>p.score>=95&&p.task>0).slice(0,3).map(p=>esc(p.name)).join(', ');
+  if(qcards[2]) qcards[2].innerHTML=`<li>${fmt(t.completed)}/${fmt(t.total_log_rows||t.total)} task đã hoàn thành.</li><li>${best||'Nhóm có score cao'} là nhóm ổn định.</li><li>Bravo có ${fmt(b.total)} mã được ghi nhận.</li>`;
+  if(qcards[3]) qcards[3].innerHTML=`<li>Thiếu audit log lỗi ERP theo tháng.</li><li>Thiếu owner xử lý tồn kho ECN tách khỏi người khai báo.</li><li>Cần chuẩn hóa Project Task Log cho PLM/ECIMS/MPS.</li>`;
+}
+function actionNormalize(a){ return {p:a.level||a.p||'P2', issue:a.issue||'', act:a.act||a.output||'', owner:a.owner||'', due:a.deadline||a.due||'', out:a.output||'', close:a.close||'Có bằng chứng đóng việc / RAG chuyển Green'}; }
+function renderActions(rows){
+ currentActions=rows.map(actionNormalize);
+ const tbody=document.querySelector('#actionTable tbody'); if(!tbody) return; tbody.innerHTML='';
+ currentActions.forEach(r=>{ const tr=document.createElement('tr');
+  tr.innerHTML=`<td><span class="priority ${r.p.toLowerCase()}">${esc(r.p)}</span></td><td><b>${esc(r.issue)}</b></td><td>${esc(r.act)}</td><td>${esc(r.owner)}</td><td>${esc(r.due)}</td><td>${esc(r.out)}</td><td>${esc(r.close)}</td>`; tbody.appendChild(tr); });
+}
+function filterActions(){ const q=norm(document.getElementById('searchAction')?.value||''); const p=document.getElementById('prioFilter')?.value||''; const rows=currentActions.filter(a=>(!p||a.p===p)&&(!q||norm(Object.values(a).join(' ')).includes(q))); const tbody=document.querySelector('#actionTable tbody'); tbody.innerHTML=''; rows.forEach(r=>{const tr=document.createElement('tr');tr.innerHTML=`<td><span class="priority ${r.p.toLowerCase()}">${esc(r.p)}</span></td><td><b>${esc(r.issue)}</b></td><td>${esc(r.act)}</td><td>${esc(r.owner)}</td><td>${esc(r.due)}</td><td>${esc(r.out)}</td><td>${esc(r.close)}</td>`;tbody.appendChild(tr);}); }
+function resetActions(){ const s=document.getElementById('searchAction'); if(s)s.value=''; const p=document.getElementById('prioFilter'); if(p)p.value=''; renderActions(CURRENT.actions||[]); }
+function grade(p){ if(p.risk_stock>0||p.late>30) return ['red','P0']; if(p.edit_rate>15||p.late>0) return ['yellow','B-/Risk']; if(p.score>=98) return ['green','A+']; if(p.score>=95) return ['green','A']; return ['yellow','B']; }
+function renderPeople(s){
+  const people=(s.people||[]).slice().sort((a,b)=>{
+    const ar=(a.risk_stock>0?10000:0)+(a.late||0)*100+(a.edit_rate||0)*10;
+    const br=(b.risk_stock>0?10000:0)+(b.late||0)*100+(b.edit_rate||0)*10;
+    return br-ar || (b.task+b.bravo+b.ecn)-(a.task+a.bravo+a.ecn);
+  });
+  const selected=[...people.filter(p=>p.risk_stock>0||p.late>0||p.edit_rate>8).slice(0,4), ...people.filter(p=>p.score>=95&&p.task>0).slice(0,2)];
+  const cards=document.getElementById('peopleCards'); if(cards) cards.innerHTML=selected.map(p=>{ const [color,g]=grade(p); const ontime=p.task?Math.max(0,Math.round(100-(p.late||0)*100/p.task)):100; const quality=Math.max(0,Math.round(100-(p.edit_rate||0))); const vol=Math.min(100,Math.round(((p.task||0)+(p.bravo||0)/10+(p.ecn||0)*2)/3));
+    return `<div class="card ${color}"><div class="person"><div><div class="pname">${esc(p.name)}</div><div class="pmeta">${fmt(p.task)} task · ${fmt(p.late)} trễ · ${fmt(p.bravo)} mã Bravo · ${fmt(p.ecn)} ECN</div></div><span class="badge b-${color==='red'?'red':color==='green'?'green':'yellow'}">${g}</span></div><div class="bars"><div class="barline"><span>Volume</span><div class="track"><div class="fill blue" style="width:${vol}%"></div></div><b>${vol}</b></div><div class="barline"><span>Đúng hạn</span><div class="track"><div class="fill ${ontime<80?'red':ontime<95?'yellow':''}" style="width:${ontime}%"></div></div><b>${ontime}</b></div><div class="barline"><span>Chất lượng</span><div class="track"><div class="fill ${quality<85?'red':quality<98?'yellow':''}" style="width:${quality}%"></div></div><b>${quality}</b></div></div></div>`;
+  }).join('');
+  const tbody=document.querySelector('#peopleTable tbody'); if(tbody) tbody.innerHTML=(s.people||[]).slice().sort((a,b)=>a.score-b.score).map(p=>`<tr><td><b>${esc(p.name)}</b></td><td>${fmt(p.bravo)}</td><td>${fmt(p.task)}</td><td>${fmt(p.late)}</td><td>${pct(p.edit_rate,1)}</td><td>${fmt(p.ecn)}</td><td>${fmt(p.risk_stock)}</td><td><span class="badge ${p.score<70?'b-red':p.score<90?'b-yellow':'b-green'}">${fmt(p.score)}</span></td></tr>`).join('');
+  setText('#peopleCount', `${fmt((s.people||[]).length)} người`);
+}
+function renderSourceTables(s){
+  setHTML('#srcBravo', `ID: <b>${esc(s.sources?.bravo?.id||LIVE_SOURCES.bravo.id)}</b><br>Rows snapshot: <b>${fmt(s.bravo.total)}</b> · Mã sửa: <b>${fmt(s.bravo.edited)}</b> · Tỷ lệ sửa: <b>${pct(s.bravo.edit_rate,2)}</b>`);
+  setHTML('#srcTasks', `ID: <b>${esc(s.sources?.tasks?.id||LIVE_SOURCES.tasks.id)}</b><br>Rows snapshot: <b>${fmt(s.tasks.total_log_rows||s.tasks.total)}</b> · Hoàn thành: <b>${pct(s.tasks.completion_rate,1)}</b> · Đúng hạn: <b>${pct(s.tasks.ontime_rate,1)}</b>`);
+  setHTML('#srcEcn', `ID: <b>${esc(s.sources?.ecn?.id||LIVE_SOURCES.ecn.id)}</b><br>ECN: <b>${fmt(s.ecn.legacy_total_display||s.ecn.total)}</b> · Tồn rủi ro: <b>${fmt(s.ecn.risk_inventory)} pcs</b> · PIC: <b>${esc(s.ecn.risk_pic)}</b>`);
+  setHTML('#taskSourceTable tbody', (s.tasks.project_stats||[]).slice(0,12).map(r=>`<tr><td><b>${esc(r.project||r.group||r.label)}</b></td><td>${fmt(r.total)}</td><td>${fmt(r.late)}</td><td>${pct((r.late||0)*100/Math.max(1,r.total||1),1)}</td><td>${(r.late||0)>0?'Cần RCA':'Ổn định'}</td></tr>`).join(''));
+  setHTML('#bravoSourceTable tbody', (s.bravo.quality||s.bravo.top_creators||[]).slice(0,12).map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${fmt(r.total)}</td><td>${fmt(r.edited)}</td><td>${pct(r.edit_rate,1)}</td><td>${fmt(r.total_edits)}</td></tr>`).join(''));
+  setHTML('#ecnSourceTable tbody', (s.ecn.risk_rows||[]).map(r=>`<tr><td><b>${esc(r.code)}</b></td><td>${esc(r.model)}</td><td>${esc(r.type)}</td><td>${esc(r.due)}</td><td><b>${fmt(r.stock)}</b></td><td>${esc(r.factory)}</td><td>${esc(r.pic)}</td><td>${esc(r.action)}</td></tr>`).join(''));
+}
+
+function renderAIAnalysis(s){
+  const b=s.bravo||{}, t=s.tasks||{}, e=s.ecn||{};
+  const topGroup=(t.group_stats||[])[0]||{group:'Khai báo hệ thống khách hàng',total:98,late:61,ontime_rate:37.8};
+  const topProject=(t.project_stats||[])[0]||{project:'Bảo mật Q8 (F976)',total:56,late:30,ontime_rate:46.4};
+  const riskPerson=(s.people||[]).slice().sort((a,b)=>((b.risk_stock>0?10000:0)+(b.late||0)*100+(b.edit_rate||0)*10)-((a.risk_stock>0?10000:0)+(a.late||0)*100+(a.edit_rate||0)*10))[0]||{};
+  const latePerson=(s.people||[]).filter(p=>(p.late||0)>0).sort((a,b)=>(b.late||0)-(a.late||0))[0]||{};
+  const qualityRisk=(b.quality||[]).filter(x=>(x.total||0)>=20).sort((a,b)=>(b.edit_rate||0)-(a.edit_rate||0))[0]||{};
+  const topQuality=(b.quality||[]).filter(x=>(x.total||0)>=100 && (x.edit_rate||0)<2).sort((a,b)=>(a.edit_rate||0)-(b.edit_rate||0))[0]||{};
+  const lateShare=(topGroup.late||0)*100/Math.max(1,t.late||1);
+  const firstTimeRight=100-(b.edit_rate||0);
+  const ecnRiskDays = e.risk_due ? Math.max(0, Math.round((new Date() - new Date(e.risk_due+'T00:00:00'))/86400000)) : null;
+
+  setHTML('#aiExecutiveSummary', `<b>Kết luận AI:</b> Hệ thống đang <b>hoàn thành việc</b> nhưng chưa đạt chuẩn <b>đúng hạn và kiểm soát rủi ro</b>. Điểm nghẽn lớn nhất là <b>${esc(topGroup.group)}</b> với <b>${fmt(topGroup.late)} / ${fmt(t.late)} task trễ</b> (${pct(lateShare,1)} tổng task trễ). Rủi ro khẩn nhất là ECN <b>${esc(e.risk_item)}</b> còn <b>${fmt(e.risk_inventory)} pcs</b> sau hạn. Chất lượng Bravo đạt <b>${pct(firstTimeRight,1)} đúng lần đầu</b>, sát ngưỡng nhưng chưa đủ an toàn.`);
+
+  const cardData=[
+    ['#aiBottleneck','AI Bottleneck','red',
+      [`${fmt(t.late)} task trễ`, `${pct(t.ontime_rate,1)} đúng hạn`, `${pct(lateShare,1)} trễ do 1 nhóm`],
+      `Nhóm <b>${esc(topGroup.group)}</b> là bottleneck vận hành: ${fmt(topGroup.late)}/${fmt(topGroup.total)} task trễ, tỷ lệ đúng hạn chỉ ${pct(topGroup.ontime_rate,1)}. Dự án nặng nhất: <b>${esc(topProject.project)}</b> với ${fmt(topProject.late)} task trễ.`,
+      `RCA theo 3 lớp: khách hàng/PLM-ECIMS delay · thiếu spec đầu vào · phân tải nội bộ.`],
+    ['#aiPeopleRisk','AI People Risk','yellow',
+      [`${esc(latePerson.name||'PIC rủi ro')}`, `${fmt(latePerson.late||0)} task trễ`, `Score ${fmt(latePerson.score||0)}`],
+      `AI không kết luận cảm tính về cá nhân. Dữ liệu cho thấy <b>${esc(latePerson.name||'PIC rủi ro')}</b> có ${fmt(latePerson.late||0)} task trễ trên ${fmt(latePerson.task||0)} task; cần kiểm tra tải việc, dependency từ khách hàng và quyền xử lý trên hệ thống.`,
+      `1:1 trong 24h, tách lỗi khách quan/chủ quan, chốt phân tải lại nếu quá tải.`],
+    ['#aiEcnAlert','AI ECN Alert','red',
+      [`${esc(e.risk_item)}`, `${fmt(e.risk_inventory)} pcs`, `${esc(e.risk_pic)}`],
+      `ECN <b>${esc(e.risk_item)}</b> / ${esc(e.risk_model)} còn tồn <b>${fmt(e.risk_inventory)} pcs</b>, PIC ${esc(e.risk_pic)}. ${ecnRiskDays!==null?`Đã quá hạn khoảng <b>${fmt(ecnRiskDays)} ngày</b> so với ${esc(e.risk_due)}.`:''} Dữ liệu chưa có phương án xử lý và giá trị tài chính.`,
+      `Chốt ngay: dùng tiếp/đổi version/hủy/thương lượng KH; bổ sung đơn giá × tồn kho.`],
+    ['#aiQualityAudit','AI Quality Audit','green',
+      [`${pct(firstTimeRight,1)} FTR Bravo`, `${fmt(b.edited)} mã sửa`, `${pct(b.edit_rate,2)} sửa`],
+      `Bravo có ${fmt(b.total)} mã, ${fmt(b.edited)} mã sửa, tổng ${fmt(b.total_edits)} lần sửa. Người cần audit nổi bật: <b>${esc(qualityRisk.name||'--')}</b> ${pct(qualityRisk.edit_rate||0,1)} sửa. Người chất lượng tốt: <b>${esc(topQuality.name||'--')}</b> ${pct(topQuality.edit_rate||0,1)} sửa.`,
+      `Loại trừ batch import trước khi xếp hạng; audit 20 mẫu/người với nhóm sửa >8%.`],
+    ['#aiMissingProject','AI Missing Project','blue',
+      ['PLM AppSheet', 'ECIMS KH', 'MPS KH'],
+      `AI phát hiện các dự án trọng điểm chưa có task live rõ trong tracker tháng: <b>PLM AppSheet</b>, <b>ECIMS KH</b>, <b>MPS KH</b>. Đây là rủi ro quản trị: dự án có tên nhưng không có owner/deadline/gate thì dashboard không điều hành được.`,
+      `Bắt buộc mở task log: Owner · deadline · gate nghiệm thu · RAG · blocker.`],
+    ['#aiDecisionDraft','AI Decision Draft','purple',
+      ['2 P0', '3 P1', '7 quyết định'],
+      `AI draft các quyết định cần anh duyệt: xử lý tồn ECN, phân tải nhóm KH, chuẩn KPI khách quan/chủ quan, khóa audit Bravo, mở tracker dự án thiếu task.`,
+      `Duyệt trong daily/weekly: quyết định rõ A/B/C, không để “đang xem xét” kéo dài.`]
+  ];
+  cardData.forEach(([sel,title,color,chips,body,action])=>{
+    setHTML(sel, `<b>${esc(title)}</b><div class="ai-kpi-line">${chips.map(c=>`<span class="ai-chip ${color}">${esc(c)}</span>`).join('')}</div><div class="ai-card-body">${body}</div><div class="ai-card-action"><b>AI đề xuất:</b> ${action}</div>`);
+  });
+
+  const rows=[
+    ['Bottleneck tiến độ', `${esc(topGroup.group)}: ${fmt(topGroup.late)}/${fmt(topGroup.total)} task trễ; ${pct(topGroup.ontime_rate,1)} đúng hạn`, 'KPI đúng hạn bị kéo xuống bởi một nhóm việc duy nhất, không phải lỗi toàn bộ bộ phận.', 'RCA nhóm KB hệ thống KH; tách lỗi khách quan/chủ quan; thiết lập SLA đầu vào.', 'Trưởng BP DLCN + GĐ CN', '3 ngày'],
+    ['Rủi ro nhân sự', `${esc(latePerson.name||'--')}: ${fmt(latePerson.late||0)} task trễ / ${fmt(latePerson.task||0)} task`, 'Có dấu hiệu quá tải/phụ thuộc hệ thống KH/thiếu điều kiện đầu vào. Không nên quy lỗi cá nhân trước khi RCA.', '1:1, review workload, phân bổ backup, chuẩn hóa checklist nhận yêu cầu.', 'Trưởng BP DLCN', '24h'],
+    ['ECN tồn kho', `${esc(e.risk_item)} còn ${fmt(e.risk_inventory)} pcs; hạn ${esc(e.risk_due)}`, 'Rủi ro aging/hủy hàng/không kiểm soát version; dữ liệu thiếu phương án và giá trị tài chính.', 'Yêu cầu PIC nhập phương án xử lý, đơn giá, thành tiền, trạng thái duyệt.', `${esc(e.risk_pic||'ECN PIC')} + Kế toán GT`, '24h'],
+    ['Chất lượng Bravo', `${fmt(b.edited)} mã sửa / ${fmt(b.total)} mã; ${pct(b.edit_rate,2)} sửa`, 'Chỉ số đúng lần đầu sát ngưỡng; nhóm sửa cao có thể làm sai BOM/routing/version nếu không audit.', 'Audit 5–10% record/ngày; coaching người có tỷ lệ sửa >8%; loại batch import khỏi ranking.', 'Data Owner + IT Bravo', '7 ngày'],
+    ['Dự án thiếu task', 'PLM AppSheet / ECIMS KH / MPS KH chưa có task live rõ', 'Dự án chiến lược không nằm trong task log thì không có quản trị tiến độ thật.', 'Mở Project Task Log chuẩn: task, owner, deadline, RAG, output nghiệm thu.', 'Trưởng BP DLCN', '7 ngày'],
+    ['Quyết định quản trị', `${(s.actions||[]).filter(a=>(a.level||a.p)==='P0').length} P0; ${(s.actions||[]).filter(a=>(a.level||a.p)==='P1').length} P1`, 'Nếu không chốt quyết định, dashboard chỉ là báo cáo, không thành công cụ điều hành.', 'Đưa các quyết định vào daily/weekly; việc đỏ phải có owner và deadline mới.', 'GĐ Công nghệ', 'Daily']
+  ];
+  setHTML('#aiAnalysisTable tbody', rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''));
+
+  const roots=[
+    ['1','Thiếu chuẩn SLA đầu vào từ khách hàng/hệ thống KH', `${esc(topGroup.group)} chiếm ${pct(lateShare,1)} task trễ`, 'Lấy 10 case trễ gần nhất, check ngày nhận đủ spec và ngày hệ thống KH phản hồi'],
+    ['2','Quá tải hoặc thiếu backup ở PIC xử lý hệ thống KH', `${esc(latePerson.name||'--')} có ${fmt(latePerson.late||0)} task trễ`, 'So sánh workload/ngày, số lượng request, thời gian chờ phê duyệt và quyền thao tác'],
+    ['3','Thiếu rule ECN quá hạn còn tồn kho', `${esc(e.risk_item)} còn ${fmt(e.risk_inventory)} pcs`, 'Bổ sung trigger: Today > hạn ECN và tồn kho > 0 thì gửi cảnh báo'],
+    ['4','Chưa tách batch import khỏi năng suất thủ công Bravo', `Có batch lớn trong Bravo; ${fmt(b.total)} mã tổng`, 'Tag batch import, không dùng để đánh giá tốc độ cá nhân'],
+    ['5','Dự án chiến lược chưa bị ép vào tracker vận hành', 'PLM/ECIMS/MPS chưa có task live rõ', 'Yêu cầu mỗi dự án có tối thiểu 1 owner, 1 milestone tuần, 1 output nghiệm thu']
+  ];
+  setHTML('#aiRootCauseTable tbody', roots.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''));
+  const decisions=[
+    ['1',`Xử lý ${fmt(e.risk_inventory)} pcs ECN ${esc(e.risk_item)}`,'Ưu tiên A: thương lượng khách hàng hoặc chuyển version nếu được; B: dùng nội bộ/tái chế; C: hủy có phê duyệt','Tồn kho aging, sai version, phát sinh COPQ'],
+    ['2',`Phân tải nhóm ${esc(topGroup.group)}`,'Tách luồng Samsung/Canon; mỗi luồng có backup; request thiếu spec trả lại ngay','KPI đúng hạn tiếp tục dưới 98%'],
+    ['3','Chuẩn KPI trễ khách quan/chủ quan','KPI chính vẫn đo tổng; phụ KPI tách nguyên nhân khách quan để công bằng','Đánh giá nhân sự sai và không xử lý đúng nguyên nhân'],
+    ['4','Audit nhóm sửa Bravo cao','Audit 20 mã/người với nhóm >8% sửa; batch import không tính vào lỗi cá nhân','Sai BOM/routing/version lọt sang sản xuất'],
+    ['5','Bắt buộc tracker dự án PLM/ECIMS/MPS','Không có task live = xem như RAG vàng/đỏ tùy quá hạn','Dự án chiến lược trôi mà dashboard không cảnh báo']
+  ];
+  setHTML('#aiDecisionTable tbody', decisions.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''));
+}
+
+function renderV5(s,mode='snapshot'){ CURRENT=s; renderMetrics(s); renderCommandQuestions(s); renderActions(s.actions||[]); renderPeople(s); renderSourceTables(s); renderAIAnalysis(s); setText('#liveMode',mode.toUpperCase()); setText('#lastRefresh',new Date().toLocaleString('vi-VN')); setText('#liveStatus', mode==='live'?'Đã thử kéo live 3 nguồn. Nguồn nào bị chặn quyền sẽ tự dùng snapshot dự phòng.':'Đang dùng snapshot đã tính sẵn từ 3 nguồn.'); }
+function filterSourceTables(){ const q=norm(document.getElementById('globalSearchV5')?.value||''); ['#taskSourceTable','#bravoSourceTable','#ecnSourceTable','#peopleTable'].forEach(sel=>{ document.querySelectorAll(sel+' tbody tr').forEach(tr=>{ tr.style.display=(!q||norm(tr.textContent).includes(q))?'':'none'; }); }); }
+// CSV parsing and live summarizing
+function parseCSV(text){
+  const rows=[]; let row=[], cur='', q=false;
+  text = String(text || '').replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  for(let i=0;i<text.length;i++){
+    const c=text[i], n=text[i+1];
+    if(c==='"'){
+      if(q && n==='"'){ cur+='"'; i++; }
+      else q=!q;
+    } else if(c===',' && !q){
+      row.push(cur); cur='';
+    } else if(c==='\n' && !q){
+      row.push(cur); rows.push(row); row=[]; cur='';
+    } else {
+      cur+=c;
+    }
+  }
+  row.push(cur);
+  if(row.some(x=>String(x||'')!=='')) rows.push(row);
+  return rows;
+}
+function findHeader(rows, aliases){ for(let i=0;i<Math.min(rows.length,20);i++){ const r=rows[i].map(norm).join('|'); if(aliases.every(a=>r.includes(norm(a)))) return i; } return 0; }
+function col(headers, aliases){ const nh=headers.map(norm); for(const a of aliases){ const na=norm(a); let idx=nh.findIndex(h=>h===na||h.includes(na)||na.includes(h)); if(idx>=0) return idx; } return -1; }
+function toNum(v){ const x=String(v??'').replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,''); return x?Number(x)||0:0; }
+function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}; let edited=0,total_edits=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); if(ed>0) edited++; total_edits+=ed; byUser[user]??={name:user,total:0,edited:0,total_edits:0}; byUser[user].total++; if(ed>0) byUser[user].edited++; byUser[user].total_edits+=ed; const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.total)); return {...fallback,total:valid.length,edited,total_edits,edit_rate:edited*100/Math.max(1,valid.length),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value}))}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
+function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=col(h,['Ngày kết thúc']); const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0; data.forEach(r=>{ const st=norm(r[idxStatus]), al=norm(r[idxAlert]); const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
+function mergePeople(s){ const m={}; function get(n){ const k=norm(n).toUpperCase(); m[k]??={name:String(n||'Không rõ').trim(),bravo:0,task:0,late:0,edit_rate:0,ecn:0,risk_stock:0,score:95}; return m[k]; } (s.bravo.top_creators||[]).forEach(x=>{const p=get(x.name); p.bravo=x.total||0; p.edit_rate=x.edit_rate||0;}); (s.tasks.pic_stats||[]).forEach(x=>{const p=get(x.name||x.pic); p.task=x.total||0; p.late=x.late||0;}); (s.ecn.people||[]).forEach(x=>{const p=get(x.name); p.ecn=x.ecn||0; p.risk_stock=x.risk||0;}); Object.values(m).forEach(p=>{ const ontime=p.task?Math.max(0,100-p.late*100/p.task):100; const quality=Math.max(0,100-(p.edit_rate||0)); const risk=p.risk_stock>0?30:100; p.score=Math.round(ontime*0.35+quality*0.35+risk*0.20+Math.min(100,(p.bravo+p.task+p.ecn)/20)*0.10); }); return Object.values(m).sort((a,b)=>a.score-b.score); }
+async function fetchCSV(id){ const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&cachebust=${Date.now()}`; const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return parseCSV(await r.text()); }
+async function refreshLiveV5(){
+  const status=[]; const live=JSON.parse(JSON.stringify(SNAPSHOT));
+  try{ const rows=await fetchCSV(LIVE_SOURCES.bravo.id); live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push(`Bravo: LIVE ${rows.length} dòng`); }catch(e){ status.push('Bravo: dùng snapshot ('+e.message+')'); }
+  try{ const rows=await fetchCSV(LIVE_SOURCES.tasks.id); live.tasks=summarizeTaskRows(rows,SNAPSHOT.tasks); status.push(`Task: LIVE ${rows.length} dòng`); }catch(e){ status.push('Task: dùng snapshot ('+e.message+')'); }
+  try{ const rows=await fetchCSV(LIVE_SOURCES.ecn.id); status.push(`ECN: LIVE ${rows.length} dòng (giữ rules snapshot nếu thiếu header)`); }catch(e){ status.push('ECN: dùng snapshot ('+e.message+')'); }
+  live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
+  renderV5(live,'live'); setText('#liveStatus', status.join(' · '));
+}
+
+// ===== DLCN AI ENGINE BACKEND CONNECTOR V5.9 - EMBEDDED URL + QUEUE RUN FIX =====
+
+const DLCN_DEFAULT_ENGINE_URL = 'https://script.google.com/macros/s/AKfycbxoXcUnXM2EFQ57i8bDDNLv3WdErHlYb8X9uoShmocKJU97i80yshFXJfAHWahxFNi2_Q/exec';
+
+function engineLog(msg){
+  const el=document.getElementById('engineLog');
+  const line='['+new Date().toLocaleTimeString('vi-VN')+'] '+msg;
+  if(el) el.innerHTML = esc(line) + '<br>' + (el.innerHTML||'');
+  console.log('[DLCN AI]', msg);
+}
+function clearEngineLog(){ const el=document.getElementById('engineLog'); if(el) el.textContent='Đã xóa log.'; }
+async function testEnginePing(){
+  try{
+    setText('#engineStatus','Đang test ping AI Engine...');
+    engineLog('Bắt đầu ping Web App...');
+    const data = await fetchEngine('ping');
+    setText('#engineStatus','✅ Ping OK bằng '+(data._connect_method||'UNKNOWN')+' · '+(data.version||'no-version'));
+    engineLog('Ping OK: '+JSON.stringify({method:data._connect_method, version:data.version, generated_at:data.generated_at}).slice(0,300));
+  }catch(e){
+    setText('#engineStatus','❌ Ping lỗi: '+e.message);
+    engineLog('Ping lỗi: '+e.message);
+    alert('Ping lỗi:\n\n'+e.message);
+  }
+}
+function initEngineUrl(){
+  const saved = localStorage.getItem('DLCN_AI_ENGINE_URL') || DLCN_DEFAULT_ENGINE_URL || '';
+  const inp = document.getElementById('appScriptUrl');
+  if (inp) inp.value = saved;
+  if (saved) {
+    localStorage.setItem('DLCN_AI_ENGINE_URL', saved);
+    setText('#engineStatus','✅ V5.9 đã nhúng sẵn Web App URL. Bấm “Tải kết quả AI từ Master” để đọc dữ liệu động. Khi cần chạy lại, bấm “Chạy AI Engine ngay” để xếp lịch chạy nền.');
+    engineLog('Đã nạp sẵn Web App URL trong file V5.9.');
+  }
+}
+function saveEngineUrl(){
+  const url = (document.getElementById('appScriptUrl')?.value || '').trim();
+  if (!url) { alert('Anh cần dán Apps Script Web App URL.'); return; }
+  localStorage.setItem('DLCN_AI_ENGINE_URL', url);
+  setText('#engineStatus','Đã lưu Web App URL. Bấm “Test Ping” hoặc “Tải kết quả AI từ Master”.');
+  engineLog('Đã lưu URL: '+url);
+}
+function engineUrl(action){
+  const url = (document.getElementById('appScriptUrl')?.value || localStorage.getItem('DLCN_AI_ENGINE_URL') || DLCN_DEFAULT_ENGINE_URL || '').trim();
+  if (!url) throw new Error('Chưa có Apps Script Web App URL');
+  const sep = url.includes('?') ? '&' : '?';
+  return url + sep + 'action=' + encodeURIComponent(action || 'summary') + '&cachebust=' + Date.now();
+}
+function engineUrlWithCallback(action, cbName){
+  const url = (document.getElementById('appScriptUrl')?.value || localStorage.getItem('DLCN_AI_ENGINE_URL') || DLCN_DEFAULT_ENGINE_URL || '').trim();
+  if (!url) throw new Error('Chưa có Apps Script Web App URL');
+  const sep = url.includes('?') ? '&' : '?';
+  return url + sep + 'action=' + encodeURIComponent(action || 'summary') + '&callback=' + encodeURIComponent(cbName) + '&cachebust=' + Date.now();
+}
+function fetchEngineDirect(action){
+  return new Promise(async (resolve,reject)=>{
+    try{
+      const r = await fetch(engineUrl(action), {method:'GET', cache:'no-store', redirect:'follow'});
+      const txt = await r.text();
+      let data;
+      try { data = JSON.parse(txt.replace(/^\uFEFF/,'')); }
+      catch(parseErr){ throw new Error('Web App trả về không phải JSON hợp lệ: ' + txt.slice(0,120)); }
+      if(!data || data.ok === false) throw new Error((data && data.error) || 'AI Engine trả về lỗi');
+      data._connect_method = 'FETCH';
+      resolve(data);
+    }catch(e){ reject(e); }
+  });
+}
+function fetchEngineJSONP(action){
+  return new Promise((resolve,reject)=>{
+    const cbName = 'dlcnAIEngineCallback_' + Date.now() + '_' + Math.floor(Math.random()*100000);
+    let done = false;
+    const script = document.createElement('script');
+    const cleanup = () => { try{ delete window[cbName]; }catch(e){ window[cbName]=undefined; } if(script && script.parentNode) script.parentNode.removeChild(script); };
+    const timer = setTimeout(()=>{ if(done) return; done=true; cleanup(); reject(new Error('JSONP timeout: Web App có thể chưa hỗ trợ callback=... hoặc chưa Deploy phiên bản mới.')); }, 15000);
+    window[cbName] = (data) => {
+      if(done) return; done=true; clearTimeout(timer); cleanup();
+      if(!data || data.ok === false) reject(new Error((data && data.error) || 'AI Engine trả về lỗi'));
+      else { data._connect_method = 'JSONP'; resolve(data); }
+    };
+    try { script.src = engineUrlWithCallback(action, cbName); }
+    catch(e){ clearTimeout(timer); cleanup(); reject(e); return; }
+    script.onerror = () => { if(done) return; done=true; clearTimeout(timer); cleanup(); reject(new Error('JSONP script load error: URL sai/quyền Web App sai/hoặc response không phải JavaScript.')); };
+    document.body.appendChild(script);
+  });
+}
+async function fetchEngine(action){
+  // V5.5: Ưu tiên JSONP để đọc được từ file HTML local, sau đó fallback fetch nếu môi trường cho phép CORS.
+  const errors=[];
+  try { return await fetchEngineJSONP(action); }
+  catch(e){ errors.push('JSONP: ' + e.message); }
+  try { return await fetchEngineDirect(action); }
+  catch(e){ errors.push('FETCH: ' + e.message); }
+  throw new Error(errors.join(' | ') + ' → Web App mở trực tiếp OK nhưng dashboard không đọc được thường do Apps Script chưa bọc JSONP. Hãy cập nhật patch doGet/respond_ V1.1 rồi Deploy lại.');
+}
+async function loadEngineSummary(){
+  try{
+    setText('#engineStatus','Đang tải kết quả AI từ Master...'); engineLog('Đang tải summary từ Web App...');
+    const data = await fetchEngine('summary');
+    applyEnginePayload(data);
+    engineLog('Summary OK, sheets='+(data.sheets?Object.keys(data.sheets).join(','):'không có sheets'));
+    setText('#engineStatus','✅ Đã kết nối AI Engine bằng '+(data._connect_method||'UNKNOWN')+' · Cập nhật lúc '+(data.generated_at||new Date().toLocaleString('vi-VN'))+'.');
+  }catch(e){ engineLog('Summary lỗi: '+e.message); setText('#engineStatus','❌ Lỗi kết nối AI Engine: '+e.message); alert('Lỗi kết nối AI Engine:\n\n' + e.message); }
+}
+async function runEngineNow(){
+  try{
+    setText('#engineStatus','Đang gửi yêu cầu xếp lịch chạy AI Engine...');
+    engineLog('Gửi action=queue để tránh timeout khi Engine chạy lâu...');
+    const data = await fetchEngine('queue');
+    const msg = data.message || data.status || 'Đã xếp lịch chạy AI Engine.';
+    engineLog('Queue OK: '+JSON.stringify({status:data.status, scheduled_for:data.scheduled_for, message:msg}).slice(0,400));
+    setText('#engineStatus','✅ '+msg+' Chờ khoảng 60–90 giây rồi bấm “Tải kết quả AI từ Master”. Dashboard sẽ tự thử tải lại sau 90 giây.');
+    setTimeout(()=>{
+      engineLog('Tự động tải kết quả sau khi queue 90 giây...');
+      loadEngineSummary();
+    }, 90000);
+  }catch(e){
+    engineLog('Queue lỗi: '+e.message);
+    setText('#engineStatus','❌ Lỗi xếp lịch chạy AI Engine: '+e.message+' Nếu Engine đang chạy nền, chờ 1–2 phút rồi bấm “Tải kết quả AI từ Master”.');
+    alert('Lỗi xếp lịch chạy AI Engine:\n\n'+e.message+'\n\nNếu Apps Script báo Engine đang chạy, không bấm nhiều lần. Chờ 1–2 phút rồi tải kết quả từ Master.');
+  }
+}
+function sheetRows(payload, name){ return payload?.sheets?.[name] || []; }
+function applyEnginePayload(payload){
+  const kpi = sheetRows(payload,'FACT_DAILY_KPI');
+  const people = sheetRows(payload,'PEOPLE_SCORE');
+  const rules = sheetRows(payload,'AI_RULE_ANALYSIS');
+  const actions = sheetRows(payload,'ACTION_CENTER');
+  const decisions = sheetRows(payload,'AI_DECISION_DRAFT');
+  const llm = sheetRows(payload,'AI_LLM_SUMMARY');
+  // Update Action Center
+  if(actions.length){
+    const normalized = actions.map(a=>({level:a.priority||a.p||'P2', issue:a.issue||'', act:a.action||'', owner:a.owner||'', deadline:a.deadline||'', output:a.close_criteria||'', close:a.close_criteria||''}));
+    renderActions(normalized);
+  }
+  // Update People Score table
+  if(people.length){
+    const tbody=document.querySelector('#peopleTable tbody');
+    if(tbody) tbody.innerHTML = people.slice().sort((a,b)=>(Number(a.score)||0)-(Number(b.score)||0)).map(p=>`<tr><td><b>${esc(p.name||'')}</b></td><td>${fmt(p.bravo)}</td><td>${fmt(p.task)}</td><td>${fmt(p.late)}</td><td>${pct(Number(p.edit_rate)||0,1)}</td><td>${fmt(p.ecn)}</td><td>${fmt(p.risk_stock)}</td><td><span class="badge ${(Number(p.score)||0)<70?'b-red':(Number(p.score)||0)<90?'b-yellow':'b-green'}">${fmt(p.score)}</span></td></tr>`).join('');
+    setText('#peopleCount', `${fmt(people.length)} người · từ AI Engine`);
+  }
+  // Update AI executive summary
+  const llmText = llm?.[0]?.summary || '';
+  if(llmText) setHTML('#aiExecutiveSummary', `<b>AI Engine Summary:</b> ${esc(llmText).replace(/\n/g,'<br>')}`);
+  else if(rules.length) setHTML('#aiExecutiveSummary', `<b>AI Engine đã phân tích ${rules.length} vấn đề:</b> ` + rules.map(r=>`<span class="ai-chip ${String(r.priority).toLowerCase()==='p0'?'red':'yellow'}">${esc(r.category)} · ${esc(r.priority)}</span>`).join(' '));
+  // Update analysis tables
+  if(rules.length){
+    setHTML('#aiAnalysisTable tbody', rules.map(r=>`<tr><td>${esc(r.category)}</td><td>${esc(r.evidence||r.finding)}</td><td>${esc(r.risk)}</td><td>${esc(r.recommendation)}</td><td>${esc(r.owner)}</td><td>${esc(r.deadline)}</td></tr>`).join(''));
+    setHTML('#aiRootCauseTable tbody', rules.map((r,i)=>`<tr><td>${i+1}</td><td>${esc(r.risk)}</td><td>${esc(r.evidence)}</td><td>${esc(r.recommendation)}</td></tr>`).join(''));
+  }
+  if(decisions.length){
+    setHTML('#aiDecisionTable tbody', decisions.map(d=>`<tr><td>${esc(d.no)}</td><td>${esc(d.decision)}</td><td>${esc(d.options)}</td><td>${esc(d.risk_if_delay)}</td></tr>`).join(''));
+  }
+  // Update KPI small values when keys exist
+  const byKey={}; kpi.forEach(x=>byKey[x.key]=x);
+  if(byKey.TASK_TOTAL) document.querySelector('#kpi .metric:nth-child(1) .mval').textContent = fmt(byKey.TASK_TOTAL.value);
+  if(byKey.TASK_COMPLETION) document.querySelector('#kpi .metric:nth-child(2) .mval').textContent = pct(Number(byKey.TASK_COMPLETION.value)||0,1);
+  if(byKey.TASK_ONTIME) document.querySelector('#kpi .metric:nth-child(3) .mval').textContent = pct(Number(byKey.TASK_ONTIME.value)||0,1);
+  if(byKey.TASK_LATE) document.querySelector('#kpi .metric:nth-child(4) .mval').textContent = fmt(byKey.TASK_LATE.value);
+  if(byKey.BRAVO_TOTAL) document.querySelector('#kpi .metric:nth-child(5) .mval').textContent = fmt(byKey.BRAVO_TOTAL.value);
+  if(byKey.ECN_RISK_STOCK) document.querySelector('#kpi .metric:nth-child(6) .mval').textContent = fmt(byKey.ECN_RISK_STOCK.value);
+  setText('#liveMode','AI ENGINE');
+  setText('#lastRefresh', new Date().toLocaleString('vi-VN'));
+}
+initEngineUrl();
+
+  // Expose ra global chỉ những hàm onclick= cần gọi
+  window.SNAPSHOT = SNAPSHOT;
+  window.LIVE_SOURCES = LIVE_SOURCES;
+  window.refreshLiveV5 = refreshLiveV5;
+  window.renderV5 = renderV5;
+  window.filterSourceTables = filterSourceTables;
+  window.saveEngineUrl = saveEngineUrl;
+  window.loadEngineSummary = loadEngineSummary;
+  window.runEngineNow = runEngineNow;
+  window.testEnginePing = testEnginePing;
+  window.clearEngineLog = clearEngineLog;
+  if (typeof resetActions === 'function') window.resetActions = resetActions;
+})();
+
+// initTDT: gọi khi BP Dữ liệu tab được mở
+let _tdtInitialized = false;
+function initTDT() {
+  if (_tdtInitialized) return;
+  _tdtInitialized = true;
+  setTimeout(() => {
+    if (typeof window.renderV5 === 'function') window.renderV5(window.SNAPSHOT, 'snapshot');
+  }, 120);
 }
 
 </script>
