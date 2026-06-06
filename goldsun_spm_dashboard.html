@@ -320,6 +320,8 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   .section-title.orange { color: var(--orange); border-left-color: var(--orange-border); }
   .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
   .grid-5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 10px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(6,1fr); gap: 8px; }
+  .grid-7 { display: grid; grid-template-columns: repeat(7,1fr); gap: 7px; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 
@@ -496,6 +498,28 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .dlcn-scope .tbl-hdr-navy span { color:#1a3a5c; }
 .dlcn-scope .tbl-hdr-red   { background:linear-gradient(90deg,#fdedec,#fff5f5); border-bottom:2px solid #f5b7b1; }
 .dlcn-scope .tbl-hdr-red span   { color:#922b21; }
+
+/* ── Responsive: DLCN tab co giãn mọi thiết bị ── */
+@media (max-width:900px){
+  .grid-5,.grid-4,.grid-2{ grid-template-columns:1fr 1fr !important; }
+  .dlcn-scope .tbl-scroll{ overflow-x:auto; }
+  .dlcn-scope canvas{ max-width:100% !important; }
+  [style*="grid-template-columns:3fr 2fr"],[style*="grid-template-columns:3fr 2fr"]{
+    display:block !important; }
+  [style*="grid-template-columns:3fr 2fr"] > *{ margin-bottom:12px; }
+}
+@media (max-width:600px){
+  .grid-5,.grid-4,.grid-2{ grid-template-columns:1fr !important; }
+  .kpi-card{ min-width:0; }
+  .zone-hdr h2{ font-size:13px; }
+  .dlcn-scope .main{ padding:8px 4px; }
+  .chart-w{ overflow-x:auto; }
+}
+.dlcn-scope .main{ box-sizing:border-box; max-width:100%; overflow-x:hidden; }
+.dlcn-scope .grid-5,.dlcn-scope .grid-4,.dlcn-scope .grid-6,.dlcn-scope .grid-7{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:7px;
+}
+.dlcn-scope .tbl-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
 </style>
 
 
@@ -930,63 +954,81 @@ PEOPLE_SCORE =
 <div class="main">
 
 <!-- ══ ZONE I: KPI TỔNG QUAN ══ -->
-<div id="kpi" class="section-title">I. KPI TỔNG QUAN – THÁNG 5/2026</div>
-<div class="grid-5" style="margin-bottom:14px">
+<div id="kpi" class="section-title">I. TỔNG QUAN DỮ LIỆU<button onclick="if(window._syncDLCNAllSections)window._syncDLCNAllSections();" style="float:right;font-size:11px;padding:3px 10px;background:#1a5276;color:#fff;border:none;border-radius:4px;cursor:pointer;margin-top:-2px">🔄 Cập nhật dữ liệu</button></div>
+<div class="grid-7" style="margin-bottom:14px">
   <div class="kpi-card blue">
-    <div class="kpi-label">TỔNG CÔNG VIỆC THÁNG</div>
-    <div class="kpi-value">1.066</div>
-    <div class="kpi-sub">27 dự án / khách hàng</div>
-    <span class="kpi-target target-ok">Nhà máy GS5 – Quế Võ 1</span>
+    <div class="kpi-label">TỔNG SL CÔNG VIỆC</div>
+    <div class="kpi-value" id="dlcnV-taskTotal">--</div>
+    <div class="kpi-sub" id="dlcnS-taskTotal">-- CV | -- dự án | --</div>
+    <span class="kpi-target target-ok">Sheet: 00_Task_Schedule</span>
   </div>
   <div class="kpi-card green">
     <div class="kpi-label">TỶ LỆ HOÀN THÀNH</div>
-    <div class="kpi-value">100%</div>
-    <div class="kpi-sub">1.066 / 1.066 task đã hoàn thành</div>
-    <span class="kpi-target target-ok">✓ Đạt – KPI ≥ 95%</span>
+    <div class="kpi-value" id="dlcnV-taskComp">--</div>
+    <div class="kpi-sub" id="dlcnS-taskComp">-- / -- task kết thúc</div>
+    <span class="kpi-target target-ok">KPI ≥ 95%</span>
   </div>
   <div class="kpi-card yellow">
     <div class="kpi-label">TỶ LỆ ĐÚNG HẠN</div>
-    <div class="kpi-value">94,1%</div>
-    <div class="kpi-sub">1.003 đúng hạn / 1.066 task</div>
-    <span class="kpi-target target-miss">⚠ CHƯA ĐẠT – Target ≥ 98%</span>
+    <div class="kpi-value" id="dlcnV-taskOntime">--</div>
+    <div class="kpi-sub" id="dlcnS-taskOntime">-- đúng/trước hạn / -- CV</div>
+    <span class="kpi-target target-miss">Target ≥ 98%</span>
   </div>
   <div class="kpi-card red">
-    <div class="kpi-label">TASK TRỄ HẠN</div>
-    <div class="kpi-value">63</div>
-    <div class="kpi-sub">5,9% tổng task | 100% do TTKH Samsung</div>
+    <div class="kpi-label">HOÀN THÀNH SAU HẠN</div>
+    <div class="kpi-value" id="dlcnV-taskLate">--</div>
+    <div class="kpi-sub" id="dlcnS-taskLate">Hoàn thành sau hạn (cột T)</div>
     <span class="kpi-target target-miss">🔴 RCA ngay</span>
   </div>
-  <div class="kpi-card red" style="border-top-color:#8e24aa">
-    <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
-    <div class="kpi-value" style="color:#8e24aa">1.492</div>
-    <div class="kpi-sub">pcs SSA-MLR-00154 chưa xử lý</div>
-    <span class="kpi-target target-miss">🔴 CẦN GIẢI QUYẾT NGAY</span>
+  <div class="kpi-card green">
+    <div class="kpi-label">CẢNH BÁO XANH</div>
+    <div class="kpi-value" id="dlcnV-warnGreen">--</div>
+    <div class="kpi-sub" id="dlcnS-warnGreen">Cột S: Cảnh báo xanh</div>
+    <span class="kpi-target" style="background:#EAF5EE;color:#1B6B3A">✓ Theo dõi</span>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-label">CẢNH BÁO VÀNG</div>
+    <div class="kpi-value" id="dlcnV-warnYellow">--</div>
+    <div class="kpi-sub" id="dlcnS-warnYellow">Cột S: Cảnh báo vàng</div>
+    <span class="kpi-target" style="background:#FEF3E2;color:#D97706">⚠ Theo dõi</span>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">CẢNH BÁO QUÁ HẠN</div>
+    <div class="kpi-value" id="dlcnV-warnLate">--</div>
+    <div class="kpi-sub" id="dlcnS-warnLate">Cột S: Cảnh báo quá hạn</div>
+    <span class="kpi-target target-miss">🔴 Xử lý ngay</span>
   </div>
 </div>
 
 <!-- KPI ERP Bravo summary row -->
-<div class="grid-4" style="margin-bottom:4px">
+<div class="grid-5" style="margin-bottom:4px">
   <div class="kpi-card blue" style="padding:12px 14px">
     <div class="kpi-label">TỔNG MÃ ERP ĐÃ KHAI BÁO</div>
-    <div class="kpi-value" style="font-size:22px">45.853</div>
-    <div class="kpi-sub">10/2025 → 05/2026 | GS5+GS1+GS6</div>
+    <div class="kpi-value" id="dlcnV-bravoTotal" style="font-size:22px">45.853</div>
+    <div class="kpi-sub" id="dlcnS-bravoTotal">10/2025 → 05/2026 | GS5+GS1+GS6</div>
   </div>
   <div class="kpi-card green" style="padding:12px 14px">
     <div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div>
-    <div class="kpi-value" style="font-size:22px">97,6%</div>
-    <div class="kpi-sub">44.731/45.853 mã không cần sửa</div>
+    <div class="kpi-value" id="dlcnV-bravoQuality" style="font-size:22px">97,6%</div>
+    <div class="kpi-sub" id="dlcnS-bravoQuality">44.731/45.853 mã không cần sửa</div>
     <span class="kpi-target target-warn">⚠ Sát KPI – mục tiêu ≥ 98%</span>
   </div>
   <div class="kpi-card teal" style="padding:12px 14px">
     <div class="kpi-label">TỔNG ECN XỬ LÝ (Q1/2026)</div>
-    <div class="kpi-value" style="font-size:22px">91+</div>
-    <div class="kpi-sub">GS1 (Canon) + GS5 (Samsung) | 2 PIC</div>
+    <div class="kpi-value" id="dlcnV-ecnTotal" style="font-size:22px">91+</div>
+    <div class="kpi-sub" id="dlcnS-ecnTotal">GS1 (Canon) + GS5 (Samsung) | 2 PIC</div>
   </div>
   <div class="kpi-card yellow" style="padding:12px 14px">
     <div class="kpi-label">MÃ ERP CÓ SỬA ≥ 1 LẦN</div>
-    <div class="kpi-value" style="font-size:22px">1.122</div>
-    <div class="kpi-sub">2,4% tổng mã | Cần phân tích nguyên nhân</div>
+    <div class="kpi-value" id="dlcnV-bravoEdited" style="font-size:22px">1.122</div>
+    <div class="kpi-sub" id="dlcnS-bravoEdited">2,4% tổng mã | Cần phân tích nguyên nhân</div>
     <span class="kpi-target target-miss">⚠ Vượt mục tiêu ≤ 2%</span>
+  </div>
+  <div class="kpi-card red" style="border-top-color:#8e24aa;padding:12px 14px">
+    <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
+    <div class="kpi-value" id="dlcnV-ecnRisk" style="color:#8e24aa;font-size:22px">1.492</div>
+    <div class="kpi-sub" id="dlcnS-ecnRisk">pcs chưa xử lý</div>
+    <span class="kpi-target target-miss">🔴 CẦN GIẢI QUYẾT</span>
   </div>
 </div>
 
@@ -1177,7 +1219,9 @@ PEOPLE_SCORE =
       <option>TRẦN THỊ THU HƯƠNG</option><option>TÔ THỊ MAI</option>
     </select>
     <button class="btn-reset" onclick="resetFilter()">Reset</button>
-    <span style="font-size:11.5px;color:#566573;margin-left:auto;align-self:center">Hiển thị: <strong id="rowCount">15</strong> / 63 task trễ (mẫu đại diện)</span>
+    <button class="btn-reset" onclick="if(window._syncDLCNAllSections)window._syncDLCNAllSections();if(window._syncDLCNLateTasks)window._syncDLCNLateTasks();" style="background:#1a5276;color:#fff;border-color:#1a5276;margin-left:4px">🔄 Cập nhật LIVE</button>
+    <span id="dlcnLiveStatus" style="font-size:11px;color:#27ae60;margin-left:6px"></span>
+    <span style="font-size:11.5px;color:#566573;margin-left:auto;align-self:center">Hiển thị: <strong id="rowCount">-</strong> task trễ</span>
   </div>
   <div class="tbl-scroll">
     <table id="lateTable">
@@ -1280,9 +1324,9 @@ PEOPLE_SCORE =
 
 <div class="section-title">IX.1 – KPI TỔNG QUAN ERP KHAI BÁO</div>
 <div class="grid-4" style="margin-bottom:14px">
-  <div class="kpi-card blue"><div class="kpi-label">TỔNG MÃ ĐÃ KHAI BÁO</div><div class="kpi-value">45.853</div><div class="kpi-sub">10/2025 → 05/2026 | GS5+GS1+GS6</div></div>
-  <div class="kpi-card green"><div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div><div class="kpi-value">97,6%</div><div class="kpi-sub">44.731/45.853 mã không cần sửa</div><span class="kpi-target target-warn">⚠ Sát KPI ≥ 98%</span></div>
-  <div class="kpi-card yellow"><div class="kpi-label">MÃ CÓ SỬA ≥ 1 LẦN</div><div class="kpi-value">1.122</div><div class="kpi-sub">2,4% | 1.040 sửa 1L, 44 sửa 2L, 31 sửa 3L</div><span class="kpi-target target-miss">⚠ Cần phân tích nguyên nhân</span></div>
+  <div class="kpi-card blue"><div class="kpi-label">TỔNG MÃ ĐÃ KHAI BÁO</div><div id="dlcnV-ix1Total" class="kpi-value">45.853</div><div class="kpi-sub">10/2025 → 05/2026 | GS5+GS1+GS6</div></div>
+  <div class="kpi-card green"><div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div><div id="dlcnV-ix1Quality" class="kpi-value">97,6%</div><div class="kpi-sub">44.731/45.853 mã không cần sửa</div><span class="kpi-target target-warn">⚠ Sát KPI ≥ 98%</span></div>
+  <div class="kpi-card yellow"><div class="kpi-label">MÃ CÓ SỬA ≥ 1 LẦN</div><div id="dlcnV-ix1Edited" class="kpi-value">1.122</div><div class="kpi-sub">2,4% | 1.040 sửa 1L, 44 sửa 2L, 31 sửa 3L</div><span class="kpi-target target-miss">⚠ Cần phân tích nguyên nhân</span></div>
   <div class="kpi-card red"><div class="kpi-label">MÃ DÒNG PHỔ BIẾN NHẤT</div><div class="kpi-value">VDC01</div><div class="kpi-sub">7.003 mã – Vật liệu in (kẽm, bản in, cao su)</div></div>
 </div>
 
@@ -1352,7 +1396,7 @@ PEOPLE_SCORE =
   <div class="chart-w">
     <div class="chart-t" style="font-size:12px">% Sửa theo nhân viên – Ngưỡng KPI 2%</div>
     <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Mỗi bar = % sửa (nhãn: số sửa / tổng mã khai báo)</div>
-    <canvas id="cQual" height="208"></canvas>
+    <canvas id="cQual" height="166"></canvas>
   </div>
 </div>
 
@@ -1361,7 +1405,7 @@ PEOPLE_SCORE =
   <div class="chart-w" style="padding:16px 18px">
     <div class="chart-t" style="font-size:12px;border-left-color:#1a5276">Top 15 Mã dòng SP/NVL khai báo nhiều nhất</div>
     <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Tổng 45.853 mã | 10/2025 – 05/2026 | GS5 + GS1 + GS6</div>
-    <canvas id="cDong" height="208"></canvas>
+    <canvas id="cDong" height="125"></canvas>
   </div>
   <div class="chart-w" style="padding:16px 18px">
     <div class="chart-t" style="font-size:12px;border-left-color:#2980b9">
@@ -1370,7 +1414,7 @@ PEOPLE_SCORE =
     </div>
     <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Lấy trực tiếp từ cột "Mã công đoạn" (cột I) – Google Sheets Bravo</div>
     <div id="cdLoading" style="font-size:11px;color:#2980b9;padding:10px 0 4px">⏳ Đang tải dữ liệu từ Google Sheets...</div>
-    <canvas id="cCongDoan" height="208" style="display:none"></canvas>
+    <canvas id="cCongDoan" height="125" style="display:none"></canvas>
   </div>
 </div>
 </div>
@@ -1399,14 +1443,14 @@ PEOPLE_SCORE =
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div class="kpi-card teal" style="padding:12px 14px">
         <div class="kpi-label">TỔNG ECN XỬ LÝ</div>
-        <div class="kpi-value" style="font-size:22px">91+</div>
-        <div class="kpi-sub">Q1/2026 | 2 nhà máy | 3 PIC</div>
+        <div class="kpi-value" id="dlcnV-ecnTotal2" style="font-size:22px">91+</div>
+        <div class="kpi-sub" id="dlcnS-ecnTotal2">Q1/2026 | 2 nhà máy | 3 PIC</div>
         <span class="kpi-target target-ok">Cập nhật 100% đúng hạn</span>
       </div>
       <div class="kpi-card red" style="padding:12px 14px;border-top-color:#8e24aa">
         <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
-        <div class="kpi-value" style="color:#8e24aa;font-size:22px">1.492 pcs</div>
-        <div class="kpi-sub">SSA-MLR-00154 | MANUAL-L500</div>
+        <div class="kpi-value" id="dlcnV-ecnRisk2" style="color:#8e24aa;font-size:22px">1.492 pcs</div>
+        <div class="kpi-sub" id="dlcnS-ecnRisk2">SSA-MLR-00154 | MANUAL-L500</div>
         <span class="kpi-target target-miss">🔴 CHƯA CÓ PHƯƠNG ÁN</span>
       </div>
       <div class="kpi-card blue" style="padding:12px 14px">
@@ -1445,7 +1489,7 @@ PEOPLE_SCORE =
       <div style="position:relative;max-width:380px;margin:0 auto">
         <canvas id="cEcnType" height="300" role="img" aria-label="Biểu đồ phân loại ECN"></canvas>
         <div id="ecnCenterLabel" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);text-align:center;pointer-events:none">
-          <div style="font-size:28px;font-weight:bold;color:#0e6655;line-height:1.1">91</div>
+          <div id="dlcnV-ecnCenter" style="font-size:28px;font-weight:bold;color:#0e6655;line-height:1.1">91</div>
           <div style="font-size:11px;color:#566573;font-weight:bold">TỔNG ECN</div>
         </div>
       </div>
@@ -2397,7 +2441,8 @@ function gvizFetch(sheetId, tabName, startRow, tqQuery) {
     const cbName = '_gviz_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     const rangePart = startRow ? `&range=A${startRow}:ZZ` : '';  // ZZ đủ rộng mọi cột
     const tqPart = tqQuery ? `&tq=${encodeURIComponent(tqQuery)}` : '';  // optional: override row limit (VD: 'select * limit 10000')
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}&sheet=${encodeURIComponent(tabName)}&headers=1${rangePart}${tqPart}`;
+    const sheetPart = tabName ? `&sheet=${encodeURIComponent(tabName)}` : '';
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}${sheetPart}&headers=1${rangePart}${tqPart}`;
 
     const timeout = setTimeout(() => {
       cleanup();
@@ -5784,6 +5829,13 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
     new Chart(gc('cCongDoan'),{type:'bar',data:{labels:estLabels,datasets:[{label:'Số mã (ước tính)',data:estVals,backgroundColor:['#1a5276','#2980b9','#e67e22','#27ae60','#0e6655'],borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:['#1a3a5c','#1a5276','#7d3c00','#1a4d2e','#0b4033'],backgroundColor:['#eaf2fb','#eaf2fb','#fdf0e6','#eafaf1','#e8f8f5'],borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
   }
 })();
+// Auto-sync khi initDLCN được gọi: kéo dữ liệu LIVE từ 3 GSheet
+setTimeout(async function() {
+  try {
+    if (typeof window._syncDLCNAllSections === 'function') await window._syncDLCNAllSections();
+    if (typeof window._syncDLCNLateTasks === 'function') window._syncDLCNLateTasks();
+  } catch(e) { console.warn('[initDLCN auto-sync]', e.message); }
+}, 800);
 }
 
 // ══ TDT V5.9 — IIFE scope (tránh xung đột với SPM charts) ══
@@ -5972,13 +6024,31 @@ function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ng�
 function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=col(h,['Ngày kết thúc']); const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0; data.forEach(r=>{ const st=norm(r[idxStatus]), al=norm(r[idxAlert]); const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
 function mergePeople(s){ const m={}; function get(n){ const k=norm(n).toUpperCase(); m[k]??={name:String(n||'Không rõ').trim(),bravo:0,task:0,late:0,edit_rate:0,ecn:0,risk_stock:0,score:95}; return m[k]; } (s.bravo.top_creators||[]).forEach(x=>{const p=get(x.name); p.bravo=x.total||0; p.edit_rate=x.edit_rate||0;}); (s.tasks.pic_stats||[]).forEach(x=>{const p=get(x.name||x.pic); p.task=x.total||0; p.late=x.late||0;}); (s.ecn.people||[]).forEach(x=>{const p=get(x.name); p.ecn=x.ecn||0; p.risk_stock=x.risk||0;}); Object.values(m).forEach(p=>{ const ontime=p.task?Math.max(0,100-p.late*100/p.task):100; const quality=Math.max(0,100-(p.edit_rate||0)); const risk=p.risk_stock>0?30:100; p.score=Math.round(ontime*0.35+quality*0.35+risk*0.20+Math.min(100,(p.bravo+p.task+p.ecn)/20)*0.10); }); return Object.values(m).sort((a,b)=>a.score-b.score); }
 async function fetchCSV(id){ const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&cachebust=${Date.now()}`; const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return parseCSV(await r.text()); }
+// ── gvizToCSV: convert gvizFetch table → array-of-arrays (CSV format) ──
+function gvizToCSV(table) {
+  var header = (table.cols || []).map(function(c){ return (c.label || c.id || '').trim(); });
+  var rows = (table.rows || []).map(function(row){
+    return (row.c || []).map(function(cell){
+      if (!cell) return '';
+      if (cell.f && cell.f.trim()) return cell.f.trim();
+      return cell.v != null ? String(cell.v) : '';
+    });
+  });
+  return [header].concat(rows);
+}
+async function fetchGvizCSV(sheetId, tabName, startRow) {
+  var table = await gvizFetch(sheetId, tabName || '', startRow || null, 'select * limit 10000');
+  return gvizToCSV(table);
+}
 async function refreshLiveV5(){
   const status=[]; const live=JSON.parse(JSON.stringify(SNAPSHOT));
-  try{ const rows=await fetchCSV(LIVE_SOURCES.bravo.id); live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push(`Bravo: LIVE ${rows.length} dòng`); }catch(e){ status.push('Bravo: dùng snapshot ('+e.message+')'); }
-  try{ const rows=await fetchCSV(LIVE_SOURCES.tasks.id); live.tasks=summarizeTaskRows(rows,SNAPSHOT.tasks); status.push(`Task: LIVE ${rows.length} dòng`); }catch(e){ status.push('Task: dùng snapshot ('+e.message+')'); }
+  try{ var rows; try{ rows=await fetchCSV(LIVE_SOURCES.bravo.id); }catch(_fe){ rows=await fetchGvizCSV(LIVE_SOURCES.bravo.id); } live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push('Bravo: LIVE '+rows.length+' dòng'); }catch(e){ status.push('Bravo: snapshot ('+e.message+')'); }
+  try{ var rows2; try{ rows2=await fetchCSV(LIVE_SOURCES.tasks.id); }catch(_fe){ rows2=await fetchGvizCSV(LIVE_SOURCES.tasks.id); } live.tasks=summarizeTaskRows(rows2,SNAPSHOT.tasks); status.push('Task: LIVE '+rows2.length+' dòng'); }catch(e){ status.push('Task: snapshot ('+e.message+')'); }
   try{ const rows=await fetchCSV(LIVE_SOURCES.ecn.id); status.push(`ECN: LIVE ${rows.length} dòng (giữ rules snapshot nếu thiếu header)`); }catch(e){ status.push('ECN: dùng snapshot ('+e.message+')'); }
   live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
+  window._dlcnLiveData = live;
   renderV5(live,'live'); setText('#liveStatus', status.join(' · '));
+  if(typeof window._syncDLCNAllSections==='function') window._syncDLCNAllSections(live);
 }
 
 // ===== DLCN AI ENGINE BACKEND CONNECTOR V5.9 - EMBEDDED URL + QUEUE RUN FIX =====
@@ -6135,12 +6205,12 @@ function applyEnginePayload(payload){
   }
   // Update KPI small values when keys exist
   const byKey={}; kpi.forEach(x=>byKey[x.key]=x);
-  if(byKey.TASK_TOTAL) document.querySelector('#kpi .metric:nth-child(1) .mval').textContent = fmt(byKey.TASK_TOTAL.value);
-  if(byKey.TASK_COMPLETION) document.querySelector('#kpi .metric:nth-child(2) .mval').textContent = pct(Number(byKey.TASK_COMPLETION.value)||0,1);
-  if(byKey.TASK_ONTIME) document.querySelector('#kpi .metric:nth-child(3) .mval').textContent = pct(Number(byKey.TASK_ONTIME.value)||0,1);
-  if(byKey.TASK_LATE) document.querySelector('#kpi .metric:nth-child(4) .mval').textContent = fmt(byKey.TASK_LATE.value);
-  if(byKey.BRAVO_TOTAL) document.querySelector('#kpi .metric:nth-child(5) .mval').textContent = fmt(byKey.BRAVO_TOTAL.value);
-  if(byKey.ECN_RISK_STOCK) document.querySelector('#kpi .metric:nth-child(6) .mval').textContent = fmt(byKey.ECN_RISK_STOCK.value);
+  if(byKey.TASK_TOTAL){ var _e1=document.querySelector('#kpi .metric:nth-child(1) .mval'); if(_e1) _e1.textContent=fmt(byKey.TASK_TOTAL.value); }
+  if(byKey.TASK_COMPLETION){ var _e2=document.querySelector('#kpi .metric:nth-child(2) .mval'); if(_e2) _e2.textContent=pct(Number(byKey.TASK_COMPLETION.value)||0,1); }
+  if(byKey.TASK_ONTIME){ var _e3=document.querySelector('#kpi .metric:nth-child(3) .mval'); if(_e3) _e3.textContent=pct(Number(byKey.TASK_ONTIME.value)||0,1); }
+  if(byKey.TASK_LATE){ var _e4=document.querySelector('#kpi .metric:nth-child(4) .mval'); if(_e4) _e4.textContent=fmt(byKey.TASK_LATE.value); }
+  if(byKey.BRAVO_TOTAL){ var _e5=document.querySelector('#kpi .metric:nth-child(5) .mval'); if(_e5) _e5.textContent=fmt(byKey.BRAVO_TOTAL.value); }
+  if(byKey.ECN_RISK_STOCK){ var _e6=document.querySelector('#kpi .metric:nth-child(6) .mval'); if(_e6) _e6.textContent=fmt(byKey.ECN_RISK_STOCK.value); }
   setText('#liveMode','AI ENGINE');
   setText('#lastRefresh', new Date().toLocaleString('vi-VN'));
 }
@@ -6160,15 +6230,534 @@ initEngineUrl();
   if (typeof resetActions === 'function') window.resetActions = resetActions;
 })();
 
-// initTDT: gọi khi BP Dữ liệu tab được mở
-let _tdtInitialized = false;
+// ══ GLOBAL: initTDT, refreshCurrentBP, _syncDLCNLateTasks, _syncDLCNAllSections
+// Tất cả nằm NGOÀI TDT IIFE để tránh xung đột scope
+
+// ── initTDT: auto-refresh LIVE khi lần đầu mở BP Dữ liệu ──
+var _tdtLastRefresh = 0;
 function initTDT() {
-  if (_tdtInitialized) return;
-  _tdtInitialized = true;
-  setTimeout(() => {
-    if (typeof window.renderV5 === 'function') window.renderV5(window.SNAPSHOT, 'snapshot');
-  }, 120);
+  if (typeof window.renderV5 === 'function') window.renderV5(window.SNAPSHOT, 'snapshot');
+  var _now = Date.now();
+  if (_now - _tdtLastRefresh < 60000) return;
+  _tdtLastRefresh = _now;
+  setTimeout(async function() {
+    try { if (typeof window.refreshLiveV5 === 'function') await window.refreshLiveV5(); }
+    catch(e) { console.warn('[initTDT]', e.message); }
+  }, 400);
 }
+
+// ── refreshCurrentBP: nút Cập nhật header ──
+function refreshCurrentBP() {
+  var a = document.querySelector('.l1-btn.active');
+  var bp = a ? a.dataset.bp : null;
+  if (bp === 'data') {
+    var sub = document.querySelector('.l2-btn.active[data-sub]');
+    if (sub && sub.dataset.sub === 'tab-dlcn') {
+      if (typeof window._syncDLCNAllSections === 'function')
+        window._syncDLCNAllSections(window._dlcnLiveData);
+      if (typeof window._syncDLCNLateTasks === 'function')
+        window._syncDLCNLateTasks();
+    } else {
+      if (typeof window.refreshLiveV5 === 'function') window.refreshLiveV5();
+    }
+  } else { loadData(); }
+}
+
+// ── _syncDLCNLateTasks: kéo task trễ từ GSheet, cập nhật Section V ──
+window._syncDLCNLateTasks = async function() {
+  var TASKS_ID = '1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ';
+  var statusEl = document.getElementById('dlcnLiveStatus');
+  try {
+    if (statusEl) statusEl.textContent = 'Dang keo du lieu...';
+    var table = await gvizFetch(TASKS_ID, '00_Task_Schedule', null, 'select * limit 99999');
+    var hdr = {};
+    (table.cols||[]).forEach(function(c,i){ var lb=(c.label||c.id||'').trim().toLowerCase(); if(lb) hdr[lb]=i; });
+    function getV(row, keys) {
+      var ks = Array.isArray(keys) ? keys : [keys];
+      for (var ki=0; ki<ks.length; ki++) {
+        var idx = hdr[ks[ki].toLowerCase()];
+        if (idx===undefined) continue;
+        var cell = (row.c||[])[idx]; if (!cell) continue;
+        if (cell.f && cell.f.trim()) return cell.f.trim();
+        if (cell.v != null) return String(cell.v).trim();
+      } return '';
+    }
+    var live = []; var stt = 0;
+    (table.rows||[]).forEach(function(row) {
+      if (!row||!row.c) return;
+      var cb = getV(row,['canh bao tien do','canh bao tien do ','canh bao tien']);
+      if (!cb || !/sau.*han|tre/i.test(cb.normalize('NFD').replace(/\\u0300-\\u036f/g,'').replace(/d/g,'d'))) return;
+      // simpler check
+      var cbRaw = getV(row,['cảnh báo tiến độ','cảnh báo tiến độ ']);
+      if (!cbRaw && !cb) return;
+      var check = (cbRaw||cb||'').toLowerCase();
+      if (check.indexOf('sau') === -1 && check.indexOf('tr') === -1) return;
+      stt++;
+      live.push({
+        stt: stt,
+        du_an: getV(row,['dự án','du an']),
+        nhom: getV(row,['nhóm công việc','nhom cong viec']),
+        uu_tien: getV(row,['mức độ ưu tiên','dieu chinh thu cong']),
+        noi_dung: getV(row,['nội dung công việc','noi dung cong viec','nội dung công việc ']),
+        pic: getV(row,['pic triển khai','pic trien khai','pic triển khai ']),
+        ngay_kt: getV(row,['ngày kết thúc\\n(2)','ngày kết thúc (2)','ngay ket thuc']),
+        ngay_ht: getV(row,['ngày hoàn thành thực tế','ngay hoan thanh']),
+        canh_bao: cbRaw||cb
+      });
+    });
+    if (live.length > 0 && typeof lateData !== 'undefined') {
+      lateData = live;
+      if (typeof renderTable === 'function') renderTable(lateData);
+      var cntEl = document.getElementById('rowCount');
+      if (cntEl) cntEl.textContent = lateData.length;
+      var cntSpan = document.querySelector('.filter-bar span[style*="margin-left:auto"]');
+      if (cntSpan) cntSpan.innerHTML = 'Hien thi: <strong id="rowCount">' + lateData.length + '</strong> / ' + lateData.length + ' task tre (LIVE)';
+    }
+    if (statusEl) statusEl.textContent = 'LIVE ' + new Date().toLocaleTimeString('vi-VN');
+  } catch(e) {
+    if (statusEl) statusEl.textContent = 'Loi: ' + e.message;
+    console.warn('[_syncDLCNLateTasks]', e);
+  }
+};
+
+// ── _syncDLCNAllSections: cập nhật toàn bộ DLCN sections từ 3 GSheet ──
+window._syncDLCNAllSections = async function(liveCache) {
+  var TASKS_ID = '1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ';
+  var ECN_ID   = '1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg';
+  var BRAVO_ID = '17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU';
+
+  function setEl(id, val) {
+    var el = document.getElementById(id);
+    if (el && val !== undefined && val !== null) el.textContent = String(val);
+  }
+  function fmtVN(n) {
+    if (n === undefined || n === null || isNaN(n)) return '--';
+    return Math.round(Number(n)).toLocaleString('vi-VN');
+  }
+  function fmtPct(n, d) {
+    if (n === undefined || n === null || isNaN(n)) return '--';
+    return Number(n).toFixed(d||1).replace('.', ',') + '%';
+  }
+  function cellVal(cell) {
+    if (!cell) return '';
+    if (cell.f && String(cell.f).trim()) return String(cell.f).trim();
+    if (cell.v != null) return String(cell.v).trim();
+    return '';
+  }
+  function cellNum(cell) {
+    var s = cellVal(cell).replace(/[^0-9.-]/g, '');
+    var n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+  function updChart(canvasId, newLabels, newDatasets) {
+    try {
+      var canvas = document.getElementById(canvasId);
+      if (!canvas || typeof Chart === 'undefined') return;
+      var ch = Chart.getChart(canvas);
+      if (!ch) return;
+      if (newLabels) ch.data.labels = newLabels;
+      for (var i = 0; i < newDatasets.length; i++) {
+        if (ch.data.datasets[i]) Object.assign(ch.data.datasets[i], newDatasets[i]);
+      }
+      ch.update('none');
+    } catch(e) { console.warn('[updChart] ' + canvasId, e.message); }
+  }
+  // Build header→index map from table.cols
+  function hdrIdx(table) {
+    var map = {};
+    (table.cols||[]).forEach(function(c, i) {
+      var lb = (c.label || c.id || '').trim().toLowerCase()
+        .replace(/\s+/g,' ')
+        .normalize('NFD').replace(/[̀-ͯ]/g,'');
+      if (lb) map[lb] = i;
+    });
+    return map;
+  }
+  // Normalize Vietnamese string for comparison
+  function norm(s) {
+    return String(s||'').toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/\s+/g,' ').trim();
+  }
+  // Find col index by multiple key candidates (normalized)
+  function findCol(map, keys) {
+    for (var k = 0; k < keys.length; k++) {
+      var n = norm(keys[k]);
+      if (map[n] !== undefined) return map[n];
+    }
+    return -1;
+  }
+  // Get cell value by col index or key search
+  function getByIdx(row, idx) {
+    if (idx < 0) return '';
+    return cellVal((row.c||[])[idx]);
+  }
+
+  try {
+    // ══ FETCH 1: TASKS ══════════════════════════════════════════
+    // Nguồn: sheet '00_Task_Schedule' — đọc đến dòng cuối cùng
+    var taskTable = await gvizFetch(TASKS_ID, '00_Task_Schedule', null, 'select * limit 99999');
+    var tm = hdrIdx(taskTable);
+    var taskRows = (taskTable.rows||[]).filter(function(r){ return r && r.c; });
+
+    // Find key column indices (00_Task_Schedule column mapping):
+    // Col B = Dự án, Col G = Nội dung công việc
+    // Col S = Cảnh báo công việc, Col T = Cảnh báo tiến độ, Col U = Nhà máy thực hiện
+    var iContent = findCol(tm, ['noi dung cong viec','nội dung công việc','noi dung cong viec ']);
+    var iColS    = findCol(tm, ['canh bao cong viec','canh bao cong viec ','canh bao cv']);
+    var iColT    = findCol(tm, ['canh bao tien do','canh bao tien do ']);
+    var iProj    = findCol(tm, ['du an','project','ma du an','ten du an']);
+    var iNhaMay  = findCol(tm, ['nha may thuc hien','nha may thuc hien ','nha may']);
+    var iPic     = findCol(tm, ['pic trien khai','pic','nguoi phu trach','phu trach']);
+    var iTuan    = findCol(tm, ['tuan','week','tuan ke hoach']);
+    var iThang   = findCol(tm, ['thang','month','thang ke hoach']);
+
+    // Fallback to absolute column index if header lookup fails (A=0, B=1, G=6, S=18, T=19, U=20)
+    if (iContent < 0) iContent = 6;
+    if (iColS    < 0) iColS    = 18;
+    if (iColT    < 0) iColT    = 19;
+    if (iProj    < 0) iProj    = 1;
+    if (iNhaMay  < 0) iNhaMay  = 20;
+
+    console.log('[DLCN Tasks 00_Task_Schedule] content=' + iContent + ' colS=' + iColS + ' colT=' + iColT + ' proj=' + iProj + ' nhaMay=' + iNhaMay + ' totalRows=' + taskRows.length);
+
+    var taskTotal = 0, taskDone = 0, taskLate = 0, taskOntime = 0;
+    var taskWarnGreen = 0, taskWarnYellow = 0, taskWarnLate = 0;
+    var projMap = {}, nhaMaySet = {}, weekMap = {}, monthMap = {}, picLateMap = {};
+
+    taskRows.forEach(function(row) {
+      // Skip completely empty rows
+      var hasData = (row.c||[]).some(function(c){ return c && c.v != null && String(c.v).trim() !== ''; });
+      if (!hasData) return;
+
+      // Skip header rows
+      var c0 = cellVal((row.c||[])[0]);
+      if (norm(c0) === 'stt' || norm(c0) === 'no' || norm(c0) === '#') return;
+
+      // Count by Col G (Nội dung công việc) — row must have content here
+      var contentVal = getByIdx(row, iContent);
+      if (!contentVal) return;
+
+      taskTotal++;
+
+      // Lấy giá trị thô (lowercase) để so khớp trực tiếp tiếng Việt
+      // — norm() không xử lý đúng "đ" (U+0111) và một số nguyên âm tổ hợp tiếng Việt
+      var colSRaw = getByIdx(row, iColS).toLowerCase();
+      var colTRaw = getByIdx(row, iColT).toLowerCase();
+
+      // TỶ LỆ HOÀN THÀNH: Col S = "Kết thúc công việc"
+      if (colSRaw.indexOf('kết thúc') > -1 || colSRaw.indexOf('ket thuc') > -1) taskDone++;
+
+      // CẢNH BÁO XANH: Col S = "Cảnh báo xanh"
+      if (colSRaw.indexOf('xanh') > -1) taskWarnGreen++;
+
+      // CẢNH BÁO VÀNG: Col S = "Cảnh báo vàng"
+      if (colSRaw.indexOf('vàng') > -1 || (colSRaw.indexOf('vang') > -1 && colSRaw.indexOf('canh') > -1)) taskWarnYellow++;
+
+      // CẢNH BÁO QUÁ HẠN: Col S = "Cảnh báo quá hạn"
+      if (colSRaw.indexOf('quá hạn') > -1 || (colSRaw.indexOf('qua han') > -1 && colSRaw.indexOf('bao') > -1)) taskWarnLate++;
+
+      // TỶ LỆ ĐÚNG HẠN: Col T = "Hoàn thành trước hạn" HOẶC "Hoàn thành đúng hạn"
+      var isOntime = (
+        colTRaw.indexOf('trước hạn') > -1 ||
+        colTRaw.indexOf('đúng hạn')  > -1 ||
+        colTRaw.indexOf('truoc han') > -1 ||
+        colTRaw.indexOf('đung han')  > -1
+      );
+      if (isOntime) taskOntime++;
+
+      // HOÀN THÀNH SAU HẠN: Col T = "Hoàn thành sau hạn"
+      var isLate = (
+        colTRaw.indexOf('hoàn thành sau hạn') > -1 ||
+        colTRaw.indexOf('hoan thanh sau han') > -1 ||
+        (colTRaw.indexOf('sau hạn') > -1 && colTRaw.indexOf('hoàn thành') > -1) ||
+        (colTRaw.indexOf('sau han') > -1 && colTRaw.indexOf('hoan thanh') > -1)
+      );
+      if (isLate) taskLate++;
+
+      // Dự án (Col B)
+      var proj = (iProj >= 0 ? getByIdx(row, iProj) : '') || 'Khac';
+      if (proj) projMap[proj] = (projMap[proj]||0) + 1;
+
+      // Nhà máy thực hiện (Col U)
+      var nm = getByIdx(row, iNhaMay);
+      if (nm) nhaMaySet[nm] = 1;
+
+      var pic = (iPic >= 0 ? getByIdx(row, iPic) : '') || 'Chua phan cong';
+      if (!picLateMap[pic]) picLateMap[pic] = {total:0, late:0};
+      picLateMap[pic].total++;
+      if (isLate) picLateMap[pic].late++;
+
+      var tuan = iTuan >= 0 ? getByIdx(row, iTuan) : '';
+      if (tuan) weekMap[tuan] = (weekMap[tuan]||0) + 1;
+      var thang = iThang >= 0 ? getByIdx(row, iThang) : '';
+      if (thang) monthMap[thang] = (monthMap[thang]||0) + 1;
+    });
+
+    var compPct    = taskTotal > 0 ? taskDone   * 100 / taskTotal : 0;
+    var ontimePct  = taskTotal > 0 ? taskOntime  * 100 / taskTotal : 0;
+    var latePct    = taskTotal > 0 ? taskLate    * 100 / taskTotal : 0;
+    var projCount  = Object.keys(projMap).length;
+    var nhaMayList = Object.keys(nhaMaySet).join(', ') || '--';
+
+    // Update KPI Section I — 6 boxes
+    setEl('dlcnV-taskTotal',   fmtVN(taskTotal));
+    setEl('dlcnS-taskTotal',   fmtVN(taskTotal) + ' CV | ' + projCount + ' dự án | ' + nhaMayList);
+    setEl('dlcnV-taskComp',    fmtPct(compPct, 1));
+    setEl('dlcnS-taskComp',    fmtVN(taskDone) + ' / ' + fmtVN(taskTotal) + ' task kết thúc');
+    setEl('dlcnV-taskOntime',  fmtPct(ontimePct, 1));
+    setEl('dlcnS-taskOntime',  fmtVN(taskOntime) + ' đúng/trước hạn / ' + fmtVN(taskTotal));
+    setEl('dlcnV-taskLate',    fmtVN(taskLate));
+    setEl('dlcnS-taskLate',    latePct.toFixed(1).replace('.', ',') + '% tổng task | Cột T: Hoàn thành sau hạn');
+    setEl('dlcnV-warnGreen',   fmtVN(taskWarnGreen));
+    setEl('dlcnS-warnGreen',   'Trong ' + fmtVN(taskTotal) + ' công việc');
+    setEl('dlcnV-warnYellow',  fmtVN(taskWarnYellow));
+    setEl('dlcnS-warnYellow',  'Trong ' + fmtVN(taskTotal) + ' công việc');
+    setEl('dlcnV-warnLate',    fmtVN(taskWarnLate));
+    setEl('dlcnS-warnLate',    'Cột S: Cảnh báo quá hạn');
+
+    // ══ FETCH 2: ECN ════════════════════════════════════════════
+    // Col M (index 12) = "Khong su dung" → count non-empty rows = TONG ECN XU LY
+    // Col Q (index 16) = "So luong ton kho xac nhan (1)" → SUM = TON KHO ECN RUI RO
+    var ecnTable = await gvizFetch(ECN_ID, '', null, 'select * limit 10000');
+    var ecnRows  = (ecnTable.rows||[]).filter(function(r){ return r && r.c; });
+
+    var ecnTotal = 0, ecnRiskStock = 0;
+    var ecnTypeMap = {}, ecnKHMap = {}, ecnNMMap = {};
+    var em = hdrIdx(ecnTable);
+
+    // Find col indices — fallback to absolute index if not found by label
+    var iEcnM  = findCol(em, ['khong su dung','hinh thuc xu ly','loai ecn','phan loai']); if (iEcnM  < 0) iEcnM  = 12;
+    var iEcnQ  = findCol(em, ['so luong ton kho xac nhan (1)','ton kho xac nhan','so luong ton kho']); if (iEcnQ  < 0) iEcnQ  = 16;
+    var iEcnKH = findCol(em, ['khach hang','customer','ten kh','kh']);
+    var iEcnNM = findCol(em, ['nha may','factory','nha may thuc hien','nm']);
+
+    console.log('[DLCN ECN] col M idx=' + iEcnM + ' col Q idx=' + iEcnQ + ' total rows=' + ecnRows.length);
+
+    ecnRows.forEach(function(row) {
+      // Count ECN by col M non-empty
+      var vM = cellVal((row.c||[])[iEcnM]);
+      if (!vM || vM === '0') return;
+      // Skip rows where col M looks like a header
+      if (norm(vM) === 'khong su dung' || norm(vM) === 'loai ecn' || norm(vM) === 'hinh thuc') return;
+      ecnTotal++;
+
+      // Sum col Q for risk inventory
+      var qNum = cellNum((row.c||[])[iEcnQ]);
+      if (qNum > 0) ecnRiskStock += qNum;
+
+      // Classify by type (col M value itself)
+      var eType = vM;
+      if (eType.length > 30) eType = eType.substring(0, 30);
+      ecnTypeMap[eType] = (ecnTypeMap[eType]||0) + 1;
+
+      var kh = iEcnKH >= 0 ? getByIdx(row, iEcnKH) : '';
+      if (kh && norm(kh) !== 'khach hang') ecnKHMap[kh] = (ecnKHMap[kh]||0) + 1;
+
+      var nm = iEcnNM >= 0 ? getByIdx(row, iEcnNM) : '';
+      if (nm && norm(nm) !== 'nha may') ecnNMMap[nm] = (ecnNMMap[nm]||0) + 1;
+    });
+
+    console.log('[DLCN ECN] LIVE: total=' + ecnTotal + ' risk=' + ecnRiskStock);
+
+    // Update ECN KPIs
+    setEl('dlcnV-ecnRisk',   fmtVN(ecnRiskStock) + ' pcs');
+    setEl('dlcnS-ecnRisk',   'Ton kho xac nhan (cot Q)');
+    setEl('dlcnV-ecnTotal',  ecnTotal > 0 ? ecnTotal + '+' : '--');
+    setEl('dlcnS-ecnTotal',  'Tong ECN xu ly (cot M)');
+    setEl('dlcnV-ecnTotal2', ecnTotal > 0 ? ecnTotal + '+' : '--');
+    setEl('dlcnS-ecnTotal2', ecnTotal + ' ban ghi | ' + Object.keys(ecnNMMap).length + ' nha may');
+    setEl('dlcnV-ecnRisk2',  fmtVN(ecnRiskStock) + ' pcs');
+    setEl('dlcnV-ecnCenter', String(ecnTotal));
+
+    var ecnHdr = document.querySelector('#ecn .zone-hdr span');
+    if (ecnHdr) ecnHdr.textContent = ecnTotal + '+ ban ghi | Nguon: ECN_TRACKING LIVE';
+
+    if (Object.keys(ecnTypeMap).length > 0) {
+      var etL = Object.keys(ecnTypeMap).sort(function(a,b){ return ecnTypeMap[b]-ecnTypeMap[a]; });
+      var etV = etL.map(function(k){ return ecnTypeMap[k]; });
+      var etC = ['#1a7a4a','#e74c3c','#e67e22','#7f8c8d','#2980b9','#8e44ad'];
+      updChart('cEcnType', etL, [{data: etV, backgroundColor: etC.slice(0, etL.length)}]);
+    }
+    if (Object.keys(ecnKHMap).length > 0) {
+      var khL = Object.keys(ecnKHMap).sort(function(a,b){ return ecnKHMap[b]-ecnKHMap[a]; }).slice(0,8);
+      var khV = khL.map(function(k){ return ecnKHMap[k]; });
+      updChart('cEcnKH', khL, [{data: khV}]);
+    }
+    if (Object.keys(ecnNMMap).length > 0) {
+      var nmL = Object.keys(ecnNMMap);
+      var nmV = nmL.map(function(k){ return ecnNMMap[k]; });
+      updChart('cEcnNM', nmL, [{data: nmV}]);
+    }
+
+    // ══ FETCH 3: BRAVO ══════════════════════════════════════════
+    var bravoTable = await gvizFetch(BRAVO_ID, '', null, 'select * limit 10000');
+    var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
+    var bm = hdrIdx(bravoTable);
+
+    // Find column indices
+    var iBvSua    = findCol(bm, ['so lan sua','lan sua','so lan chinh sua','so lan sua doi']);
+    var iBvUser   = findCol(bm, ['nguoi khai bao','nguoi kb','ten nguoi','nhan vien','nguoi thuc hien']);
+    var iBvThang  = findCol(bm, ['thang khai bao','thang','month','thang tao']);
+    var iBvTuan   = findCol(bm, ['tuan khai bao','tuan','week']);
+    var iBvLine   = findCol(bm, ['ma dong sp','dong sp','ma dong','product line','dong san pham','ma dong sp/ nvl','ma dong']);
+    var iBvNgay   = findCol(bm, ['ngay khai bao','ngay','date','creation date','ngay tao']);
+    var iBvCongDoan = findCol(bm, ['ma cong doan','cong doan','stage','phuong thuc','ma cong doan ']);
+
+    // Find header row: scan first 10 rows for keyword match
+    var dataStartIdx = 0;
+    for (var hi = 0; hi < Math.min(bravoAllRows.length, 10); hi++) {
+      var rv = (bravoAllRows[hi].c||[]).map(function(c){ return norm(cellVal(c)); }).join('|');
+      if (rv.indexOf('khai bao') > -1 || rv.indexOf('ma san pham') > -1 || rv.indexOf('so lan') > -1) {
+        // This row looks like a data header — data starts next row if it's actually the header
+        // But since gviz with headers=1 already handles this, dataStartIdx = 0
+        break;
+      }
+      // If first cell is not numeric and row is not empty, it might be a title row
+      var c0v = norm(cellVal((bravoAllRows[hi].c||[])[0]));
+      if (!c0v) continue;
+      if (!isNaN(parseFloat(c0v))) { dataStartIdx = hi; break; } // found first numeric row
+      dataStartIdx = hi + 1; // skip non-numeric title rows
+    }
+
+    var bravoData = bravoAllRows.slice(dataStartIdx);
+    var bravoTotal = 0, bravoEdited = 0;
+    var bravoByMonth = {}, bravoByUser = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0];
+    var bravoByCD = {};
+
+    bravoData.forEach(function(row) {
+      // Must have at least one non-empty cell
+      var hasData = (row.c||[]).some(function(c){ return c && c.v != null && String(c.v).trim() !== ''; });
+      if (!hasData) return;
+      // First cell or any meaningful identifier
+      var c0 = (row.c||[])[0];
+      var c0v = cellVal(c0);
+      // Skip header-like rows
+      var nc0 = norm(c0v);
+      if (nc0 === 'stt' || nc0 === 'no' || nc0 === 'ma san pham' || nc0 === 'ma vat tu') return;
+      bravoTotal++;
+
+      var nSua = iBvSua >= 0 ? (parseInt(cellVal((row.c||[])[iBvSua])) || 0) : 0;
+      if (nSua > 0) bravoEdited++;
+
+      var nguoi = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
+      if (nguoi) {
+        if (!bravoByUser[nguoi]) bravoByUser[nguoi] = {total:0, edited:0};
+        bravoByUser[nguoi].total++;
+        if (nSua > 0) bravoByUser[nguoi].edited++;
+      }
+
+      var thang = iBvThang >= 0 ? getByIdx(row, iBvThang) : '';
+      if (thang) bravoByMonth[thang] = (bravoByMonth[thang]||0) + 1;
+
+      var tuan = iBvTuan >= 0 ? getByIdx(row, iBvTuan) : '';
+      if (tuan) bravoByWeek[tuan] = (bravoByWeek[tuan]||0) + 1;
+
+      var dong = iBvLine >= 0 ? getByIdx(row, iBvLine) : '';
+      if (dong) bravoByLine[dong] = (bravoByLine[dong]||0) + 1;
+
+      var ngay = iBvNgay >= 0 ? getByIdx(row, iBvNgay) : '';
+      if (ngay) {
+        var d = new Date(ngay);
+        if (!isNaN(d.getTime())) bravoByDow[d.getDay()]++;
+      }
+
+      var cd = iBvCongDoan >= 0 ? getByIdx(row, iBvCongDoan) : '';
+      if (cd) bravoByCD[cd] = (bravoByCD[cd]||0) + 1;
+    });
+
+    var bravoQualPct = bravoTotal > 0 ? (bravoTotal - bravoEdited) * 100 / bravoTotal : 0;
+    var bravoEditPct = bravoTotal > 0 ? bravoEdited * 100 / bravoTotal : 0;
+
+    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' edited=' + bravoEdited);
+
+    // Update Bravo KPIs
+    var todayStr = new Date().toLocaleDateString('vi-VN');
+    setEl('dlcnV-bravoTotal',   fmtVN(bravoTotal));
+    setEl('dlcnS-bravoTotal',   'Du lieu LIVE - ' + todayStr);
+    setEl('dlcnV-bravoQuality', fmtPct(bravoQualPct, 1));
+    setEl('dlcnS-bravoQuality', fmtVN(bravoTotal - bravoEdited) + '/' + fmtVN(bravoTotal) + ' ma khong can sua');
+    setEl('dlcnV-bravoEdited',  fmtVN(bravoEdited));
+    setEl('dlcnS-bravoEdited',  fmtPct(bravoEditPct, 1) + ' tong ma | Phan tich nguyen nhan');
+    // Section IX.1
+    setEl('dlcnV-ix1Total',   fmtVN(bravoTotal));
+    setEl('dlcnV-ix1Quality', fmtPct(bravoQualPct, 1));
+    setEl('dlcnV-ix1Edited',  fmtVN(bravoEdited));
+
+    var erpHdr = document.querySelector('#erp .zone-hdr span');
+    if (erpHdr) erpHdr.textContent = fmtVN(bravoTotal) + ' ma | Nguon: ERP Bravo LIVE - ' + todayStr;
+
+    // Charts
+    // cQual: % sua theo nhan vien
+    var qualUsers = Object.keys(bravoByUser).sort(function(a,b){
+      return (bravoByUser[b].edited/Math.max(1,bravoByUser[b].total)) - (bravoByUser[a].edited/Math.max(1,bravoByUser[a].total));
+    }).slice(0, 12);
+    if (qualUsers.length > 0) {
+      var qL = qualUsers.map(function(u){ var p=u.trim().split(' '); return p.slice(-2).join(' '); });
+      var qV = qualUsers.map(function(u){ var d=bravoByUser[u]; return +(d.edited*100/Math.max(1,d.total)).toFixed(1); });
+      var qC = qV.map(function(v){ return v>10?'#e74c3c':v>2?'#f39c12':'#27ae60'; });
+      updChart('cQual', qL, [{data: qV, backgroundColor: qC}]);
+    }
+
+    // cDong: top 15 product lines
+    var dLines = Object.keys(bravoByLine).sort(function(a,b){ return bravoByLine[b]-bravoByLine[a]; }).slice(0,15);
+    if (dLines.length > 0) {
+      var dV = dLines.map(function(k){ return bravoByLine[k]; });
+      var dC = dV.map(function(v){ return v>5000?'#1a3a5c':v>3000?'#1a5276':v>1500?'#2980b9':'#5dade2'; });
+      updChart('cDong', dLines, [{data: dV, backgroundColor: dC}]);
+    }
+
+    // cMonth: by month
+    var mK = Object.keys(bravoByMonth).sort();
+    if (mK.length > 0) {
+      var mV = mK.map(function(k){ return bravoByMonth[k]; });
+      updChart('cMonth', mK, [{data: mV}]);
+    }
+
+    // cWeek: by week
+    var wK = Object.keys(bravoByWeek).sort();
+    if (wK.length > 0) {
+      var wV = wK.map(function(k){ return bravoByWeek[k]; });
+      updChart('cWeek', wK, [{data: wV}]);
+    }
+
+    // cDow: day of week
+    updChart('cDow', ['CN','T2','T3','T4','T5','T6','T7'], [{data: bravoByDow}]);
+
+    // cCongDoan: Cong doan online
+    if (Object.keys(bravoByCD).length > 0) {
+      var cdL = Object.keys(bravoByCD).sort(function(a,b){ return bravoByCD[b]-bravoByCD[a]; }).slice(0,15);
+      var cdV = cdL.map(function(k){ return bravoByCD[k]; });
+      var cvs = document.getElementById('cCongDoan');
+      var loadEl = document.getElementById('cdLoading');
+      if (cvs) {
+        cvs.style.display = '';
+        if (loadEl) loadEl.style.display = 'none';
+        updChart('cCongDoan', cdL, [{data: cdV}]);
+      }
+    }
+
+    // Section V filter bar count update
+    var cntSpan = document.querySelector('.filter-bar span[style*="margin-left:auto"]');
+    if (cntSpan) cntSpan.innerHTML = 'Task tre: <strong id="rowCount">' + taskLate + '</strong> (LIVE)';
+
+    // Status
+    var liveEl = document.getElementById('dlcnLiveStatus');
+    if (liveEl) liveEl.textContent = '[LIVE] Tasks:' + taskTotal + ' ECN:' + ecnTotal + ' Bravo:' + bravoTotal + ' - ' + new Date().toLocaleTimeString('vi-VN');
+
+    window._dlcnLiveData = {
+      tasks: {total:taskTotal, completed:taskDone, late:taskLate, ontime:taskOntime},
+      ecn:   {total:ecnTotal, risk:ecnRiskStock},
+      bravo: {total:bravoTotal, edited:bravoEdited}
+    };
+    console.log('[_syncDLCNAllSections] OK tasks=' + taskTotal + ' ecn=' + ecnTotal + ' bravo=' + bravoTotal);
+
+  } catch(err) {
+    console.warn('[_syncDLCNAllSections] Error:', err.message, err.stack);
+    var liveEl = document.getElementById('dlcnLiveStatus');
+    if (liveEl) liveEl.textContent = '[Loi] ' + err.message;
+  }
+};
 
 </script>
 
