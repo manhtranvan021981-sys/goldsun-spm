@@ -1000,35 +1000,51 @@ PEOPLE_SCORE =
   </div>
 </div>
 
-<!-- KPI ERP Bravo summary row -->
-<div class="grid-5" style="margin-bottom:4px">
-  <div class="kpi-card blue" style="padding:12px 14px">
-    <div class="kpi-label">TỔNG MÃ ERP ĐÃ KHAI BÁO</div>
-    <div class="kpi-value" id="dlcnV-bravoTotal" style="font-size:22px">45.853</div>
-    <div class="kpi-sub" id="dlcnS-bravoTotal">10/2025 → 05/2026 | GS5+GS1+GS6</div>
+<!-- KPI Tổng quan – 8 ô trên 1 hàng (ERP Bravo + ECN) -->
+<div style="display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin-bottom:10px">
+  <div class="kpi-card blue" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">TỔNG MÃ ERP ĐÃ KHAI BÁO</div>
+    <div class="kpi-value" id="dlcnV-bravoTotal" style="font-size:19px">45.853</div>
+    <div class="kpi-sub" id="dlcnS-bravoTotal" style="font-size:9px">10/2025 → 05/2026 | GS5+GS1+GS6</div>
   </div>
-  <div class="kpi-card green" style="padding:12px 14px">
-    <div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div>
-    <div class="kpi-value" id="dlcnV-bravoQuality" style="font-size:22px">97,6%</div>
-    <div class="kpi-sub" id="dlcnS-bravoQuality">44.731/45.853 mã không cần sửa</div>
-    <span class="kpi-target target-warn">⚠ Sát KPI – mục tiêu ≥ 98%</span>
+  <div class="kpi-card green" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">KHAI BÁO ĐÚNG LẦN ĐẦU</div>
+    <div class="kpi-value" id="dlcnV-bravoQuality" style="font-size:19px">97,6%</div>
+    <div class="kpi-sub" id="dlcnS-bravoQuality" style="font-size:9px">44.731/45.853 mã không cần sửa</div>
+    <span class="kpi-target target-warn" style="font-size:9px">⚠ Sát KPI ≥ 98%</span>
   </div>
-  <div class="kpi-card teal" style="padding:12px 14px">
-    <div class="kpi-label">TỔNG ECN XỬ LÝ (Q1/2026)</div>
-    <div class="kpi-value" id="dlcnV-ecnTotal" style="font-size:22px">91+</div>
-    <div class="kpi-sub" id="dlcnS-ecnTotal">GS1 (Canon) + GS5 (Samsung) | 2 PIC</div>
+  <div class="kpi-card yellow" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">MÃ ERP CÓ SỬA > 1 LẦN</div>
+    <div class="kpi-value" id="dlcnV-bravoEdited" style="font-size:19px">1.122</div>
+    <div class="kpi-sub" id="dlcnS-bravoEdited" style="font-size:9px">Cần phân tích nguyên nhân</div>
+    <span class="kpi-target target-miss" style="font-size:9px">⚠ Vượt mục tiêu ≤ 2%</span>
   </div>
-  <div class="kpi-card yellow" style="padding:12px 14px">
-    <div class="kpi-label">MÃ ERP CÓ SỬA ≥ 1 LẦN</div>
-    <div class="kpi-value" id="dlcnV-bravoEdited" style="font-size:22px">1.122</div>
-    <div class="kpi-sub" id="dlcnS-bravoEdited">2,4% tổng mã | Cần phân tích nguyên nhân</div>
-    <span class="kpi-target target-miss">⚠ Vượt mục tiêu ≤ 2%</span>
+  <div class="kpi-card teal" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">TỔNG SỐ MÃ CODE ECN</div>
+    <div class="kpi-value" id="dlcnV-ecnMaVT" style="font-size:19px">--</div>
+    <div class="kpi-sub" id="dlcnS-ecnMaVT" style="font-size:9px">Dữ liệu LIVE</div>
   </div>
-  <div class="kpi-card red" style="border-top-color:#8e24aa;padding:12px 14px">
-    <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
-    <div class="kpi-value" id="dlcnV-ecnRisk" style="color:#8e24aa;font-size:22px">1.492</div>
-    <div class="kpi-sub" id="dlcnS-ecnRisk">pcs chưa xử lý</div>
-    <span class="kpi-target target-miss">🔴 CẦN GIẢI QUYẾT</span>
+  <div class="kpi-card orange" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">SỐ LƯỢNG TỒN KHO ECN</div>
+    <div class="kpi-value" id="dlcnV-ecnPSum" style="font-size:19px">--</div>
+    <div class="kpi-sub" id="dlcnS-ecnPSum" style="font-size:9px">--</div>
+    <span class="kpi-target target-warn" style="font-size:9px">→ Ưu tiên xử lý mã tồn lâu</span>
+  </div>
+  <div class="kpi-card red" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">SỐ LƯỢNG TỒN KHO XÁC NHẬN</div>
+    <div class="kpi-value" id="dlcnV-ecnQSum" style="font-size:19px">--</div>
+    <div class="kpi-sub" id="dlcnS-ecnQSum" style="font-size:9px">--</div>
+    <span class="kpi-target target-miss" style="font-size:9px">→ Phối hợp KH huỷ/dùng bù</span>
+  </div>
+  <div class="kpi-card purple" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">GIÁ TRỊ ECN</div>
+    <div class="kpi-value" id="dlcnV-ecnXSum" style="font-size:17px">--</div>
+    <div class="kpi-sub" id="dlcnS-ecnXSum" style="font-size:9px">Thành tiền tồn kho ECN</div>
+  </div>
+  <div class="kpi-card blue" style="padding:10px 10px">
+    <div class="kpi-label" style="font-size:9.5px">TỔNG SỰ VỤ KHAI BÁO ECN</div>
+    <div class="kpi-value" id="dlcnV-ecnAB" style="font-size:19px">--</div>
+    <div class="kpi-sub" id="dlcnS-ecnAB" style="font-size:9px">Số ECN phân biệt</div>
   </div>
 </div>
 
@@ -6345,7 +6361,13 @@ window._syncDLCNAllSections = async function(liveCache) {
     return '';
   }
   function cellNum(cell) {
-    var s = cellVal(cell).replace(/[^0-9.-]/g, '');
+    if (!cell) return 0;
+    // Ưu tiên cell.v (raw numeric value từ gviz) — tránh parse sai chuỗi định dạng "1.382.676,00"
+    if (cell.v != null && typeof cell.v === 'number') return cell.v;
+    // Fallback: parse chuỗi, xử lý format Việt Nam (chấm = nghìn, phẩy = thập phân)
+    var s = String(cell.f != null ? cell.f : (cell.v != null ? cell.v : '')).trim();
+    if (s.indexOf(',') > -1) s = s.replace(/\./g, '').replace(',', '.');
+    else s = s.replace(/[^0-9.-]/g, '');
     var n = parseFloat(s);
     return isNaN(n) ? 0 : n;
   }
@@ -6517,33 +6539,66 @@ window._syncDLCNAllSections = async function(liveCache) {
     setEl('dlcnS-warnLate',    'Cột S: Cảnh báo quá hạn');
 
     // ══ FETCH 2: ECN ════════════════════════════════════════════
-    // Col M (index 12) = "Khong su dung" → count non-empty rows = TONG ECN XU LY
-    // Col Q (index 16) = "So luong ton kho xac nhan (1)" → SUM = TON KHO ECN RUI RO
-    var ecnTable = await gvizFetch(ECN_ID, '', null, 'select * limit 10000');
+    // Sheet: "Báo cáo theo dõi quản lý ECN V2" | Row 7 = header | Data từ row 8 trở đi (không giới hạn)
+    // Col E (idx 4)  = Mã vật tư → đếm non-empty = TỔNG SỐ MÃ CODE ECN
+    // Col M (idx 12) = Loại ECN  → count non-empty = TỔNG ECN XỬ LÝ (existing)
+    // Col P (idx 15) = Số lượng tồn kho ECN → SUM
+    // Col Q (idx 16) = Số lượng tồn kho xác nhận (1) → SUM = TON KHO ECN RUI RO
+    // Col X (idx 23) = Thành tiền (3) = (1)*(2) → SUM = GIÁ TRỊ ECN
+    // Col AB(idx 27) = Số ECN → distinct count = TỔNG SỰ VỤ
+    var ecnTable = await gvizFetch(ECN_ID, 'Báo cáo theo dõi quản lý ECN V2', 7, 'select *');
     var ecnRows  = (ecnTable.rows||[]).filter(function(r){ return r && r.c; });
 
     var ecnTotal = 0, ecnRiskStock = 0;
+    var ecnMaVTCount = 0;
+    var ecnPSum = 0, ecnPCount = 0;
+    var ecnQSum = 0, ecnQCount = 0;
+    var ecnXSum = 0;
+    var ecnABSet = {};
     var ecnTypeMap = {}, ecnKHMap = {}, ecnNMMap = {};
     var em = hdrIdx(ecnTable);
 
-    // Find col indices — fallback to absolute index if not found by label
+    // Find col indices — fallback to absolute positional index nếu header không khớp
+    var iEcnE  = findCol(em, ['ma vat tu','ma vt','vat tu','material code','ma hang']); if (iEcnE  < 0) iEcnE  = 4;
     var iEcnM  = findCol(em, ['khong su dung','hinh thuc xu ly','loai ecn','phan loai']); if (iEcnM  < 0) iEcnM  = 12;
-    var iEcnQ  = findCol(em, ['so luong ton kho xac nhan (1)','ton kho xac nhan','so luong ton kho']); if (iEcnQ  < 0) iEcnQ  = 16;
+    var iEcnP  = findCol(em, ['so luong ton kho ecn','ton kho ecn','sl ton kho ecn','so luong ton kho ecn (col p)']); if (iEcnP  < 0) iEcnP  = 15;
+    var iEcnQ  = findCol(em, ['so luong ton kho xac nhan (1)','ton kho xac nhan','so luong ton kho xac nhan']); if (iEcnQ  < 0) iEcnQ  = 16;
+    var iEcnX  = findCol(em, ['thanh tien (3)','thanh tien','(3) = (1) * (2)','gia tri ecn']); if (iEcnX  < 0) iEcnX  = 23;
+    var iEcnAB = findCol(em, ['so ecn','ma ecn','ecn number','ecn no']); if (iEcnAB < 0) iEcnAB = 27;
     var iEcnKH = findCol(em, ['khach hang','customer','ten kh','kh']);
     var iEcnNM = findCol(em, ['nha may','factory','nha may thuc hien','nm']);
 
-    console.log('[DLCN ECN] col M idx=' + iEcnM + ' col Q idx=' + iEcnQ + ' total rows=' + ecnRows.length);
+    console.log('[DLCN ECN] cols: E=' + iEcnE + ' M=' + iEcnM + ' P=' + iEcnP + ' Q=' + iEcnQ + ' X=' + iEcnX + ' AB=' + iEcnAB + ' | rows=' + ecnRows.length);
 
     ecnRows.forEach(function(row) {
-      // Count ECN by col M non-empty
-      var vM = cellVal((row.c||[])[iEcnM]);
+      var cells = row.c || [];
+
+      // ── Metrics không điều kiện (toàn bộ dữ liệu) ──
+      // 1. TỔNG SỐ MÃ CODE ECN: col E non-empty
+      var vE = cellVal(cells[iEcnE]);
+      if (vE && vE.trim()) ecnMaVTCount++;
+
+      // 2. SỐ LƯỢNG TỒN KHO ECN: SUM col P
+      var pNum = cellNum(cells[iEcnP]);
+      if (pNum > 0) { ecnPSum += pNum; ecnPCount++; }
+
+      // 3. SỐ LƯỢNG TỒN KHO XÁC NHẬN: SUM col Q
+      var qNum = cellNum(cells[iEcnQ]);
+      if (qNum > 0) { ecnQSum += qNum; ecnQCount++; }
+
+      // 4. GIÁ TRỊ ECN: SUM col X
+      var xNum = cellNum(cells[iEcnX]);
+      if (xNum) ecnXSum += xNum;
+
+      // 5. TỔNG SỰ VỤ KHAI BÁO ECN: distinct col AB
+      var ab = cellVal(cells[iEcnAB]);
+      if (ab && ab.trim()) ecnABSet[ab.trim()] = 1;
+
+      // ── Existing: Col M-based counting (TỔNG ECN XỬ LÝ + TỒN KHO RỦI RO) ──
+      var vM = cellVal(cells[iEcnM]);
       if (!vM || vM === '0') return;
-      // Skip rows where col M looks like a header
       if (norm(vM) === 'khong su dung' || norm(vM) === 'loai ecn' || norm(vM) === 'hinh thuc') return;
       ecnTotal++;
-
-      // Sum col Q for risk inventory
-      var qNum = cellNum((row.c||[])[iEcnQ]);
       if (qNum > 0) ecnRiskStock += qNum;
 
       // Classify by type (col M value itself)
@@ -6558,11 +6613,29 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (nm && norm(nm) !== 'nha may') ecnNMMap[nm] = (ecnNMMap[nm]||0) + 1;
     });
 
-    console.log('[DLCN ECN] LIVE: total=' + ecnTotal + ' risk=' + ecnRiskStock);
+    // Format GIÁ TRỊ ECN — hiển thị số tiền định dạng Việt Nam (không thập phân)
+    function fmtMoney(n) {
+      if (n == null || isNaN(n) || n === 0) return '--';
+      return Math.round(Number(n)).toLocaleString('vi-VN') + ' đ';
+    }
+    var ecnABCount = Object.keys(ecnABSet).length;
 
-    // Update ECN KPIs
+    console.log('[DLCN ECN] LIVE: maVT=' + ecnMaVTCount + ' pSum=' + ecnPSum + '(' + ecnPCount + 'ma) qSum=' + ecnQSum + '(' + ecnQCount + 'ma) xSum=' + ecnXSum + ' ab=' + ecnABCount + ' total(M)=' + ecnTotal + ' risk=' + ecnRiskStock);
+
+    // Update ECN KPIs — Section I (mới)
+    setEl('dlcnV-ecnMaVT',  fmtVN(ecnMaVTCount));
+    setEl('dlcnS-ecnMaVT',  'Du lieu LIVE - ' + new Date().toLocaleDateString('vi-VN'));
+    setEl('dlcnV-ecnPSum',  fmtVN(ecnPSum));
+    setEl('dlcnS-ecnPSum',  'Tong so ma ton: ' + fmtVN(ecnPCount) + ' ma');
+    setEl('dlcnV-ecnQSum',  fmtVN(ecnQSum));
+    setEl('dlcnS-ecnQSum',  'Tong so ma ton: ' + fmtVN(ecnQCount) + ' ma');
+    setEl('dlcnV-ecnXSum',  fmtMoney(ecnXSum));
+    setEl('dlcnS-ecnXSum',  'Thanh tien ton kho ECN (cot X)');
+    setEl('dlcnV-ecnAB',    fmtVN(ecnABCount));
+    setEl('dlcnS-ecnAB',    'So vu ECN phan biet (cot AB)');
+    // Update ECN KPIs — existing (TỒN KHO RỦI RO + TỔNG ECN XỬ LÝ)
     setEl('dlcnV-ecnRisk',   fmtVN(ecnRiskStock) + ' pcs');
-    setEl('dlcnS-ecnRisk',   'Ton kho xac nhan (cot Q)');
+    setEl('dlcnS-ecnRisk',   'Ton kho xac nhan (cot Q, loc col M)');
     setEl('dlcnV-ecnTotal',  ecnTotal > 0 ? ecnTotal + '+' : '--');
     setEl('dlcnS-ecnTotal',  'Tong ECN xu ly (cot M)');
     setEl('dlcnV-ecnTotal2', ecnTotal > 0 ? ecnTotal + '+' : '--');
@@ -6591,12 +6664,17 @@ window._syncDLCNAllSections = async function(liveCache) {
     }
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
-    var bravoTable = await gvizFetch(BRAVO_ID, '', null, 'select * limit 10000');
+    // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
+    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select *');
     var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
     var bm = hdrIdx(bravoTable);
 
     // Find column indices
+    // Cột L (index 11) = "Mã sản phẩm" — điều kiện lọc chính; fallback positional index 11
+    var iBvMaSP   = findCol(bm, ['ma san pham','ma vat tu','ma sp','ma erp','product code','ma hang']);
+    if (iBvMaSP < 0) iBvMaSP = 11; // fallback: cột L (0-based index 11)
     var iBvSua    = findCol(bm, ['so lan sua','lan sua','so lan chinh sua','so lan sua doi']);
+    if (iBvSua < 0) iBvSua = 3; // fallback: cột D (0-based index 3)
     var iBvUser   = findCol(bm, ['nguoi khai bao','nguoi kb','ten nguoi','nhan vien','nguoi thuc hien']);
     var iBvThang  = findCol(bm, ['thang khai bao','thang','month','thang tao']);
     var iBvTuan   = findCol(bm, ['tuan khai bao','tuan','week']);
@@ -6604,41 +6682,24 @@ window._syncDLCNAllSections = async function(liveCache) {
     var iBvNgay   = findCol(bm, ['ngay khai bao','ngay','date','creation date','ngay tao']);
     var iBvCongDoan = findCol(bm, ['ma cong doan','cong doan','stage','phuong thuc','ma cong doan ']);
 
-    // Find header row: scan first 10 rows for keyword match
-    var dataStartIdx = 0;
-    for (var hi = 0; hi < Math.min(bravoAllRows.length, 10); hi++) {
-      var rv = (bravoAllRows[hi].c||[]).map(function(c){ return norm(cellVal(c)); }).join('|');
-      if (rv.indexOf('khai bao') > -1 || rv.indexOf('ma san pham') > -1 || rv.indexOf('so lan') > -1) {
-        // This row looks like a data header — data starts next row if it's actually the header
-        // But since gviz with headers=1 already handles this, dataStartIdx = 0
-        break;
-      }
-      // If first cell is not numeric and row is not empty, it might be a title row
-      var c0v = norm(cellVal((bravoAllRows[hi].c||[])[0]));
-      if (!c0v) continue;
-      if (!isNaN(parseFloat(c0v))) { dataStartIdx = hi; break; } // found first numeric row
-      dataStartIdx = hi + 1; // skip non-numeric title rows
-    }
-
-    var bravoData = bravoAllRows.slice(dataStartIdx);
-    var bravoTotal = 0, bravoEdited = 0;
+    // gviz đã tiêu thụ row 7 làm header (range=A7:ZZ, headers=1) → data bắt đầu từ index 0
+    var bravoData = bravoAllRows;
+    // bravoTotal  : dòng có Mã sản phẩm (cột L) khác rỗng
+    // bravoGood   : Mã sản phẩm != rỗng VÀ Số lần sửa <= 1 (khai báo đúng lần đầu)
+    // bravoEdited : Mã sản phẩm != rỗng VÀ Số lần sửa > 1  (có sửa > 1 lần)
+    var bravoTotal = 0, bravoGood = 0, bravoEdited = 0;
     var bravoByMonth = {}, bravoByUser = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0];
     var bravoByCD = {};
 
     bravoData.forEach(function(row) {
-      // Must have at least one non-empty cell
-      var hasData = (row.c||[]).some(function(c){ return c && c.v != null && String(c.v).trim() !== ''; });
-      if (!hasData) return;
-      // First cell or any meaningful identifier
-      var c0 = (row.c||[])[0];
-      var c0v = cellVal(c0);
-      // Skip header-like rows
-      var nc0 = norm(c0v);
-      if (nc0 === 'stt' || nc0 === 'no' || nc0 === 'ma san pham' || nc0 === 'ma vat tu') return;
+      // Chỉ đếm dòng có Mã sản phẩm (cột L) khác rỗng
+      var maSP = cellVal((row.c||[])[iBvMaSP]);
+      if (!maSP || maSP.trim() === '') return;
       bravoTotal++;
 
-      var nSua = iBvSua >= 0 ? (parseInt(cellVal((row.c||[])[iBvSua])) || 0) : 0;
-      if (nSua > 0) bravoEdited++;
+      var nSua = (parseInt(cellVal((row.c||[])[iBvSua])) || 0);
+      if (nSua <= 1) bravoGood++;   // khai báo đúng lần đầu (0 hoặc 1 lần sửa)
+      if (nSua > 1)  bravoEdited++; // có sửa > 1 lần
 
       var nguoi = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
       if (nguoi) {
@@ -6666,22 +6727,21 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (cd) bravoByCD[cd] = (bravoByCD[cd]||0) + 1;
     });
 
-    var bravoQualPct = bravoTotal > 0 ? (bravoTotal - bravoEdited) * 100 / bravoTotal : 0;
-    var bravoEditPct = bravoTotal > 0 ? bravoEdited * 100 / bravoTotal : 0;
+    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' good=' + bravoGood + ' edited(>1)=' + bravoEdited);
 
-    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' edited=' + bravoEdited);
-
-    // Update Bravo KPIs
+    // Update Bravo KPIs — I. TỔNG QUAN DỮ LIỆU
     var todayStr = new Date().toLocaleDateString('vi-VN');
     setEl('dlcnV-bravoTotal',   fmtVN(bravoTotal));
     setEl('dlcnS-bravoTotal',   'Du lieu LIVE - ' + todayStr);
-    setEl('dlcnV-bravoQuality', fmtPct(bravoQualPct, 1));
-    setEl('dlcnS-bravoQuality', fmtVN(bravoTotal - bravoEdited) + '/' + fmtVN(bravoTotal) + ' ma khong can sua');
+    // Khai báo đúng lần đầu: count (Mã SP != rỗng VÀ Số lần sửa <= 1)
+    setEl('dlcnV-bravoQuality', fmtVN(bravoGood));
+    setEl('dlcnS-bravoQuality', fmtVN(bravoGood) + '/' + fmtVN(bravoTotal) + ' ma khai bao dung lan dau');
+    // Có sửa > 1 lần: count (Mã SP != rỗng VÀ Số lần sửa > 1)
     setEl('dlcnV-bravoEdited',  fmtVN(bravoEdited));
-    setEl('dlcnS-bravoEdited',  fmtPct(bravoEditPct, 1) + ' tong ma | Phan tich nguyen nhan');
+    setEl('dlcnS-bravoEdited',  fmtVN(bravoEdited) + '/' + fmtVN(bravoTotal) + ' ma co sua > 1 lan');
     // Section IX.1
     setEl('dlcnV-ix1Total',   fmtVN(bravoTotal));
-    setEl('dlcnV-ix1Quality', fmtPct(bravoQualPct, 1));
+    setEl('dlcnV-ix1Quality', fmtVN(bravoGood));
     setEl('dlcnV-ix1Edited',  fmtVN(bravoEdited));
 
     var erpHdr = document.querySelector('#erp .zone-hdr span');
@@ -6747,8 +6807,8 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     window._dlcnLiveData = {
       tasks: {total:taskTotal, completed:taskDone, late:taskLate, ontime:taskOntime},
-      ecn:   {total:ecnTotal, risk:ecnRiskStock},
-      bravo: {total:bravoTotal, edited:bravoEdited}
+      ecn:   {total:ecnTotal, risk:ecnRiskStock, maVT:ecnMaVTCount, pSum:ecnPSum, qSum:ecnQSum, xSum:ecnXSum, suVu:ecnABCount},
+      bravo: {total:bravoTotal, good:bravoGood, edited:bravoEdited}
     };
     console.log('[_syncDLCNAllSections] OK tasks=' + taskTotal + ' ecn=' + ecnTotal + ' bravo=' + bravoTotal);
 
