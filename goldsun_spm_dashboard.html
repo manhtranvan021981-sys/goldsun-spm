@@ -1053,6 +1053,7 @@ PEOPLE_SCORE =
 <div class="grid-2">
   <div class="escalate-panel">
     <div class="escalate-title">🔴 CÁC VẤN ĐỀ CẦN ESCALATION LÊN GĐ CÔNG NGHỆ</div>
+    <div id="dlcn-escalate-list">
     <div class="escalate-item">
       <div class="escalate-num">1</div>
       <div class="escalate-content">
@@ -1093,6 +1094,7 @@ PEOPLE_SCORE =
         <span class="escalate-action">→ GĐ yêu cầu: Trưởng BP báo cáo trạng thái 2 dự án trong tuần tới.</span>
       </div>
     </div>
+    </div><!-- /dlcn-escalate-list -->
   </div>
 
   <div style="display:flex; flex-direction:column; gap:12px;">
@@ -1100,39 +1102,43 @@ PEOPLE_SCORE =
       <div class="alert-title">📌 TÓM TẮT CẢNH BÁO TIẾN ĐỘ</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div style="text-align:center;padding:12px;background:#fdecea;border-radius:6px;border:1px solid #e74c3c;">
-          <div style="font-size:26px;font-weight:bold;color:#c0392b;">63</div>
+          <div id="dlcn2-taskLate" style="font-size:26px;font-weight:bold;color:#c0392b;">63</div>
           <div style="font-size:11px;color:#c0392b;">Task hoàn thành TRỄ HẠN</div>
         </div>
         <div style="text-align:center;padding:12px;background:#eaf2fb;border-radius:6px;border:1px solid #2980b9;">
-          <div style="font-size:26px;font-weight:bold;color:#1a5276;">1.002</div>
+          <div id="dlcn2-taskDungHan" style="font-size:26px;font-weight:bold;color:#1a5276;">1.002</div>
           <div style="font-size:11px;color:#1a5276;">Task hoàn thành ĐÚNG HẠN</div>
         </div>
         <div style="text-align:center;padding:12px;background:#eafaf1;border-radius:6px;border:1px solid #27ae60;">
-          <div style="font-size:26px;font-weight:bold;color:#1a7a3e;">1</div>
+          <div id="dlcn2-taskBefore" style="font-size:26px;font-weight:bold;color:#1a7a3e;">1</div>
           <div style="font-size:11px;color:#1a7a3e;">Task TRƯỚC HẠN</div>
         </div>
         <div style="text-align:center;padding:12px;background:#f4f6f7;border-radius:6px;border:1px solid #aab;">
-          <div style="font-size:26px;font-weight:bold;color:#1a3a5c;">0</div>
+          <div id="dlcn2-taskOverdue" style="font-size:26px;font-weight:bold;color:#1a3a5c;">0</div>
           <div style="font-size:11px;color:#566573;">Task QUÁ HẠN chưa HT</div>
         </div>
       </div>
     </div>
     <div class="alert-box">
       <div class="alert-title">📊 PHÂN TÍCH NHÓM CÔNG VIỆC TRỄ HẠN</div>
+      <div id="dlcn2-groupBars">
       <div class="bar-row"><div class="bar-label">KB hệ thống KH</div><div class="bar-track"><div class="bar-fill red-f" style="width:96.8%"><span>61</span></div></div><div class="bar-count">61</div></div>
       <div class="bar-row"><div class="bar-label">Cập nhật hồ sơ mẫu</div><div class="bar-track"><div class="bar-fill yellow-f" style="width:1.6%"></div></div><div class="bar-count">1</div></div>
       <div class="bar-row"><div class="bar-label">XD Tiêu chuẩn</div><div class="bar-track"><div class="bar-fill yellow-f" style="width:1.6%"></div></div><div class="bar-count">1</div></div>
       <p class="footnote" style="margin-top:8px;">⚠ 96,8% task trễ thuộc nhóm <strong>Khai báo hệ thống Khách hàng</strong>. Đây là điểm nghẽn duy nhất cần xử lý.</p>
+      </div><!-- /dlcn2-groupBars -->
     </div>
     <div class="alert-box">
       <div class="alert-title">🎯 SO SÁNH KPI MỤC TIÊU vs THỰC TẾ</div>
       <table style="width:100%;font-size:12px;">
-        <tr><th>Chỉ tiêu</th><th>Mục tiêu</th><th>Thực tế</th><th>Đánh giá</th></tr>
+        <thead><tr><th>Chỉ tiêu</th><th>Mục tiêu</th><th>Thực tế</th><th>Đánh giá</th><th style="color:#566573;font-weight:normal">Tiêu chí / Công thức</th></tr></thead>
+        <tbody id="dlcn2-kpiTable">
         <tr><td>% Hoàn thành task</td><td>≥ 95%</td><td><strong>100%</strong></td><td><span class="pill pill-done">✓ ĐẠT</span></td></tr>
         <tr><td>% Update đúng hạn</td><td>≥ 98%</td><td><strong style="color:#c0392b">94,1%</strong></td><td><span class="pill pill-late">✗ CHƯA ĐẠT</span></td></tr>
         <tr><td>Chất lượng KB ERP</td><td>≥ 98%</td><td><strong style="color:#d68910">97,6%</strong></td><td><span class="pill pill-p1">⚠ SÁT NGƯỠNG</span></td></tr>
-        <tr><td>ECN tồn kho = 0</td><td>= 0 pcs</td><td><strong style="color:#c0392b">1.492 pcs</strong></td><td><span class="pill pill-late">✗ VI PHẠM</span></td></tr>
-        <tr><td>Lỗi ERP khai báo sai</td><td>→ 0 lỗi</td><td>Chưa có dữ liệu</td><td><span class="badge badge-yellow">Cần đo</span></td></tr>
+        <tr><td>ECN tồn kho</td><td>= 0 pcs</td><td><strong style="color:#c0392b">--</strong></td><td><span class="pill pill-late">✗ VI PHẠM</span></td></tr>
+        <tr><td>Task quá hạn chưa HT</td><td>= 0</td><td><strong>--</strong></td><td><span class="pill pill-done">--</span></td></tr>
+        </tbody>
       </table>
     </div>
   </div>
@@ -6336,6 +6342,174 @@ window._syncDLCNLateTasks = async function() {
   }
 };
 
+// ── renderSectionII_DLCN: render 4 panel Section II từ live data ──────────
+// Các helper được khai báo ngay trong hàm để đảm bảo hoạt động khi gọi từ global scope
+function renderSectionII_DLCN(td) {
+  function fmtVN(n) {
+    if (n === undefined || n === null || isNaN(Number(n))) return '--';
+    return Math.round(Number(n)).toLocaleString('vi-VN');
+  }
+  function fmtPct(n, d) {
+    if (n === undefined || n === null || isNaN(Number(n))) return '--';
+    return Number(n).toFixed(d != null ? d : 1).replace('.', ',') + '%';
+  }
+  function fmtMoney(n) {
+    if (n == null || isNaN(Number(n)) || Number(n) === 0) return '--';
+    return Math.round(Number(n)).toLocaleString('vi-VN') + ' đ';
+  }
+  var fV = function(n) { return fmtVN(n); };
+
+  // ── Panel 1: Escalation Items ─────────────────────────────────────────────
+  var esc = '';
+  // Item 1: Tỷ lệ đúng hạn vs KPI 98%
+  var opStr   = td.ontimePct.toFixed(1).replace('.', ',') + '%';
+  var gap1    = (98 - td.ontimePct).toFixed(1).replace('.', ',');
+  var stat1   = td.ontimePct >= 98 ? 'ĐẠT KPI ≥ 98%' : 'CHƯA ĐẠT KPI 98% (thiếu ' + gap1 + '%)';
+  var col1    = td.ontimePct >= 98 ? '#27ae60' : '#c0392b';
+  var gArr    = Object.entries(td.groupMap).filter(function(e){ return e[1].late > 0; }).sort(function(a,b){ return b[1].late - a[1].late; });
+  var topGStr = gArr.length > 0 ? gArr[0][0] + ' (' + gArr[0][1].late + ' task)' : 'không ghi nhận nhóm';
+  esc += '<div class="escalate-item"><div class="escalate-num">1</div><div class="escalate-content">' +
+    '<strong style="color:' + col1 + '">Tỷ lệ đúng hạn ' + opStr + ' – ' + stat1 + '</strong>' +
+    '<p>' + fV(td.taskLate) + ' task trễ / ' + fV(td.taskTotal) + ' task. Nhóm trễ nhiều nhất: <em>' + topGStr + '</em>.</p>' +
+    '<span class="escalate-action">→ ' + (td.ontimePct < 98 ? 'GĐ quyết định: Điều chỉnh KPI hay tăng năng lực nhóm thực hiện?' : 'Duy trì theo dõi tuần tới.') + '</span>' +
+    '</div></div>';
+
+  // Item 2: Top dự án trễ nhất
+  var pLArr = Object.entries(td.projLateMap).filter(function(e){ return e[1].late > 0; }).sort(function(a,b){ return b[1].late - a[1].late; });
+  if (pLArr.length > 0) {
+    var tp2 = pLArr[0], tp2Pct = tp2[1].total > 0 ? Math.round(tp2[1].late * 100 / tp2[1].total) : 0;
+    var p2Sub = pLArr.length > 1 ? ' Dự án trễ thứ 2: ' + pLArr[1][0] + ' (' + pLArr[1][1].late + ' trễ).' : '';
+    esc += '<div class="escalate-item"><div class="escalate-num">2</div><div class="escalate-content">' +
+      '<strong>Dự án "' + tp2[0] + '" – ' + tp2[1].late + ' task trễ (' + tp2Pct + '% số task)</strong>' +
+      '<p>Tổng task dự án: ' + tp2[1].total + '.' + p2Sub + '</p>' +
+      '<span class="escalate-action">→ GĐ xem xét: RCA nguyên nhân delay – do KH hay năng lực nội bộ?</span>' +
+      '</div></div>';
+  } else {
+    esc += '<div class="escalate-item"><div class="escalate-num">2</div><div class="escalate-content">' +
+      '<strong style="color:#27ae60">Tất cả dự án đúng hạn</strong>' +
+      '<p>Không ghi nhận dự án nào có task trễ trong dữ liệu hiện tại.</p>' +
+      '</div></div>';
+  }
+
+  // Item 3: Top PIC trễ
+  var picArr = Object.entries(td.picLateMap).filter(function(e){ return e[1].late > 0; }).sort(function(a,b){ return b[1].late - a[1].late; });
+  if (picArr.length > 0) {
+    var tp3 = picArr[0], tp3Pct = tp3[1].total > 0 ? Math.round(tp3[1].late * 100 / tp3[1].total) : 0;
+    esc += '<div class="escalate-item"><div class="escalate-num">3</div><div class="escalate-content">' +
+      '<strong>' + tp3[0].toUpperCase() + ' – ' + tp3Pct + '% task trễ (' + tp3[1].late + '/' + tp3[1].total + ' task)</strong>' +
+      '<p>Cần đánh giá: quá tải, thiếu hỗ trợ hay vướng mắc kỹ thuật hệ thống KH?</p>' +
+      '<span class="escalate-action">→ GĐ quyết định: Phân bổ lại nguồn lực hoặc hỗ trợ kỹ thuật?</span>' +
+      '</div></div>';
+  } else {
+    esc += '<div class="escalate-item"><div class="escalate-num">3</div><div class="escalate-content">' +
+      '<strong style="color:#27ae60">Tất cả PIC đúng hạn</strong>' +
+      '<p>Không ghi nhận PIC nào có task trễ.</p>' +
+      '</div></div>';
+  }
+
+  // Item 4: ECN tồn kho
+  var ecnOk = (!td.ecnQSum || td.ecnQSum === 0);
+  esc += '<div class="escalate-item"><div class="escalate-num">4</div><div class="escalate-content">' +
+    (ecnOk
+      ? '<strong style="color:#27ae60">ECN tồn kho: 0 pcs – Đang kiểm soát tốt</strong><p>Không có tồn kho ECN phát sinh. Duy trì theo dõi định kỳ.</p>'
+      : '<strong style="color:#c0392b">🔴 ECN TỒN KHO XÁC NHẬN: ' + fV(td.ecnQSum) + ' pcs (' + (td.ecnQCount||0) + ' mã) – Giá trị: ' + fmtMoney(td.ecnXSum) + '</strong>' +
+        '<p>Cần phân công người chịu trách nhiệm xử lý từng mã tồn. Rủi ro hàng aging tăng theo thời gian.</p>' +
+        '<span class="escalate-action">→ GĐ yêu cầu: Báo cáo phương án từng mã – tiêu hủy, chuyển đổi hay thương lượng với KH?</span>'
+    ) +
+    '</div></div>';
+
+  // Item 5: ERP khai báo chất lượng
+  var brQPct = td.bravoTotal > 0 ? td.bravoGood * 100 / td.bravoTotal : 100;
+  var brOk   = brQPct >= 98;
+  esc += '<div class="escalate-item"><div class="escalate-num">5</div><div class="escalate-content">' +
+    '<strong style="color:' + (brOk ? '#27ae60' : '#d68910') + '">Chất lượng khai báo ERP: ' + brQPct.toFixed(1).replace('.', ',') + '% (' + fV(td.bravoEdited) + ' mã sửa > 1 lần)</strong>' +
+    '<p>Tổng mã khai báo: ' + fV(td.bravoTotal) + '. ' + fV(td.bravoEdited) + ' mã phải sửa >1 lần — gây tiêu hao thời gian khai báo và tăng rủi ro sai lệch dữ liệu.</p>' +
+    '<span class="escalate-action">→ ' + (brOk ? 'Đạt KPI ≥ 98%. Duy trì chuẩn nhập liệu.' : 'GĐ yêu cầu: Truy nguyên nhân sai KB đầu tiên. Kiểm tra training và checklist nhập liệu.') + '</span>' +
+    '</div></div>';
+
+  var escEl = document.getElementById('dlcn-escalate-list');
+  if (escEl) escEl.innerHTML = esc;
+
+  // ── Panel 2: TÓM TẮT CẢNH BÁO TIẾN ĐỘ ──────────────────────────────────
+  var lEl = document.getElementById('dlcn2-taskLate');
+  var dEl = document.getElementById('dlcn2-taskDungHan');
+  var bEl = document.getElementById('dlcn2-taskBefore');
+  var oEl = document.getElementById('dlcn2-taskOverdue');
+  if (lEl) lEl.textContent = fV(td.taskLate);
+  if (dEl) dEl.textContent = fV(td.taskDungHan);
+  if (bEl) bEl.textContent = fV(td.taskBeforeHan);
+  if (oEl) oEl.textContent = fV(td.taskQuaHan != null ? td.taskQuaHan : td.taskWarnLate);
+
+  // ── Panel 3: PHÂN TÍCH NHÓM CÔNG VIỆC TRỄ HẠN ────────────────────────────
+  var barsEl = document.getElementById('dlcn2-groupBars');
+  if (barsEl) {
+    var gLate = Object.entries(td.groupMap).filter(function(e){ return e[1].late > 0; }).sort(function(a,b){ return b[1].late - a[1].late; });
+    var maxL  = gLate.length > 0 ? Math.max(gLate[0][1].late, 1) : 1;
+    var bHTML = '';
+    if (gLate.length === 0) {
+      bHTML = '<p style="color:#27ae60;font-size:12px;padding:8px;">✅ Không có nhóm công việc nào trễ hạn.</p>';
+    } else {
+      gLate.forEach(function(e) {
+        var w   = Math.max(2, Math.round(e[1].late * 100 / maxL));
+        var cls = w > 50 ? 'red-f' : 'yellow-f';
+        bHTML += '<div class="bar-row">' +
+          '<div class="bar-label" title="' + e[0] + '">' + e[0] + '</div>' +
+          '<div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + w + '%"><span>' + e[1].late + '</span></div></div>' +
+          '<div class="bar-count">' + e[1].late + '/' + e[1].total + '</div></div>';
+      });
+      var topG = gLate[0];
+      var tPct = td.taskLate > 0 ? Math.round(topG[1].late * 100 / td.taskLate) : 0;
+      bHTML += '<p class="footnote" style="margin-top:8px;">⚠ ' + tPct + '% task trễ thuộc nhóm <strong>' + topG[0] + '</strong>. Đây là điểm nghẽn cần ưu tiên xử lý.</p>';
+    }
+    barsEl.innerHTML = bHTML;
+  }
+
+  // ── Panel 4: SO SÁNH KPI MỤC TIÊU vs THỰC TẾ ───────────────────────────
+  var kpiEl = document.getElementById('dlcn2-kpiTable');
+  if (kpiEl) {
+    var brQNum  = td.bravoTotal > 0 ? td.bravoGood * 100 / td.bravoTotal : 100;
+    var qhCount = td.taskQuaHan != null ? td.taskQuaHan : td.taskWarnLate;
+    var rows = [
+      {
+        label:'% Hoàn thành task', target:'≥ 95%',
+        val:fmtPct(td.compPct,0), ok:td.compPct >= 95, warn:false,
+        note:'Đếm dòng có cột S = "Kết thúc công việc" (hoàn thành) ÷ Tổng dòng có nội dung cột G (Nội dung công việc) × 100. Nguồn: sheet 00_Task_Schedule'
+      },
+      {
+        label:'% Đúng hạn', target:'≥ 98%',
+        val:fmtPct(td.ontimePct,1), ok:td.ontimePct >= 98, warn:(td.ontimePct >= 95 && td.ontimePct < 98),
+        note:'Đếm dòng cột T = "Hoàn thành trước hạn" + dòng cột T = "Hoàn thành đúng hạn" ÷ Tổng task × 100. Thực tế: ' + fV(td.taskBeforeHan) + ' trước hạn + ' + fV(td.taskDungHan) + ' đúng hạn = ' + fV(td.taskOntime) + ' / ' + fV(td.taskTotal)
+      },
+      {
+        label:'Chất lượng KB ERP', target:'≥ 98%',
+        val:brQNum.toFixed(1).replace('.', ',') + '%', ok:brQNum >= 98, warn:(brQNum >= 95 && brQNum < 98),
+        note:'Đếm dòng cột L (Mã sản phẩm) ≠ rỗng VÀ cột D (Số lần sửa) ≤ 1 ÷ Tổng mã cột L ≠ rỗng × 100. Thực tế: ' + fV(td.bravoGood) + ' / ' + fV(td.bravoTotal) + ' mã. Nguồn: Bravo'
+      },
+      {
+        label:'ECN tồn kho', target:'= 0 pcs',
+        val:(td.ecnQSum > 0 ? fV(td.ecnQSum)+' pcs' : '0 pcs'), ok:!(td.ecnQSum > 0), warn:false,
+        note:'SUM cột Q (Số lượng tồn kho xác nhận) — chỉ tính dòng > 0. Số mã tồn: ' + (td.ecnQCount||0) + ' mã. Nguồn: sheet Báo cáo theo dõi quản lý ECN V2'
+      },
+      {
+        label:'Task quá hạn chưa HT', target:'= 0',
+        val:fV(qhCount), ok:qhCount === 0, warn:false,
+        note:'Đếm dòng cột T = "Quá hạn chưa hoàn thành" (task đã quá deadline nhưng chưa kết thúc). Nguồn: sheet 00_Task_Schedule'
+      }
+    ];
+    var kHTML = '';
+    rows.forEach(function(r) {
+      var cls = r.ok ? 'pill pill-done' : (r.warn ? 'pill pill-p1' : 'pill pill-late');
+      var txt = r.ok ? '✓ ĐẠT'         : (r.warn ? '⚠ SÁT NGƯỠNG' : '✗ CHƯA ĐẠT');
+      var vst = r.ok ? '' : (r.warn ? ' style="color:#d68910"' : ' style="color:#c0392b"');
+      kHTML += '<tr><td>' + r.label + '</td><td>' + r.target + '</td>' +
+        '<td><strong' + vst + '>' + r.val + '</strong></td>' +
+        '<td><span class="' + cls + '">' + txt + '</span></td>' +
+        '<td style="font-size:10px;color:#566573;line-height:1.4">' + r.note + '</td></tr>';
+    });
+    kpiEl.innerHTML = kHTML;
+  }
+}
+
 // ── _syncDLCNAllSections: cập nhật toàn bộ DLCN sections từ 3 GSheet ──
 window._syncDLCNAllSections = async function(liveCache) {
   var TASKS_ID = '1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ';
@@ -6390,15 +6564,19 @@ window._syncDLCNAllSections = async function(liveCache) {
     (table.cols||[]).forEach(function(c, i) {
       var lb = (c.label || c.id || '').trim().toLowerCase()
         .replace(/\s+/g,' ')
-        .normalize('NFD').replace(/[̀-ͯ]/g,'');
+        .normalize('NFD').replace(/[̀-ͯ]/g,'')
+        .replace(/đ/g,'d');
       if (lb) map[lb] = i;
     });
     return map;
   }
   // Normalize Vietnamese string for comparison
+  // Bổ sung .replace(/đ/g,'d') vì "đ" (U+0111) KHÔNG phân tách trong NFD
+  // → nếu thiếu bước này, 'dung han' sẽ không khớp 'đúng hạn'
   function norm(s) {
     return String(s||'').toLowerCase()
       .normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/đ/g,'d')
       .replace(/\s+/g,' ').trim();
   }
   // Find col index by multiple key candidates (normalized)
@@ -6433,6 +6611,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     var iPic     = findCol(tm, ['pic trien khai','pic','nguoi phu trach','phu trach']);
     var iTuan    = findCol(tm, ['tuan','week','tuan ke hoach']);
     var iThang   = findCol(tm, ['thang','month','thang ke hoach']);
+    var iGroup   = findCol(tm, ['nhom cong viec','nhom cv','nhom','group']);
 
     // Fallback to absolute column index if header lookup fails (A=0, B=1, G=6, S=18, T=19, U=20)
     if (iContent < 0) iContent = 6;
@@ -6441,11 +6620,13 @@ window._syncDLCNAllSections = async function(liveCache) {
     if (iProj    < 0) iProj    = 1;
     if (iNhaMay  < 0) iNhaMay  = 20;
 
-    console.log('[DLCN Tasks 00_Task_Schedule] content=' + iContent + ' colS=' + iColS + ' colT=' + iColT + ' proj=' + iProj + ' nhaMay=' + iNhaMay + ' totalRows=' + taskRows.length);
+    console.log('[DLCN Tasks 00_Task_Schedule] content=' + iContent + ' colS=' + iColS + ' colT=' + iColT + ' proj=' + iProj + ' nhaMay=' + iNhaMay + ' iGroup=' + iGroup + ' totalRows=' + taskRows.length);
 
     var taskTotal = 0, taskDone = 0, taskLate = 0, taskOntime = 0;
+    var taskBeforeHan = 0, taskDungHan = 0, taskQuaHan = 0;
     var taskWarnGreen = 0, taskWarnYellow = 0, taskWarnLate = 0;
     var projMap = {}, nhaMaySet = {}, weekMap = {}, monthMap = {}, picLateMap = {};
+    var groupMap = {}, projLateMap = {};
 
     taskRows.forEach(function(row) {
       // Skip completely empty rows
@@ -6466,6 +6647,7 @@ window._syncDLCNAllSections = async function(liveCache) {
       // — norm() không xử lý đúng "đ" (U+0111) và một số nguyên âm tổ hợp tiếng Việt
       var colSRaw = getByIdx(row, iColS).toLowerCase();
       var colTRaw = getByIdx(row, iColT).toLowerCase();
+      var colTNorm = norm(getByIdx(row, iColT));  // normalized: bỏ dấu để so khớp ổn định
 
       // TỶ LỆ HOÀN THÀNH: Col S = "Kết thúc công việc"
       if (colSRaw.indexOf('kết thúc') > -1 || colSRaw.indexOf('ket thuc') > -1) taskDone++;
@@ -6480,21 +6662,20 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (colSRaw.indexOf('quá hạn') > -1 || (colSRaw.indexOf('qua han') > -1 && colSRaw.indexOf('bao') > -1)) taskWarnLate++;
 
       // TỶ LỆ ĐÚNG HẠN: Col T = "Hoàn thành trước hạn" HOẶC "Hoàn thành đúng hạn"
-      var isOntime = (
-        colTRaw.indexOf('trước hạn') > -1 ||
-        colTRaw.indexOf('đúng hạn')  > -1 ||
-        colTRaw.indexOf('truoc han') > -1 ||
-        colTRaw.indexOf('đung han')  > -1
-      );
-      if (isOntime) taskOntime++;
+      // Dùng colTNorm (bỏ dấu) để so khớp ổn định với mọi chuẩn Unicode của Google Sheets
+      var isBeforeHan = (colTNorm.indexOf('truoc han') > -1);
+      var isDungHan   = !isBeforeHan && (colTNorm.indexOf('dung han') > -1);
+      var isOntime = isBeforeHan || isDungHan;
+      if (isBeforeHan) taskBeforeHan++;
+      if (isDungHan)   taskDungHan++;
+      if (isOntime)    taskOntime++;
+
+      // QUÁ HẠN CHƯA HOÀN THÀNH: Col T = "Quá hạn chưa hoàn thành" — dùng norm
+      var isQuaHan = (colTNorm.indexOf('qua han') > -1 && colTNorm.indexOf('chua') > -1);
+      if (isQuaHan) taskQuaHan++;
 
       // HOÀN THÀNH SAU HẠN: Col T = "Hoàn thành sau hạn"
-      var isLate = (
-        colTRaw.indexOf('hoàn thành sau hạn') > -1 ||
-        colTRaw.indexOf('hoan thanh sau han') > -1 ||
-        (colTRaw.indexOf('sau hạn') > -1 && colTRaw.indexOf('hoàn thành') > -1) ||
-        (colTRaw.indexOf('sau han') > -1 && colTRaw.indexOf('hoan thanh') > -1)
-      );
+      var isLate = (colTNorm.indexOf('sau han') > -1 && colTNorm.indexOf('hoan thanh') > -1);
       if (isLate) taskLate++;
 
       // Dự án (Col B)
@@ -6509,6 +6690,17 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (!picLateMap[pic]) picLateMap[pic] = {total:0, late:0};
       picLateMap[pic].total++;
       if (isLate) picLateMap[pic].late++;
+
+      // Nhóm công việc (iGroup) → groupMap
+      var grp = (iGroup >= 0 ? getByIdx(row, iGroup) : '') || 'Không rõ nhóm';
+      if (!groupMap[grp]) groupMap[grp] = {total:0, late:0};
+      groupMap[grp].total++;
+      if (isLate) groupMap[grp].late++;
+
+      // Dự án late tracking → projLateMap
+      if (!projLateMap[proj]) projLateMap[proj] = {total:0, late:0};
+      projLateMap[proj].total++;
+      if (isLate) projLateMap[proj].late++;
 
       var tuan = iTuan >= 0 ? getByIdx(row, iTuan) : '';
       if (tuan) weekMap[tuan] = (weekMap[tuan]||0) + 1;
@@ -6546,7 +6738,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     // Col Q (idx 16) = Số lượng tồn kho xác nhận (1) → SUM = TON KHO ECN RUI RO
     // Col X (idx 23) = Thành tiền (3) = (1)*(2) → SUM = GIÁ TRỊ ECN
     // Col AB(idx 27) = Số ECN → distinct count = TỔNG SỰ VỤ
-    var ecnTable = await gvizFetch(ECN_ID, 'Báo cáo theo dõi quản lý ECN V2', 7, 'select *');
+    var ecnTable = await gvizFetch(ECN_ID, 'Báo cáo theo dõi quản lý ECN V2', 7, 'select * limit 99999');
     var ecnRows  = (ecnTable.rows||[]).filter(function(r){ return r && r.c; });
 
     var ecnTotal = 0, ecnRiskStock = 0;
@@ -6665,7 +6857,7 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
     // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
-    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select *');
+    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit 99999');
     var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
     var bm = hdrIdx(bravoTable);
 
@@ -6804,6 +6996,28 @@ window._syncDLCNAllSections = async function(liveCache) {
     // Status
     var liveEl = document.getElementById('dlcnLiveStatus');
     if (liveEl) liveEl.textContent = '[LIVE] Tasks:' + taskTotal + ' ECN:' + ecnTotal + ' Bravo:' + bravoTotal + ' - ' + new Date().toLocaleTimeString('vi-VN');
+
+    // ── Render Section II từ live data ──────────────────────────────────────
+    try {
+      renderSectionII_DLCN({
+        taskTotal:    taskTotal,    taskDone:       taskDone,
+        taskLate:     taskLate,     taskOntime:     taskOntime,
+        taskBeforeHan:taskBeforeHan,taskDungHan:    taskDungHan,
+        taskQuaHan:   taskQuaHan,
+        taskWarnLate: taskWarnLate, taskWarnGreen:  taskWarnGreen,
+        taskWarnYellow:taskWarnYellow,
+        ontimePct:    ontimePct,    compPct:        compPct,
+        latePct:      latePct,
+        groupMap:     groupMap,     projLateMap:    projLateMap,
+        picLateMap:   picLateMap,
+        bravoTotal:   bravoTotal,   bravoGood:      bravoGood,
+        bravoEdited:  bravoEdited,
+        ecnQSum:      ecnQSum,      ecnQCount:      ecnQCount,
+        ecnPSum:      ecnPSum,      ecnPCount:      ecnPCount,
+        ecnXSum:      ecnXSum,      ecnMaVTCount:   ecnMaVTCount,
+        ecnABCount:   ecnABCount
+      });
+    } catch(e2) { console.warn('[renderSectionII_DLCN]', e2.message, e2.stack); }
 
     window._dlcnLiveData = {
       tasks: {total:taskTotal, completed:taskDone, late:taskLate, ontime:taskOntime},
