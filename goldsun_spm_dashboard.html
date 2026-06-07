@@ -1330,7 +1330,7 @@ PEOPLE_SCORE =
   <div class="kpi-card blue"><div class="kpi-label">TỔNG MÃ ĐÃ KHAI BÁO</div><div id="dlcnV-ix1Total" class="kpi-value">45.853</div><div class="kpi-sub">10/2025 → 05/2026 | GS5+GS1+GS6</div></div>
   <div class="kpi-card green"><div class="kpi-label">KHAI BÁO ĐÚNG LẦN ĐẦU</div><div id="dlcnV-ix1Quality" class="kpi-value">97,6%</div><div class="kpi-sub">44.731/45.853 mã không cần sửa</div><span class="kpi-target target-warn">⚠ Sát KPI ≥ 98%</span></div>
   <div class="kpi-card yellow"><div class="kpi-label">MÃ CÓ SỬA ≥ 1 LẦN</div><div id="dlcnV-ix1Edited" class="kpi-value">1.122</div><div class="kpi-sub">2,4% | 1.040 sửa 1L, 44 sửa 2L, 31 sửa 3L</div><span class="kpi-target target-miss">⚠ Cần phân tích nguyên nhân</span></div>
-  <div class="kpi-card red"><div class="kpi-label">MÃ DÒNG PHỔ BIẾN NHẤT</div><div class="kpi-value">VDC01</div><div class="kpi-sub">7.003 mã – Vật liệu in (kẽm, bản in, cao su)</div></div>
+  <div class="kpi-card red"><div class="kpi-label">MÃ DÒNG PHỔ BIẾN NHẤT</div><div id="dlcnV-ix1Line" class="kpi-value">VDC01</div><div id="dlcnV-ix1LineSub" class="kpi-sub">7.003 mã – Vật liệu in (kẽm, bản in, cao su)</div></div>
 </div>
 
 <div class="section-title">IX.2 – BIỂU ĐỒ KHAI BÁO THEO TUẦN & NGÀY TRONG TUẦN</div>
@@ -5809,9 +5809,26 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
   let _ixC = {};
   function _dIX(id){ const cv=gc(id); if(cv){ const ex=Chart.getChart(cv); if(ex) ex.destroy(); } if(_ixC[id]){ try{_ixC[id].destroy();}catch(e){} delete _ixC[id]; } }
   function _abb(n){ const p=String(n||'').trim().split(/\s+/); if(p.length<=1) return n; const fn=p[p.length-1]; const ini=p.slice(0,-1).map(w=>w.charAt(0).toUpperCase()).join('.'); return ini+'.'+fn.charAt(0).toUpperCase()+fn.slice(1).toLowerCase(); }
+  function _fn(n){ return (n==null||n==='')?'--':Number(n).toLocaleString('vi-VN'); }
+  function _pc(n,d){ return (n==null||isNaN(+n))?'--':(+n).toFixed(d==null?1:d).replace('.',',')+'%'; }
+  function _txt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
+  function _sub(id,v){ const el=document.getElementById(id); if(el&&el.nextElementSibling) el.nextElementSibling.textContent=v; }
 
   window._renderIXChartsFromData = function(s){
     const b=(s&&s.bravo)||{}, e=(s&&s.ecn)||{};
+
+    // ── IX.1 KPI cards — cập nhật từ live / snapshot data ──
+    if(b.total!=null){
+      _txt('dlcnV-ix1Total', _fn(b.total));
+      _sub('dlcnV-ix1Total', (b.date_from||'10/2025')+' → '+(b.date_to||'05/2026')+' | GS5+GS1+GS6');
+      const qRate=Math.max(0,100-(+(b.edit_rate)||0));
+      _txt('dlcnV-ix1Quality', _pc(qRate,1));
+      _sub('dlcnV-ix1Quality', _fn((b.total||0)-(b.edited||0))+'/'+_fn(b.total||0)+' mã không cần sửa');
+      _txt('dlcnV-ix1Edited', _fn(b.edited));
+      _sub('dlcnV-ix1Edited', _pc(b.edit_rate,1)+' | Tổng '+_fn(b.total_edits||(b.edited||0))+' lần sửa');
+      const tl=b.top_lines&&b.top_lines[0];
+      if(tl){ _txt('dlcnV-ix1Line',tl.label||'--'); _txt('dlcnV-ix1LineSub',_fn(tl.value)+' mã'); }
+    }
 
     // 1. Biểu đồ tuần — from SNAPSHOT.bravo.by_week
     const wkArr=b.by_week||[];
@@ -5886,8 +5903,8 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
     if(gc('cEcnNM')) _ixC['cEcnNM']=new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS1 Hà Nội (23)'],datasets:[{data:[68,23],backgroundColor:['#1a5276','#27ae60'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:12,weight:'bold'},formatter:v=>v}}}});
   };
 
-  // Gọi ngay với SNAPSHOT (IIFE đã chạy trước initDLCN)
-  window._renderIXChartsFromData(window._DLCN_SNAPSHOT || {});
+  // Dùng live data nếu đã fetch xong, ngược lại dùng SNAPSHOT
+  window._renderIXChartsFromData(window._dlcnLiveData || window._DLCN_SNAPSHOT || {});
 })();
 
 // ── Fetch Bravo Google Sheets – đếm Mã công đoạn (gvizFetch, tránh CORS) ──
@@ -6118,7 +6135,7 @@ function parseCSV(text){
   return rows;
 }
 function findHeader(rows, aliases){ for(let i=0;i<Math.min(rows.length,20);i++){ const r=rows[i].map(norm).join('|'); if(aliases.every(a=>r.includes(norm(a)))) return i; } return 0; }
-function col(headers, aliases){ const nh=headers.map(norm); for(const a of aliases){ const na=norm(a); let idx=nh.findIndex(h=>h===na||h.includes(na)||na.includes(h)); if(idx>=0) return idx; } return -1; }
+function col(headers, aliases){ const nh=headers.map(norm); for(const a of aliases){ const na=norm(a); if(!na) continue; let idx=nh.findIndex(h=>h===na||h.includes(na)); if(idx>=0) return idx; } return -1; }
 function toNum(v){ const x=String(v??'').replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,''); return x?Number(x)||0:0; }
 function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}; let edited=0,total_edits=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); if(ed>0) edited++; total_edits+=ed; byUser[user]??={name:user,total:0,edited:0,total_edits:0}; byUser[user].total++; if(ed>0) byUser[user].edited++; byUser[user].total_edits+=ed; const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.total)); return {...fallback,total:valid.length,edited,total_edits,edit_rate:edited*100/Math.max(1,valid.length),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value}))}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
 function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=col(h,['Ngày kết thúc']); const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0; data.forEach(r=>{ const st=norm(r[idxStatus]), al=norm(r[idxAlert]); const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
@@ -6137,12 +6154,12 @@ function gvizToCSV(table) {
   return [header].concat(rows);
 }
 async function fetchGvizCSV(sheetId, tabName, startRow) {
-  var table = await gvizFetch(sheetId, tabName || '', startRow || null, 'select * limit 10000');
+  var table = await gvizFetch(sheetId, tabName || '', startRow || null, 'select *');
   return gvizToCSV(table);
 }
 async function refreshLiveV5(){
   const status=[]; const live=JSON.parse(JSON.stringify(SNAPSHOT));
-  try{ var rows; try{ rows=await fetchCSV(LIVE_SOURCES.bravo.id); }catch(_fe){ rows=await fetchGvizCSV(LIVE_SOURCES.bravo.id); } live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push('Bravo: LIVE '+rows.length+' dòng'); }catch(e){ status.push('Bravo: snapshot ('+e.message+')'); }
+  try{ var rows; try{ const _bt=await gvizFetch(LIVE_SOURCES.bravo.id,'',null,'select *'); rows=gvizToCSV(_bt); }catch(_fe){ try{ rows=await fetchCSV(LIVE_SOURCES.bravo.id); }catch(_fe2){ rows=await fetchGvizCSV(LIVE_SOURCES.bravo.id); } } live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push('Bravo: LIVE '+rows.length+' dòng'); }catch(e){ status.push('Bravo: snapshot ('+e.message+')'); }
   try{ var rows2; try{ rows2=await fetchCSV(LIVE_SOURCES.tasks.id); }catch(_fe){ rows2=await fetchGvizCSV(LIVE_SOURCES.tasks.id); } live.tasks=summarizeTaskRows(rows2,SNAPSHOT.tasks); status.push('Task: LIVE '+rows2.length+' dòng'); }catch(e){ status.push('Task: snapshot ('+e.message+')'); }
   try{ const rows=await fetchCSV(LIVE_SOURCES.ecn.id); status.push(`ECN: LIVE ${rows.length} dòng (giữ rules snapshot nếu thiếu header)`); }catch(e){ status.push('ECN: dùng snapshot ('+e.message+')'); }
   live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
