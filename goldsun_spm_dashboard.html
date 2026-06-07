@@ -5785,9 +5785,9 @@ new Chart(gc('cHour'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+'
 // Dữ liệu cQual: [% sửa, số mã sửa, tổng mã] theo từng NV
 const qualNV=['P.P.Anh','T.THƯƠNG','T.V.HẢO','NHẬT ANH','T.HIỀN','V.DUY','Đ.HẰNG','N.PHÚ','T.PHƯƠNG','X.TÙNG','V.ANH','T.TÌNH'];
 const qualPct=[43.8,37.2,22.8,19.1,9.7,3.8,3.6,3.5,2.1,1.6,1.5,0.4];
-const qualFixed=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,595*0],[4,899]];
-// Fix HÀ VIỆT ANH fix = 0 out of 595 not listed (low); keep all from table
-const qualFixedCorrect=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[8,595],[4,899]];
+const qualFixed=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,1364],[4,899]];
+// PHẠM VIỆT ANH: 20 edits / 1364 total — buildIXCharts dùng SNAPSHOT thay thế bên dưới
+const qualFixedCorrect=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,1364],[4,899]];
 const qualColors=qualPct.map(v=>v>10?'#e74c3c':v>2?'#f39c12':'#27ae60');
 new Chart(gc('cQual'),{type:'bar',data:{labels:qualNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qualPct,backgroundColor:qualColors,borderRadius:3},{label:'KPI 2%',data:Array(qualNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const [fix,tot]=qualFixedCorrect[i];return `${v}%  (${fix}/${tot} mã)`;}},tooltip:{callbacks:{label:c=>{if(c.dataset.label==='KPI 2%')return 'KPI: 2%';const i=c.dataIndex;const [fix,tot]=qualFixedCorrect[i];return ` ${c.raw}% – Sửa: ${fix}/${tot} mã`;}}}},scales:{x:{max:55,ticks:{callback:v=>v+'%'}}}}});
 
@@ -5803,43 +5803,136 @@ new Chart(gc('cEcnKH'),{type:'bar',data:{labels:['Samsung SEV','Samsung SEVT','C
 
 new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS1 Hà Nội (23)'],datasets:[{data:[68,23],backgroundColor:['#1a5276','#27ae60'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:12,weight:'bold'},formatter:v=>v}}}});
 
-// ── Fetch Bravo Google Sheets – đếm Mã công đoạn (cột I) ──
+// ── buildIXCharts: render Section IX từ SNAPSHOT/live data ──
+// Gọi lần đầu với window._DLCN_SNAPSHOT, gọi lại khi refreshLiveV5 xong.
+(function(){
+  let _ixC = {};
+  function _dIX(id){ const cv=gc(id); if(cv){ const ex=Chart.getChart(cv); if(ex) ex.destroy(); } if(_ixC[id]){ try{_ixC[id].destroy();}catch(e){} delete _ixC[id]; } }
+  function _abb(n){ const p=String(n||'').trim().split(/\s+/); if(p.length<=1) return n; const fn=p[p.length-1]; const ini=p.slice(0,-1).map(w=>w.charAt(0).toUpperCase()).join('.'); return ini+'.'+fn.charAt(0).toUpperCase()+fn.slice(1).toLowerCase(); }
+
+  window._renderIXChartsFromData = function(s){
+    const b=(s&&s.bravo)||{}, e=(s&&s.ecn)||{};
+
+    // 1. Biểu đồ tuần — from SNAPSHOT.bravo.by_week
+    const wkArr=b.by_week||[];
+    if(wkArr.length){
+      const wL2=wkArr.map(w=>{const m=(w.label||'').match(/(\d{4})-W(\d+)/);return m?'W'+m[2].padStart(2,'0')+'/'+m[1].slice(2):w.label;});
+      const wD2=wkArr.map(w=>w.value||0);
+      _dIX('cWeek');
+      if(gc('cWeek')) _ixC['cWeek']=new Chart(gc('cWeek'),{type:'bar',data:{labels:wL2,datasets:[{label:'Mã khai báo',data:wD2,backgroundColor:wD2.map(v=>v>3000?'#e74c3c':v>1000?'#f39c12':'#2980b9'),borderRadius:3}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=500,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>3000?'#922b21':v>1000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>3000?'#fdecea':v>1000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v},tooltip:{callbacks:{label:c=>` ${c.raw.toLocaleString('vi')} mã`}}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{maxRotation:60,font:{size:8}}}}}});
+    }
+
+    // 2. Biểu đồ theo thứ — from SNAPSHOT.bravo.by_dow
+    const dowArr=b.by_dow||[];
+    if(dowArr.length){
+      const dL=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'];
+      const dD=dL.map((_,i)=>(dowArr[i]&&dowArr[i].value)||0);
+      _dIX('cDow');
+      if(gc('cDow')) _ixC['cDow']=new Chart(gc('cDow'),{type:'bar',data:{labels:dL,datasets:[{label:'Mã',data:dD,backgroundColor:['#2980b9','#2980b9','#e74c3c','#e74c3c','#e67e22','#95a5a6','#7f8c8d'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>(v/1000).toFixed(1)+'K'}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
+    }
+
+    // 3. Biểu đồ tháng — from SNAPSHOT.bravo.by_month (giữ phân chia batch)
+    const moArr=b.by_month||[];
+    if(moArr.length){
+      const mL=moArr.map(m=>{const p=(m.label||'').split('-');return p.length===2?p[1]+'/'+p[0].slice(2):m.label;});
+      const mT=moArr.map(m=>m.value||0);
+      const bM={'12/25':2494,'01/26':20948,'02/26':1,'03/26':0,'04/26':1,'05/26':0};
+      const mMan=mT.map((t,i)=>Math.max(0,t-(bM[mL[i]]||0)));
+      const mBat=mL.map(l=>bM[l]||0);
+      _dIX('cMonth');
+      if(gc('cMonth')) _ixC['cMonth']=new Chart(gc('cMonth'),{type:'bar',data:{labels:mL,datasets:[{label:'Thủ công',data:mMan,backgroundColor:'#2980b9',borderRadius:3},{label:'Batch',data:mBat,backgroundColor:'#e74c3c',borderRadius:3}]},options:{responsive:true,scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>v>=1000?(v/1000).toFixed(1)+'K':v}}},plugins:{legend:{labels:{font:{size:10}}},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>500,color:'#fff',font:{size:8,weight:'bold'},formatter:v=>v>=1000?(v/1000).toFixed(0)+'K':v},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.raw.toLocaleString('vi')} mã`}}}}});
+    }
+
+    // 4. Biểu đồ giờ — from SNAPSHOT.bravo.by_hour
+    const hrArr=b.by_hour||[];
+    if(hrArr.length){
+      const hD2=Array.from({length:24},(_,i)=>{const it=hrArr.find(h=>String(h.label)===String(i));return it?it.value:0;});
+      _dIX('cHour');
+      if(gc('cHour')) _ixC['cHour']=new Chart(gc('cHour'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+'h'),datasets:[{label:'Mã',data:hD2,backgroundColor:hD2.map(v=>v>5000?'#e74c3c':v>2000?'#f39c12':'#2980b9'),borderRadius:2}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=800,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#922b21':v>2000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#fdecea':v>2000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{font:{size:9}}}}}});
+    }
+
+    // 5. Biểu đồ chất lượng — from SNAPSHOT.bravo.quality (tính đúng edit_rate, fix[edited,total])
+    const qArr=(b.quality||[]).slice(0,12);
+    if(qArr.length){
+      const qNV=qArr.map(q=>_abb(q.name));
+      const qPct=qArr.map(q=>Number((q.edit_rate||0).toFixed(1)));
+      const qFA=qArr.map(q=>[q.edited||0,q.total||0]);
+      const qCol=qPct.map(v=>v>10?'#e74c3c':v>2?'#f39c12':'#27ae60');
+      const qMax=Math.max(55,Math.ceil(Math.max(...qPct)*1.2)||55);
+      _dIX('cQual');
+      if(gc('cQual')) _ixC['cQual']=new Chart(gc('cQual'),{type:'bar',data:{labels:qNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qPct,backgroundColor:qCol,borderRadius:3},{label:'KPI 2%',data:Array(qNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const[fix,tot]=qFA[i];return `${v}%  (${fix}/${tot} mã)`;}}},scales:{x:{max:qMax,ticks:{callback:v=>v+'%'}}}}});
+    }
+
+    // 6. Top dòng hàng — from SNAPSHOT.bravo.top_lines
+    const tlArr=(b.top_lines||[]).slice(0,15);
+    if(tlArr.length){
+      const tLL=tlArr.map(l=>l.label),tLV=tlArr.map(l=>l.value||0);
+      const tLC=tLV.map(v=>v>5000?'#1a3a5c':v>3000?'#1a5276':v>1500?'#2980b9':'#5dade2');
+      _dIX('cDong');
+      if(gc('cDong')) _ixC['cDong']=new Chart(gc('cDong'),{type:'bar',data:{labels:tLL,datasets:[{label:'Số mã',data:tLV,backgroundColor:tLC,borderRadius:4,barThickness:16}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:20}},plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:10,weight:'bold'},anchor:'end',align:'left',offset:6,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{x:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v},grid:{color:'#f0f2f5'}},y:{ticks:{font:{size:11}}}}}});
+    }
+
+    // 7. ECN loại — from SNAPSHOT.ecn.types
+    const ecnT=e.types&&e.types.length?e.types:[{label:'Dừng theo TĐ',value:66},{label:'SX hết tồn',value:12},{label:'Dừng ngay',value:10},{label:'Không SD',value:1},{label:'Khác',value:2}];
+    _dIX('cEcnType');
+    if(gc('cEcnType')) _ixC['cEcnType']=new Chart(gc('cEcnType'),{type:'doughnut',data:{labels:ecnT.map(t=>`${t.label} (${t.value})`),datasets:[{data:ecnT.map(t=>t.value),backgroundColor:['#2980b9','#f39c12','#e74c3c','#95a5a6','#9b59b6'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,cutout:'60%',plugins:{legend:{display:false},datalabels:{display:true,color:'#fff',font:{size:10,weight:'bold'},formatter:v=>v>1?v:''}},rotation:-90,circumference:360}});
+
+    // 8. ECN theo khách hàng — giữ phân tách Samsung SEV/SEVT (ECN live chưa được parse)
+    _dIX('cEcnKH');
+    if(gc('cEcnKH')) _ixC['cEcnKH']=new Chart(gc('cEcnKH'),{type:'bar',data:{labels:['Samsung SEV','Samsung SEVT','Canon','Tân An','ANZ','Brother'],datasets:[{label:'ECN',data:[48,20,20,1,1,1],backgroundColor:['#1a5276','#2980b9','#27ae60','#f39c12','#e67e22','#9b59b6'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>v}},scales:{y:{beginAtZero:true},x:{ticks:{font:{size:9},maxRotation:30}}}}});
+
+    // 9. ECN theo nhà máy
+    _dIX('cEcnNM');
+    if(gc('cEcnNM')) _ixC['cEcnNM']=new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS1 Hà Nội (23)'],datasets:[{data:[68,23],backgroundColor:['#1a5276','#27ae60'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:12,weight:'bold'},formatter:v=>v}}}});
+  };
+
+  // Gọi ngay với SNAPSHOT (IIFE đã chạy trước initDLCN)
+  window._renderIXChartsFromData(window._DLCN_SNAPSHOT || {});
+})();
+
+// ── Fetch Bravo Google Sheets – đếm Mã công đoạn (gvizFetch, tránh CORS) ──
 (function fetchCongDoan(){
-  const url='https://docs.google.com/spreadsheets/d/17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU/export?format=csv';
-  fetch(url,{mode:'cors'}).then(r=>r.text()).then(csv=>{
-    const rows=csv.split('\n');
-    const cnt={};
-    let total=0;
-    let headerFound=false;
-    rows.forEach(row=>{
-      const cols=row.split(',');
-      if(!headerFound){if(cols[8]&&cols[8].trim()==='Mã công đoạn')headerFound=true;return;}
-      const cd=cols[8]?cols[8].trim().replace(/^"|"$/g,''):'';
-      if(cd&&cd!==''){cnt[cd]=(cnt[cd]||0)+1;total++;}
-    });
-    if(total===0){document.getElementById('cdLoading').textContent='⚠ Không tải được dữ liệu (CORS). Dùng dữ liệu ước tính.';renderCongDoan(null);return;}
-    document.getElementById('cdLoading').style.display='none';
-    document.getElementById('cCongDoan').style.display='block';
-    const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
-    const labels=sorted.map(x=>x[0]);
-    const vals=sorted.map(x=>x[1]);
-    const colors=['#1a5276','#27ae60','#e67e22','#8e24aa','#0e6655','#e74c3c','#2980b9'];
-    new Chart(gc('cCongDoan'),{type:'bar',data:{labels,datasets:[{label:'Số mã',data:vals,backgroundColor:colors.slice(0,labels.length),borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:ctx=>{const c=['#1a3a5c','#1a4d2e','#7d3c00','#4a235a','#0b4033','#7b241c','#1a5276'];return c[ctx.dataIndex%c.length];},backgroundColor:ctx=>{const c=['#eaf2fb','#eafaf1','#fdf0e6','#f4ecf7','#e8f8f5','#fdecea','#eaf2fb'];return c[ctx.dataIndex%c.length];},borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
-  }).catch(()=>{document.getElementById('cdLoading').textContent='⚠ Lỗi kết nối GSheet. Dùng dữ liệu ước tính.';renderCongDoan(null);});
-  function renderCongDoan(data){
-    // Ước tính dựa trên cấu trúc kho Bravo
+  const BRAVO_ID='17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU';
+  function renderCongDoan(){
     const estLabels=['CD01 (Phôi sóng)','CD02 (Tờ in offset)','CD03 (BTP hộp)','CD04 (Sóng cuộn)','CD05 (Thành phẩm)'];
     const estVals=[3200,2800,1600,800,5400];
     document.getElementById('cdLoading').style.display='none';
     document.getElementById('cCongDoan').style.display='block';
+    const exCD=Chart.getChart(gc('cCongDoan')); if(exCD) exCD.destroy();
     new Chart(gc('cCongDoan'),{type:'bar',data:{labels:estLabels,datasets:[{label:'Số mã (ước tính)',data:estVals,backgroundColor:['#1a5276','#2980b9','#e67e22','#27ae60','#0e6655'],borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:['#1a3a5c','#1a5276','#7d3c00','#1a4d2e','#0b4033'],backgroundColor:['#eaf2fb','#eaf2fb','#fdf0e6','#eafaf1','#e8f8f5'],borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
   }
+  if(typeof gvizFetch!=='function'){ renderCongDoan(); return; }
+  gvizFetch(BRAVO_ID,'',7,'select I limit 99999')
+    .then(function(table){
+      const cdIdx=0; // select I trả về 1 cột duy nhất
+      const cnt={};
+      (table.rows||[]).forEach(function(row){
+        const cell=row.c&&row.c[cdIdx];
+        if(!cell) return;
+        const cd=String(cell.f||cell.v||'').trim();
+        if(cd) cnt[cd]=(cnt[cd]||0)+1;
+      });
+      const total=Object.values(cnt).reduce((s,v)=>s+v,0);
+      if(!total){ document.getElementById('cdLoading').textContent='⚠ Không có dữ liệu cột Mã công đoạn. Dùng ước tính.'; renderCongDoan(); return; }
+      document.getElementById('cdLoading').style.display='none';
+      document.getElementById('cCongDoan').style.display='block';
+      const exCD=Chart.getChart(gc('cCongDoan')); if(exCD) exCD.destroy();
+      const sorted=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+      const labels=sorted.map(x=>x[0]), vals=sorted.map(x=>x[1]);
+      const colors=['#1a5276','#27ae60','#e67e22','#8e24aa','#0e6655','#e74c3c','#2980b9'];
+      new Chart(gc('cCongDoan'),{type:'bar',data:{labels,datasets:[{label:'Số mã',data:vals,backgroundColor:colors.slice(0,labels.length),borderRadius:6,barThickness:40}]},options:{responsive:true,layout:{padding:{top:28}},plugins:{legend:{display:false},datalabels:{color:ctx=>{const c=['#1a3a5c','#1a4d2e','#7d3c00','#4a235a','#0b4033','#7b241c','#1a5276'];return c[ctx.dataIndex%c.length];},backgroundColor:ctx=>{const c=['#eaf2fb','#eafaf1','#fdf0e6','#f4ecf7','#e8f8f5','#fdecea','#eaf2fb'];return c[ctx.dataIndex%c.length];},borderRadius:4,padding:{x:6,y:3},font:{size:11,weight:'bold'},anchor:'end',align:'top',offset:4,formatter:v=>v.toLocaleString('vi')+' mã'}},scales:{y:{ticks:{callback:v=>v.toLocaleString('vi')},grid:{color:'#f0f2f5'}},x:{ticks:{font:{size:11,weight:'bold'}}}}}});
+    })
+    .catch(function(){ document.getElementById('cdLoading').textContent='⚠ Không tải được Bravo. Dùng dữ liệu ước tính.'; renderCongDoan(); });
 })();
-// Auto-sync khi initDLCN được gọi: kéo dữ liệu LIVE từ 3 GSheet
+// Auto-sync LIVE khi initDLCN được gọi: cập nhật TDT + Section IX + late tasks
 setTimeout(async function() {
   try {
-    if (typeof window._syncDLCNAllSections === 'function') await window._syncDLCNAllSections();
-    if (typeof window._syncDLCNLateTasks === 'function') window._syncDLCNLateTasks();
+    if (typeof window.refreshLiveV5 === 'function') {
+      await window.refreshLiveV5(); // cập nhật TDT I-VIII + Section IX charts
+    } else {
+      if (typeof window._syncDLCNAllSections === 'function') await window._syncDLCNAllSections();
+      if (typeof window._syncDLCNLateTasks === 'function') window._syncDLCNLateTasks();
+    }
   } catch(e) { console.warn('[initDLCN auto-sync]', e.message); }
 }, 800);
 }
@@ -5852,6 +5945,7 @@ const LIVE_SOURCES = {
   tasks: {id:'1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ', name:'Công việc hằng ngày'},
   ecn: {id:'1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', name:'ECN thay đổi sản phẩm'}
 };
+window._DLCN_SNAPSHOT = SNAPSHOT;
 let CURRENT = SNAPSHOT;
 let currentActions = [];
 function fmt(n){ if(n===undefined||n===null||n==='') return '--'; if(typeof n==='string') return n; return Number(n).toLocaleString('vi-VN'); }
@@ -6054,6 +6148,7 @@ async function refreshLiveV5(){
   live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
   window._dlcnLiveData = live;
   renderV5(live,'live'); setText('#liveStatus', status.join(' · '));
+  if(typeof window._renderIXChartsFromData==='function') window._renderIXChartsFromData(live);
   if(typeof window._syncDLCNAllSections==='function') window._syncDLCNAllSections(live);
 }
 
