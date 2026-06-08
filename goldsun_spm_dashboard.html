@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1400, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GoldSun SPM Dashboard v8</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -33,7 +33,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .loading-bar{width:200px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;overflow:hidden}
 .loading-fill{height:100%;background:#fff;border-radius:2px;animation:loading 2s ease-in-out infinite}
 @keyframes loading{0%{width:0%}50%{width:70%}100%{width:100%}}
-.content{padding:14px;overflow:auto}
+.content{padding:14px;overflow-x:clip}
 .tab-content{display:none}.tab-content.active{display:block}
 .alert-strip{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .a-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid transparent;transition:all 0.15s}
@@ -60,7 +60,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .pt{font-size:13px;font-weight:600;color:#1A1A1A}
 .pt-icon{width:20px;height:20px;border-radius:5px;background:var(--red);display:inline-flex;align-items:center;justify-content:center;margin-right:6px;font-size:11px;color:#fff}
 .pa{font-size:11px;color:var(--green);cursor:pointer;font-weight:500}
-.ai-box{background:linear-gradient(135deg,#EEF4FB,#E8F4FF);border:1px solid #B5D4F4;border-radius:12px;padding:14px;margin-bottom:12px}
+.ai-box{background:linear-gradient(135deg,#EEF4FB,#E8F4FF);border:1px solid #B5D4F4;border-radius:12px;padding:14px;margin-bottom:12px;overflow:hidden;max-width:100%}
 .ai-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .ai-lbl{font-size:12px;font-weight:600;color:#1A4B8C;display:flex;align-items:center;gap:6px}
 .ai-ref{font-size:10px;padding:5px 10px;border:1px solid #378ADD;border-radius:12px;cursor:pointer;color:#1A4B8C;background:transparent;font-weight:500}
@@ -143,7 +143,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
 .bp-ph.show{display:flex}
 
 /* ── RAG CHIPS ── */
-.rag-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}
+.rag-strip{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:12px}
 .rag-chip{background:#fff;border:2px solid #E8E6E0;border-radius:12px;padding:11px 8px 9px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden}
 .rag-chip:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12)}
 .rag-icon{font-size:16px;margin-bottom:3px;line-height:1}
@@ -257,6 +257,37 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#F4F3F0;font-size:13px;o
   .mc-val{font-size:13px}
   .nav-item{padding:8px 6px;font-size:10px}
   .content{padding:4px}
+}
+
+/* ── Responsive reflow: inline-styled containers ── */
+@media (max-width:768px){
+  /* Topbar: ẩn GSP NEXT + Quế Võ text, chỉ giữ logo + brand name + actions */
+  .topbar-brand{overflow:hidden}
+  .topbar-brand>div:nth-child(3),
+  .topbar-brand>div:nth-child(4),
+  .topbar-brand>div:nth-child(5),
+  .topbar-brand>div:nth-child(6){display:none!important}
+  /* RAG strip 3 cols on tablet */
+  .rag-strip{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  /* AI box: stack vertically */
+  .ai-box{flex-direction:column!important}
+  .ai-box>div[style*="flex:0 0 32%"]{flex:1 1 auto!important}
+  .ai-box>div[style*="border-left:1px solid #B5D4F4"]{border-left:none!important;padding-left:0!important;border-top:1px solid #B5D4F4;padding-top:10px}
+  /* Metric-row2: stack dọc; chart wrap xuống hàng riêng full-width */
+  #metric-row2{flex-direction:column!important}
+  #metric-row2>div:first-child{flex-wrap:wrap!important}
+  #metric-row2>div:first-child>div:last-child{flex:1 1 100%!important;min-width:0!important}
+  /* Inline grids: single/double column */
+  div[style*="grid-template-columns:60fr 40fr"]{grid-template-columns:1fr!important}
+  div[style*="grid-template-columns:35fr 65fr"]{grid-template-columns:1fr!important}
+  div[style*="grid-template-columns:1fr 1fr 2fr"]{grid-template-columns:1fr 1fr!important}
+  div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+  /* DLCN 8-col KPI grid → 2 cols */
+  div[style*="grid-template-columns:repeat(8,minmax(0,1fr))"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:480px){
+  .rag-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  div[style*="grid-template-columns:1fr 1fr 2fr"]{grid-template-columns:1fr!important}
 }
 
 /* ── L2 anchor nav (DLCN sections) ── */
