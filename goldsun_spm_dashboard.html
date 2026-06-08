@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=1400, user-scalable=yes">
 <title>GoldSun SPM Dashboard v8</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
@@ -1341,7 +1341,7 @@ PEOPLE_SCORE =
 </div>
 <!-- Dòng 2: cDow 3/5 + cHour 2/5 -->
 <div style="display:grid;grid-template-columns:3fr 2fr;gap:12px;margin-bottom:14px">
-  <div class="chart-w"><div class="chart-t" style="font-size:11.5px">Phân bố khai báo theo ngày trong tuần</div><canvas id="cDow" height="140"></canvas></div>
+  <div class="chart-w"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><span class="chart-t" style="font-size:11.5px;margin:0">Phân bố khai báo theo ngày trong tuần</span><div style="display:flex;align-items:center;gap:6px"><span id="dowWeekCount" style="font-size:30px;font-weight:700;background:#e8f4fd;color:#1a4b8c;padding:6px 27px;border-radius:30px;border:1px solid #bee3f8;white-space:nowrap">—</span><select id="dowWeekFilter" style="font-size:10.5px;padding:2px 7px;border:1px solid #ccc;border-radius:4px;color:#2c3e50;background:#fff;cursor:pointer;max-width:160px"><option value="">Tất cả tuần</option></select></div></div><canvas id="cDow" height="140"></canvas></div>
   <div class="chart-w"><div class="chart-t" style="font-size:11.5px">Phân bố khai báo theo giờ trong ngày</div><canvas id="cHour" height="140"></canvas></div>
 </div>
 
@@ -1896,9 +1896,12 @@ PEOPLE_SCORE =
       </div>
     </div>
   </div>
-  <!-- 3 biểu đồ — 1 hàng, chia đều 1/3 mỗi cái -->
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px">
+  <!-- Hàng 1: YQ mẫu theo tuần — full width -->
+  <div style="margin-bottom:12px">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>YQ mẫu theo tuần</div></div><div class="cw" style="height:175px"><canvas id="c-weekly"></canvas></div></div>
+  </div>
+  <!-- Hàng 2: Tình trạng mẫu 60% | Pipeline YC → OK 40% -->
+  <div style="display:grid;grid-template-columns:60fr 40fr;gap:12px;margin-bottom:12px">
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Tình trạng mẫu</div></div>
       <div class="cw" style="height:175px"><canvas id="c-status"></canvas></div>
     </div>
@@ -2439,7 +2442,7 @@ let charts = {};
 
 // ── GVIZ FETCH ─────────────────────────────────────────────────
 // JSONP — hoạt động cả file:// lẫn https://, không bị CORS
-function gvizFetch(sheetId, tabName, startRow, tqQuery) {
+function gvizFetch(sheetId, tabName, startRow, tqQuery, timeoutMs) {
   return new Promise((resolve, reject) => {
     const cbName = '_gviz_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     const rangePart = startRow ? `&range=A${startRow}:ZZ` : '';  // ZZ đủ rộng mọi cột
@@ -2449,8 +2452,8 @@ function gvizFetch(sheetId, tabName, startRow, tqQuery) {
 
     const timeout = setTimeout(() => {
       cleanup();
-      reject(new Error(`Timeout (20s) — sheet "${tabName}". Kiểm tra: (1) sheet đã chia sẻ "Anyone with link"? (2) Kết nối mạng OK?`));
-    }, 20000);
+      reject(new Error(`Timeout (${(timeoutMs||20000)/1000}s) — sheet "${tabName}". Kiểm tra: (1) sheet đã chia sẻ "Anyone with link"? (2) Kết nối mạng OK?`));
+    }, timeoutMs || 20000);
 
     window[cbName] = function(response) {
       cleanup();
@@ -3324,14 +3327,14 @@ function renderMetrics() {
   const ph = DATA.phantich || {yq:0,ord:0,val:0,tot:0};
   const convRate = s.total ? Math.round(ph.yq/s.total*100)+'%' : '--';
   document.getElementById('metric-row2').innerHTML =
-  // ── Trái 50%: Giá trị LM + Giá trị ĐH + Line chart
-    `<div style="flex:0 0 50%;min-width:0;display:flex;gap:8px">`
+  // ── Trái 70%: Giá trị LM + Giá trị ĐH + Line chart (mở rộng)
+    `<div style="flex:0 0 70%;min-width:0;display:flex;gap:8px">`
   + `<div style="${mcStyle}"><div class="mc-label">GIÁ TRỊ LÀM MẪU</div><div class="mc-val">${fmtBil(s.gtLamMauSum)}</div><div class="mc-sub">GT làm mẫu dự kiến</div></div>`
   + `<div style="${mcStyle}"><div class="mc-label">GIÁ TRỊ ĐH</div><div class="mc-val">${fmtBil(s.gtDHSum)}</div><div class="mc-sub">GT đơn hàng dự kiến</div></div>`
   + `<div style="flex:1;min-width:0;background:#fff;border:1px solid #E8E6E0;border-radius:12px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,0.06)">`
   + `<div class="mc-label" style="margin-bottom:5px">YQ NHẬN &amp; BÀN GIAO THEO THÁNG — LINE + TRENDLINE</div>`
-  + `<div style="height:100px"><canvas id="c-monthly-yq"></canvas></div></div></div>`
-  // ── Phải 50%: 2 order boxes từ PHANTICH_MAU_DONHANG
+  + `<div style="height:145px"><canvas id="c-monthly-yq"></canvas></div></div></div>`
+  // ── Phải 30%: 2 order boxes từ PHANTICH_MAU_DONHANG
   + `<div style="flex:1;min-width:0;display:flex;gap:8px">`
   + `<div class="ob ob-green" style="flex:1;min-width:0">`
   + `<div class="ob-lbl" style="color:var(--green)">🔄 YQ → Đơn hàng</div>`
@@ -3343,7 +3346,7 @@ function renderMetrics() {
   + `<div class="ob ob-blue" style="flex:1;min-width:0">`
   + `<div class="ob-lbl" style="color:#1A4B8C">📦 Tổng đơn hàng</div>`
   + `<div class="ob-row"><div class="ob-nm">Số dòng ĐH</div><div class="ob-nv" style="color:#1A4B8C">${(ph.ord||0).toLocaleString('vi-VN')}</div></div>`
-  + `<div class="ob-row"><div class="ob-nm">Tổng giá trị</div><div class="ob-nv" style="color:#1A4B8C;font-size:15px">${fmtBil(ph.val||0)}</div></div>`
+  + `<div class="ob-row"><div class="ob-nm">Tổng giá trị</div><div class="ob-nv" style="color:#1A4B8C;font-size:30px">${fmtBil(ph.val||0)}</div></div>`
   + `</div></div>`;
 }
 
@@ -4030,14 +4033,16 @@ function renderMonthlyYQChart() {
           const text  = String(val);
           ctx.font = 'bold 9px Segoe UI,Arial';
           const tw = ctx.measureText(text).width;
+          const m  = ctx.measureText('0');
+          const fh = m.actualBoundingBoxAscent + m.actualBoundingBoxDescent;
           const color = ds.borderColor || '#333';
           ctx.fillStyle = color;
           ctx.globalAlpha = 0.13;
           ctx.beginPath();
           if (isTop) {
-            ctx.roundRect(pt.x - tw/2 - 3, pt.y - 20, tw + 6, 13, 3);
+            ctx.roundRect(pt.x - tw/2 - 3, pt.y - fh*2 - 3, tw + 6, fh + 6, 3);
           } else {
-            ctx.roundRect(pt.x - tw/2 - 3, pt.y + 8,  tw + 6, 13, 3);
+            ctx.roundRect(pt.x - tw/2 - 3, pt.y + fh - 3,   tw + 6, fh + 6, 3);
           }
           ctx.fill();
           ctx.globalAlpha = 1;
@@ -4045,10 +4050,10 @@ function renderMonthlyYQChart() {
           ctx.textAlign = 'center';
           if (isTop) {
             ctx.textBaseline = 'bottom';
-            ctx.fillText(text, pt.x, pt.y - 8);
+            ctx.fillText(text, pt.x, pt.y - fh);
           } else {
             ctx.textBaseline = 'top';
-            ctx.fillText(text, pt.x, pt.y + 9);
+            ctx.fillText(text, pt.x, pt.y + fh);
           }
         });
         ctx.restore();
@@ -4080,7 +4085,7 @@ function renderMonthlyYQChart() {
     ]},
     options:{
       responsive: true, maintainAspectRatio: false,
-      layout: { padding: { top: 22, bottom: 4 } },
+      layout: { padding: { top: 22, bottom: 20 } },
       plugins:{
         legend:{
           display: true, position:'bottom',
@@ -4100,7 +4105,7 @@ function renderMonthlyYQChart() {
         }
       },
       scales:{
-        x:{ ticks:{ font:{size:9}, maxRotation:45, maxTicksLimit:18 },
+        x:{ ticks:{ font:{size:9}, maxRotation:45, maxTicksLimit:18, padding:18 },
             grid:{ color:'#F0EDE8' } },
         y:{ beginAtZero:true,
             ticks:{ font:{size:9}, stepSize:1, maxTicksLimit:5 },
@@ -5839,14 +5844,68 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
       if(gc('cWeek')) _ixC['cWeek']=new Chart(gc('cWeek'),{type:'bar',data:{labels:wL2,datasets:[{label:'Mã khai báo',data:wD2,backgroundColor:wD2.map(v=>v>3000?'#e74c3c':v>1000?'#f39c12':'#2980b9'),borderRadius:3}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=500,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>3000?'#922b21':v>1000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>3000?'#fdecea':v>1000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v},tooltip:{callbacks:{label:c=>` ${c.raw.toLocaleString('vi')} mã`}}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{maxRotation:60,font:{size:8}}}}}});
     }
 
-    // 2. Biểu đồ theo thứ — from SNAPSHOT.bravo.by_dow
-    const dowArr=b.by_dow||[];
-    if(dowArr.length){
-      const dL=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'];
-      const dD=dL.map((_,i)=>(dowArr[i]&&dowArr[i].value)||0);
-      _dIX('cDow');
-      if(gc('cDow')) _ixC['cDow']=new Chart(gc('cDow'),{type:'bar',data:{labels:dL,datasets:[{label:'Mã',data:dD,backgroundColor:['#2980b9','#2980b9','#e74c3c','#e74c3c','#e67e22','#95a5a6','#7f8c8d'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>(v/1000).toFixed(1)+'K'}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
+    // 2. Biểu đồ theo thứ — hỗ trợ bộ lọc tuần
+    const _dL=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'];
+    const _dOrd=[1,2,3,4,5,6,0]; // Mon→Sun (JS getDay: 0=Sun,1=Mon...6=Sat)
+    function _getDD(wk){
+      // Dùng nguồn có NHIỀU TUẦN HƠN (tránh live data rỗng override snapshot đã patch)
+      const _ldWd=(window._dlcnLiveData&&window._dlcnLiveData.bravo&&window._dlcnLiveData.bravo.by_week_dow)||{};
+      const _snWd=(window._DLCN_SNAPSHOT&&window._DLCN_SNAPSHOT.bravo&&window._DLCN_SNAPSHOT.bravo.by_week_dow)||{};
+      const _wd=Object.keys(_ldWd).length>=Object.keys(_snWd).length?_ldWd:_snWd;
+      if(wk&&_wd[wk]){ const wd=_wd[wk]; return _dOrd.map(d=>wd[d]||0); }
+      if(wk) return null;
+      // "Tất cả tuần": ưu tiên b.by_dow (tổng hợp toàn lịch sử từ snapshot/live summary)
+      // _wd chỉ chứa dữ liệu từ live sheet gần đây, không đại diện toàn bộ
+      const da=b.by_dow||[];
+      if(da.length) return _dL.map((_,i)=>(da[i]&&da[i].value)||0);
+      if(Object.keys(_wd).length) return _dOrd.map(d=>Object.values(_wd).reduce((s,wd)=>s+(wd[d]||0),0));
+      return [0,0,0,0,0,0,0];
     }
+    function _bDow(wk){
+      _dIX('cDow'); const dD=_getDD(wk);
+      const _cnt=document.getElementById('dowWeekCount');
+      if(!gc('cDow')) return;
+      if(dD===null){ // chưa có live data — đang tự động fetch
+        if(_cnt) _cnt.textContent='⏳';
+        _ixC['cDow']=new Chart(gc('cDow'),{type:'bar',data:{labels:_dL,datasets:[{label:'Mã',data:[0,0,0,0,0,0,0],backgroundColor:'#e8ecf0',borderRadius:4}]},options:{responsive:true,layout:{padding:{top:30}},plugins:{legend:{display:false},datalabels:{display:false},title:{display:true,text:'⏳ Đang tải dữ liệu tuần này…',color:'#2980b9',font:{size:11,weight:'bold'}}},scales:{y:{beginAtZero:true,ticks:{display:false},grid:{display:false}},x:{grid:{display:false}}}}}); return;
+      }
+      if(_cnt){const _tot=dD.reduce((s,v)=>s+(v||0),0);_cnt.textContent=_tot.toLocaleString('vi-VN')+' mã';}
+      _ixC['cDow']=new Chart(gc('cDow'),{type:'bar',data:{labels:_dL,datasets:[{label:'Mã',data:dD,backgroundColor:['#2980b9','#2980b9','#e74c3c','#e74c3c','#e67e22','#95a5a6','#7f8c8d'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
+    }
+    const _dSel=document.getElementById('dowWeekFilter');
+    if(_dSel){
+      // Dùng nguồn có NHIỀU TUẦN HƠN (ldWks vs snWks), tránh live data rỗng override
+      const _ldWks=(window._dlcnLiveData&&window._dlcnLiveData.bravo&&window._dlcnLiveData.bravo.weeks_available)||[];
+      const _snWks=(window._DLCN_SNAPSHOT&&window._DLCN_SNAPSHOT.bravo&&window._DLCN_SNAPSHOT.bravo.weeks_available)||[];
+      const _bestWks=_ldWks.length>=_snWks.length?_ldWks:_snWks;
+      const _rawWks=_bestWks.length?_bestWks:(b.by_week||[]).map(w=>w.label).filter(Boolean).sort();
+      const wks = (_rawWks||[]).slice().reverse();
+      const _curVal=_dSel.value; // giữ lựa chọn hiện tại nếu đang có
+      const _top3Wks=wks.slice(0,3);
+      const _top3Lbl=['Tuần gần nhất','Tuần thứ 2','Tuần thứ 3'];
+      _dSel.innerHTML='<option value="">Tất cả các tuần</option>'+_top3Wks.map((w,i)=>{const mm=w.match(/(\d+)-W(\d+)/);const wlbl=mm?'W'+mm[2]+'/'+mm[1]:w;return `<option value="${w}"${w===_curVal?' selected':''}>${_top3Lbl[i]} — ${wlbl}</option>`;}).join('');
+      _dSel.onchange=function(){ _bDow(_dSel.value); };
+      // Auto-fetch: kiểm tra SNAPSHOT (không b) — tránh loop khi live.bravo.by_week_dow rỗng
+      var _snWdChk=(window._DLCN_SNAPSHOT&&window._DLCN_SNAPSHOT.bravo&&window._DLCN_SNAPSHOT.bravo.by_week_dow)||{};
+      if(!Object.keys(_snWdChk).length){
+        if(!window._dowFetchPending){
+          window._dowFetchPending=true;
+          var _BRID=LIVE_SOURCES.bravo.id;
+          gvizFetch(_BRID,'',7,'select * limit 1').then(function(_hdr){
+            var _c=_hdr.cols||[],_tg=['ngay tao ma','ngay khai bao'],_dc=null;
+            _c.forEach(function(c){ var nl=norm(c.label||c.id||''); if(!_dc&&_tg.some(function(t){ return nl===t||nl.includes(t); })) _dc=c.id; });
+            if(!_dc) throw new Error('Không tìm thấy cột ngày');
+            return gvizFetch(_BRID,'',7,'select '+_dc+' limit 99999');
+          }).then(function(_dbt){
+            var _wd={}; (_dbt.rows||[]).forEach(function(row){ var cell=row.c&&row.c[0]; if(!cell) return; var dt=(cell.v instanceof Date)?cell.v:_parseDt(String(cell.f!=null?cell.f:'')||String(cell.v!=null?cell.v:'')); if(dt&&!isNaN(dt)){ var wk=_isoWk(dt),dw=dt.getDay(); _wd[wk]=_wd[wk]||[0,0,0,0,0,0,0]; _wd[wk][dw]++; } });
+            if(Object.keys(_wd).length){ [window._DLCN_SNAPSHOT,window._dlcnLiveData].forEach(function(src){ if(src&&src.bravo){ src.bravo.by_week_dow=_wd; src.bravo.weeks_available=Object.keys(_wd).sort(); } }); }
+            window._dowFetchPending=false;
+            if(typeof window._renderIXChartsFromData==='function') window._renderIXChartsFromData(window._dlcnLiveData||window._DLCN_SNAPSHOT||{});
+          }).catch(function(e){ console.warn('DOW auto-fetch lỗi:',e); window._dowFetchPending=false; });
+        }
+      }
+    }
+    if(b.by_week_dow||b.by_dow) _bDow(_dSel&&_dSel.value||'');
 
     // 3. Biểu đồ tháng — from SNAPSHOT.bravo.by_month (giữ phân chia batch)
     const moArr=b.by_month||[];
@@ -6137,10 +6196,12 @@ function parseCSV(text){
 function findHeader(rows, aliases){ for(let i=0;i<Math.min(rows.length,20);i++){ const r=rows[i].map(norm).join('|'); if(aliases.every(a=>r.includes(norm(a)))) return i; } return 0; }
 function col(headers, aliases){ const nh=headers.map(norm); for(const a of aliases){ const na=norm(a); if(!na) continue; let idx=nh.findIndex(h=>h===na||h.includes(na)); if(idx>=0) return idx; } return -1; }
 function toNum(v){ const x=String(v??'').replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,''); return x?Number(x)||0:0; }
-function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}; let edited=0,total_edits=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); if(ed>0) edited++; total_edits+=ed; byUser[user]??={name:user,total:0,edited:0,total_edits:0}; byUser[user].total++; if(ed>0) byUser[user].edited++; byUser[user].total_edits+=ed; const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.total)); return {...fallback,total:valid.length,edited,total_edits,edit_rate:edited*100/Math.max(1,valid.length),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value}))}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
+function _parseDt(s){ const t=String(s||'').trim(); let m; if((m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1],+m[2]-1,+m[3]); if((m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) return new Date(+m[3],+m[2]-1,+m[1]); if((m=t.match(/^Date\((\d+),(\d+),(\d+)\)/))) return new Date(+m[1],+m[2],+m[3]); return null; }
+function _isoWk(d){ const t=new Date(d.getTime()); t.setDate(t.getDate()+3-(t.getDay()+6)%7); const y=t.getFullYear(); const w1=new Date(y,0,4); return y+'-W'+String(1+Math.round(((t-w1)/864e5-3+(w1.getDay()+6)%7)/7)).padStart(2,'0'); }
+function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']), idxDate=col(h,['Ngày tạo mã','Ngày khai báo']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}, by_week_dow={}; let edited=0,total_edits=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); if(ed>0) edited++; total_edits+=ed; byUser[user]??={name:user,total:0,edited:0,total_edits:0}; byUser[user].total++; if(ed>0) byUser[user].edited++; byUser[user].total_edits+=ed; const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; const dt=_parseDt(r[idxDate]); if(dt&&!isNaN(dt)){ const wk=_isoWk(dt),dw=dt.getDay(); if(!by_week_dow[wk]) by_week_dow[wk]=[0,0,0,0,0,0,0]; by_week_dow[wk][dw]++; } }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.total)); return {...fallback,total:valid.length,edited,total_edits,edit_rate:edited*100/Math.max(1,valid.length),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value})),by_week_dow,weeks_available:Object.keys(by_week_dow).sort()}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
 function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=col(h,['Ngày kết thúc']); const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0; data.forEach(r=>{ const st=norm(r[idxStatus]), al=norm(r[idxAlert]); const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
 function mergePeople(s){ const m={}; function get(n){ const k=norm(n).toUpperCase(); m[k]??={name:String(n||'Không rõ').trim(),bravo:0,task:0,late:0,edit_rate:0,ecn:0,risk_stock:0,score:95}; return m[k]; } (s.bravo.top_creators||[]).forEach(x=>{const p=get(x.name); p.bravo=x.total||0; p.edit_rate=x.edit_rate||0;}); (s.tasks.pic_stats||[]).forEach(x=>{const p=get(x.name||x.pic); p.task=x.total||0; p.late=x.late||0;}); (s.ecn.people||[]).forEach(x=>{const p=get(x.name); p.ecn=x.ecn||0; p.risk_stock=x.risk||0;}); Object.values(m).forEach(p=>{ const ontime=p.task?Math.max(0,100-p.late*100/p.task):100; const quality=Math.max(0,100-(p.edit_rate||0)); const risk=p.risk_stock>0?30:100; p.score=Math.round(ontime*0.35+quality*0.35+risk*0.20+Math.min(100,(p.bravo+p.task+p.ecn)/20)*0.10); }); return Object.values(m).sort((a,b)=>a.score-b.score); }
-async function fetchCSV(id){ const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&cachebust=${Date.now()}`; const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return parseCSV(await r.text()); }
+async function fetchCSV(id){ const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&cachebust=${Date.now()}`; const ctrl=new AbortController(); const tim=setTimeout(()=>ctrl.abort(),30000); try{ const r=await fetch(url,{signal:ctrl.signal}); clearTimeout(tim); if(!r.ok) throw new Error('HTTP '+r.status); return parseCSV(await r.text()); }finally{ clearTimeout(tim); } }
 // ── gvizToCSV: convert gvizFetch table → array-of-arrays (CSV format) ──
 function gvizToCSV(table) {
   var header = (table.cols || []).map(function(c){ return (c.label || c.id || '').trim(); });
@@ -6159,7 +6220,9 @@ async function fetchGvizCSV(sheetId, tabName, startRow) {
 }
 async function refreshLiveV5(){
   const status=[]; const live=JSON.parse(JSON.stringify(SNAPSHOT));
-  try{ var rows; try{ const _bt=await gvizFetch(LIVE_SOURCES.bravo.id,'',null,'select *'); rows=gvizToCSV(_bt); }catch(_fe){ try{ rows=await fetchCSV(LIVE_SOURCES.bravo.id); }catch(_fe2){ rows=await fetchGvizCSV(LIVE_SOURCES.bravo.id); } } live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push('Bravo: LIVE '+rows.length+' dòng'); }catch(e){ status.push('Bravo: snapshot ('+e.message+')'); }
+  try{ var rows; try{ const _bt=await gvizFetch(LIVE_SOURCES.bravo.id,'',null,'select *',60000); rows=gvizToCSV(_bt); }catch(_fe){ try{ rows=await fetchCSV(LIVE_SOURCES.bravo.id); }catch(_fe2){ rows=await fetchGvizCSV(LIVE_SOURCES.bravo.id); } } live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push('Bravo: LIVE '+rows.length+' dòng'); }catch(e){ status.push('Bravo: snapshot ('+e.message+')'); }
+  // Fetch cột ngày: bước 1 tìm đúng cột, bước 2 kéo hết cột đó
+  try{ const _hdrt=await gvizFetch(LIVE_SOURCES.bravo.id,'',7,'select * limit 1'); const _hcols=_hdrt.cols||[],_tg=['ngay tao ma','ngay khai bao']; let _dc=null; _hcols.forEach(function(c){ const nl=norm(c.label||c.id||''); if(!_dc&&_tg.some(function(t){ return nl===t||nl.includes(t); })) _dc=c.id; }); if(!_dc) throw new Error('no date col'); const _dbt=await gvizFetch(LIVE_SOURCES.bravo.id,'',7,'select '+_dc+' limit 99999'); const _wd={}; (_dbt.rows||[]).forEach(function(r){ const cell=r.c&&r.c[0]; if(!cell) return; const dt=(cell.v instanceof Date)?cell.v:_parseDt(String(cell.f!=null?cell.f:'')||String(cell.v!=null?cell.v:'')); if(dt&&!isNaN(dt)){ const wk=_isoWk(dt),dw=dt.getDay(); _wd[wk]=_wd[wk]||[0,0,0,0,0,0,0]; _wd[wk][dw]++; } }); if(Object.keys(_wd).length){ live.bravo.by_week_dow=_wd; live.bravo.weeks_available=Object.keys(_wd).sort(); status.push('DOW: '+Object.keys(_wd).length+' tuần'); } }catch(_de){ status.push('DOW: '+_de.message); }
   try{ var rows2; try{ rows2=await fetchCSV(LIVE_SOURCES.tasks.id); }catch(_fe){ rows2=await fetchGvizCSV(LIVE_SOURCES.tasks.id); } live.tasks=summarizeTaskRows(rows2,SNAPSHOT.tasks); status.push('Task: LIVE '+rows2.length+' dòng'); }catch(e){ status.push('Task: snapshot ('+e.message+')'); }
   try{ const rows=await fetchCSV(LIVE_SOURCES.ecn.id); status.push(`ECN: LIVE ${rows.length} dòng (giữ rules snapshot nếu thiếu header)`); }catch(e){ status.push('ECN: dùng snapshot ('+e.message+')'); }
   live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
