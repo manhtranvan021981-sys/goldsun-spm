@@ -7125,9 +7125,18 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
     // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
-    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit 99999');
-    var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
+    // Dùng phân trang để đọc hết toàn bộ bảng tính đến dòng cuối cùng khác rỗng
+    var _bravoBatch = 20000;
+    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch);
     var bm = hdrIdx(bravoTable);
+    var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
+    while (bravoAllRows.length > 0 && bravoAllRows.length % _bravoBatch === 0) {
+        var _bvExtra = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch + ' offset ' + bravoAllRows.length);
+        var _bvRows = (_bvExtra.rows||[]).filter(function(r){ return r && r.c; });
+        if (_bvRows.length === 0) break;
+        bravoAllRows = bravoAllRows.concat(_bvRows);
+    }
+    console.log('[DLCN Bravo] Doc tong cong:', bravoAllRows.length, 'dong');
 
     // Find column indices
     // Cột L (index 11) = "Mã sản phẩm" — điều kiện lọc chính; fallback positional index 11
@@ -7155,15 +7164,18 @@ window._syncDLCNAllSections = async function(liveCache) {
     var bravoByCD = {};
 
     bravoData.forEach(function(row) {
-      // Chỉ đếm dòng có cột G khác rỗng
+      // TỔNG MÃ ERP ĐÃ KHAI BÁO: đếm cột L (Mã sản phẩm) khác rỗng
+      var colL_val = cellVal((row.c||[])[iBvMaSP]);
+      if (colL_val && colL_val.trim() !== '') bravoTotal++;
+
+      // Chất lượng khai báo: chỉ tính dòng có cột G khác rỗng
       var colG_val = cellVal((row.c||[])[iBvColG]);
       if (!colG_val || colG_val.trim() === '') return;
-      bravoTotal++;
 
       var colD_raw = cellVal((row.c||[])[iBvSua]);
       var nSua = (parseInt(colD_raw) || 0);
       if (!colD_raw || colD_raw.trim() === '') bravoGood++;  // cột D rỗng = khai báo đúng lần đầu
-      if (nSua >= 1) bravoEdited++;  // cột D >= 1 = có sửa ≥ 1 lần
+      if (nSua >= 1) bravoEdited++;  // cột D >= 1 = có sửa >= 1 lần
 
       var nguoi = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
       if (nguoi) {
