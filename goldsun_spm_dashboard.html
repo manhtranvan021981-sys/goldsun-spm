@@ -5857,11 +5857,13 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
     if(b.total!=null){
       _txt('dlcnV-ix1Total', _fn(b.total));
       _sub('dlcnV-ix1Total', (b.date_from||'10/2025')+' → '+(b.date_to||'05/2026')+' | GS5+GS1+GS6');
-      const qRate=Math.max(0,100-(+(b.edit_rate)||0));
+      // Khai báo đúng lần đầu: b.good (nếu có) hoặc b.total - b.edited
+      const goodCount = (b.good != null) ? b.good : ((b.total||0) - (b.edited||0));
+      const qRate = (b.total||0) > 0 ? goodCount * 100 / (b.total||1) : 0;
       _txt('dlcnV-ix1Quality', _pc(qRate,1));
-      _sub('dlcnV-ix1Quality', _fn((b.total||0)-(b.edited||0))+'/'+_fn(b.total||0)+' mã không cần sửa');
+      _sub('dlcnV-ix1Quality', _fn(goodCount)+'/'+_fn(b.total||0)+' mã khai báo đúng lần đầu');
       _txt('dlcnV-ix1Edited', _fn(b.edited));
-      _sub('dlcnV-ix1Edited', _pc(b.edit_rate,1)+' | Tổng '+_fn(b.total_edits||(b.edited||0))+' lần sửa');
+      _sub('dlcnV-ix1Edited', _pc(b.edit_rate,1)+' mã có sửa ≥ 1 lần');
       const tl=b.top_lines&&b.top_lines[0];
       if(tl){ _txt('dlcnV-ix1Line',tl.label||'--'); _txt('dlcnV-ix1LineSub',_fn(tl.value)+' mã'); }
     }
@@ -7137,27 +7139,31 @@ window._syncDLCNAllSections = async function(liveCache) {
     var iBvThang  = findCol(bm, ['thang khai bao','thang','month','thang tao']);
     var iBvTuan   = findCol(bm, ['tuan khai bao','tuan','week']);
     var iBvLine   = findCol(bm, ['ma dong sp','dong sp','ma dong','product line','dong san pham','ma dong sp/ nvl','ma dong']);
+    if (iBvLine < 0) iBvLine = 9; // fallback: cột J (0-based index 9)
+    var iBvColG   = findCol(bm, ['ma erp','ma san pham erp','sku','ma vat tu erp','item code','ma sp erp']);
+    if (iBvColG < 0) iBvColG = 6; // fallback: cột G (0-based index 6)
     var iBvNgay   = findCol(bm, ['ngay khai bao','ngay','date','creation date','ngay tao']);
     var iBvCongDoan = findCol(bm, ['ma cong doan','cong doan','stage','phuong thuc','ma cong doan ']);
 
     // gviz đã tiêu thụ row 7 làm header (range=A7:ZZ, headers=1) → data bắt đầu từ index 0
     var bravoData = bravoAllRows;
-    // bravoTotal  : dòng có Mã sản phẩm (cột L) khác rỗng
-    // bravoGood   : Mã sản phẩm != rỗng VÀ Số lần sửa <= 1 (khai báo đúng lần đầu)
-    // bravoEdited : Mã sản phẩm != rỗng VÀ Số lần sửa > 1  (có sửa > 1 lần)
+    // bravoTotal  : dòng có cột G khác rỗng
+    // bravoGood   : cột G != rỗng VÀ cột D là rỗng           (khai báo đúng lần đầu)
+    // bravoEdited : cột G != rỗng VÀ cột D >= 1              (có sửa ≥ 1 lần)
     var bravoTotal = 0, bravoGood = 0, bravoEdited = 0;
     var bravoByMonth = {}, bravoByUser = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0];
     var bravoByCD = {};
 
     bravoData.forEach(function(row) {
-      // Chỉ đếm dòng có Mã sản phẩm (cột L) khác rỗng
-      var maSP = cellVal((row.c||[])[iBvMaSP]);
-      if (!maSP || maSP.trim() === '') return;
+      // Chỉ đếm dòng có cột G khác rỗng
+      var colG_val = cellVal((row.c||[])[iBvColG]);
+      if (!colG_val || colG_val.trim() === '') return;
       bravoTotal++;
 
-      var nSua = (parseInt(cellVal((row.c||[])[iBvSua])) || 0);
-      if (nSua <= 1) bravoGood++;   // khai báo đúng lần đầu (0 hoặc 1 lần sửa)
-      if (nSua > 1)  bravoEdited++; // có sửa > 1 lần
+      var colD_raw = cellVal((row.c||[])[iBvSua]);
+      var nSua = (parseInt(colD_raw) || 0);
+      if (!colD_raw || colD_raw.trim() === '') bravoGood++;  // cột D rỗng = khai báo đúng lần đầu
+      if (nSua >= 1) bravoEdited++;  // cột D >= 1 = có sửa ≥ 1 lần
 
       var nguoi = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
       if (nguoi) {
@@ -7185,17 +7191,33 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (cd) bravoByCD[cd] = (bravoByCD[cd]||0) + 1;
     });
 
-    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' good=' + bravoGood + ' edited(>1)=' + bravoEdited);
+    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' good(D=empty)=' + bravoGood + ' edited(D>=1)=' + bravoEdited);
 
     // Update Bravo KPIs — I. TỔNG QUAN DỮ LIỆU
     var todayStr = new Date().toLocaleDateString('vi-VN');
     setEl('dlcnV-bravoTotal',   fmtVN(bravoTotal));
     setEl('dlcnS-bravoTotal',   'Du lieu LIVE - ' + todayStr);
-    // Khai báo đúng lần đầu: count (Mã SP != rỗng VÀ Số lần sửa <= 1)
-    setEl('dlcnV-bravoQuality', fmtVN(bravoGood));
-    setEl('dlcnS-bravoQuality', fmtVN(bravoGood) + '/' + fmtVN(bravoTotal) + ' m\u00e3 kh\u00f4ng c\u1ea7n s\u1eeda');
+    // Khai báo đúng lần đầu: col G != rỗng VÀ col D là rỗng
+    var _goodPct = bravoTotal > 0 ? bravoGood * 100 / bravoTotal : 0;
+    var _editPct = bravoTotal > 0 ? bravoEdited * 100 / bravoTotal : 0;
+    setEl('dlcnV-bravoQuality', fmtPct(_goodPct, 1));
+    setEl('dlcnS-bravoQuality', fmtVN(bravoGood) + '/' + fmtVN(bravoTotal) + ' mã khai báo đúng lần đầu');
+    // Có sửa >= 1 lần: col G != rỗng VÀ col D >= 1
     setEl('dlcnV-bravoEdited',  fmtVN(bravoEdited));
-    setEl('dlcnS-bravoEdited',  fmtPct(bravoTotal > 0 ? bravoEdited/bravoTotal*100 : 0, 1) + '% c\u1ea7n ph\u00e2n t\u00edch nguy\u00ean nh\u00e2n');
+    setEl('dlcnS-bravoEdited',  fmtPct(_editPct, 1) + ' mã có sửa ≥ 1 lần');
+    // Cập nhật IX.1 KPI cards từ live data
+    setEl('dlcnV-ix1Quality', fmtPct(_goodPct, 1));
+    var _ix1QEl = document.getElementById('dlcnV-ix1Quality');
+    if (_ix1QEl && _ix1QEl.nextElementSibling) _ix1QEl.nextElementSibling.textContent = fmtVN(bravoGood) + '/' + fmtVN(bravoTotal) + ' mã khai báo đúng lần đầu';
+    setEl('dlcnV-ix1Edited', fmtVN(bravoEdited));
+    var _ix1EEl = document.getElementById('dlcnV-ix1Edited');
+    if (_ix1EEl && _ix1EEl.nextElementSibling) _ix1EEl.nextElementSibling.textContent = fmtPct(_editPct, 1) + ' mã có sửa ≥ 1 lần';
+    // Mã dòng phổ biến nhất: mode của cột J
+    var _blSorted = Object.keys(bravoByLine).sort(function(a,b){ return bravoByLine[b]-bravoByLine[a]; });
+    if (_blSorted.length > 0) {
+      setEl('dlcnV-ix1Line', _blSorted[0]);
+      setEl('dlcnV-ix1LineSub', fmtVN(bravoByLine[_blSorted[0]]) + ' mã');
+    }
 
     // Cap nhat bieu do Bravo voi du lieu live
     // cWeek: khai bao theo tuan
