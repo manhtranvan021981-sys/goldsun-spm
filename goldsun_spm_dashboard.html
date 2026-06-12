@@ -6800,6 +6800,26 @@ window._syncDLCNAllSections = async function(liveCache) {
   }
 
   try {
+    // ══ Khởi động song song FETCH 3 (BRAVO) ngay từ đầu ══════════
+    // Bravo là nguồn lớn nhất (~48k dòng x 26 cột, ~30MB) nên cho tải
+    // chạy nền song song với FETCH 1 (Tasks) và FETCH 2 (ECN) thay vì
+    // chờ tuần tự — giảm đáng kể thời gian load Section I.
+    var _bravoFetchPromise = (async function() {
+      var _bravoBatch = 60000;
+      // Bravo ~48k dòng x 26 cột (~30MB JSON) -> timeout mặc định 20s không đủ, tăng lên 60s
+      var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch, 60000);
+      var bm = hdrIdx(bravoTable);
+      var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
+      while (bravoAllRows.length > 0 && bravoAllRows.length % _bravoBatch === 0) {
+          var _bvExtra = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch + ' offset ' + bravoAllRows.length, 60000);
+          var _bvRows = (_bvExtra.rows||[]).filter(function(r){ return r && r.c; });
+          if (_bvRows.length === 0) break;
+          bravoAllRows = bravoAllRows.concat(_bvRows);
+      }
+      console.log('[DLCN Bravo] Doc tong cong:', bravoAllRows.length, 'dong');
+      return { bm: bm, bravoAllRows: bravoAllRows };
+    })();
+
     // ══ FETCH 1: TASKS ══════════════════════════════════════════
     // Nguồn: sheet '00_Task_Schedule' — đọc đến dòng cuối cùng
     var taskTable = await gvizFetch(TASKS_ID, '00_Task_Schedule', null, 'select * limit 99999');
@@ -7138,19 +7158,10 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
     // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
-    // Dùng phân trang (limit/offset) để đọc hết toàn bộ bảng tính đến dòng cuối cùng khác rỗng
-    var _bravoBatch = 60000;
-    // Bravo ~48k dòng x 26 cột (~30MB JSON) -> timeout mặc định 20s không đủ, tăng lên 60s
-    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch, 60000);
-    var bm = hdrIdx(bravoTable);
-    var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
-    while (bravoAllRows.length > 0 && bravoAllRows.length % _bravoBatch === 0) {
-        var _bvExtra = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch + ' offset ' + bravoAllRows.length, 60000);
-        var _bvRows = (_bvExtra.rows||[]).filter(function(r){ return r && r.c; });
-        if (_bvRows.length === 0) break;
-        bravoAllRows = bravoAllRows.concat(_bvRows);
-    }
-    console.log('[DLCN Bravo] Doc tong cong:', bravoAllRows.length, 'dong');
+    // Dữ liệu Bravo đã được tải song song ở đầu hàm (xem _bravoFetchPromise) — chỉ cần chờ kết quả
+    var _bravoResult = await _bravoFetchPromise;
+    var bm = _bravoResult.bm;
+    var bravoAllRows = _bravoResult.bravoAllRows;
 
     // Find column indices
     // Cột L (index 11) = "Mã sản phẩm" — điều kiện lọc chính; fallback positional index 11
