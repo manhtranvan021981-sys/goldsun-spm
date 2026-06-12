@@ -1630,7 +1630,7 @@ PEOPLE_SCORE =
 <div class="section-title ecn">X.6 – BẢNG THEO DÕI TỒN KHO ECN & TRẠNG THÁI XỬ LÝ</div>
 <div class="tbl-wrap" style="margin-bottom:14px">
   <div class="tbl-header tbl-hdr-red" style="border-left:4px solid #c0392b">
-    <span>🚨 CHỈ HIỂN THỊ CÁC MÃ CÓ TỒN KHO &gt; 0 HOẶC RỦI RO CAO – Cần can thiệp ngay</span>
+    <span id="ecnRiskHdrText">🚨 CHỈ HIỂN THỊ CÁC MÃ CÓ TỒN KHO &gt; 0 HOẶC RỦI RO CAO – Cần can thiệp ngay</span>
   </div>
   <div class="tbl-scroll">
     <table id="ecnRiskTable">
@@ -1641,7 +1641,7 @@ PEOPLE_SCORE =
           <th>Nhà máy</th><th>PIC</th><th>Phương án</th><th>Trạng thái</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="ecnRiskTableBody">
         <tr style="background:#fff0f0">
           <td>1</td>
           <td><b>SSA-MLR-00154</b></td>
@@ -1815,11 +1815,11 @@ PEOPLE_SCORE =
   <div class="alert-title" style="color:#1a5276">📊 CHỈ SỐ TỔNG QUAN NHÓM – THÁNG 5/2026</div>
   <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;text-align:center">
     <div style="padding:10px;background:#eafaf1;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a7a3e">9</div><div style="font-size:10px;color:#566573">NV hoạt động</div></div>
-    <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a5276">1.066</div><div style="font-size:10px;color:#566573">Task hoàn thành</div></div>
-    <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a5276">45.853</div><div style="font-size:10px;color:#566573">Mã ERP khai báo</div></div>
-    <div style="padding:10px;background:#e8f8f5;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#0e6655">91+</div><div style="font-size:10px;color:#566573">ECN xử lý</div></div>
-    <div style="padding:10px;background:#fdecea;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#c0392b">63</div><div style="font-size:10px;color:#566573">Task trễ hạn</div></div>
-    <div style="padding:10px;background:#f4ecf7;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#8e24aa">1.492</div><div style="font-size:10px;color:#566573">Tồn kho ECN (pcs)</div></div>
+    <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div id="dlcnV-xiTaskDone" style="font-size:18px;font-weight:bold;color:#1a5276">1.066</div><div style="font-size:10px;color:#566573">Task hoàn thành</div></div>
+    <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div id="dlcnV-xiErpTotal" style="font-size:18px;font-weight:bold;color:#1a5276">45.853</div><div style="font-size:10px;color:#566573">Mã ERP khai báo</div></div>
+    <div style="padding:10px;background:#e8f8f5;border-radius:6px"><div id="dlcnV-xiEcnTotal" style="font-size:18px;font-weight:bold;color:#0e6655">91+</div><div style="font-size:10px;color:#566573">ECN xử lý</div></div>
+    <div style="padding:10px;background:#fdecea;border-radius:6px"><div id="dlcnV-xiTaskLate" style="font-size:18px;font-weight:bold;color:#c0392b">63</div><div style="font-size:10px;color:#566573">Task trễ hạn</div></div>
+    <div style="padding:10px;background:#f4ecf7;border-radius:6px"><div id="dlcnV-xiEcnRisk" style="font-size:18px;font-weight:bold;color:#8e24aa">1.492</div><div style="font-size:10px;color:#566573">Tồn kho ECN (pcs)</div></div>
   </div>
 </div>
 
@@ -5965,17 +5965,7 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
       if(gc('cHour')) _ixC['cHour']=new Chart(gc('cHour'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+'h'),datasets:[{label:'Mã',data:hD2,backgroundColor:hD2.map(v=>v>5000?'#e74c3c':v>2000?'#f39c12':'#2980b9'),borderRadius:2}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=800,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#922b21':v>2000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#fdecea':v>2000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{font:{size:9}}}}}});
     }
 
-    // 5. Biểu đồ chất lượng — from SNAPSHOT.bravo.quality (tính đúng edit_rate, fix[edited,total])
-    const qArr=(b.quality||[]).slice(0,12);
-    if(qArr.length){
-      const qNV=qArr.map(q=>_abb(q.name));
-      const qPct=qArr.map(q=>Number((q.edit_rate||0).toFixed(1)));
-      const qFA=qArr.map(q=>[q.edited||0,q.total||0]);
-      const qCol=qPct.map(v=>v>10?'#e74c3c':v>2?'#f39c12':'#27ae60');
-      const qMax=Math.max(55,Math.ceil(Math.max(...qPct)*1.2)||55);
-      _dIX('cQual');
-      if(gc('cQual')) _ixC['cQual']=new Chart(gc('cQual'),{type:'bar',data:{labels:qNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qPct,backgroundColor:qCol,borderRadius:3},{label:'KPI 2%',data:Array(qNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const[fix,tot]=qFA[i]||[0,0];return `${v}%  (${fix}/${tot} mã)`;}}},scales:{x:{max:qMax,ticks:{callback:v=>v+'%'}}}}});
-    }
+    // 5. Biểu đồ chất lượng — GIỮ biểu đồ tĩnh màu đỏ ban đầu (cQual), không override bằng SNAPSHOT.bravo.quality (theo yêu cầu)
 
     // 6. Top dòng hàng — from SNAPSHOT.bravo.top_lines
     const tlArr=(b.top_lines||[]).slice(0,15);
@@ -6948,10 +6938,12 @@ window._syncDLCNAllSections = async function(liveCache) {
     setEl('dlcnS-taskTotal',   fmtVN(taskTotal) + ' CV | ' + projCount + ' dự án | ' + nhaMayList);
     setEl('dlcnV-taskComp',    fmtPct(compPct, 1));
     setEl('dlcnS-taskComp',    fmtVN(taskDone) + ' / ' + fmtVN(taskTotal) + ' task kết thúc');
+    setEl('dlcnV-xiTaskDone',  fmtVN(taskDone));
     setEl('dlcnV-taskOntime',  fmtPct(ontimePct, 1));
     setEl('dlcnS-taskOntime',  fmtVN(taskOntime) + ' đúng/trước hạn / ' + fmtVN(taskTotal));
     setEl('dlcnV-taskLate',    fmtVN(taskLate));
     setEl('dlcnS-taskLate',    latePct.toFixed(1).replace('.', ',') + '% tổng task | Cột T: Hoàn thành sau hạn');
+    setEl('dlcnV-xiTaskLate',  fmtVN(taskLate));
     setEl('dlcnV-warnGreen',   fmtVN(taskWarnGreen));
     setEl('dlcnS-warnGreen',   'Trong ' + fmtVN(taskTotal) + ' công việc');
     setEl('dlcnV-warnYellow',  fmtVN(taskWarnYellow));
@@ -7135,6 +7127,8 @@ window._syncDLCNAllSections = async function(liveCache) {
     setEl('dlcnS-ecnTotal2', ecnTotal + ' ban ghi | ' + Object.keys(ecnNMMap).length + ' nha may');
     setEl('dlcnV-ecnRisk2',  fmtVN(ecnRiskStock) + ' pcs');
     setEl('dlcnV-ecnCenter', String(ecnTotal));
+    setEl('dlcnV-xiEcnRisk',  fmtVN(ecnRiskStock));
+    setEl('dlcnV-xiEcnTotal', ecnTotal > 0 ? ecnTotal + '+' : '--');
 
     var ecnHdr = document.querySelector('#ecn .zone-hdr span');
     if (ecnHdr) ecnHdr.textContent = ecnTotal + '+ ban ghi | Nguon: ECN_TRACKING LIVE';
@@ -7155,6 +7149,89 @@ window._syncDLCNAllSections = async function(liveCache) {
       var nmV = nmL.map(function(k){ return ecnNMMap[k]; });
       updChart('cEcnNM', nmL, [{data: nmV}]);
     }
+
+    // ══ X.6 — Bảng theo dõi tồn kho ECN (LIVE từ ECN_TRACKING) ════
+    (function renderEcnRiskTable() {
+      var tbody = document.getElementById('ecnRiskTableBody');
+      if (!tbody) return;
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+      }
+      function ecnDate(cell) {
+        if (!cell || cell.v == null) return null;
+        var m = /^Date\((\d+),(\d+),(\d+)/.exec(String(cell.v));
+        if (!m) return null;
+        return new Date(+m[1], +m[2], +m[3]);
+      }
+      function fmtDateVN(cell) {
+        var d = ecnDate(cell);
+        if (!d) return cellVal(cell);
+        return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+      }
+      var riskRows = [];
+      ecnRows.forEach(function(row) {
+        var cells = row.c || [];
+        var qty = cellNum(cells[iEcnQ]);
+        if (qty <= 0) return;
+        var hanCell = cells[13];
+        var hanDate = ecnDate(hanCell);
+        var overdue = hanDate ? hanDate.getTime() < Date.now() : false;
+        riskRows.push({
+          ma: cellVal(cells[iEcnE]),
+          model: cellVal(cells[1]) || cellVal(cells[5]),
+          dienGiai: cellVal(cells[8]),
+          hinhThuc: cellVal(cells[iEcnM]),
+          ngayBanHanh: fmtDateVN(cells[18]),
+          han: fmtDateVN(hanCell),
+          qty: qty,
+          nhaMay: cellVal(cells[20]),
+          pic: cellVal(cells[19]),
+          phuongAn: cellVal(cells[25]),
+          overdue: overdue
+        });
+      });
+      riskRows.sort(function(a,b){ return b.qty - a.qty; });
+
+      var hdrText = document.getElementById('ecnRiskHdrText');
+      if (riskRows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:#1a7a3e">✅ Không có mã ECN nào còn tồn kho &gt; 0 (dữ liệu LIVE)</td></tr>';
+        if (hdrText) hdrText.textContent = '✅ Không có mã ECN tồn kho > 0 (LIVE - ' + new Date().toLocaleDateString('vi-VN') + ')';
+        return;
+      }
+      var _ECN_RISK_LIMIT = 20;
+      var shownRows = riskRows.slice(0, _ECN_RISK_LIMIT);
+      tbody.innerHTML = shownRows.map(function(r, i) {
+        var modelTxt = r.model + (r.dienGiai ? ' – ' + r.dienGiai : '');
+        var hanTxt = r.overdue ? r.han + ' ⚠ ĐÃ QUÁ HẠN' : r.han;
+        var hanStyle = r.overdue ? 'color:#c0392b;font-weight:bold' : '';
+        var badge = r.overdue
+          ? '<span class="badge badge-red">🔴 KHẨN</span>'
+          : '<span class="badge badge-yellow">⚠ CẦN XỬ LÝ</span>';
+        var rowBg = r.overdue ? 'background:#fff0f0' : '';
+        var pa = r.phuongAn || 'Chưa có phương án';
+        var paStyle = r.phuongAn ? '' : 'color:#c0392b';
+        return '<tr style="' + rowBg + '">' +
+          '<td>' + (i+1) + '</td>' +
+          '<td><b>' + esc(r.ma) + '</b></td>' +
+          '<td>' + esc(modelTxt) + '</td>' +
+          '<td>' + esc(r.hinhThuc) + '</td>' +
+          '<td>' + esc(r.ngayBanHanh) + '</td>' +
+          '<td style="' + hanStyle + '">' + esc(hanTxt) + '</td>' +
+          '<td style="color:#8e24aa;font-weight:bold;font-size:15px">' + fmtVN(r.qty) + ' pcs</td>' +
+          '<td>' + esc(r.nhaMay) + '</td>' +
+          '<td>' + esc(r.pic) + '</td>' +
+          '<td style="' + paStyle + '">' + esc(pa) + '</td>' +
+          '<td>' + badge + '</td>' +
+          '</tr>';
+      }).join('');
+
+      var _hdrSuffix = riskRows.length > _ECN_RISK_LIMIT
+        ? ' – Top ' + _ECN_RISK_LIMIT + '/' + riskRows.length + ' mã tồn kho cao nhất'
+        : ' – ' + riskRows.length + ' mã cần can thiệp';
+      if (hdrText) hdrText.textContent = '🚨 CHỈ HIỂN THỊ CÁC MÃ CÓ TỒN KHO > 0 (LIVE - ' + new Date().toLocaleDateString('vi-VN') + ')' + _hdrSuffix;
+    })();
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
     // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
@@ -7242,6 +7319,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     var todayStr = new Date().toLocaleDateString('vi-VN');
     setEl('dlcnV-bravoTotal',   fmtVN(bravoTotal));
     setEl('dlcnS-bravoTotal',   'Du lieu LIVE - ' + todayStr);
+    setEl('dlcnV-xiErpTotal',   fmtVN(bravoTotal));
     // Khai báo đúng lần đầu: col G != rỗng VÀ col D là rỗng
     var _goodPct = bravoTotal > 0 ? bravoGood * 100 / bravoTotal : 0;
     var _editPct = bravoTotal > 0 ? bravoEdited * 100 / bravoTotal : 0;
@@ -7298,11 +7376,29 @@ window._syncDLCNAllSections = async function(liveCache) {
         if (_dowCnt) _dowCnt.textContent = bravoByDow.reduce(function(a,b){return a+(b||0);},0).toLocaleString('vi-VN') + ' mã';
       }
     }
-    // cQual: chat luong khai bao theo nhan vien (% sua)
+    // cQual: chat luong khai bao theo nhan vien (% sua) — ONLINE, giu thang mau do/cam/xanh theo % + duong KPI 2%
     var quNV = Object.keys(bravoByUser).sort(function(a,b){return bravoByUser[b].total-bravoByUser[a].total;}).slice(0,12);
     if (quNV.length > 0) {
       var quPct = quNV.map(function(k){ return bravoByUser[k].total>0 ? +(bravoByUser[k].edited/bravoByUser[k].total*100).toFixed(1) : 0; });
-      updChart('cQual', quNV, [{data: quPct}]);
+      var quFix = quNV.map(function(k){ return [bravoByUser[k].edited, bravoByUser[k].total]; });
+      var quLbl = quNV.map(function(n){
+        var p = String(n||'').trim().split(/\s+/);
+        if (p.length <= 1) return n;
+        var fn = p[p.length-1];
+        var ini = p.slice(0,-1).map(function(w){ return w.charAt(0).toUpperCase(); }).join('.');
+        return ini + '.' + fn.charAt(0).toUpperCase() + fn.slice(1).toLowerCase();
+      });
+      var quCol = quPct.map(function(v){ return v>10?'#e74c3c':v>2?'#f39c12':'#27ae60'; });
+      var quMax = Math.max(55, Math.ceil(Math.max.apply(null, quPct)*1.2) || 55);
+      var quCanvas = document.getElementById('cQual');
+      if (quCanvas && typeof Chart !== 'undefined') {
+        var quOld = Chart.getChart(quCanvas);
+        if (quOld) quOld.destroy();
+        new Chart(quCanvas, {type:'bar', data:{labels: quLbl, datasets:[
+          {label:'% Mã sửa / Tổng KB', data: quPct, backgroundColor: quCol, borderRadius:3},
+          {label:'KPI 2%', data: Array(quLbl.length).fill(2), type:'line', borderColor:'#c0392b', borderDash:[5,3], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
+        ]}, options:{indexAxis:'y', responsive:true, layout:{padding:{right:150}}, plugins:{datalabels:{display:function(ctx){ return ctx.datasetIndex===0; }, color:'#1c2833', font:{size:10,weight:'bold'}, anchor:'end', align:'right', offset:6, clamp:false, formatter:function(v,ctx){ if(ctx.datasetIndex!==0) return ''; var fx=quFix[ctx.dataIndex]||[0,0]; return v+'%  ('+fx[0]+'/'+fx[1]+' mã)'; }}, tooltip:{callbacks:{label:function(c){ if(c.dataset.label==='KPI 2%') return 'KPI: 2%'; var fx=quFix[c.dataIndex]||[0,0]; return ' '+c.raw+'% – Sửa: '+fx[0]+'/'+fx[1]+' mã'; }}}}, scales:{x:{max:quMax, ticks:{callback:function(v){ return v+'%'; }}}}}});
+      }
     }
     // cDong: theo dong san pham
     var blKeys = Object.keys(bravoByLine).sort(function(a,b){return bravoByLine[b]-bravoByLine[a];}).slice(0,14);
