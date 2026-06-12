@@ -2473,10 +2473,10 @@ let charts = {};
 
 // ── GVIZ FETCH ─────────────────────────────────────────────────
 // JSONP — hoạt động cả file:// lẫn https://, không bị CORS
-function gvizFetch(sheetId, tabName, startRow, tqQuery, timeoutMs) {
+function gvizFetch(sheetId, tabName, startRow, tqQuery, timeoutMs, endCol) {
   return new Promise((resolve, reject) => {
     const cbName = '_gviz_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    const rangePart = startRow ? `&range=A${startRow}:ZZ` : '';  // ZZ đủ rộng mọi cột
+    const rangePart = startRow ? `&range=A${startRow}:${endCol||'ZZ'}` : '';  // endCol hẹp hơn ZZ giúp gviz trả nhanh hơn & tránh giới hạn số cell
     const tqPart = tqQuery ? `&tq=${encodeURIComponent(tqQuery)}` : '';  // optional: override row limit (VD: 'select * limit 10000')
     const sheetPart = tabName ? `&sheet=${encodeURIComponent(tabName)}` : '';
     const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json;responseHandler:${cbName}${sheetPart}&headers=1${rangePart}${tqPart}`;
@@ -5849,6 +5849,10 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
   function _pc(n,d){ return (n==null||isNaN(+n))?'--':(+n).toFixed(d==null?1:d).replace('.',',')+'%'; }
   function _txt(id,v){ const el=document.getElementById(id); if(el) el.textContent=v; }
   function _sub(id,v){ const el=document.getElementById(id); if(el&&el.nextElementSibling) el.nextElementSibling.textContent=v; }
+  // Local helpers (norm/_parseDt/_isoWk nam ngoai scope IIFE nay) - tranh ReferenceError o DOW auto-fetch
+  function norm(s){ return String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim(); }
+  function _parseDt(s){ const t=String(s||'').trim(); let m; if((m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1],+m[2]-1,+m[3]); if((m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) return new Date(+m[3],+m[2]-1,+m[1]); if((m=t.match(/^Date\((\d+),(\d+),(\d+)\)/))) return new Date(+m[1],+m[2],+m[3]); return null; }
+  function _isoWk(d){ const t=new Date(d.getTime()); t.setDate(t.getDate()+3-(t.getDay()+6)%7); const y=t.getFullYear(); const w1=new Date(y,0,4); return y+'-W'+String(1+Math.round(((t-w1)/864e5-3+(w1.getDay()+6)%7)/7)).padStart(2,'0'); }
 
   window._renderIXChartsFromData = function(s){
     const b=(s&&s.bravo)||{}, e=(s&&s.ecn)||{};
@@ -5905,6 +5909,7 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
       if(_cnt){const _tot=dD.reduce((s,v)=>s+(v||0),0);_cnt.textContent=_tot.toLocaleString('vi-VN')+' mã';}
       _ixC['cDow']=new Chart(gc('cDow'),{type:'bar',data:{labels:_dL,datasets:[{label:'Mã',data:dD,backgroundColor:['#2980b9','#2980b9','#e74c3c','#e74c3c','#e67e22','#95a5a6','#7f8c8d'],borderRadius:4}]},options:{responsive:true,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}}}}});
     }
+    window._bDowRefresh=_bDow; // cho phép _syncDLCNAllSections gọi lại đúng theo tuần đang chọn
     const _dSel=document.getElementById('dowWeekFilter');
     if(_dSel){
       // Dùng nguồn có NHIỀU TUẦN HƠN (ldWks vs snWks), tránh live data rỗng override
@@ -5969,7 +5974,7 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
       const qCol=qPct.map(v=>v>10?'#e74c3c':v>2?'#f39c12':'#27ae60');
       const qMax=Math.max(55,Math.ceil(Math.max(...qPct)*1.2)||55);
       _dIX('cQual');
-      if(gc('cQual')) _ixC['cQual']=new Chart(gc('cQual'),{type:'bar',data:{labels:qNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qPct,backgroundColor:qCol,borderRadius:3},{label:'KPI 2%',data:Array(qNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const[fix,tot]=qFA[i];return `${v}%  (${fix}/${tot} mã)`;}}},scales:{x:{max:qMax,ticks:{callback:v=>v+'%'}}}}});
+      if(gc('cQual')) _ixC['cQual']=new Chart(gc('cQual'),{type:'bar',data:{labels:qNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qPct,backgroundColor:qCol,borderRadius:3},{label:'KPI 2%',data:Array(qNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const[fix,tot]=qFA[i]||[0,0];return `${v}%  (${fix}/${tot} mã)`;}}},scales:{x:{max:qMax,ticks:{callback:v=>v+'%'}}}}});
     }
 
     // 6. Top dòng hàng — from SNAPSHOT.bravo.top_lines
@@ -6785,6 +6790,14 @@ window._syncDLCNAllSections = async function(liveCache) {
     if (idx < 0) return '';
     return cellVal((row.c||[])[idx]);
   }
+  // ISO week string "YYYY-Www" cho ngay d (local helper - tranh ReferenceError do _isoWk toan cuc nam ngoai scope)
+  function _isoWk(d) {
+    var t = new Date(d.getTime());
+    t.setDate(t.getDate() + 3 - (t.getDay() + 6) % 7);
+    var y = t.getFullYear();
+    var w1 = new Date(y, 0, 4);
+    return y + '-W' + String(1 + Math.round(((t - w1) / 864e5 - 3 + (w1.getDay() + 6) % 7) / 7)).padStart(2, '0');
+  }
 
   try {
     // ══ FETCH 1: TASKS ══════════════════════════════════════════
@@ -7125,13 +7138,14 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
     // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
-    // Dùng phân trang để đọc hết toàn bộ bảng tính đến dòng cuối cùng khác rỗng
-    var _bravoBatch = 20000;
-    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch);
+    // Dùng phân trang (limit/offset) để đọc hết toàn bộ bảng tính đến dòng cuối cùng khác rỗng
+    var _bravoBatch = 60000;
+    // Bravo ~48k dòng x 26 cột (~30MB JSON) -> timeout mặc định 20s không đủ, tăng lên 60s
+    var bravoTable = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch, 60000);
     var bm = hdrIdx(bravoTable);
     var bravoAllRows = (bravoTable.rows||[]).filter(function(r){ return r && r.c; });
     while (bravoAllRows.length > 0 && bravoAllRows.length % _bravoBatch === 0) {
-        var _bvExtra = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch + ' offset ' + bravoAllRows.length);
+        var _bvExtra = await gvizFetch(BRAVO_ID, '', 7, 'select * limit ' + _bravoBatch + ' offset ' + bravoAllRows.length, 60000);
         var _bvRows = (_bvExtra.rows||[]).filter(function(r){ return r && r.c; });
         if (_bvRows.length === 0) break;
         bravoAllRows = bravoAllRows.concat(_bvRows);
@@ -7151,7 +7165,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     if (iBvLine < 0) iBvLine = 9; // fallback: cột J (0-based index 9)
     var iBvColG   = findCol(bm, ['ma erp','ma san pham erp','sku','ma vat tu erp','item code','ma sp erp']);
     if (iBvColG < 0) iBvColG = 6; // fallback: cột G (0-based index 6)
-    var iBvNgay   = findCol(bm, ['ngay khai bao','ngay','date','creation date','ngay tao']);
+    var iBvNgay   = findCol(bm, ['ngay tao ma','ngay khai bao','ngay tao','ngay','date','creation date']);
     var iBvCongDoan = findCol(bm, ['ma cong doan','cong doan','stage','phuong thuc','ma cong doan ']);
 
     // gviz đã tiêu thụ row 7 làm header (range=A7:ZZ, headers=1) → data bắt đầu từ index 0
@@ -7160,13 +7174,27 @@ window._syncDLCNAllSections = async function(liveCache) {
     // bravoGood   : cột G != rỗng VÀ cột D là rỗng           (khai báo đúng lần đầu)
     // bravoEdited : cột G != rỗng VÀ cột D >= 1              (có sửa ≥ 1 lần)
     var bravoTotal = 0, bravoGood = 0, bravoEdited = 0;
-    var bravoByMonth = {}, bravoByUser = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0];
+    var bravoByMonth = {}, bravoByUser = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0], bravoByWeekDow = {};
     var bravoByCD = {};
 
     bravoData.forEach(function(row) {
-      // TỔNG MÃ ERP ĐÃ KHAI BÁO: đếm cột L (Mã sản phẩm) khác rỗng
+      // Cột L (Mã sản phẩm) — bộ lọc chính cho tổng mã và phân bố ngày
       var colL_val = cellVal((row.c||[])[iBvMaSP]);
-      if (colL_val && colL_val.trim() !== '') bravoTotal++;
+      var hasColL = colL_val && colL_val.trim() !== '';
+      if (hasColL) bravoTotal++;
+
+      // Ngày khai báo: chỉ đếm dòng có cột L khác rỗng (L8:L)
+      if (hasColL && iBvNgay >= 0) {
+        var ngayCell = (row.c||[])[iBvNgay];
+        var d = parseGvizDate(ngayCell);
+        if (d && !isNaN(d.getTime())) {
+          bravoByDow[d.getDay()]++;
+          var _wk = _isoWk(d);
+          if (!bravoByWeekDow[_wk]) bravoByWeekDow[_wk] = [0,0,0,0,0,0,0];
+          bravoByWeekDow[_wk][d.getDay()]++;
+        }
+      }
+      // (kết thúc xử lý ngày khai báo)
 
       // Chất lượng khai báo: chỉ tính dòng có cột G khác rỗng
       var colG_val = cellVal((row.c||[])[iBvColG]);
@@ -7192,12 +7220,6 @@ window._syncDLCNAllSections = async function(liveCache) {
 
       var dong = iBvLine >= 0 ? getByIdx(row, iBvLine) : '';
       if (dong) bravoByLine[dong] = (bravoByLine[dong]||0) + 1;
-
-      var ngay = iBvNgay >= 0 ? getByIdx(row, iBvNgay) : '';
-      if (ngay) {
-        var d = new Date(ngay);
-        if (!isNaN(d.getTime())) bravoByDow[d.getDay()]++;
-      }
 
       var cd = iBvCongDoan >= 0 ? getByIdx(row, iBvCongDoan) : '';
       if (cd) bravoByCD[cd] = (bravoByCD[cd]||0) + 1;
@@ -7242,9 +7264,28 @@ window._syncDLCNAllSections = async function(liveCache) {
     if (bmKeys.length > 0) {
       updChart('cMonth', bmKeys, [{data: bmKeys.map(function(k){return bravoByMonth[k];}), label:'Khai b\u00e1o'}]);
     }
-    // cDow: phan bo theo ngay trong tuan
+    // cDow: phân bố theo ngày trong tuần — sync live data rồi vẽ lại đúng theo tuần đang chọn
     if (bravoByDow.some(function(v){return v>0;})) {
-      updChart('cDow', null, [{data: bravoByDow}]);
+      var _dowOrd = [1,2,3,4,5,6,0];
+      var _dowLbl = ['T2','T3','T4','T5','T6','T7','CN'];
+      var _byDow = _dowLbl.map(function(lbl,i){ return {label: lbl, value: bravoByDow[_dowOrd[i]]}; });
+      [window._dlcnLiveData, window._DLCN_SNAPSHOT].forEach(function(src) {
+        if (src && src.bravo) {
+          src.bravo.by_dow = _byDow;
+          if (Object.keys(bravoByWeekDow).length > 0) {
+            src.bravo.by_week_dow = bravoByWeekDow;
+            src.bravo.weeks_available = Object.keys(bravoByWeekDow).sort();
+          }
+        }
+      });
+      var _dowSel = document.getElementById('dowWeekFilter');
+      if (typeof window._bDowRefresh === 'function') {
+        window._bDowRefresh(_dowSel ? _dowSel.value : '');
+      } else {
+        updChart('cDow', null, [{data: bravoByDow}]);
+        var _dowCnt = document.getElementById('dowWeekCount');
+        if (_dowCnt) _dowCnt.textContent = bravoByDow.reduce(function(a,b){return a+(b||0);},0).toLocaleString('vi-VN') + ' mã';
+      }
     }
     // cQual: chat luong khai bao theo nhan vien (% sua)
     var quNV = Object.keys(bravoByUser).sort(function(a,b){return bravoByUser[b].total-bravoByUser[a].total;}).slice(0,12);
