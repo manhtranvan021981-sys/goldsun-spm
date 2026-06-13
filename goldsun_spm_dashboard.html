@@ -1307,7 +1307,7 @@ PEOPLE_SCORE =
     <div class="alert-title">🏢 TỔ CHỨC BỘ PHẬN & NHÂN SỰ QV1</div>
     <table style="width:100%;font-size:12px">
       <tr><th>Vị trí</th><th>Tên nhân viên</th><th>Nhóm công việc chính</th></tr>
-      <tr><td>Trưởng bộ phận</td><td><em>(chưa xác định)</em></td><td>Quản trị BOM SX, routing, audit data</td></tr>
+      <tr><td>Trưởng bộ phận</td><td>TRẦN THỊ THU HƯƠNG</td><td>Quản trị BOM SX, routing, audit data</td></tr>
       <tr><td>NV KB Hệ thống ERP</td><td>NGUYỄN NGỌC PHÚ</td><td>Khai báo ERP – 280 task T5 | 1.978 mã T10/25-T5/26</td></tr>
       <tr><td>NV KB Hệ thống ERP</td><td>ĐẶNG THỊ HẰNG</td><td>Khai báo ERP – 271 task T5 | 1.535 mã</td></tr>
       <tr><td>NV KB Hệ thống ERP</td><td>NGUYỄN THỊ TÌNH</td><td>Khai báo ERP – 64 task T5 | 899 mã | Chất lượng xuất sắc</td></tr>
@@ -1814,7 +1814,7 @@ PEOPLE_SCORE =
 <div class="alert-box" style="margin-top:10px;border-left:4px solid #2980b9">
   <div class="alert-title" style="color:#1a5276">📊 CHỈ SỐ TỔNG QUAN NHÓM – THÁNG 5/2026</div>
   <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;text-align:center">
-    <div style="padding:10px;background:#eafaf1;border-radius:6px"><div style="font-size:18px;font-weight:bold;color:#1a7a3e">9</div><div style="font-size:10px;color:#566573">NV hoạt động</div></div>
+    <div style="padding:10px;background:#eafaf1;border-radius:6px"><div id="dlcnV-xiNvActive" style="font-size:18px;font-weight:bold;color:#1a7a3e">9</div><div style="font-size:10px;color:#566573">NV hoạt động</div></div>
     <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div id="dlcnV-xiTaskDone" style="font-size:18px;font-weight:bold;color:#1a5276">1.066</div><div style="font-size:10px;color:#566573">Task hoàn thành</div></div>
     <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div id="dlcnV-xiErpTotal" style="font-size:18px;font-weight:bold;color:#1a5276">45.853</div><div style="font-size:10px;color:#566573">Mã ERP khai báo</div></div>
     <div style="padding:10px;background:#e8f8f5;border-radius:6px"><div id="dlcnV-xiEcnTotal" style="font-size:18px;font-weight:bold;color:#0e6655">91+</div><div style="font-size:10px;color:#566573">ECN xử lý</div></div>
@@ -6836,6 +6836,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     if (iProj    < 0) iProj    = 1;
     if (iNhaMay  < 0) iNhaMay  = 20;
     if (iGroup   < 0) iGroup   = 2;   // Col C = "Nhóm công việc" (0-indexed)
+    if (iPic     < 0) iPic     = 8;   // Col I = "Pic triển khai " (0-indexed)
 
     console.log('[DLCN Tasks 00_Task_Schedule] content=' + iContent + ' colS=' + iColS + ' colT=' + iColT + ' proj=' + iProj + ' nhaMay=' + iNhaMay + ' iGroup=' + iGroup + ' totalRows=' + taskRows.length);
 
@@ -6932,6 +6933,12 @@ window._syncDLCNAllSections = async function(liveCache) {
     var latePct    = taskTotal > 0 ? taskLate    * 100 / taskTotal : 0;
     var projCount  = Object.keys(projMap).length;
     var nhaMayList = Object.keys(nhaMaySet).join(', ') || '--';
+    var _nvSet = {};
+    Object.keys(picLateMap).forEach(function(p) {
+      if (!p || p === 'Chua phan cong') return;
+      _nvSet[p.trim().toUpperCase().replace(/\s+/g, ' ')] = 1;
+    });
+    var nvActiveCount = Object.keys(_nvSet).length;
 
     // Update KPI Section I — 6 boxes
     setEl('dlcnV-taskTotal',   fmtVN(taskTotal));
@@ -6939,6 +6946,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     setEl('dlcnV-taskComp',    fmtPct(compPct, 1));
     setEl('dlcnS-taskComp',    fmtVN(taskDone) + ' / ' + fmtVN(taskTotal) + ' task kết thúc');
     setEl('dlcnV-xiTaskDone',  fmtVN(taskDone));
+    setEl('dlcnV-xiNvActive', fmtVN(nvActiveCount));
     setEl('dlcnV-taskOntime',  fmtPct(ontimePct, 1));
     setEl('dlcnS-taskOntime',  fmtVN(taskOntime) + ' đúng/trước hạn / ' + fmtVN(taskTotal));
     setEl('dlcnV-taskLate',    fmtVN(taskLate));
