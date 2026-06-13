@@ -1540,10 +1540,10 @@ PEOPLE_SCORE =
 <div class="section-title ecn">X.3 – PHÂN TÍCH ECN THEO KHÁCH HÀNG & SẢN PHẨM</div>
 <div class="grid-2" style="margin-bottom:14px">
   <div class="tbl-wrap">
-    <div class="tbl-header tbl-hdr-navy"><span>🏭 ECN Samsung (SEV / SEVT) – GS5 Quế Võ 1 | ~68 ECN</span></div>
+    <div class="tbl-header tbl-hdr-navy"><span id="ecnX3T1Hdr">🏭 ECN Samsung (SEV / SEVT) – GS5 Quế Võ 1 | ~68 ECN</span></div>
     <table>
       <thead><tr><th>Model / Sản phẩm</th><th>Ver cũ → Mới</th><th>Diễn giải</th><th>Hình thức</th><th>Thời hạn</th><th>Tồn kho</th></tr></thead>
-      <tbody>
+      <tbody id="ecnX3T1Body">
         <tr><td>MANUAL-L500 (GH68-57134V + GH68-57137S)</td><td>2.0 → 2.5</td><td>Upversion – Samsung SEV Ms Thuần</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/02/26</td><td style="color:#8e24aa;font-weight:bold">GH90-70262H: <b>1.492 pcs</b> ⚠</td></tr>
         <tr><td>MANUAL-S931 (GH68-56580A)</td><td>1.0 → 1.1</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/03/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
         <tr><td>MANUAL-F966 (GH68-57169A)</td><td>1.0 → 1.1</td><td>Upversion – Samsung SEV Mr Toản</td><td><span class="pill pill-moment">Dừng TĐ</span></td><td>23/03/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
@@ -1558,10 +1558,10 @@ PEOPLE_SCORE =
     <div style="padding:8px 14px"><p class="footnote">🔍 PIC: HÀ VIỆT ANH (GS5 QV1) – Nguồn ECN: Samsung SEV (Mr Toản, Ms Thuần) + SEVT (Mr Tiệp). Hàng loạt upversion 1.0/1.1/1.2→2.5 trong tháng 1–3/2026.</p></div>
   </div>
   <div class="tbl-wrap">
-    <div class="tbl-header tbl-hdr-teal"><span>🏭 ECN Canon + Khách hàng khác – GS1 Hà Nội | ~23 ECN</span></div>
+    <div class="tbl-header tbl-hdr-teal"><span id="ecnX3T2Hdr">🏭 ECN Canon + Khách hàng khác – GS1 Hà Nội | ~23 ECN</span></div>
     <table>
       <thead><tr><th>Mã sản phẩm</th><th>Model</th><th>Diễn giải thay đổi</th><th>Hình thức</th><th>Thời hạn</th><th>Tồn kho</th></tr></thead>
-      <tbody>
+      <tbody id="ecnX3T2Body">
         <tr><td>CAN-BSA-00073</td><td>F84 / QX2-4223-000</td><td>Đổi mực, bỏ box certificate</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
         <tr><td>CAN-BSA-00066</td><td>G12 / QX2-5535-000</td><td>Đổi mực, bỏ box certificate</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
         <tr><td>CAN-FSA-00054</td><td>G75 / QX2-6300-000</td><td>Chuyển đổi mực</td><td><span class="pill pill-stop">Dừng ngay</span></td><td>26/02/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
@@ -1579,9 +1579,8 @@ PEOPLE_SCORE =
 
 <!-- X.4 + X.5 combined in one row -->
 <div class="section-title ecn">X.4 – HIỆU SUẤT NHÂN SỰ XỬ LÝ ECN &nbsp;|&nbsp; X.5 – BIỂU ĐỒ ECN THEO KHÁCH HÀNG & NHÀ MÁY</div>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1.4fr 1.4fr;gap:10px;margin-bottom:14px;align-items:stretch">
-  <!-- NV 1 -->
-  <div class="nv-card ok" style="padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between">
+<div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px" id="dlcnV-nvCardsWrap">
+  <div class="nv-card ok" style="padding:12px 14px;flex:1 1 200px;min-width:190px;display:flex;flex-direction:column;justify-content:space-between">
     <div>
       <div class="nv-name" style="font-size:11.5px">✅ HÀ VIỆT ANH – GS5 QV1</div>
       <div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>~68</strong></span><span class="nv-stat" style="color:#c0392b">1 tồn kho ⚠</span></div>
@@ -1589,8 +1588,7 @@ PEOPLE_SCORE =
     </div>
     <p style="font-size:10.5px;margin-top:8px;color:#566573">Samsung SEV/SEVT Q1/2026. Cần xử lý 1.492 pcs tồn kho ngay.</p>
   </div>
-  <!-- NV 2 -->
-  <div class="nv-card ok" style="padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between">
+  <div class="nv-card ok" style="padding:12px 14px;flex:1 1 200px;min-width:190px;display:flex;flex-direction:column;justify-content:space-between">
     <div>
       <div class="nv-name" style="font-size:11.5px">✅ NGUYỄN THỊ KHA – GS1 HN</div>
       <div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>~22</strong></span><span class="nv-stat" style="color:#1a7a3e">Tồn: 0 ✅</span></div>
@@ -1598,8 +1596,7 @@ PEOPLE_SCORE =
     </div>
     <p style="font-size:10.5px;margin-top:8px;color:#1a7a3e">Canon + Tân An. Xử lý sạch, không tồn kho.</p>
   </div>
-  <!-- NV 3 -->
-  <div class="nv-card ok" style="padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between">
+  <div class="nv-card ok" style="padding:12px 14px;flex:1 1 200px;min-width:190px;display:flex;flex-direction:column;justify-content:space-between">
     <div>
       <div class="nv-name" style="font-size:11.5px">✅ PHAN THANH HẢI – GS1 HN</div>
       <div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>1</strong></span><span class="nv-stat" style="color:#1a7a3e">Tồn: 0 ✅</span></div>
@@ -1607,6 +1604,8 @@ PEOPLE_SCORE =
     </div>
     <p style="font-size:10.5px;margin-top:8px;color:#566573">ANZ Hansefloor – Thay đổi tên + kích thước (06/01/2026).</p>
   </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;align-items:stretch">
   <!-- Chart ECN by KH -->
   <div class="chart-w" style="padding:12px 14px;display:flex;flex-direction:column">
     <div class="chart-t teal" style="font-size:11px;margin-bottom:8px">Phân bố ECN theo khách hàng</div>
@@ -7060,6 +7059,12 @@ window._syncDLCNAllSections = async function(liveCache) {
     var iEcnAB = findCol(em, ['so ecn','ma ecn','ecn number','ecn no']); if (iEcnAB < 0) iEcnAB = 27;
     var iEcnKH = findCol(em, ['khach hang','customer','ten kh','kh']);
     var iEcnNM = findCol(em, ['nha may','factory','nha may thuc hien','nm']);
+    var iEcnB  = findCol(em, ['model']); if (iEcnB  < 0) iEcnB  = 1;
+    var iEcnG  = findCol(em, ['ver cu']); if (iEcnG  < 0) iEcnG  = 6;
+    var iEcnH  = findCol(em, ['ver moi']); if (iEcnH  < 0) iEcnH  = 7;
+    var iEcnN  = findCol(em, ['thoi han ecn','thoi han']); if (iEcnN  < 0) iEcnN  = 13;
+    var iEcnAE = findCol(em, ['ten khach hang (viet tat)','ten khach hang viet tat']); if (iEcnAE < 0) iEcnAE = 30;
+    var iEcnT  = findCol(em, ['nguoi khai bao']); if (iEcnT  < 0) iEcnT  = 19;
 
     console.log('[DLCN ECN] cols: E=' + iEcnE + ' M=' + iEcnM + ' P=' + iEcnP + ' Q=' + iEcnQ + ' X=' + iEcnX + ' AB=' + iEcnAB + ' | rows=' + ecnRows.length);
 
@@ -7239,6 +7244,157 @@ window._syncDLCNAllSections = async function(liveCache) {
         ? ' – Top ' + _ECN_RISK_LIMIT + '/' + riskRows.length + ' mã tồn kho cao nhất'
         : ' – ' + riskRows.length + ' mã cần can thiệp';
       if (hdrText) hdrText.textContent = '🚨 CHỈ HIỂN THỊ CÁC MÃ CÓ TỒN KHO > 0 (LIVE - ' + new Date().toLocaleDateString('vi-VN') + ')' + _hdrSuffix;
+    })();
+
+    // X.3 - Bang ECN theo khach hang (LIVE, loc theo cot AE/Nha may)
+    (function renderEcnCustomerTables() {
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+      }
+      function ecnDate(cell) {
+        if (!cell || cell.v == null) return null;
+        var m = /^Date\((\d+),(\d+),(\d+)/.exec(String(cell.v));
+        if (!m) return null;
+        return new Date(+m[1], +m[2], +m[3]);
+      }
+      function fmtDateVN(cell) {
+        var d = ecnDate(cell);
+        if (!d) return cellVal(cell);
+        return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
+      }
+      function pillClassFor(s) {
+        var n = norm(s);
+        if (n.indexOf('dung ngay') >= 0) return 'pill-stop';
+        if (n.indexOf('het ton') >= 0) return 'pill-drain';
+        if (n.indexOf('dung td') >= 0 || n.indexOf('dung thoi diem') >= 0) return 'pill-moment';
+        if (n.indexOf('khong sd') >= 0 || n.indexOf('khong su dung') >= 0) return 'pill-unused';
+        return 'pill-teal';
+      }
+      function tonKhoCell(qty) {
+        return qty > 0
+          ? '<td style="color:#8e24aa;font-weight:bold">' + fmtVN(qty) + ' pcs \u26a0</td>'
+          : '<td style="color:#1a7a3e">0 \u2705</td>';
+      }
+      function renderVer(verCu, verMoi) {
+        if (!verCu && !verMoi) return '\u2014';
+        return esc(verCu || '\u2014') + ' \u2192 ' + esc(verMoi || '\u2014');
+      }
+
+      var T1_LIMIT = 10, T2_LIMIT = 10;
+      var rowsT1 = [], rowsT2 = [];
+      ecnRows.forEach(function(row) {
+        var cells = row.c || [];
+        var ae = norm(cellVal(cells[iEcnAE]));
+        var nm = norm(cellVal(cells[iEcnNM >= 0 ? iEcnNM : 20]));
+        var qty = cellNum(cells[iEcnQ]);
+        var item = {
+          model: cellVal(cells[iEcnB]),
+          maVT: cellVal(cells[iEcnE]),
+          verCu: cellVal(cells[iEcnG]),
+          verMoi: cellVal(cells[iEcnH]),
+          dienGiai: cellVal(cells[8]),
+          hinhThuc: cellVal(cells[iEcnM]),
+          han: fmtDateVN(cells[iEcnN]),
+          qty: qty
+        };
+        if (ae === 'sev' || ae === 'sevt') {
+          rowsT1.push(item);
+        } else if (nm === 'gs1') {
+          rowsT2.push(item);
+        }
+      });
+      rowsT1.sort(function(a,b){ return b.qty - a.qty; });
+      rowsT2.sort(function(a,b){ return b.qty - a.qty; });
+
+      var hdr1 = document.getElementById('ecnX3T1Hdr');
+      var hdr2 = document.getElementById('ecnX3T2Hdr');
+      var body1 = document.getElementById('ecnX3T1Body');
+      var body2 = document.getElementById('ecnX3T2Body');
+
+      if (hdr1) hdr1.textContent = '\ud83c\udfed ECN Samsung (SEV / SEVT) \u2013 GS5 Qu\u1ebf V\u00f5 1 | ' + rowsT1.length + ' b\u1ea3n ghi (LIVE)';
+      if (hdr2) hdr2.textContent = '\ud83c\udfed ECN Canon + Kh\u00e1ch h\u00e0ng kh\u00e1c \u2013 GS1 H\u00e0 N\u1ed9i | ' + rowsT2.length + ' b\u1ea3n ghi (LIVE)';
+
+      if (body1) {
+        body1.innerHTML = rowsT1.length === 0
+          ? '<tr><td colspan="6" style="text-align:center;color:#566573">Kh\u00f4ng c\u00f3 d\u1eef li\u1ec7u</td></tr>'
+          : rowsT1.slice(0, T1_LIMIT).map(function(r) {
+              return '<tr><td>' + esc(r.model || r.maVT) + '</td>' +
+                '<td>' + renderVer(r.verCu, r.verMoi) + '</td>' +
+                '<td>' + esc(r.dienGiai) + '</td>' +
+                '<td><span class="pill ' + pillClassFor(r.hinhThuc) + '">' + esc(r.hinhThuc || '--') + '</span></td>' +
+                '<td>' + esc(r.han) + '</td>' +
+                tonKhoCell(r.qty) +
+                '</tr>';
+            }).join('');
+      }
+      if (body2) {
+        body2.innerHTML = rowsT2.length === 0
+          ? '<tr><td colspan="6" style="text-align:center;color:#566573">Kh\u00f4ng c\u00f3 d\u1eef li\u1ec7u</td></tr>'
+          : rowsT2.slice(0, T2_LIMIT).map(function(r) {
+              return '<tr><td>' + esc(r.maVT) + '</td>' +
+                '<td>' + esc(r.model || '\u2014') + '</td>' +
+                '<td>' + esc(r.dienGiai) + '</td>' +
+                '<td><span class="pill ' + pillClassFor(r.hinhThuc) + '">' + esc(r.hinhThuc || '--') + '</span></td>' +
+                '<td>' + esc(r.han) + '</td>' +
+                tonKhoCell(r.qty) +
+                '</tr>';
+            }).join('');
+      }
+    })();
+
+    // X.4 - The hieu suat NV xu ly ECN (LIVE, theo "Nguoi khai bao")
+    (function renderNvCards() {
+      var wrap = document.getElementById('dlcnV-nvCardsWrap');
+      if (!wrap) return;
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+          return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+      }
+      var picMap = {};
+      ecnRows.forEach(function(row) {
+        var cells = row.c || [];
+        var pic = cellVal(cells[iEcnT]);
+        if (!pic || !pic.trim()) return;
+        pic = pic.trim();
+        if (!picMap[pic]) picMap[pic] = { ecnSet: {}, qCount: 0, qSum: 0 };
+        var ab = cellVal(cells[iEcnAB]);
+        if (ab && ab.trim()) picMap[pic].ecnSet[ab.trim()] = 1;
+        var q = cellNum(cells[iEcnQ]);
+        if (q > 0) { picMap[pic].qCount++; picMap[pic].qSum += q; }
+      });
+      var pics = Object.keys(picMap).map(function(name) {
+        return {
+          name: name,
+          ecnCount: Object.keys(picMap[name].ecnSet).length,
+          qCount: picMap[name].qCount,
+          qSum: picMap[name].qSum
+        };
+      });
+      pics.sort(function(a,b){ return b.ecnCount - a.ecnCount; });
+      var maxEcn = pics.length ? pics[0].ecnCount : 1;
+
+      wrap.innerHTML = pics.map(function(p) {
+        var cls = p.qCount > 0 ? 'warn' : 'ok';
+        var icon = p.qCount > 0 ? '\u26a0' : '\u2705';
+        var statTon = p.qCount > 0
+          ? '<span class="nv-stat" style="color:#c0392b">' + fmtVN(p.qCount) + ' m\u00e3 t\u1ed3n (' + fmtVN(p.qSum) + ' pcs) \u26a0</span>'
+          : '<span class="nv-stat" style="color:#1a7a3e">T\u1ed3n: 0 \u2705</span>';
+        var barPct = Math.round((p.ecnCount / maxEcn) * 100);
+        var note = p.qCount > 0
+          ? 'T\u1ed5ng ' + fmtVN(p.qSum) + ' pcs t\u1ed3n kho c\u1ea7n x\u1eed l\u00fd (' + fmtVN(p.qCount) + ' m\u00e3).'
+          : 'Kh\u00f4ng c\u00f3 t\u1ed3n kho \u2013 x\u1eed l\u00fd s\u1ea1ch.';
+        return '<div class="nv-card ' + cls + '" style="padding:12px 14px;flex:1 1 200px;min-width:190px;display:flex;flex-direction:column;justify-content:space-between">' +
+          '<div>' +
+            '<div class="nv-name" style="font-size:11.5px">' + icon + ' ' + esc(p.name) + '</div>' +
+            '<div class="nv-stats" style="margin:5px 0"><span class="nv-stat">ECN: <strong>' + fmtVN(p.ecnCount) + '</strong></span>' + statTon + '</div>' +
+            '<div class="nv-bar-bg"><div class="nv-bar-fg" style="width:' + barPct + '%;background:#1abc9c"></div></div>' +
+          '</div>' +
+          '<p style="font-size:10.5px;margin-top:8px;color:#566573">' + esc(note) + '</p>' +
+        '</div>';
+      }).join('');
     })();
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
