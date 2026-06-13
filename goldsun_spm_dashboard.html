@@ -1619,7 +1619,7 @@ PEOPLE_SCORE =
     <div style="flex:1;position:relative;min-height:160px">
       <canvas id="cEcnNM" style="position:absolute;inset:0;width:100%!important;height:100%!important"></canvas>
       <div style="position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:1">
-        <div style="font-size:20px;font-weight:bold;color:#0e6655;line-height:1.1">91</div>
+        <div id="dlcnV-cEcnNMTotal" style="font-size:20px;font-weight:bold;color:#0e6655;line-height:1.1">91</div>
         <div style="font-size:9px;color:#566573;font-weight:bold">tổng ECN</div>
       </div>
     </div>
@@ -5976,17 +5976,35 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
     }
 
     // 7. ECN loại — from SNAPSHOT.ecn.types
+    const _ecnTypeLive=window._ecnLiveCharts&&window._ecnLiveCharts.type;
     const ecnT=e.types&&e.types.length?e.types:[{label:'Dừng theo TĐ',value:66},{label:'SX hết tồn',value:12},{label:'Dừng ngay',value:10},{label:'Không SD',value:1},{label:'Khác',value:2}];
     _dIX('cEcnType');
-    if(gc('cEcnType')) _ixC['cEcnType']=new Chart(gc('cEcnType'),{type:'doughnut',data:{labels:ecnT.map(t=>`${t.label} (${t.value})`),datasets:[{data:ecnT.map(t=>t.value),backgroundColor:['#2980b9','#f39c12','#e74c3c','#95a5a6','#9b59b6'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,cutout:'60%',plugins:{legend:{display:false},datalabels:{display:true,color:'#fff',font:{size:10,weight:'bold'},formatter:v=>v>1?v:''}},rotation:-90,circumference:360}});
+    if(gc('cEcnType')){
+      const _etLabels=_ecnTypeLive?_ecnTypeLive.labels:ecnT.map(t=>`${t.label} (${t.value})`);
+      const _etData=_ecnTypeLive?_ecnTypeLive.data:ecnT.map(t=>t.value);
+      const _etColors=_ecnTypeLive?_ecnTypeLive.colors:['#2980b9','#f39c12','#e74c3c','#95a5a6','#9b59b6'];
+      _ixC['cEcnType']=new Chart(gc('cEcnType'),{type:'doughnut',data:{labels:_etLabels,datasets:[{data:_etData,backgroundColor:_etColors,borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,cutout:'60%',plugins:{legend:{display:false},datalabels:{display:true,color:'#fff',font:{size:10,weight:'bold'},formatter:v=>v>1?v:''}},rotation:-90,circumference:360}});
+    }
 
     // 8. ECN theo khách hàng — giữ phân tách Samsung SEV/SEVT (ECN live chưa được parse)
     _dIX('cEcnKH');
-    if(gc('cEcnKH')) _ixC['cEcnKH']=new Chart(gc('cEcnKH'),{type:'bar',data:{labels:['Samsung SEV','Samsung SEVT','Canon','Tân An','ANZ','Brother'],datasets:[{label:'ECN',data:[48,20,20,1,1,1],backgroundColor:['#1a5276','#2980b9','#27ae60','#f39c12','#e67e22','#9b59b6'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>v}},scales:{y:{beginAtZero:true},x:{ticks:{font:{size:9},maxRotation:30}}}}});
+    if(gc('cEcnKH')){
+      const _khLive=window._ecnLiveCharts&&window._ecnLiveCharts.kh;
+      const _khLabels=_khLive?_khLive.labels:['Samsung SEV','Samsung SEVT','Canon','Tân An','ANZ','Brother'];
+      const _khData=_khLive?_khLive.data:[48,20,20,1,1,1];
+      const _khColors=['#1a5276','#2980b9','#27ae60','#f39c12','#e67e22','#9b59b6','#34495e','#16a085'];
+      _ixC['cEcnKH']=new Chart(gc('cEcnKH'),{type:'bar',data:{labels:_khLabels,datasets:[{label:'ECN',data:_khData,backgroundColor:_khColors.slice(0,_khLabels.length),borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{color:'#fff',font:{size:9,weight:'bold'},anchor:'end',align:'start',formatter:v=>v}},scales:{y:{beginAtZero:true},x:{ticks:{font:{size:9},maxRotation:30}}}}});
+    }
 
     // 9. ECN theo nhà máy
     _dIX('cEcnNM');
-    if(gc('cEcnNM')) _ixC['cEcnNM']=new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS1 Hà Nội (23)'],datasets:[{data:[68,23],backgroundColor:['#1a5276','#27ae60'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:12,weight:'bold'},formatter:v=>v}}}});
+    if(gc('cEcnNM')){
+      const _nmLive=window._ecnLiveCharts&&window._ecnLiveCharts.nm;
+      const _nmLabels=_nmLive?_nmLive.labels:['GS5 Quế Võ 1 (68)','GS1 Hà Nội (23)'];
+      const _nmData=_nmLive?_nmLive.data:[68,23];
+      _ixC['cEcnNM']=new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:_nmLabels,datasets:[{data:_nmData,backgroundColor:['#1a5276','#27ae60','#f39c12','#9b59b6'],borderWidth:3,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}},datalabels:{color:'#fff',font:{size:12,weight:'bold'},formatter:v=>v}}}});
+      if(_nmLive){ var _nmTotalEl=document.getElementById('dlcnV-cEcnNMTotal'); if(_nmTotalEl) _nmTotalEl.textContent=_nmData.reduce(function(a,b){ return a+b; },0).toLocaleString('vi-VN'); }
+    }
   };
 
   // Dùng live data nếu đã fetch xong, ngược lại dùng SNAPSHOT
@@ -7057,8 +7075,8 @@ window._syncDLCNAllSections = async function(liveCache) {
     var iEcnQ  = findCol(em, ['so luong ton kho xac nhan (1)','ton kho xac nhan','so luong ton kho xac nhan']); if (iEcnQ  < 0) iEcnQ  = 16;
     var iEcnX  = findCol(em, ['thanh tien (3)','thanh tien','(3) = (1) * (2)','gia tri ecn']); if (iEcnX  < 0) iEcnX  = 23;
     var iEcnAB = findCol(em, ['so ecn','ma ecn','ecn number','ecn no']); if (iEcnAB < 0) iEcnAB = 27;
-    var iEcnKH = findCol(em, ['khach hang','customer','ten kh','kh']);
-    var iEcnNM = findCol(em, ['nha may','factory','nha may thuc hien','nm']);
+    var iEcnKH = findCol(em, ['khach hang','customer','ten kh','kh']); if (iEcnKH < 0) iEcnKH = 30;
+    var iEcnNM = findCol(em, ['nha may','factory','nha may thuc hien','nm','nha may trien khai']); if (iEcnNM < 0) iEcnNM = 20;
     var iEcnB  = findCol(em, ['model']); if (iEcnB  < 0) iEcnB  = 1;
     var iEcnG  = findCol(em, ['ver cu']); if (iEcnG  < 0) iEcnG  = 6;
     var iEcnH  = findCol(em, ['ver moi']); if (iEcnH  < 0) iEcnH  = 7;
@@ -7151,16 +7169,26 @@ window._syncDLCNAllSections = async function(liveCache) {
       var etV = etL.map(function(k){ return ecnTypeMap[k]; });
       var etC = ['#1a7a4a','#e74c3c','#e67e22','#7f8c8d','#2980b9','#8e44ad'];
       updChart('cEcnType', etL, [{data: etV, backgroundColor: etC.slice(0, etL.length)}]);
+      window._ecnLiveCharts = window._ecnLiveCharts || {};
+      window._ecnLiveCharts.type = { labels: etL, data: etV, colors: etC.slice(0, etL.length) };
     }
     if (Object.keys(ecnKHMap).length > 0) {
       var khL = Object.keys(ecnKHMap).sort(function(a,b){ return ecnKHMap[b]-ecnKHMap[a]; }).slice(0,8);
       var khV = khL.map(function(k){ return ecnKHMap[k]; });
       updChart('cEcnKH', khL, [{data: khV}]);
+      window._ecnLiveCharts = window._ecnLiveCharts || {};
+      window._ecnLiveCharts.kh = { labels: khL, data: khV };
     }
     if (Object.keys(ecnNMMap).length > 0) {
-      var nmL = Object.keys(ecnNMMap);
-      var nmV = nmL.map(function(k){ return ecnNMMap[k]; });
+      var nmDisplay = { 'GS1': 'GS1 Hà Nội', 'GS5': 'GS5 Quế Võ 1' };
+      var nmOrder = ['GS5','GS1'].filter(function(k){ return ecnNMMap[k] != null; });
+      Object.keys(ecnNMMap).forEach(function(k){ if (nmOrder.indexOf(k) < 0) nmOrder.push(k); });
+      var nmV = nmOrder.map(function(k){ return ecnNMMap[k]; });
+      var nmL = nmOrder.map(function(k){ return (nmDisplay[k] || k) + ' (' + ecnNMMap[k] + ')'; });
       updChart('cEcnNM', nmL, [{data: nmV}]);
+      setEl('dlcnV-cEcnNMTotal', fmtVN(nmV.reduce(function(a,b){ return a+b; }, 0)));
+      window._ecnLiveCharts = window._ecnLiveCharts || {};
+      window._ecnLiveCharts.nm = { labels: nmL, data: nmV };
     }
 
     // ══ X.6 — Bảng theo dõi tồn kho ECN (LIVE từ ECN_TRACKING) ════
