@@ -1792,7 +1792,7 @@ PEOPLE_SCORE =
 <div class="grid-2">
   <div class="alert-box" style="border-left:4px solid #1a7a3e">
     <div class="alert-title" style="color:#1a7a3e">✅ ĐIỂM MẠNH CẦN DUY TRÌ</div>
-    <ul style="font-size:12px;line-height:2;padding-left:18px">
+    <ul id="dlcnXiStrong" style="font-size:12px;line-height:2;padding-left:18px">
       <li>100% công việc hoàn thành (1.066/1.066 task) – Không có task quá hạn chưa xử lý</li>
       <li>Nhóm khai báo ERP ổn định: NGUYỄN NGỌC PHÚ (280 task, 1.978 mã), ĐẶNG THỊ HẰNG (271 task, 1.535 mã)</li>
       <li>Chất lượng khai báo ERP xuất sắc: NGUYỄN THỊ TÌNH (0,4% sửa), TRỊNH XUÂN TÙNG (1,6%), PHẠM VIỆT ANH (1,5%)</li>
@@ -1802,7 +1802,7 @@ PEOPLE_SCORE =
   </div>
   <div class="alert-box" style="border-left:4px solid #c0392b">
     <div class="alert-title" style="color:#c0392b">🔴 ĐIỂM CẦN CẢI THIỆN NGAY</div>
-    <ul style="font-size:12px;line-height:2;padding-left:18px">
+    <ul id="dlcnXiWeak" style="font-size:12px;line-height:2;padding-left:18px">
       <li><b>KPI đúng hạn 94,1% – chưa đạt 98%:</b> Toàn bộ do nhóm Khai báo KH Samsung (37,8% đúng hạn)</li>
       <li><b>1 NV 100% trễ:</b> TRẦN THỊ THU HƯƠNG – 57/57 task trễ tháng 5. Cần RCA và phân công lại ngay</li>
       <li><b>ECN tồn kho khẩn:</b> 1.492 pcs SSA-MLR-00154 quá hạn 4 tháng, chưa có phương án. Quyết định trong tuần này</li>
@@ -1826,10 +1826,10 @@ PEOPLE_SCORE =
 
 <div class="footnote" style="margin-top:16px;padding:10px 14px;background:#f4f6f7;border-radius:6px">
   <strong>Nguồn dữ liệu:</strong>
-  (1) <em>CONGVIEC_NHOM_DATA.xlsx</em> – 1.066 task tháng 5/2026, GS5 QV1 &nbsp;|&nbsp;
-  (2) <em>Báo cáo tổng hợp khai báo hệ thống.xlsx</em> – 45.853 mã ERP 10/2025–05/2026 &nbsp;|&nbsp;
-  (3) <em>ECN_TRACKING</em> – 91+ bản ghi ECN Q1/2026 GS1+GS5<br>
-  <strong>Cập nhật lần cuối:</strong> 02/06/2026 &nbsp;|&nbsp;
+  (1) <em>CONGVIEC_NHOM_DATA.xlsx</em> – <span id="dlcnXiTaskSrc">1.066 task tháng 5/2026, GS5 QV1</span> &nbsp;|&nbsp;
+  (2) <em>Báo cáo tổng hợp khai báo hệ thống.xlsx</em> – <span id="dlcnXiErpSrc">45.853 mã ERP 10/2025–05/2026</span> &nbsp;|&nbsp;
+  (3) <em>ECN_TRACKING</em> – <span id="dlcnXiEcnSrc">91+ bản ghi ECN Q1/2026 GS1+GS5</span><br>
+  <strong>Cập nhật lần cuối:</strong> <span id="dlcnXiUpdated">02/06/2026</span> &nbsp;|&nbsp;
   <strong>Người xây dựng:</strong> Anna – AI Assistant GoldSun Dashboard &nbsp;|&nbsp;
   <strong>Phiên bản:</strong> v2.0 – Bổ sung phân tích ECN đầy đủ
 </div>
@@ -6847,6 +6847,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     var iTuan    = findCol(tm, ['tuan','week','tuan ke hoach']);
     var iThang   = findCol(tm, ['thang','month','thang ke hoach']);
     var iGroup   = findCol(tm, ['nhom cong viec','nhom cv','nhom','group']);
+    var iPriority = findCol(tm, ['muc do uu tien','muc do uu tien ','priority']);
 
     // Fallback to absolute column index if header lookup fails (A=0, B=1, G=6, S=18, T=19, U=20)
     if (iContent < 0) iContent = 6;
@@ -6856,6 +6857,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     if (iNhaMay  < 0) iNhaMay  = 20;
     if (iGroup   < 0) iGroup   = 2;   // Col C = "Nhóm công việc" (0-indexed)
     if (iPic     < 0) iPic     = 8;   // Col I = "Pic triển khai " (0-indexed)
+    if (iPriority < 0) iPriority = 3; // Col D = "Mức độ ưu tiên" (0-indexed)
 
     console.log('[DLCN Tasks 00_Task_Schedule] content=' + iContent + ' colS=' + iColS + ' colT=' + iColT + ' proj=' + iProj + ' nhaMay=' + iNhaMay + ' iGroup=' + iGroup + ' totalRows=' + taskRows.length);
 
@@ -6863,7 +6865,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     var taskBeforeHan = 0, taskDungHan = 0, taskQuaHan = 0;
     var taskWarnGreen = 0, taskWarnYellow = 0, taskWarnLate = 0;
     var projMap = {}, nhaMaySet = {}, weekMap = {}, monthMap = {}, picLateMap = {};
-    var groupMap = {}, projLateMap = {};
+    var groupMap = {}, projLateMap = {}, projPriorityMap = {};
 
     taskRows.forEach(function(row) {
       // Skip completely empty rows
@@ -6918,6 +6920,10 @@ window._syncDLCNAllSections = async function(liveCache) {
       // Dự án (Col B)
       var proj = (iProj >= 0 ? getByIdx(row, iProj) : '') || 'Khac';
       if (proj) projMap[proj] = (projMap[proj]||0) + 1;
+
+      // Mức độ ưu tiên (Col D) — đánh dấu dự án "Ưu tiên trọng điểm"
+      var priority = iPriority >= 0 ? getByIdx(row, iPriority) : '';
+      if (norm(priority) === norm('Ưu tiên trọng điểm')) projPriorityMap[proj] = true;
 
       // Nhà máy thực hiện (Col U)
       var nm = getByIdx(row, iNhaMay);
@@ -7693,6 +7699,165 @@ window._syncDLCNAllSections = async function(liveCache) {
       console.log('[DLCN] X7/X8 AI Analysis sync OK \u2014 generated_at=' + aiTime);
     } catch(e) {
       console.warn('[DLCN] FETCH4 X7/X8 AI Analysis loi (giu noi dung tinh):', e.message);
+    }
+
+    // \u2550\u2550 XI \u2014 Sinh \u0111\u1ed9ng "\u0110I\u1ec2M M\u1ea0NH" / "\u0110I\u1ec2M C\u1ea6N C\u1ea2I THI\u1ec6N" + footnote \u2550\u2550\u2550\u2550
+    // To\u00e0n b\u1ed9 d\u1eef li\u1ec7u c\u1ea7n (task, bravo, ecn) \u0111\u00e3 c\u00f3 s\u1eb5n trong scope t\u1eeb
+    // FETCH 1-3, kh\u00f4ng c\u1ea7n ngu\u1ed3n b\u1ed5 sung.
+    try {
+      function escXi(s) { return String(s==null?'':s).replace(/[&<>'"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]; }); }
+      function ecnDateXi(cell) {
+        if (!cell || cell.v == null) return null;
+        var m = /^Date\((\d+),(\d+),(\d+)/.exec(String(cell.v));
+        if (!m) return null;
+        return new Date(+m[1], +m[2], +m[3]);
+      }
+      var strongItems = [], weakItems = [];
+
+      // \u2500\u2500 \u0110I\u1ec2M M\u1ea0NH \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+      // 1. T\u1ef7 l\u1ec7 ho\u00e0n th\u00e0nh
+      if (taskTotal > 0) {
+        var doneTxt = compPct.toFixed(1).replace('.',',') + '% c\u00f4ng vi\u1ec7c ho\u00e0n th\u00e0nh (' + fmtVN(taskDone) + '/' + fmtVN(taskTotal) + ' task)';
+        if (taskQuaHan === 0) doneTxt += ' \u2013 Kh\u00f4ng c\u00f3 task qu\u00e1 h\u1ea1n ch\u01b0a x\u1eed l\u00fd';
+        strongItems.push(doneTxt);
+      }
+
+      // 2. Top 2 NV khai b\u00e1o ERP nhi\u1ec1u nh\u1ea5t
+      var topErp = Object.keys(bravoByUser).filter(function(k){ return k && norm(k) !== 'khong ro'; })
+        .sort(function(a,b){ return bravoByUser[b].total - bravoByUser[a].total; }).slice(0,2);
+      if (topErp.length) {
+        strongItems.push('Nh\u00f3m khai b\u00e1o ERP \u1ed5n \u0111\u1ecbnh: ' + topErp.map(function(k){
+          var t = picLateMap[k] ? picLateMap[k].total : 0;
+          return escXi(k) + ' (' + (t>0 ? fmtVN(t)+' task, ' : '') + fmtVN(bravoByUser[k].total) + ' m\u00e3)';
+        }).join(', '));
+      }
+
+      // 3. Top 3 NV ch\u1ea5t l\u01b0\u1ee3ng KB ERP t\u1ed1t nh\u1ea5t (total >= 100, t\u1ef7 l\u1ec7 s\u1eeda th\u1ea5p nh\u1ea5t)
+      var topQual = Object.keys(bravoByUser).filter(function(k){ return bravoByUser[k].total >= 100; })
+        .sort(function(a,b){
+          var ra = bravoByUser[a].total>0 ? bravoByUser[a].edited/bravoByUser[a].total : 0;
+          var rb = bravoByUser[b].total>0 ? bravoByUser[b].edited/bravoByUser[b].total : 0;
+          return ra - rb;
+        }).slice(0,3);
+      if (topQual.length) {
+        strongItems.push('Ch\u1ea5t l\u01b0\u1ee3ng khai b\u00e1o ERP xu\u1ea5t s\u1eafc: ' + topQual.map(function(k){
+          var r = bravoByUser[k].total>0 ? (bravoByUser[k].edited/bravoByUser[k].total*100) : 0;
+          return escXi(k) + ' (' + r.toFixed(1).replace('.',',') + '% s\u1eeda)';
+        }).join(', '));
+      }
+
+      // 4. ECN Samsung SEV/SEVT t\u1ed3n kho = 0
+      var samsungTotal = 0, samsungZero = 0;
+      ecnRows.forEach(function(row) {
+        var cells = row.c || [];
+        var ae = norm(cellVal(cells[iEcnAE]));
+        if (ae === 'sev' || ae === 'sevt') {
+          samsungTotal++;
+          if (cellNum(cells[iEcnQ]) === 0) samsungZero++;
+        }
+      });
+      if (samsungTotal > 0) {
+        var samsungPct = samsungZero * 100 / samsungTotal;
+        if (samsungPct >= 90) {
+          strongItems.push('ECN x\u1eed l\u00fd t\u1ed1t: ' + fmtVN(samsungZero) + '/' + fmtVN(samsungTotal) + ' b\u1ea3n ghi Samsung SEV/SEVT t\u1ed3n kho = 0');
+        }
+      }
+
+      // 5. D\u1ef1 \u00e1n c\u00f3 nhi\u1ec1u task (>=50) v\u00e0 100% \u0111\u00fang h\u1ea1n (cham = 0)
+      var perfectProjs = Object.keys(projLateMap).filter(function(p){
+        return projLateMap[p].total >= 50 && projLateMap[p].cham === 0;
+      }).sort(function(a,b){ return projLateMap[b].total - projLateMap[a].total; }).slice(0,3);
+      if (perfectProjs.length) {
+        strongItems.push('Nh\u00f3m ' + perfectProjs.map(function(p){
+          return escXi(p) + ' (' + fmtVN(projLateMap[p].total) + ' task)';
+        }).join(' + ') + ': 100% \u0111\u00fang h\u1ea1n');
+      }
+
+      // \u2500\u2500 \u0110I\u1ec2M C\u1ea6N C\u1ea2I THI\u1ec6N \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+      // 1. KPI \u0111\u00fang h\u1ea1n t\u1ed5ng < 98% \u2192 nh\u00f3m k\u00e9o \u0111i\u1ec3m xu\u1ed1ng nhi\u1ec1u nh\u1ea5t
+      if (ontimePct < 98) {
+        var worstGroup = null;
+        Object.keys(groupMap).forEach(function(g){
+          if (!g || groupMap[g].total < 10) return;
+          var gOntime = (groupMap[g].total - groupMap[g].cham) * 100 / groupMap[g].total;
+          if (!worstGroup || gOntime < worstGroup.pct) worstGroup = {name:g, pct:gOntime};
+        });
+        var kpiTxt = '<b>KPI \u0111\u00fang h\u1ea1n ' + ontimePct.toFixed(1).replace('.',',') + '% \u2013 ch\u01b0a \u0111\u1ea1t 98%:</b>';
+        if (worstGroup) kpiTxt += ' Ch\u1ee7 y\u1ebfu do nh\u00f3m ' + escXi(worstGroup.name) + ' (' + worstGroup.pct.toFixed(1).replace('.',',') + '% \u0111\u00fang h\u1ea1n)';
+        weakItems.push(kpiTxt);
+      }
+
+      // 2. NV c\u00f3 t\u1ef7 l\u1ec7 tr\u1ec5 cao nh\u1ea5t (total >= 10, rate >= 30%)
+      var worstPic = null;
+      Object.keys(picLateMap).forEach(function(p){
+        if (!p || p === 'Chua phan cong' || picLateMap[p].total < 10) return;
+        var rate = picLateMap[p].late / picLateMap[p].total;
+        if (!worstPic || rate > worstPic.rate) worstPic = {name:p, rate:rate, late:picLateMap[p].late, total:picLateMap[p].total};
+      });
+      if (worstPic && worstPic.rate >= 0.3) {
+        weakItems.push('<b>NV ' + escXi(worstPic.name) + ' \u2013 ' + fmtVN(worstPic.late) + '/' + fmtVN(worstPic.total) + ' task tr\u1ec5:</b> C\u1ea7n RCA v\u00e0 ph\u00e2n c\u00f4ng l\u1ea1i');
+      }
+
+      // 3. ECN t\u1ed3n kho r\u1ee7i ro cao nh\u1ea5t
+      var topRisk = null;
+      ecnRows.forEach(function(row) {
+        var cells = row.c || [];
+        var q = cellNum(cells[iEcnQ]);
+        if (q > 0 && (!topRisk || q > topRisk.q)) {
+          topRisk = {q:q, maVT: cellVal(cells[iEcnE]), dueCell: cells[iEcnN]};
+        }
+      });
+      if (topRisk) {
+        var dueD = ecnDateXi(topRisk.dueCell);
+        var overdue = dueD && dueD < new Date();
+        weakItems.push('<b>ECN t\u1ed3n kho kh\u1ea9n:</b> ' + fmtVN(topRisk.q) + ' pcs ' + escXi(topRisk.maVT) + (overdue ? ' \u0111\u00e3 qu\u00e1 h\u1ea1n ECN' : '') + ', ch\u01b0a c\u00f3 ph\u01b0\u01a1ng \u00e1n x\u1eed l\u00fd. C\u1ea7n quy\u1ebft \u0111\u1ecbnh trong tu\u1ea7n n\u00e0y');
+      }
+
+      // 4. NV t\u1ef7 l\u1ec7 s\u1eeda ERP cao b\u1ea5t th\u01b0\u1eddng (total >= 20, rate > 10%)
+      var highEdit = Object.keys(bravoByUser).filter(function(k){
+        return bravoByUser[k].total >= 20 && (bravoByUser[k].edited / bravoByUser[k].total) > 0.1;
+      }).sort(function(a,b){
+        return (bravoByUser[b].edited/bravoByUser[b].total) - (bravoByUser[a].edited/bravoByUser[a].total);
+      }).slice(0,3);
+      if (highEdit.length) {
+        weakItems.push('<b>Ch\u1ea5t l\u01b0\u1ee3ng KB ERP:</b> ' + highEdit.length + ' NV t\u1ef7 l\u1ec7 s\u1eeda cao b\u1ea5t th\u01b0\u1eddng (' + highEdit.map(function(k){
+          var r = bravoByUser[k].edited/bravoByUser[k].total*100;
+          return escXi(k) + ' ' + r.toFixed(1).replace('.',',') + '%';
+        }).join(', ') + ') \u2013 c\u1ea7n coaching');
+      }
+
+      // 5. D\u1ef1 \u00e1n "\u01afu ti\u00ean tr\u1ecdng \u0111i\u1ec3m" (c\u1ed9t D, 00_Task_Schedule) c\u00f3 task tr\u1ec5/qu\u00e1 h\u1ea1n
+      var riskyPriority = Object.keys(projPriorityMap).filter(function(p){
+        return projLateMap[p] && projLateMap[p].cham > 0;
+      }).sort(function(a,b){ return projLateMap[b].cham - projLateMap[a].cham; }).slice(0,3);
+      if (riskyPriority.length) {
+        weakItems.push('<b>D\u1ef1 \u00e1n "\u01afu ti\u00ean tr\u1ecdng \u0111i\u1ec3m" c\u00f3 r\u1ee7i ro ch\u1eadm ti\u1ebfn \u0111\u1ed9:</b> ' + riskyPriority.map(function(p){
+          return escXi(p) + ' (' + fmtVN(projLateMap[p].cham) + '/' + fmtVN(projLateMap[p].total) + ' task tr\u1ec5/qu\u00e1 h\u1ea1n)';
+        }).join(', '));
+      } else if (Object.keys(projPriorityMap).length > 0) {
+        strongItems.push('T\u1ea5t c\u1ea3 d\u1ef1 \u00e1n "\u01afu ti\u00ean tr\u1ecdng \u0111i\u1ec3m" hi\u1ec7n kh\u00f4ng c\u00f3 task tr\u1ec5/qu\u00e1 h\u1ea1n');
+      }
+
+      // \u2500\u2500 Ghi v\u00e0o DOM \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+      var elStrong = document.getElementById('dlcnXiStrong');
+      if (elStrong && strongItems.length) {
+        elStrong.innerHTML = strongItems.map(function(t){ return '<li>' + t + '</li>'; }).join('');
+      }
+      var elWeak = document.getElementById('dlcnXiWeak');
+      if (elWeak && weakItems.length) {
+        elWeak.innerHTML = weakItems.map(function(t){ return '<li>' + t + '</li>'; }).join('');
+      }
+
+      // \u2500\u2500 Footnote \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+      var nowStr = new Date().toLocaleString('vi-VN');
+      setEl('dlcnXiUpdated', nowStr);
+      setEl('dlcnXiTaskSrc', fmtVN(taskTotal) + ' task (LIVE)');
+      setEl('dlcnXiErpSrc',  fmtVN(bravoTotal) + ' m\u00e3 ERP (LIVE)');
+      setEl('dlcnXiEcnSrc',  fmtVN(ecnTotal) + ' b\u1ea3n ghi ECN (LIVE)');
+
+      console.log('[DLCN] XI tong ket sync OK \u2014 strong=' + strongItems.length + ' weak=' + weakItems.length);
+    } catch(e) {
+      console.warn('[DLCN] XI tong ket loi (giu noi dung tinh):', e.message);
     }
 
     console.log('[DLCN] Live sync done: tasks + ECN + Bravo OK \u2014 ' + new Date().toLocaleTimeString('vi-VN'));
