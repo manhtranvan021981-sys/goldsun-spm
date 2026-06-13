@@ -1716,7 +1716,7 @@ PEOPLE_SCORE =
   <div class="tbl-scroll">
     <table>
       <thead style="background:linear-gradient(90deg,#e8f8f5,#f4fbf9)"><tr style="border-bottom:2px solid #a2d9ce"><th style="color:#0e6655;background:transparent">#</th><th style="color:#0e6655;background:transparent">Vấn đề ECN</th><th style="color:#0e6655;background:transparent">Mức độ</th><th style="color:#0e6655;background:transparent">Hành động cụ thể</th><th style="color:#0e6655;background:transparent">Người TN chính</th><th style="color:#0e6655;background:transparent">Phối hợp</th><th style="color:#0e6655;background:transparent">Thời hạn</th><th style="color:#0e6655;background:transparent">Kết quả đầu ra</th></tr></thead>
-      <tbody>
+      <tbody id="dlcnX7Tbody">
         <tr style="background:#fff8f8">
           <td><b>1</b></td>
           <td><b>SSA-MLR-00154: 1.492 pcs tồn kho sau hạn ECN</b></td>
@@ -1775,12 +1775,14 @@ PEOPLE_SCORE =
 <div class="section-title ecn">X.8 – TƯ VẤN: 6 ĐIỀU CẦN BỔ SUNG VÀO HỆ THỐNG THEO DÕI ECN</div>
 <div class="adv-box teal" style="margin-bottom:16px">
   <div class="adv-title teal">💡 Tư vấn cải thiện hệ thống quản lý ECN – Từ dữ liệu thực tế</div>
+  <div id="dlcnX8Items">
   <div class="adv-item"><span style="font-size:14px;flex-shrink:0">1️⃣</span><div class="adv-text"><strong>CẢNH BÁO TỒN KHO TỰ ĐỘNG: Trigger khi tồn kho > 0 sau hạn ECN</strong><p>Hiện tại không có cơ chế cảnh báo. SSA-MLR-00154 với 1.492 pcs đã quá hạn 4 tháng mà không được phát hiện. Cần alert tự động qua Google Sheet Apps Script hoặc App Sheet.</p></div></div>
   <div class="adv-item"><span style="font-size:14px;flex-shrink:0">2️⃣</span><div class="adv-text"><strong>NGƯỜI CHỊU TRÁCH NHIỆM XỬ LÝ: Cột bắt buộc trong mọi bản ghi ECN</strong><p>Hiện chỉ có "Người khai báo". Cần phân biệt: Người khai báo ECN ≠ Người chịu trách nhiệm xử lý tồn kho. Mô hình RACI cần được áp dụng ngay vào file ECN.</p></div></div>
   <div class="adv-item"><span style="font-size:14px;flex-shrink:0">3️⃣</span><div class="adv-text"><strong>GIÁ TRỊ TÀI CHÍNH: Đơn giá × Tồn kho = Rủi ro tài chính từng ECN</strong><p>Cột "Đơn giá" và "Thành tiền" đều trống trong file. Không thể đo tác động tài chính. Cần điền đủ để báo cáo giám đốc: "Tổng giá trị hàng ECN tồn kho = X tỷ đồng".</p></div></div>
   <div class="adv-item"><span style="font-size:14px;flex-shrink:0">4️⃣</span><div class="adv-text"><strong>LIÊN KẾT ECN → ĐƠN HÀNG → ERP: Truy xuất ảnh hưởng ngược</strong><p>Cột "Đơn hàng bán" trong file hiện đa số bị trống. Không biết ECN này ảnh hưởng đơn hàng nào đang chạy. Đây là thông tin then chốt để quyết định tốc độ xử lý ECN.</p></div></div>
   <div class="adv-item"><span style="font-size:14px;flex-shrink:0">5️⃣</span><div class="adv-text"><strong>SỐ NGÀY TỒN KHO: Tính tự động từ Ngày ECN → Hiện tại</strong><p>Cột "Số ngày tồn kho" hiện trống. Cần công thức: =TODAY()-[Ngày ECN] để thấy ngay mã nào đang tồn kho lâu nhất và cần ưu tiên xử lý.</p></div></div>
   <div class="adv-item"><span style="font-size:14px;flex-shrink:0">6️⃣</span><div class="adv-text"><strong>DASHBOARD ECN REAL-TIME: Tích hợp vào Dashboard DLCN hàng ngày</strong><p>ECN cần được theo dõi hàng ngày như công việc, không phải theo tháng. Đề xuất thêm tab "ECN Today" vào dashboard hiển thị: Số ECN mới nhận, ECN sắp đến hạn (≤7 ngày), ECN quá hạn còn tồn kho.</p></div></div>
+  </div>
 </div>
 </div>
 
@@ -7628,7 +7630,81 @@ window._syncDLCNAllSections = async function(liveCache) {
       });
     }
 
+    // \u2550\u2550 FETCH 4: X7_ACTION_PLAN + X8_ADVISORY (AI Analysis) \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550
+    // 2 tab n\u00e0y \u0111\u01b0\u1ee3c Apps Script (bound v\u00e0o BC_THEODOI_ECN_V2) t\u1ef1 ph\u00e2n t\u00edch
+    // v\u00e0 ghi m\u1ed7i khi ng\u01b0\u1eddi d\u00f9ng ch\u1ea1y menu "ECN AI Analysis" -> "Ch\u1ea1y ph\u00e2n t\u00edch ngay".
+    // Header \u1edf row 1 (writeTable_ setValues t\u1eeb row 1) -> headers=1.
+    try {
+      function escX(s) { return String(s==null?'':s).replace(/[&<>'"]/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]; }); }
+      var x7Table = await gvizFetch(ECN_ID, 'X7_ACTION_PLAN', 1, 'select * limit 99999');
+      var x7Rows = (x7Table.rows||[]).filter(function(r){ return r && r.c; });
+      var x7Tbody = document.getElementById('dlcnX7Tbody');
+      if (x7Tbody && x7Rows.length > 0) {
+        var BADGE_CLS = { '\ud83d\udd34 KH\u1ea8N':'badge-red', '\u26a0 T.B\u00ecnh':'badge-yellow', '\u2139 \u0110\u1ec1 xu\u1ea5t':'badge-blue' };
+        x7Tbody.innerHTML = x7Rows.map(function(row) {
+          var c = row.c || [];
+          var stt   = cellVal(c[0]);
+          var issue = cellVal(c[1]);
+          var level = cellVal(c[2]);
+          var action= cellVal(c[3]);
+          var pic   = cellVal(c[4]);
+          var coop  = cellVal(c[5]);
+          var due   = cellVal(c[6]);
+          var out   = cellVal(c[7]);
+          var badgeCls = BADGE_CLS[level] || 'badge-blue';
+          var trStyle = level === '\ud83d\udd34 KH\u1ea8N' ? ' style="background:#fff8f8"' : '';
+          var sttHtml = level === '\ud83d\udd34 KH\u1ea8N' ? '<b>' + escX(stt) + '</b>' : escX(stt);
+          var issueHtml = level === '\ud83d\udd34 KH\u1ea8N' ? '<b>' + escX(issue) + '</b>' : escX(issue);
+          var dueHtml = due ? '<b>' + escX(due) + '</b>' : '';
+          return '<tr' + trStyle + '>' +
+            '<td>' + sttHtml + '</td>' +
+            '<td>' + issueHtml + '</td>' +
+            '<td><span class="badge ' + badgeCls + '">' + escX(level) + '</span></td>' +
+            '<td>' + escX(action) + '</td>' +
+            '<td>' + escX(pic) + '</td>' +
+            '<td>' + escX(coop) + '</td>' +
+            '<td>' + dueHtml + '</td>' +
+            '<td>' + escX(out) + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      var x8Table = await gvizFetch(ECN_ID, 'X8_ADVISORY', 1, 'select * limit 99999');
+      var x8Rows = (x8Table.rows||[]).filter(function(r){ return r && r.c; });
+      var x8Box = document.getElementById('dlcnX8Items');
+      if (x8Box && x8Rows.length > 0) {
+        x8Box.innerHTML = x8Rows.map(function(row) {
+          var c = row.c || [];
+          var icon  = cellVal(c[1]);
+          var title = cellVal(c[2]);
+          var body  = cellVal(c[3]);
+          return '<div class="adv-item"><span style="font-size:14px;flex-shrink:0">' + escX(icon) + '</span><div class="adv-text"><strong>' + escX(title) + '</strong><p>' + escX(body) + '</p></div></div>';
+        }).join('');
+      }
+
+      // C\u1eadp nh\u1eadt th\u1eddi \u0111i\u1ec3m ph\u00e2n t\u00edch AI (generated_at t\u1eeb X7, c\u1ed9t cu\u1ed1i)
+      var aiTime = x7Rows.length > 0 ? cellVal((x7Rows[0].c||[])[8]) : '';
+      if (aiTime) {
+        [window._dlcnLiveData, window._DLCN_SNAPSHOT].forEach(function(src) {
+          if (src) src.ecn_ai_generated_at = aiTime;
+        });
+      }
+
+      console.log('[DLCN] X7/X8 AI Analysis sync OK \u2014 generated_at=' + aiTime);
+    } catch(e) {
+      console.warn('[DLCN] FETCH4 X7/X8 AI Analysis loi (giu noi dung tinh):', e.message);
+    }
+
     console.log('[DLCN] Live sync done: tasks + ECN + Bravo OK \u2014 ' + new Date().toLocaleTimeString('vi-VN'));
+
+  } catch(e) {
+    console.error('[_syncDLCNAllSections]', e.message, e.stack);
+  }
+};
+</script>
+
+</body>
+</htmlconsole.log('[DLCN] Live sync done: tasks + ECN + Bravo OK \u2014 ' + new Date().toLocaleTimeString('vi-VN'));
 
   } catch(e) {
     console.error('[_syncDLCNAllSections]', e.message, e.stack);
