@@ -636,6 +636,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f0f3f6;c
 <!-- ════ LEVEL-1 NAV — Các Bộ phận ════ -->
 <div class="nav-l1" id="navL1">
   <button class="l1-btn" data-bp="tqkh" onclick="selectDashBP(this)">🏠 Tổng quan<br>khối CN</button>
+  <button class="l1-btn" data-bp="hoptuan" onclick="selectDashBP(this)">📅 Họp tuần</button>
   <button class="l1-btn" data-bp="thietke" onclick="selectDashBP(this)">🎨 BP Thiết kế<br>— Chế bản<span class="bp-badge">2</span></button>
   <button class="l1-btn active" data-bp="spmnpi" onclick="selectDashBP(this)">⚙️ BP CN triển khai<br>&amp; tối ưu SX<span class="bp-badge">6</span></button>
   <button class="l1-btn" data-bp="data" onclick="selectDashBP(this)">🗄️ BP Dữ liệu CN<br>&amp; Hệ thống<span class="bp-badge">4</span></button>
@@ -2147,7 +2148,7 @@ PEOPLE_SCORE =
 <div class="tab-content" id="tab-project">
   <!-- 4 biểu đồ 1 hàng ngang -->
   <div class="g4">
-    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🍩</span>Trạng thái công việc</div></div><div class="cw" style="height:200px"><canvas id="c-proj"></canvas></div></div>
+    <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🍩</span>Trạng thái công việc</div></div><div class="cw" style="height:230px"><canvas id="c-proj"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">📊</span>Phân loại ưu tiên</div></div><div class="cw" style="height:200px"><canvas id="c-proj-uutien"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">⚠</span>Cảnh báo tiến độ</div></div><div class="cw" style="height:200px"><canvas id="c-proj-tiendo"></canvas></div></div>
     <div class="panel"><div class="ph"><div class="pt"><span class="pt-icon">🔔</span>Cảnh báo công việc</div></div><div class="cw"><div id="proj-cviec-gauges"></div></div></div>
@@ -2355,6 +2356,94 @@ PEOPLE_SCORE =
   </div><!-- end tk-sec-danhsach -->
 
 </div><!-- end tab-tk-overview -->
+
+
+<!-- ══════════════════════════════════════════════════════════
+     TAB HỌP TUẦN — Tổng kết & giao việc tuần
+     ══════════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-hoptuan">
+
+  <div class="panel" style="margin-bottom:12px">
+    <div class="ph">
+      <div class="pt"><span class="pt-icon">📅</span>Họp tuần — <span id="ht-week-label">--</span></div>
+      <button class="ai-ref" onclick="HT_refresh()">🔄 Cập nhật dữ liệu</button>
+    </div>
+    <div id="ht-status" style="font-size:11px;color:var(--gray)">Bấm "Cập nhật dữ liệu" để tải tình hình live từ 4 sheet CV trước khi họp.</div>
+  </div>
+
+  <!-- KHỐI A -->
+  <div class="panel" style="margin-bottom:12px">
+    <div class="ph"><div class="pt"><span class="pt-icon">📋</span>A. Việc đã giao tuần trước — Tiến độ hiện tại</div></div>
+    <div style="overflow-x:auto">
+    <table class="dt" style="font-size:11px;width:100%">
+      <thead><tr><th>Bộ phận</th><th style="min-width:220px">Nội dung công việc</th><th>PIC</th><th>Hạn</th><th>% HT</th><th>Tình trạng</th><th>Cảnh báo tiến độ</th></tr></thead>
+      <tbody id="ht-khoia-tbody"><tr><td colspan="7" style="text-align:center;padding:12px;color:var(--gray)">Chưa có dữ liệu — bấm "🔄 Cập nhật dữ liệu"</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- KHỐI B -->
+  <div class="panel" style="margin-bottom:12px">
+    <div class="ph"><div class="pt"><span class="pt-icon">🤖</span>B. Vấn đề tổng hợp mới — Tuần này</div></div>
+    <div id="ht-khoib" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:10px">
+      <div style="padding:12px;text-align:center;color:var(--gray);font-size:11px">Chưa có dữ liệu — bấm "🔄 Cập nhật dữ liệu"</div>
+    </div>
+  </div>
+
+  <!-- KHỐI C -->
+  <div class="panel" style="margin-bottom:12px">
+    <div class="ph"><div class="pt"><span class="pt-icon">📝</span>C. Ghi chú thảo luận</div></div>
+    <div style="display:grid;grid-template-columns:180px minmax(300px,3fr) auto;gap:8px;align-items:start">
+      <select id="ht-c-bp" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px">
+        <option value="">-- Chung / Tổng quan --</option>
+        <option value="thietke">BP Thiết kế – Chế bản</option>
+        <option value="spmnpi">BP CN triển khai &amp; tối ưu SX</option>
+        <option value="data">BP Dữ liệu CN &amp; Hệ thống</option>
+        <option value="dev">BP Phát triển CN &amp; Ứng dụng</option>
+      </select>
+      <input id="ht-c-topic" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px" placeholder="Chủ đề thảo luận">
+      <div style="display:flex;gap:6px">
+        <button id="ht-c-savebtn" class="ai-ref" style="padding:6px 10px;font-size:10px;white-space:nowrap" onclick="HT_saveNote()">💾 Lưu</button>
+        <button id="ht-c-cancelbtn" class="ai-ref" style="padding:6px 10px;font-size:10px;white-space:nowrap;display:none;background:var(--gray)" onclick="HT_cancelEditNote()">✖ Hủy sửa</button>
+      </div>
+    </div>
+    <textarea id="ht-c-note" rows="4" style="margin-top:8px;width:100%;box-sizing:border-box;padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px;resize:vertical" placeholder="Nội dung thảo luận / quyết định..."></textarea>
+    <div id="ht-c-list" style="margin-top:10px;font-size:11px"></div>
+  </div>
+
+  <!-- KHỐI D -->
+  <div class="panel">
+    <div class="ph"><div class="pt"><span class="pt-icon">➕</span>D. Giao việc mới</div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px">
+      <select id="ht-d-bp" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px" onchange="htUpdateNhomOptions()">
+        <option value="thietke">BP Thiết kế – Chế bản</option>
+        <option value="spmnpi">BP CN triển khai &amp; tối ưu SX</option>
+        <option value="data">BP Dữ liệu CN &amp; Hệ thống</option>
+        <option value="dev">BP Phát triển CN &amp; Ứng dụng</option>
+      </select>
+      <input id="ht-d-duan" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px" placeholder="Dự án (nếu có)">
+      <select id="ht-d-nhom" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px">
+        <option value="">-- Chọn Hệ / Nhóm công việc --</option>
+      </select>
+      <select id="ht-d-uutien" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px">
+        <option>Ưu tiên trọng điểm</option>
+        <option selected>Ưu tiên 1</option>
+        <option>Ưu tiên 2</option>
+      </select>
+      <input id="ht-d-pic" list="ht-d-pic-list" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px" placeholder="Gõ tên để tìm PIC...">
+      <datalist id="ht-d-pic-list"></datalist>
+      <input id="ht-d-han" type="date" style="padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px">
+      <textarea id="ht-d-noidung" rows="3" style="width:100%;box-sizing:border-box;padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px;resize:vertical" placeholder="Nội dung công việc"></textarea>
+      <textarea id="ht-d-ketqua" rows="3" style="width:100%;box-sizing:border-box;padding:6px 8px;font-size:11px;border:1px solid #DDD;border-radius:6px;resize:vertical" placeholder="Mục tiêu / Kết quả cần đạt"></textarea>
+    </div>
+    <button class="ai-ref" style="margin-top:8px" onclick="HT_assignTask()">💾 Giao việc</button>
+    <div id="ht-d-status" style="font-size:11px;margin-top:6px;color:var(--gray)"></div>
+    <div id="ht-d-list" style="margin-top:10px;font-size:11px"></div>
+  </div>
+
+</div><!-- end tab-hoptuan -->
 
 
 </div><!-- end content -->
@@ -4008,22 +4097,29 @@ const doughnutOuter = {
   id: 'doughnutOuter',
   afterDatasetsDraw(chart) {
     if (chart.config.type !== 'doughnut') return;
-    const {ctx} = chart;
+    const {ctx, chartArea} = chart;
     const meta = chart.getDatasetMeta(0);
+    const total = chart.data.datasets[0].data.reduce((a,b)=>a+(+b||0),0);
+    const R = 9; // bán kính badge
     ctx.save();
     ctx.font='bold 10px Segoe UI,Arial';
     ctx.textAlign='center'; ctx.textBaseline='middle';
     meta.data.forEach((arc, i) => {
       const val = chart.data.datasets[0].data[i];
       if (!val) return;
+      // Bỏ qua lát quá nhỏ (<2%) để tránh chồng nhãn — đã có trong tooltip/legend
+      if (total>0 && (val/total) < 0.02) return;
       const mid = (arc.startAngle + arc.endAngle) / 2;
       const r   = arc.outerRadius + 14;
-      const x   = arc.x + r * Math.cos(mid);
-      const y   = arc.y + r * Math.sin(mid);
+      let x = arc.x + r * Math.cos(mid);
+      let y = arc.y + r * Math.sin(mid);
+      // Giới hạn trong vùng vẽ để không chồng lên legend/tiêu đề
+      x = Math.min(Math.max(x, chartArea.left+R), chartArea.right-R);
+      y = Math.min(Math.max(y, chartArea.top+R), chartArea.bottom-R);
       const bg = chart.data.datasets[0].backgroundColor[i] || '#555';
       ctx.fillStyle = bg.length > 7 ? bg.slice(0,7) : bg;
       ctx.beginPath();
-      ctx.arc(x, y, 9, 0, Math.PI*2);
+      ctx.arc(x, y, R, 0, Math.PI*2);
       ctx.fill();
       ctx.fillStyle = '#fff';
       ctx.fillText(val, x, y);
@@ -4562,9 +4658,13 @@ function initCharts() {
   const pColors=[GREEN+'CC',NAVY+'CC',RED+'CC',GOLD+'CC','#9C27B0CC','#607D8BCC'];
   charts.proj=new Chart(document.getElementById('c-proj'),{type:'doughnut',
     data:{labels:pSKeys,datasets:[{data:pSVals,backgroundColor:pColors,borderWidth:0}]},
-    options:{responsive:true,maintainAspectRatio:false,cutout:'58%',
-      layout:{padding:{top:14,bottom:4,left:14,right:14}},
-      plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:4}},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'62%',
+      layout:{padding:{top:20,bottom:6,left:20,right:20}},
+      plugins:{legend:{position:'bottom',labels:{font:{size:9},boxWidth:10,padding:6,
+        generateLabels:(chart)=>chart.data.labels.map((l,i)=>{
+          const v=chart.data.datasets[0].data[i];
+          return {text:`${l}: ${v}`, fillStyle:chart.data.datasets[0].backgroundColor[i], strokeStyle:chart.data.datasets[0].backgroundColor[i], index:i};
+        })}},
         tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.parsed} việc`}}}},
     plugins:[doughnutCenter, doughnutOuter]
   });
@@ -4843,6 +4943,7 @@ function renderFunnels() {
 // ── 2-LEVEL NAV — BP CONFIG & FUNCTIONS ─────────────────────────
 const DASH_BPS = {
   tqkh:     {label:'Tổng quan khối CN',              icon:'🏠', subtabs:[]},
+  hoptuan:  {label:'Họp tuần',                       icon:'📅', subtabs:[]},
   thietke:  {label:'BP Thiết kế – Chế bản',          icon:'🎨', subtabs:[
     {id:'tk-overview', label:'📊 Tổng quan'},
     {id:'tk-tiendro',  label:'📋 Tiến độ PIC'},
@@ -4915,6 +5016,14 @@ function selectDashBP(btn) {
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
     document.getElementById('tab-tdt').classList.add('active');
     setTimeout(initTDT, 50);
+  } else if(bpId === 'hoptuan') {
+    // Họp tuần — tab tổng hợp, không cần L2
+    ph.classList.remove('show');
+    wrap.classList.remove('open');
+    l2.innerHTML = '';
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab-hoptuan').classList.add('active');
+    setTimeout(()=>{ if(window.HT_init) window.HT_init(); }, 50);
   } else if(bpId === 'setup_bp') {
     // Cài đặt — chuyển thẳng đến tab setup, không cần L2
     ph.classList.remove('show');
@@ -7875,6 +7984,367 @@ window._syncDLCNAllSections = async function(liveCache) {
     console.error('[_syncDLCNAllSections]', e.message, e.stack);
   }
 };
+</script>
+
+<!-- ══════════════════════════════════════════════════════════
+     HT_ MODULE — Tab "Họp tuần"
+     ══════════════════════════════════════════════════════════ -->
+<script>
+// ── CONFIG: 4 sheet CV của 4 BP (header dòng 3, cột A=0 .. Z=25, X/Y/Z mới) ──
+const HT_COLS_STD = {duan:1,nhom:2,uutien:3,tinhtrang:5,noidung:6,ketqua:7,pic:8,bophan:9,
+  batdau:10,ketthuc:11,tile:12,htt:13,cb_cv:18,cb_td:19,nhamay:20,nguon:23,tuangiao:24,idaction:25};
+
+const HT_BP = {
+  thietke: {label:'BP Thiết kế – Chế bản',        id:'1BulsA8W5YR4EIlLmEkbfn3wCI6GnHE2p8hkDWONZxq4', tab:'00_Task_Schedule', hr:3, cols:HT_COLS_STD},
+  spmnpi:  {label:'BP CN triển khai & tối ưu SX', id:'1PtSaH6m10bFJRnpc9uIVpNGRgbMl2HneBqxR4lfJQu4', tab:'00_Task_Schedule', hr:3, cols:HT_COLS_STD},
+  data:    {label:'BP Dữ liệu CN & Hệ thống',     id:'1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ', tab:'', hr:3, cols:HT_COLS_STD},
+  dev:     {label:'BP Phát triển CN & Ứng dụng',  id:'1nEx5haJpYZiPAVzEYjL7hV1z_QXTid2keWEccdTy_lY', tab:'', hr:3, cols:HT_COLS_STD},
+};
+
+// Apps Script Web App — đã bật ghi (action=addWeeklyTask / addDiscussionNote)
+const HT_ENGINE_URL = 'https://script.google.com/macros/s/AKfycbxoXcUnXM2EFQ57i8bDDNLv3WdErHlYb8X9uoShmocKJU97i80yshFXJfAHWahxFNi2_Q/exec';
+
+const HT_STATE = { data:{}, lastLoaded:null, picList:[], notes:[], editingNoteId:null };
+
+// ── HELPERS ─────────────────────────────────────────────────────
+function htPad(n){ return String(n).padStart(2,'0'); }
+function htISOWeek(d){
+  const t=new Date(d.getTime()); t.setHours(0,0,0,0);
+  t.setDate(t.getDate()+3-((t.getDay()+6)%7));
+  const week1=new Date(t.getFullYear(),0,4);
+  const wk=1+Math.round(((t-week1)/86400000-3+((week1.getDay()+6)%7))/7);
+  return t.getFullYear()+'-W'+htPad(wk);
+}
+function htWeekTag(offset){ const d=new Date(); d.setDate(d.getDate()+7*(offset||0)); return htISOWeek(d); }
+function htTodayVN(){ const d=new Date(); return htPad(d.getDate())+'/'+htPad(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2); }
+function htDateToVN(iso){ const p=iso.split('-'); return htPad(+p[2])+'/'+htPad(+p[1])+'/'+p[0].slice(2); }
+function htUUID(){ return 'wm-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8); }
+function esc2(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function htFetchBP(key){
+  const cfg = HT_BP[key];
+  const table = await gvizFetch(cfg.id, cfg.tab, cfg.hr, 'select * limit 99999', 30000);
+  const rows = (table.rows||[]).map(r=>(r.c||[]).map(c=> c ? (c.f!=null?c.f:(c.v!=null?c.v:'')) : ''));
+  return rows.filter(r=>r.some(v=>String(v).trim()!==''));
+}
+
+// Danh mục PIC — đọc cột C của sheet CONGVIEC_NHOM_DATA, tab 05_DanhMuc_NV (chỉ đọc, không ghi)
+async function htFetchPicList(){
+  try{
+    const table = await gvizFetch(HT_BP.data.id, '05_DanhMuc_NV', 1, 'select * limit 999', 20000);
+    const rows = (table.rows||[]).map(r=>(r.c||[]).map(c=> c ? (c.f!=null?c.f:(c.v!=null?c.v:'')) : ''));
+    const names = rows.map(r=>String(r[2]||'').trim()).filter(v=>v && !/^(pic|họ|ten|tên)/i.test(v));
+    return [...new Set(names)];
+  }catch(e){ console.warn('[htFetchPicList]', e.message); return []; }
+}
+function htRenderPicOptions(){
+  const dl=document.getElementById('ht-d-pic-list');
+  if(!dl) return;
+  const list=HT_STATE.picList||[];
+  dl.innerHTML=list.map(n=>`<option value="${esc2(n)}"></option>`).join('');
+}
+
+// Danh mục Hệ/Nhóm công việc — đọc cột E của sheet "06_StatusMaster" theo từng file BP (chỉ đọc)
+async function htFetchNhomList(bpKey){
+  try{
+    const cfg = HT_BP[bpKey];
+    const table = await gvizFetch(cfg.id, '06_StatusMaster', 1, 'select * limit 999', 20000);
+    const rows = (table.rows||[]).map(r=>(r.c||[]).map(c=> c ? (c.f!=null?c.f:(c.v!=null?c.v:'')) : ''));
+    const names = rows.map(r=>String(r[4]||'').trim()).filter(v=>v && !/^(nhom|hệ|nhóm)/i.test(v));
+    return [...new Set(names)];
+  }catch(e){ console.warn('[htFetchNhomList]', bpKey, e.message); return []; }
+}
+async function htUpdateNhomOptions(){
+  const bpSel=document.getElementById('ht-d-bp');
+  const nhomSel=document.getElementById('ht-d-nhom');
+  if(!bpSel || !nhomSel) return;
+  const bpKey=bpSel.value;
+  HT_STATE.nhomLists=HT_STATE.nhomLists||{};
+  if(!HT_STATE.nhomLists[bpKey]) HT_STATE.nhomLists[bpKey]=await htFetchNhomList(bpKey);
+  const list=HT_STATE.nhomLists[bpKey]||[];
+  nhomSel.innerHTML='<option value="">-- Chọn Hệ / Nhóm công việc --</option>'+list.map(n=>`<option value="${esc2(n)}">${esc2(n)}</option>`).join('');
+}
+
+// ── INIT ────────────────────────────────────────────────────────
+function HT_init(){
+  const lbl=document.getElementById('ht-week-label');
+  if(lbl) lbl.textContent = 'Tuần này: '+htWeekTag(0)+' · Tuần trước: '+htWeekTag(-1);
+  htFetchPicList().then(list=>{ HT_STATE.picList=list; htRenderPicOptions(); });
+  htUpdateNhomOptions();
+  htFetchNotes().then(htRenderNotesList);
+}
+
+// ── REFRESH (load live cả 4 sheet) ────────────────────────────────
+async function HT_refresh(){
+  const statusEl=document.getElementById('ht-status');
+  statusEl.textContent='⏳ Đang tải dữ liệu live từ 4 sheet CV...';
+  const keys=Object.keys(HT_BP);
+  const results=await Promise.allSettled(keys.map(k=>htFetchBP(k)));
+  const errs=[];
+  results.forEach((r,i)=>{ if(r.status==='fulfilled') HT_STATE.data[keys[i]]=r.value; else errs.push(HT_BP[keys[i]].label+': '+r.reason.message); });
+  HT_STATE.lastLoaded=new Date();
+  htRenderKhoiA();
+  htRenderKhoiB();
+  htRenderAssignedToday();
+  statusEl.textContent='✅ Cập nhật lúc '+HT_STATE.lastLoaded.toLocaleString('vi-VN')+(errs.length?(' · ⚠ '+errs.join(' | ')):'');
+}
+
+// ── KHỐI A: Việc đã giao tuần trước — tiến độ live ─────────────────
+function htRenderKhoiA(){
+  const weekPrev=htWeekTag(-1);
+  const out=[];
+  Object.entries(HT_BP).forEach(([key,cfg])=>{
+    (HT_STATE.data[key]||[]).forEach(r=>{
+      const nguon=String(r[cfg.cols.nguon]||'').trim();
+      const tg=String(r[cfg.cols.tuangiao]||'').trim();
+      if(nguon==='Họp tuần' && tg===weekPrev){
+        out.push({bp:cfg.label, noidung:r[cfg.cols.noidung]||'', pic:r[cfg.cols.pic]||'', han:r[cfg.cols.ketthuc]||'',
+          tile:r[cfg.cols.tile]||'', tinhtrang:r[cfg.cols.tinhtrang]||'', cb:r[cfg.cols.cb_td]||r[cfg.cols.cb_cv]||''});
+      }
+    });
+  });
+  const tbody=document.getElementById('ht-khoia-tbody');
+  if(!out.length){ tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:12px;color:var(--gray)">Không có việc nào được giao trong tuần ${weekPrev} (hoặc chưa cập nhật)</td></tr>`; return; }
+  tbody.innerHTML=out.map(x=>{
+    const cb=String(x.cb);
+    const style = /sau hạn|quá hạn/i.test(cb) ? 'background:#FDECEA;color:#D93025'
+      : /đúng hạn|trước hạn|kết thúc/i.test(cb) ? 'background:#EAF7EF;color:#1B6B3A'
+      : 'background:#FFFBEB;color:#B7791F';
+    return `<tr><td>${esc2(x.bp)}</td><td>${esc2(x.noidung)}</td><td>${esc2(x.pic)}</td><td>${esc2(x.han)}</td><td>${esc2(x.tile)}</td><td>${esc2(x.tinhtrang)}</td><td><span style="padding:2px 8px;border-radius:10px;font-size:10px;${style}">${esc2(cb)}</span></td></tr>`;
+  }).join('');
+}
+
+// ── KHỐI B: Phân tích tổng hợp theo từng Bộ phận ─────────────
+function htAnalyzeBPFull(cfg, rows){
+  rows = rows || [];
+  const total = rows.length;
+  let completed=0, late=0, overdueOpen=0;
+  const byNhom={}, byPic={}, byProject={};
+  rows.forEach(r=>{
+    const cb_td=String(r[cfg.cols.cb_td]||'');
+    const cb_cv=String(r[cfg.cols.cb_cv]||'');
+    const tinhtrang=String(r[cfg.cols.tinhtrang]||'');
+    const uutien=String(r[cfg.cols.uutien]||'');
+    const nhom=String(r[cfg.cols.nhom]||'Không rõ');
+    const duan=String(r[cfg.cols.duan]||'').trim() || nhom;
+    const pic=String(r[cfg.cols.pic]||'Chưa có PIC').trim() || 'Chưa có PIC';
+    const isDone=/hoàn thành/i.test(tinhtrang);
+    const isLate=/sau hạn/i.test(cb_td);
+    const isOverdueOpen=/quá hạn chưa/i.test(cb_td) || (/cảnh báo (vàng|quá hạn)/i.test(cb_cv) && !isDone);
+    if(isDone) completed++;
+    if(isLate) late++;
+    if(isOverdueOpen) overdueOpen++;
+    byPic[pic]=byPic[pic]||{name:pic,total:0,late:0,done:0};
+    byPic[pic].total++;
+    if(isLate) byPic[pic].late++;
+    if(isDone) byPic[pic].done++;
+    if(isLate) byNhom[nhom]=(byNhom[nhom]||0)+1;
+    if(/trọng điểm/i.test(uutien)){
+      byProject[duan]=byProject[duan]||{name:duan,total:0,late:0};
+      byProject[duan].total++;
+      if(isLate) byProject[duan].late++;
+    }
+  });
+  const completionRate = total? Math.round(completed/total*1000)/10 : 0;
+  const ontimeRate = total? Math.round((total-late)/total*1000)/10 : 100;
+
+  const picStats = Object.values(byPic).filter(p=>p.total>=3).map(p=>({...p, rate: p.total? p.late/p.total*100 : 0}));
+  const best = picStats.slice().sort((a,b)=> a.rate-b.rate || b.total-a.total)[0];
+  const worst = picStats.slice().sort((a,b)=> b.rate-a.rate || b.total-a.total)[0];
+
+  const topProjects = Object.values(byProject).sort((a,b)=>b.total-a.total).slice(0,3);
+  const topNhom = Object.entries(byNhom).sort((a,b)=>b[1]-a[1])[0];
+
+  const issues=[];
+  if(overdueOpen>0) issues.push(`${overdueOpen} CV quá hạn chưa hoàn thành`);
+  if(topNhom && topNhom[1]>0) issues.push(`Nhóm "${topNhom[0]}" có ${topNhom[1]} CV sau hạn`);
+  if(ontimeRate<95) issues.push(`Tỷ lệ đúng hạn ${ontimeRate}% dưới mục tiêu 95%`);
+
+  let recommendation;
+  if(overdueOpen>0) recommendation = `Ưu tiên xử lý ${overdueOpen} CV quá hạn ngay trong tuần, lên phương án recovery cụ thể.`;
+  else if(worst && worst.rate>=30) recommendation = `Hỗ trợ ${worst.name} (đang trễ ${Math.round(worst.rate)}% CV) — review tải việc / bổ sung backup.`;
+  else if(ontimeRate<95) recommendation = `RCA nhóm "${topNhom?topNhom[0]:''}" để cải thiện tỷ lệ đúng hạn.`;
+  else recommendation = `Duy trì tiến độ hiện tại, tiếp tục theo dõi các dự án trọng điểm.`;
+
+  return {bp:cfg.label, total, completed, completionRate, ontimeRate, late, overdueOpen, topProjects, issues, best, worst, recommendation};
+}
+function htRenderKhoiB(){
+  const el=document.getElementById('ht-khoib');
+  const summaries = Object.entries(HT_BP).map(([key,cfg])=>htAnalyzeBPFull(cfg, HT_STATE.data[key]||[]));
+  el.innerHTML = summaries.map(s=>{
+    const ontimeColor = s.ontimeRate>=95?'#1B6B3A':(s.ontimeRate>=85?'#B7791F':'#D93025');
+    const projHtml = s.topProjects.length
+      ? s.topProjects.map(p=>`<div>• ${esc2(p.name)}: ${p.total} CV${p.late?` (⚠ ${p.late} trễ)`:''}</div>`).join('')
+      : '<div style="color:var(--gray)">Không có dự án trọng điểm đang theo dõi</div>';
+    const issuesHtml = s.issues.length
+      ? s.issues.map(i=>`<div style="color:#D93025">⚠ ${esc2(i)}</div>`).join('')
+      : '<div style="color:#1B6B3A">Không có vấn đề nổi bật</div>';
+    const bestHtml = s.best ? `${esc2(s.best.name)} (đúng hạn ${Math.round(100-s.best.rate)}%, ${s.best.total} CV)` : '--';
+    const worstHtml = (s.worst && s.worst.rate>0) ? `${esc2(s.worst.name)} (trễ ${Math.round(s.worst.rate)}%, ${s.worst.late}/${s.worst.total} CV)` : '--';
+    return `<div style="border:1px solid #E5E7EB;border-radius:10px;padding:12px;background:#FAFBFC">
+      <div style="font-weight:700;font-size:12px;color:var(--navy);margin-bottom:6px">${esc2(s.bp)}</div>
+      <div style="font-size:11px;color:#475467;margin-bottom:6px">
+        Tổng CV: <b>${s.total}</b> · Hoàn thành: <b>${s.completionRate}%</b> · Đúng hạn: <b style="color:${ontimeColor}">${s.ontimeRate}%</b>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;margin:8px 0 3px">Dự án trọng điểm</div>
+      <div style="font-size:11px;color:#475467;line-height:1.5">${projHtml}</div>
+      <div style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;margin:8px 0 3px">Vấn đề</div>
+      <div style="font-size:11px;line-height:1.5">${issuesHtml}</div>
+      <div style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;margin:8px 0 3px">Nhân sự</div>
+      <div style="font-size:11px;color:#475467;line-height:1.5">
+        <div>✅ Làm tốt: ${bestHtml}</div>
+        <div>🔧 Cần cải thiện: ${worstHtml}</div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;margin:8px 0 3px">Đề xuất</div>
+      <div style="font-size:11px;color:#003F2D;line-height:1.5">${esc2(s.recommendation)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── KHỐI D phụ: Đã giao trong tuần này (live) ──────────────────────
+function htRenderAssignedToday(){
+  const weekNow=htWeekTag(0);
+  const out=[];
+  Object.entries(HT_BP).forEach(([key,cfg])=>{
+    (HT_STATE.data[key]||[]).forEach(r=>{
+      if(String(r[cfg.cols.nguon]||'').trim()==='Họp tuần' && String(r[cfg.cols.tuangiao]||'').trim()===weekNow){
+        out.push({bp:cfg.label, nhom:r[cfg.cols.nhom]||'', pic:r[cfg.cols.pic]||'', han:r[cfg.cols.ketthuc]||'', noidung:r[cfg.cols.noidung]||''});
+      }
+    });
+  });
+  const list=document.getElementById('ht-d-list');
+  const header=`<div style="font-weight:700;font-size:10px;color:var(--navy);text-transform:uppercase;margin-bottom:4px">Đã giao trong tuần ${weekNow} (${out.length})</div>`;
+  list.innerHTML = header + out.map(x=>`<div style="padding:6px 8px;border-bottom:1px solid #EEE"><b>${esc2(x.bp)}</b> · ${esc2(x.nhom)} · PIC: ${esc2(x.pic||'--')} · Hạn: ${esc2(x.han)}<br>${esc2(x.noidung)}</div>`).join('');
+}
+
+// ── GHI DỮ LIỆU — gọi Apps Script ──────────────────────────────────
+async function htPost(payload){
+  const res = await fetch(HT_ENGINE_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload)});
+  const txt = await res.text();
+  try{ return JSON.parse(txt); }catch(e){ return {ok:true, raw:txt}; }
+}
+
+// KHỐI C — Lấy danh sách ghi chú thảo luận đã lưu
+async function htFetchNotes(){
+  HT_STATE.notesError = null;
+  try{
+    const res = await htPost({action:'listNotes'});
+    if(res && res.ok===false){ HT_STATE.notesError = res.error||'Lỗi không rõ'; HT_STATE.notes=[]; }
+    else HT_STATE.notes = (res && Array.isArray(res.notes)) ? res.notes : [];
+  }catch(e){ console.warn('fetchNotes',e); HT_STATE.notesError = e.message; HT_STATE.notes=[]; }
+  return HT_STATE.notes;
+}
+
+// KHỐI C — Render danh sách ghi chú (bấm vào để sửa)
+function htRenderNotesList(){
+  const list=document.getElementById('ht-c-list');
+  if(HT_STATE.notesError){
+    list.innerHTML = `<div style="padding:6px 8px;color:#C0392B">⚠ Không tải được danh sách ghi chú: ${esc2(HT_STATE.notesError)}<br>Kiểm tra Apps Script đã deploy bản mới (New version) có hàm listNotes/updateDiscussionNote chưa.</div>`;
+    return;
+  }
+  if(!HT_STATE.notes.length){ list.innerHTML='<div style="padding:6px 8px;color:var(--gray)">Chưa có ghi chú nào.</div>'; return; }
+  list.innerHTML = HT_STATE.notes.map(n=>{
+    const time = n.cap_nhat || n.thoi_gian || '';
+    const timeStr = time ? new Date(time).toLocaleString('vi-VN') : '';
+    return `<div onclick="HT_editNote('${esc2(n.id)}')" style="padding:6px 8px;border-bottom:1px solid #EEE;cursor:pointer" title="Bấm để sửa">
+      <b>${esc2(n.bo_phan)}${n.chu_de?(' · '+esc2(n.chu_de)):''}</b> — ${esc2(n.noi_dung)}
+      <span style="color:var(--gray)"> (${esc2(timeStr)})</span>
+    </div>`;
+  }).join('');
+}
+
+// KHỐI C — Bấm vào ghi chú: nạp lại nội dung vào form để sửa
+function HT_editNote(id){
+  const note = HT_STATE.notes.find(n=>n.id===id);
+  if(!note) return;
+  const bpKey = Object.keys(HT_BP).find(k=>HT_BP[k].label===note.bo_phan) || '';
+  document.getElementById('ht-c-bp').value = bpKey;
+  document.getElementById('ht-c-topic').value = note.chu_de||'';
+  document.getElementById('ht-c-note').value = note.noi_dung||'';
+  HT_STATE.editingNoteId = id;
+  document.getElementById('ht-c-savebtn').textContent = '💾 Cập nhật';
+  document.getElementById('ht-c-cancelbtn').style.display = '';
+}
+
+// KHỐI C — Hủy chế độ sửa, làm trống form
+function HT_cancelEditNote(){
+  HT_STATE.editingNoteId = null;
+  document.getElementById('ht-c-bp').value = '';
+  document.getElementById('ht-c-topic').value = '';
+  document.getElementById('ht-c-note').value = '';
+  document.getElementById('ht-c-savebtn').textContent = '💾 Lưu';
+  document.getElementById('ht-c-cancelbtn').style.display = 'none';
+}
+
+// KHỐI C — Lưu ghi chú thảo luận (mới hoặc cập nhật ghi chú đang sửa)
+async function HT_saveNote(){
+  const bp=document.getElementById('ht-c-bp').value;
+  const topic=document.getElementById('ht-c-topic').value.trim();
+  const note=document.getElementById('ht-c-note').value.trim();
+  if(!note){ alert('Anh nhập nội dung thảo luận trước khi lưu.'); return; }
+  const boPhan = bp?HT_BP[bp].label:'Chung';
+  const editingId = HT_STATE.editingNoteId;
+  const isEdit = (editingId!==null && editingId!==undefined && editingId!=='');
+  const payload = isEdit
+    ? {action:'updateDiscussionNote', id:editingId, bo_phan:boPhan, chu_de:topic, noi_dung:note}
+    : {action:'addDiscussionNote', id:htUUID(), tuan:htWeekTag(0), bo_phan:boPhan, chu_de:topic, noi_dung:note};
+  const savebtn=document.getElementById('ht-c-savebtn');
+  const oldLabel=savebtn.textContent;
+  savebtn.textContent='⏳ Đang lưu...'; savebtn.disabled=true;
+  try{
+    const res = await htPost(payload);
+    if(res && res.ok===false){
+      alert('Lưu thất bại: '+(res.error||'không rõ lỗi')+'\nKiểm tra lại Apps Script đã deploy bản mới (New version) và đã có sheet HOP_TUAN/tab DISCUSSION.');
+    }else{
+      await htFetchNotes();
+      htRenderNotesList();
+      HT_cancelEditNote();
+    }
+  }catch(e){ console.warn('saveNote',e); alert('Lưu thất bại: '+e.message); }
+  savebtn.disabled=false;
+  if(savebtn.textContent==='⏳ Đang lưu...') savebtn.textContent=oldLabel;
+}
+
+// KHỐI D — Giao việc mới (ghi thẳng vào sheet CV của BP đã chọn)
+async function HT_assignTask(){
+  const bp=document.getElementById('ht-d-bp').value;
+  const cfg=HT_BP[bp];
+  const noidung=document.getElementById('ht-d-noidung').value.trim();
+  const han=document.getElementById('ht-d-han').value; // yyyy-mm-dd
+  if(!noidung || !han){ alert('Anh cần nhập Nội dung công việc và Hạn hoàn thành.'); return; }
+  const payload={
+    action:'addWeeklyTask', bp,
+    tuan_giao: htWeekTag(0),
+    id_action: htUUID(),
+    du_an: document.getElementById('ht-d-duan').value.trim(),
+    nhom_cv: document.getElementById('ht-d-nhom').value.trim()||'Việc giao thêm họp tuần',
+    uu_tien: document.getElementById('ht-d-uutien').value,
+    pic: document.getElementById('ht-d-pic').value.trim(),
+    noi_dung: noidung,
+    ket_qua: document.getElementById('ht-d-ketqua').value.trim(),
+    ngay_bat_dau: htTodayVN(),
+    ngay_ket_thuc: htDateToVN(han),
+    bo_phan: cfg.label,
+  };
+  const statusEl=document.getElementById('ht-d-status');
+  statusEl.textContent='⏳ Đang ghi vào '+cfg.label+'...';
+  try{
+    await htPost(payload);
+    statusEl.textContent='✅ Đã giao việc vào '+cfg.label+' (tuần '+payload.tuan_giao+').';
+  }catch(e){
+    statusEl.textContent='❌ Lỗi gửi dữ liệu: '+e.message+' — kiểm tra Apps Script đã deploy action addWeeklyTask chưa.';
+  }
+  const list=document.getElementById('ht-d-list');
+  list.insertAdjacentHTML('afterbegin', `<div style="padding:6px 8px;border-bottom:1px solid #EEE"><b>${esc2(cfg.label)}</b> · ${esc2(payload.nhom_cv)} · PIC: ${esc2(payload.pic||'--')} · Hạn: ${esc2(payload.ngay_ket_thuc)}<br>${esc2(noidung)}</div>`);
+  document.getElementById('ht-d-duan').value='';
+  document.getElementById('ht-d-nhom').value='';
+  document.getElementById('ht-d-pic').value='';
+  document.getElementById('ht-d-noidung').value='';
+  document.getElementById('ht-d-ketqua').value='';
+  document.getElementById('ht-d-han').value='';
+}
+
+window.HT_init=HT_init; window.HT_refresh=HT_refresh; window.HT_saveNote=HT_saveNote; window.HT_assignTask=HT_assignTask;
 </script>
 
 </body>
