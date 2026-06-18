@@ -7553,8 +7553,10 @@ window._syncDLCNAllSections = async function(liveCache) {
     // Cột L (index 11) = "Mã sản phẩm" — điều kiện lọc chính; fallback positional index 11
     var iBvMaSP   = findCol(bm, ['ma san pham','ma vat tu','ma sp','ma erp','product code','ma hang']);
     if (iBvMaSP < 0) iBvMaSP = 11; // fallback: cột L (0-based index 11)
-    var iBvSua    = findCol(bm, ['so lan sua','lan sua','so lan chinh sua','so lan sua doi']);
+    var iBvSua    = findCol(bm, ['so lan sua','lan sua','so lan chinh sua','so lan sua doi','so sua','sl sua','chinh sua','so lan hieu chinh']);
     if (iBvSua < 0) iBvSua = 3; // fallback: cột D (0-based index 3)
+    // Log để kiểm tra cột "Số lần sửa" đã resolve đúng chưa
+    (function(){ var rev={}; Object.keys(bm).forEach(function(k){rev[bm[k]]=k;}); console.log('[DLCN Bravo] iBvSua='+iBvSua+'(header:"'+(rev[iBvSua]||'FALLBACK-không tìm thấy header')+'") iBvUser='+iBvUser+'(header:"'+(rev[iBvUser]||'không tìm thấy')+'")'); })();
     var iBvUser   = findCol(bm, ['nguoi khai bao','nguoi kb','ten nguoi','nhan vien','nguoi thuc hien']);
     var iBvThang  = findCol(bm, ['thang khai bao','thang','month','thang tao']);
     var iBvTuan   = findCol(bm, ['tuan khai bao','tuan','week']);
@@ -7593,21 +7595,29 @@ window._syncDLCNAllSections = async function(liveCache) {
       }
       // (kết thúc xử lý ngày khai báo)
 
+      // % sửa theo nhân viên: đếm trên cùng bộ lọc colL (nhất quán với bravoTotal)
+      // Dùng cell.v numeric check thay vì parseInt(cellVal) để tránh parse sai ngày (vd: parseInt("14/06/2026")=14)
+      if (hasColL) {
+        var _cellSua_u = (row.c||[])[iBvSua];
+        var _nSua_u = (_cellSua_u && typeof _cellSua_u.v === 'number' && _cellSua_u.v > 0) ? _cellSua_u.v : 0;
+        var _nguoi_u = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
+        if (_nguoi_u) {
+          if (!bravoByUser[_nguoi_u]) bravoByUser[_nguoi_u] = {total:0, edited:0};
+          bravoByUser[_nguoi_u].total++;
+          if (_nSua_u > 0) bravoByUser[_nguoi_u].edited++;
+        }
+      }
+
       // Chất lượng khai báo: chỉ tính dòng có cột G khác rỗng
       var colG_val = cellVal((row.c||[])[iBvColG]);
       if (!colG_val || colG_val.trim() === '') return;
 
-      var colD_raw = cellVal((row.c||[])[iBvSua]);
-      var nSua = (parseInt(colD_raw) || 0);
-      if (!colD_raw || colD_raw.trim() === '') bravoGood++;  // cột D rỗng = khai báo đúng lần đầu
-      if (nSua >= 1) bravoEdited++;  // cột D >= 1 = có sửa >= 1 lần
-
-      var nguoi = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
-      if (nguoi) {
-        if (!bravoByUser[nguoi]) bravoByUser[nguoi] = {total:0, edited:0};
-        bravoByUser[nguoi].total++;
-        if (nSua > 0) bravoByUser[nguoi].edited++;
-      }
+      // Dùng cell.v numeric check — tránh parseInt parse ngày "14/06/2026" → 14
+      var colD_cell = (row.c||[])[iBvSua];
+      var colD_raw  = cellVal(colD_cell);
+      var nSua = (colD_cell && typeof colD_cell.v === 'number' && colD_cell.v > 0) ? colD_cell.v : 0;
+      if (!colD_raw || colD_raw.trim() === '') bravoGood++;  // cột sửa rỗng = khai báo đúng lần đầu
+      if (nSua >= 1) bravoEdited++;  // cột sửa >= 1 = có sửa >= 1 lần
 
       var thang = iBvThang >= 0 ? getByIdx(row, iBvThang) : '';
       if (thang) bravoByMonth[thang] = (bravoByMonth[thang]||0) + 1;
