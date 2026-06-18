@@ -7596,15 +7596,15 @@ window._syncDLCNAllSections = async function(liveCache) {
       // (kết thúc xử lý ngày khai báo)
 
       // % sửa theo nhân viên: đếm trên cùng bộ lọc colL (nhất quán với bravoTotal)
-      // Dùng cell.v numeric check thay vì parseInt(cellVal) để tránh parse sai ngày (vd: parseInt("14/06/2026")=14)
+      // "Số lần sửa" = 1 là lần TẠO MÃ GỐC (version đầu tiên), chỉ ≥ 2 mới là THỰC SỰ CÓ SỬA
       if (hasColL) {
         var _cellSua_u = (row.c||[])[iBvSua];
-        var _nSua_u = (_cellSua_u && typeof _cellSua_u.v === 'number' && _cellSua_u.v > 0) ? _cellSua_u.v : 0;
+        var _nSua_u = (_cellSua_u && typeof _cellSua_u.v === 'number') ? _cellSua_u.v : 0;
         var _nguoi_u = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
         if (_nguoi_u) {
           if (!bravoByUser[_nguoi_u]) bravoByUser[_nguoi_u] = {total:0, edited:0};
           bravoByUser[_nguoi_u].total++;
-          if (_nSua_u > 0) bravoByUser[_nguoi_u].edited++;
+          if (_nSua_u > 1) bravoByUser[_nguoi_u].edited++;
         }
       }
 
@@ -7612,12 +7612,12 @@ window._syncDLCNAllSections = async function(liveCache) {
       var colG_val = cellVal((row.c||[])[iBvColG]);
       if (!colG_val || colG_val.trim() === '') return;
 
-      // Dùng cell.v numeric check — tránh parseInt parse ngày "14/06/2026" → 14
+      // "Số lần sửa" = 1 là lần TẠO GỐC → chỉ đếm ≥ 2 là có sửa thực sự
       var colD_cell = (row.c||[])[iBvSua];
       var colD_raw  = cellVal(colD_cell);
-      var nSua = (colD_cell && typeof colD_cell.v === 'number' && colD_cell.v > 0) ? colD_cell.v : 0;
-      if (!colD_raw || colD_raw.trim() === '') bravoGood++;  // cột sửa rỗng = khai báo đúng lần đầu
-      if (nSua >= 1) bravoEdited++;  // cột sửa >= 1 = có sửa >= 1 lần
+      var nSua = (colD_cell && typeof colD_cell.v === 'number') ? colD_cell.v : 0;
+      if (!colD_raw || colD_raw.trim() === '' || nSua <= 1) bravoGood++;  // sửa ≤ 1 = khai báo đúng / lần tạo gốc
+      if (nSua >= 2) bravoEdited++;  // sửa >= 2 = có sửa thực sự
 
       var thang = iBvThang >= 0 ? getByIdx(row, iBvThang) : '';
       if (thang) bravoByMonth[thang] = (bravoByMonth[thang]||0) + 1;
@@ -7696,7 +7696,11 @@ window._syncDLCNAllSections = async function(liveCache) {
       }
     }
     // cQual: chat luong khai bao theo nhan vien (% sua) — ONLINE, giu thang mau do/cam/xanh theo % + duong KPI 2%
-    var quNV = Object.keys(bravoByUser).sort(function(a,b){return bravoByUser[b].total-bravoByUser[a].total;}).slice(0,12);
+    var quNV = Object.keys(bravoByUser).filter(function(k){ return bravoByUser[k].total >= 50; }).sort(function(a,b){
+      var ra = bravoByUser[a].total>0 ? bravoByUser[a].edited/bravoByUser[a].total : 0;
+      var rb = bravoByUser[b].total>0 ? bravoByUser[b].edited/bravoByUser[b].total : 0;
+      return rb - ra;
+    }).slice(0,12);
     if (quNV.length > 0) {
       var quPct = quNV.map(function(k){ return bravoByUser[k].total>0 ? +(bravoByUser[k].edited/bravoByUser[k].total*100).toFixed(1) : 0; });
       var quFix = quNV.map(function(k){ return [bravoByUser[k].edited, bravoByUser[k].total]; });
