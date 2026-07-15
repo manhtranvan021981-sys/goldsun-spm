@@ -985,6 +985,10 @@ PEOPLE_SCORE =
   <div class="dlcn-scope" style="max-width:100%;overflow-x:hidden">
 <div class="main">
 
+<div id="dlcnSnapBanner" style="display:flex;align-items:center;gap:10px;background:#fef9e7;border-left:4px solid #f39c12;padding:7px 14px;font-size:11.5px;color:#7d6608;margin:0 0 8px 0">
+  <span id="dlcnSnapMsg">📋 Đang khởi tạo dữ liệu dashboard...</span>
+</div>
+
 <!-- ══ ZONE I: KPI TỔNG QUAN ══ -->
 <div id="kpi" class="section-title">I. TỔNG QUAN DỮ LIỆU<button onclick="if(window._syncDLCNAllSections)window._syncDLCNAllSections();" style="float:right;font-size:11px;padding:3px 10px;background:#1a5276;color:#fff;border:none;border-radius:4px;cursor:pointer;margin-top:-2px">🔄 Cập nhật dữ liệu</button></div>
 <div class="grid-7" style="margin-bottom:14px">
@@ -1382,8 +1386,8 @@ PEOPLE_SCORE =
   <div class="tbl-header tbl-hdr-blue"><span>Số mã khai báo / NV / Tháng &amp; Ước tính thời gian trung bình</span></div>
   <div class="tbl-scroll">
   <table>
-    <thead><tr><th>Nhân viên</th><th>12/25</th><th>01/26</th><th>02/26</th><th>03/26</th><th>04/26</th><th>05/26</th><th>Tổng</th><th>TB phút/mã</th><th>Nhận xét</th></tr></thead>
-    <tbody>
+    <thead id="ix3TableHead"><tr><th>Nhân viên</th><th>12/25</th><th>01/26</th><th>02/26</th><th>03/26</th><th>04/26</th><th>05/26</th><th>Tổng</th><th>TB phút/mã</th><th>Nhận xét</th></tr></thead>
+    <tbody id="ix3TableBody">
       <tr><td><b>NGUYỄN NGỌC PHÚ</b></td><td>2</td><td>715</td><td>157</td><td>181</td><td>403</td><td>520</td><td><b>1.978</b></td><td>~17,5</td><td><span class="qp-ok">✅ Ổn định, đều tháng</span></td></tr>
       <tr><td><b>NGUYỄN THỊ PHƯƠNG</b></td><td>26</td><td>1.042</td><td>551</td><td>315</td><td>0</td><td>0</td><td><b>1.934</b></td><td>~15,2</td><td><span class="qp-warn">⚠ Ngừng T4–T5, cần kiểm tra</span></td></tr>
       <tr><td><b>ĐẶNG THỊ HẰNG</b></td><td>0</td><td>307</td><td>165</td><td>242</td><td>410</td><td>411</td><td><b>1.535</b></td><td>~22,8</td><td><span class="qp-warn">⚠ Chậm hơn TB chung</span></td></tr>
@@ -1405,33 +1409,20 @@ PEOPLE_SCORE =
 <div class="section-title">IX.4 – CHẤT LƯỢNG KHAI BÁO (Số lần sửa) & MÃ DÒNG SP/NVL</div>
 
 <!-- ROW 1: Bảng chất lượng (trái) + Biểu đồ % Sửa (phải) -->
-<div class="grid-2" style="margin-bottom:12px;align-items:start">
-  <div class="tbl-wrap">
+<div class="grid-2" style="margin-bottom:12px;align-items:stretch">
+  <div class="tbl-wrap" id="ix4TblWrap">
     <div class="tbl-header tbl-hdr-blue"><span>Phân tích số lần sửa theo nhân viên – Chỉ số chất lượng khai báo ERP</span></div>
-    <table>
+    <table id="ix4QualTable">
       <thead><tr><th>Nhân viên</th><th align="right">Tổng KB</th><th align="right">Có sửa</th><th align="right">% Sửa</th><th align="right">Tổng lần sửa</th><th>Đánh giá</th></tr></thead>
       <tbody>
-        <tr><td>Phạm Phương Anh</td><td align="right">1.091</td><td align="right" style="color:#c0392b;font-weight:bold">478</td><td align="right"><span class="qp-bad">43,8%</span></td><td align="right">490</td><td>🔴 Batch – điều tra</td></tr>
-        <tr><td>NGUYỄN THỊ THƯƠNG</td><td align="right">172</td><td align="right" style="color:#c0392b">64</td><td align="right"><span class="qp-bad">37,2%</span></td><td align="right">64</td><td>🔴 Rất cao – coaching ngay</td></tr>
-        <tr><td>TRẦN VĂN HẢO</td><td align="right">101</td><td align="right">23</td><td align="right"><span class="qp-bad">22,8%</span></td><td align="right">23</td><td>🔴 Cần coaching ngay</td></tr>
-        <tr><td>NGUYỄN THỊ NHẬT ANH</td><td align="right">115</td><td align="right">22</td><td align="right"><span class="qp-warn">19,1%</span></td><td align="right">22</td><td>⚠ Trên ngưỡng 5%</td></tr>
-        <tr><td>NGUYỄN THÚY HIỀN</td><td align="right">556</td><td align="right">54</td><td align="right"><span class="qp-warn">9,7%</span></td><td align="right">57</td><td>⚠ Mới – đào tạo thêm</td></tr>
-        <tr><td>NGUYỄN VĂN DUY</td><td align="right">475</td><td align="right">18</td><td align="right"><span class="qp-warn">3,8%</span></td><td align="right">18</td><td>⚠ Chấp nhận được</td></tr>
-        <tr><td>ĐẶNG THỊ HẰNG</td><td align="right">1.535</td><td align="right">56</td><td align="right"><span class="qp-warn">3,6%</span></td><td align="right">102</td><td>⚠ Một số sửa nhiều lần</td></tr>
-        <tr><td>NGUYỄN NGỌC PHÚ</td><td align="right">1.978</td><td align="right">70</td><td align="right"><span class="qp-warn">3,5%</span></td><td align="right">79</td><td>⚠ Chấp nhận được</td></tr>
-        <tr><td>NGUYỄN THỊ PHƯƠNG</td><td align="right">1.934</td><td align="right">41</td><td align="right"><span class="qp-ok">2,1%</span></td><td align="right">47</td><td>✅ Tốt</td></tr>
-        <tr><td>TRỊNH XUÂN TÙNG</td><td align="right">1.260</td><td align="right">20</td><td align="right"><span class="qp-ok">1,6%</span></td><td align="right">21</td><td>✅ Tốt</td></tr>
-        <tr><td>PHẠM VIỆT ANH</td><td align="right">1.364</td><td align="right">20</td><td align="right"><span class="qp-ok">1,5%</span></td><td align="right">22</td><td>✅ Chậm nhưng ít sửa</td></tr>
-        <tr><td>NGUYỄN THỊ NGA</td><td align="right">440</td><td align="right">4</td><td align="right"><span class="qp-ok">0,9%</span></td><td align="right">5</td><td>✅ Tốt</td></tr>
-        <tr><td>NGUYỄN THỊ TÌNH</td><td align="right">899</td><td align="right">4</td><td align="right"><span class="qp-ok">0,4%</span></td><td align="right">6</td><td>✅ Xuất sắc</td></tr>
-        <tr style="background:#f4f6f7;font-weight:bold"><td>TỔNG thủ công</td><td align="right">~22.000</td><td align="right">957</td><td align="right">~2,4%</td><td align="right">941</td><td>Mục tiêu: ≤ 2%</td></tr>
+        <tr><td colspan="6" style="text-align:center;color:#999;padding:12px;font-size:11px">⏳ Đang tải dữ liệu live...</td></tr>
       </tbody>
     </table>
   </div>
-  <div class="chart-w">
+  <div class="chart-w" id="ix4ChartWrap">
     <div class="chart-t" style="font-size:12px">% Sửa theo nhân viên – Ngưỡng KPI 2%</div>
     <div style="font-size:10.5px;color:#566573;margin-bottom:8px;padding-left:8px">Mỗi bar = % sửa (nhãn: số sửa / tổng mã khai báo)</div>
-    <canvas id="cQual" height="166"></canvas>
+    <canvas id="cQual"></canvas>
   </div>
 </div>
 
@@ -5928,14 +5919,74 @@ new Chart(gc('cMonth'),{type:'bar',data:{labels:['12/25','01/26','02/26','03/26'
 const hD=[4271,1026,1634,2331,2945,873,2600,11607,9187,3264,875,961,754,784,574,218,1599,267,23,0,60,0,0,0];
 new Chart(gc('cHour'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+'h'),datasets:[{label:'Mã',data:hD,backgroundColor:hD.map(v=>v>5000?'#e74c3c':v>2000?'#f39c12':'#2980b9'),borderRadius:2}]},options:{responsive:true,layout:{padding:{top:22}},plugins:{legend:{display:false},datalabels:{display:ctx=>ctx.dataset.data[ctx.dataIndex]>=800,color:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#922b21':v>2000?'#7d6608':'#1a5276';},backgroundColor:ctx=>{const v=ctx.dataset.data[ctx.dataIndex];return v>5000?'#fdecea':v>2000?'#fef9e7':'#eaf2fb';},borderRadius:3,padding:{x:4,y:2},font:{size:9,weight:'bold'},anchor:'end',align:'top',offset:2,formatter:v=>v>=1000?(v/1000).toFixed(1)+'K':v}},scales:{y:{ticks:{callback:v=>v>=1000?(v/1000).toFixed(0)+'K':v}},x:{ticks:{font:{size:9}}}}}});
 
-// Dữ liệu cQual: [% sửa, số mã sửa, tổng mã] theo từng NV
-const qualNV=['P.P.Anh','T.THƯƠNG','T.V.HẢO','NHẬT ANH','T.HIỀN','V.DUY','Đ.HẰNG','N.PHÚ','T.PHƯƠNG','X.TÙNG','V.ANH','T.TÌNH'];
-const qualPct=[43.8,37.2,22.8,19.1,9.7,3.8,3.6,3.5,2.1,1.6,1.5,0.4];
-const qualFixed=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,1364],[4,899]];
-// PHẠM VIỆT ANH: 20 edits / 1364 total — buildIXCharts dùng SNAPSHOT thay thế bên dưới
-const qualFixedCorrect=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,1364],[4,899]];
-const qualColors=qualPct.map(v=>v>10?'#e74c3c':v>2?'#f39c12':'#27ae60');
-new Chart(gc('cQual'),{type:'bar',data:{labels:qualNV,datasets:[{label:'% Mã sửa / Tổng KB',data:qualPct,backgroundColor:qualColors,borderRadius:3},{label:'KPI 2%',data:Array(qualNV.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:true,layout:{padding:{right:150}},plugins:{datalabels:{display:ctx=>ctx.datasetIndex===0,color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:(v,ctx)=>{if(ctx.datasetIndex!==0)return '';const i=ctx.dataIndex;const [fix,tot]=qualFixedCorrect[i];return `${v}%  (${fix}/${tot} mã)`;}},tooltip:{callbacks:{label:c=>{if(c.dataset.label==='KPI 2%')return 'KPI: 2%';const i=c.dataIndex;const [fix,tot]=qualFixedCorrect[i];return ` ${c.raw}% – Sửa: ${fix}/${tot} mã`;}}}},scales:{x:{max:55,ticks:{callback:v=>v+'%'}}}}});
+// Giải pháp 3: Render IX.4 table + cQual chart từ SNAPSHOT ngay khi tab mở
+(function() {
+  var snap = window._DLCN_SNAPSHOT || window.SNAPSHOT;
+  var snapDate = (snap && snap.generated_at) ? snap.generated_at : '--';
+  var quality = (snap && snap.bravo && snap.bravo.quality) || [];
+  var filteredQ = quality.filter(function(u){ return (u.total||0) >= 10; });
+
+  // Cập nhật banner trạng thái
+  var _bannerEl = document.getElementById('dlcnSnapMsg');
+  if (_bannerEl) _bannerEl.textContent = '📋 Snapshot ' + snapDate + ' · Đang tải dữ liệu live, vui lòng đợi 30–60 giây...';
+
+  // Render IX.4 table từ SNAPSHOT
+  var ix4Tbl = document.getElementById('ix4QualTable');
+  if (ix4Tbl && filteredQ.length) {
+    var _e = function(s){ return String(s==null?'':s).replace(/[&<>'"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m];}); };
+    var totKB=0, totSua=0, totLan=0;
+    var rows = filteredQ.map(function(u){
+      var pct = u.edit_rate || 0;
+      totKB += (u.total||0); totSua += (u.edited||0); totLan += (u.total_edits||0);
+      var dg, dgCol;
+      if      (pct>=20){ dg='🔴 Rất cao – coaching ngay';     dgCol='#c0392b'; }
+      else if (pct>=10){ dg='🔴 Cao – kiểm tra ngay';         dgCol='#c0392b'; }
+      else if (pct>=5) { dg='⚠ Trên ngưỡng – cần cải thiện'; dgCol='#d68910'; }
+      else if (pct>=2) { dg='⚠ Chấp nhận được';              dgCol='#d68910'; }
+      else             { dg='✅ Đạt KPI';                      dgCol='#27ae60'; }
+      var pctCls = pct>=20?'qp-bad':pct>=2?'qp-warn':'qp-ok';
+      var sStyle = pct>=10?' style="color:#c0392b;font-weight:bold"':pct>=5?' style="color:#d68910"':'';
+      return '<tr><td>'+_e(u.name)+'</td>'
+        +'<td align="right">'+(u.total||0).toLocaleString('vi-VN')+'</td>'
+        +'<td align="right"'+sStyle+'>'+(u.edited||0).toLocaleString('vi-VN')+'</td>'
+        +'<td align="right"><span class="'+pctCls+'">'+pct.toFixed(1).replace('.',',')+'%</span></td>'
+        +'<td align="right">'+(u.total_edits||0).toLocaleString('vi-VN')+'</td>'
+        +'<td style="color:'+dgCol+'">'+dg+'</td></tr>';
+    });
+    var totPct = totKB>0 ? totSua/totKB*100 : 0;
+    rows.push('<tr style="background:#f4f6f7;font-weight:bold"><td>TỔNG (Snapshot)</td>'
+      +'<td align="right">'+totKB.toLocaleString('vi-VN')+'</td>'
+      +'<td align="right">'+totSua.toLocaleString('vi-VN')+'</td>'
+      +'<td align="right">'+totPct.toFixed(1).replace('.',',')+'%</td>'
+      +'<td align="right">'+totLan.toLocaleString('vi-VN')+'</td>'
+      +'<td>Mục tiêu: ≤ 2%</td></tr>');
+    ix4Tbl.querySelector('tbody').innerHTML = rows.join('');
+  }
+
+  // Render cQual chart từ SNAPSHOT (thay hardcoded 12 NV)
+  var quList = filteredQ.length ? filteredQ : quality;
+  var quCanvas = gc('cQual');
+  if (!quCanvas || typeof Chart === 'undefined') return;
+  var quOldC = Chart.getChart(quCanvas); if (quOldC) quOldC.destroy();
+  if (!quList.length) {
+    // Fallback hardcoded nếu SNAPSHOT không có quality
+    var _qN=['P.P.Anh','T.THƯƠNG','T.V.HẢO','NHẬT ANH','T.HIỀN','V.DUY','Đ.HẰNG','N.PHÚ','T.PHƯƠNG','X.TÙNG','V.ANH','T.TÌNH'];
+    var _qP=[43.8,37.2,22.8,19.1,9.7,3.8,3.6,3.5,2.1,1.6,1.5,0.4];
+    var _qF=[[478,1091],[64,172],[23,101],[22,115],[54,556],[18,475],[56,1535],[70,1978],[41,1934],[20,1260],[20,1364],[4,899]];
+    new Chart(quCanvas,{type:'bar',data:{labels:_qN,datasets:[{label:'% Mã sửa / Tổng KB',data:_qP,backgroundColor:_qP.map(function(v){return v>10?'#e74c3c':v>2?'#f39c12':'#27ae60';}),borderRadius:3,barThickness:16},{label:'KPI 2%',data:Array(_qN.length).fill(2),type:'line',borderColor:'#c0392b',borderDash:[5,3],borderWidth:2,pointRadius:0,fill:false,datalabels:{display:false}}]},options:{indexAxis:'y',responsive:false,maintainAspectRatio:false,layout:{padding:{right:150}},plugins:{datalabels:{display:function(ctx){return ctx.datasetIndex===0;},color:'#1c2833',font:{size:10,weight:'bold'},anchor:'end',align:'right',offset:6,clamp:false,formatter:function(v,ctx){if(ctx.datasetIndex!==0)return '';var fx=_qF[ctx.dataIndex]||[0,0];return v+'%  ('+fx[0]+'/'+fx[1]+' mã)';}},tooltip:{callbacks:{label:function(c){if(c.dataset.label==='KPI 2%')return 'KPI: 2%';var fx=_qF[c.dataIndex]||[0,0];return ' '+c.raw+'% – Sửa: '+fx[0]+'/'+fx[1]+' mã';}}}},scales:{x:{max:55,ticks:{callback:function(v){return v+'%';}}}}}}); return;
+  }
+  var _abb2 = function(n){ var p=String(n||'').trim().split(/\s+/); if(p.length<=1) return n; var fn=p[p.length-1]; return p.slice(0,-1).map(function(w){return w.charAt(0).toUpperCase();}).join('.')+'.'+fn.charAt(0).toUpperCase()+fn.slice(1).toLowerCase(); };
+  var quPct = quList.map(function(u){ return +(u.edit_rate||0).toFixed(1); });
+  var quFix = quList.map(function(u){ return [u.edited||0, u.total||0]; });
+  var quLbl = quList.map(function(u){ return _abb2(u.name); });
+  var quCol = quPct.map(function(v){ return v>10?'#e74c3c':v>2?'#f39c12':'#27ae60'; });
+  var quMax = Math.max(55, Math.ceil(Math.max.apply(null, quPct)*1.2) || 55);
+  quCanvas.style.height = Math.max(220, quList.length * 28 + 44) + 'px';
+  new Chart(quCanvas, {type:'bar', data:{labels: quLbl, datasets:[
+    {label:'% Mã sửa / Tổng KB', data: quPct, backgroundColor: quCol, borderRadius:3, barThickness:16},
+    {label:'KPI 2%', data: Array(quLbl.length).fill(2), type:'line', borderColor:'#c0392b', borderDash:[5,3], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
+  ]}, options:{indexAxis:'y', responsive:false, maintainAspectRatio:false, layout:{padding:{right:150}}, plugins:{datalabels:{display:function(ctx){ return ctx.datasetIndex===0; }, color:'#1c2833', font:{size:10,weight:'bold'}, anchor:'end', align:'right', offset:6, clamp:false, formatter:function(v,ctx){ if(ctx.datasetIndex!==0) return ''; var fx=quFix[ctx.dataIndex]||[0,0]; return v+'%  ('+fx[0]+'/'+fx[1]+' mã)'; }}, tooltip:{callbacks:{label:function(c){ if(c.dataset.label==='KPI 2%') return 'KPI: 2%'; var fx=quFix[c.dataIndex]||[0,0]; return ' '+c.raw+'% – Sửa: '+fx[0]+'/'+fx[1]+' mã'; }}}}, scales:{x:{max:quMax, ticks:{callback:function(v){ return v+'%'; }}}}}});
+})();
 
 const dongData=[7003,4109,3006,1749,1575,1445,1368,1237,1215,1210,1190,1023,960,954,909];
 const dongColors=dongData.map(v=>v>5000?'#1a3a5c':v>3000?'#1a5276':v>1500?'#2980b9':'#5dade2');
@@ -6156,11 +6207,12 @@ new Chart(gc('cEcnNM'),{type:'doughnut',data:{labels:['GS5 Quế Võ 1 (68)','GS
     })
     .catch(function(){ document.getElementById('cdLoading').textContent='⚠ Không tải được Bravo. Dùng dữ liệu ước tính.'; renderCongDoan(); });
 })();
-// Auto-sync LIVE khi initDLCN được gọi: cập nhật TDT + Section IX + late tasks
+// Auto-sync LIVE — bỏ qua nếu initTDT đã kích hoạt refresh trong vòng 2 phút (tránh fetch BRAVO 2 lần)
 setTimeout(async function() {
+  if (typeof _tdtLastRefresh !== 'undefined' && Date.now() - _tdtLastRefresh < 120000) return;
   try {
     if (typeof window.refreshLiveV5 === 'function') {
-      await window.refreshLiveV5(); // cập nhật TDT I-VIII + Section IX charts
+      await window.refreshLiveV5();
     } else {
       if (typeof window._syncDLCNAllSections === 'function') await window._syncDLCNAllSections();
       if (typeof window._syncDLCNLateTasks === 'function') window._syncDLCNLateTasks();
@@ -6326,7 +6378,7 @@ function renderAIAnalysis(s){
   setHTML('#aiDecisionTable tbody', decisions.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join(''));
 }
 
-function renderV5(s,mode='snapshot'){ CURRENT=s; renderMetrics(s); renderCommandQuestions(s); renderActions(s.actions||[]); renderPeople(s); renderSourceTables(s); renderAIAnalysis(s); setText('#liveMode',mode.toUpperCase()); setText('#lastRefresh',new Date().toLocaleString('vi-VN')); setText('#liveStatus', mode==='live'?'Đã thử kéo live 3 nguồn. Nguồn nào bị chặn quyền sẽ tự dùng snapshot dự phòng.':'Đang dùng snapshot đã tính sẵn từ 3 nguồn.'); }
+function renderV5(s,mode='snapshot'){ CURRENT=s; renderMetrics(s); renderCommandQuestions(s); renderActions(s.actions||[]); renderPeople(s); renderSourceTables(s); renderAIAnalysis(s); setText('#liveMode',mode.toUpperCase()); setText('#lastRefresh',new Date().toLocaleString('vi-VN')); var _sdt=(window.SNAPSHOT&&window.SNAPSHOT.generated_at)||'--'; setText('#liveStatus', mode==='live'?'✅ Dữ liệu live · Cập nhật lúc '+new Date().toLocaleTimeString('vi-VN')+'. Nguồn bị chặn quyền sẽ dùng snapshot dự phòng.':'📋 Snapshot '+_sdt+' · Đang tải dữ liệu live, vui lòng đợi 30–60 giây...'); }
 function filterSourceTables(){ const q=norm(document.getElementById('globalSearchV5')?.value||''); ['#taskSourceTable','#bravoSourceTable','#ecnSourceTable','#peopleTable'].forEach(sel=>{ document.querySelectorAll(sel+' tbody tr').forEach(tr=>{ tr.style.display=(!q||norm(tr.textContent).includes(q))?'':'none'; }); }); }
 // CSV parsing and live summarizing
 function parseCSV(text){
@@ -6384,6 +6436,9 @@ async function refreshLiveV5(){
   live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
   window._dlcnLiveData = live;
   renderV5(live,'live'); setText('#liveStatus', status.join(' · '));
+  // Cập nhật dlcnSnapBanner → trạng thái live
+  var _dlcnBanner=document.getElementById('dlcnSnapBanner'); if(_dlcnBanner) _dlcnBanner.style.cssText='display:flex;align-items:center;gap:10px;background:#eafaf1;border-left:4px solid #27ae60;padding:7px 14px;font-size:11.5px;color:#1d6a39;margin:0 0 8px 0';
+  var _dlcnMsg=document.getElementById('dlcnSnapMsg'); if(_dlcnMsg) _dlcnMsg.textContent='✅ Dữ liệu live đã tải xong · Cập nhật lúc '+new Date().toLocaleTimeString('vi-VN')+' · '+status.join(', ');
   if(typeof window._renderIXChartsFromData==='function') window._renderIXChartsFromData(live);
   if(typeof window._syncDLCNAllSections==='function') window._syncDLCNAllSections(live);
 }
@@ -7432,6 +7487,7 @@ window._syncDLCNAllSections = async function(liveCache) {
       ecnRows.forEach(function(row) {
         var cells = row.c || [];
         var ae = norm(cellVal(cells[iEcnAE]));
+        if (!ae) ae = norm(cellVal(cells[iEcnKH >= 0 ? iEcnKH : 30]));
         var nm = norm(cellVal(cells[iEcnNM >= 0 ? iEcnNM : 20]));
         var qty = cellNum(cells[iEcnQ]);
         var item = {
@@ -7444,9 +7500,9 @@ window._syncDLCNAllSections = async function(liveCache) {
           han: fmtDateVN(cells[iEcnN]),
           qty: qty
         };
-        if (ae === 'sev' || ae === 'sevt') {
+        if (ae.indexOf('sev') >= 0) {
           rowsT1.push(item);
-        } else if (nm === 'gs1') {
+        } else if (nm.indexOf('gs1') >= 0) {
           rowsT2.push(item);
         }
       });
@@ -7573,7 +7629,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     // bravoGood   : cột G != rỗng VÀ cột D là rỗng           (khai báo đúng lần đầu)
     // bravoEdited : cột G != rỗng VÀ cột D >= 1              (có sửa ≥ 1 lần)
     var bravoTotal = 0, bravoGood = 0, bravoEdited = 0;
-    var bravoByMonth = {}, bravoByUser = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0], bravoByWeekDow = {};
+    var bravoByMonth = {}, bravoByUser = {}, bravoByUserMonth = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0], bravoByWeekDow = {};
     var bravoByCD = {};
 
     bravoData.forEach(function(row) {
@@ -7602,9 +7658,17 @@ window._syncDLCNAllSections = async function(liveCache) {
         var _nSua_u = (_cellSua_u && typeof _cellSua_u.v === 'number') ? _cellSua_u.v : 0;
         var _nguoi_u = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
         if (_nguoi_u) {
-          if (!bravoByUser[_nguoi_u]) bravoByUser[_nguoi_u] = {total:0, edited:0};
+          if (!bravoByUser[_nguoi_u]) bravoByUser[_nguoi_u] = {total:0, edited:0, totalEdits:0};
           bravoByUser[_nguoi_u].total++;
-          if (_nSua_u > 1) bravoByUser[_nguoi_u].edited++;
+          if (_nSua_u > 1) { bravoByUser[_nguoi_u].edited++; bravoByUser[_nguoi_u].totalEdits += (_nSua_u - 1); }
+          if (iBvNgay >= 0) {
+            var _nd3 = parseGvizDate((row.c||[])[iBvNgay]);
+            if (_nd3 && !isNaN(_nd3.getTime())) {
+              var _mk3 = ('0'+(_nd3.getMonth()+1)).slice(-2)+'/'+String(_nd3.getFullYear()).slice(-2);
+              if (!bravoByUserMonth[_nguoi_u]) bravoByUserMonth[_nguoi_u] = {};
+              bravoByUserMonth[_nguoi_u][_mk3] = (bravoByUserMonth[_nguoi_u][_mk3]||0) + 1;
+            }
+          }
         }
       }
 
@@ -7695,12 +7759,124 @@ window._syncDLCNAllSections = async function(liveCache) {
         if (_dowCnt) _dowCnt.textContent = bravoByDow.reduce(function(a,b){return a+(b||0);},0).toLocaleString('vi-VN') + ' mã';
       }
     }
-    // cQual: chat luong khai bao theo nhan vien (% sua) — ONLINE, giu thang mau do/cam/xanh theo % + duong KPI 2%
-    var quNV = Object.keys(bravoByUser).filter(function(k){ return bravoByUser[k].total >= 50; }).sort(function(a,b){
+    // IX.4: bảng + biểu đồ % sửa theo NV — cùng filter >= 10 mã, xếp % giảm dần
+    var quNV = Object.keys(bravoByUser).filter(function(k){ return bravoByUser[k].total >= 10; }).sort(function(a,b){
       var ra = bravoByUser[a].total>0 ? bravoByUser[a].edited/bravoByUser[a].total : 0;
       var rb = bravoByUser[b].total>0 ? bravoByUser[b].edited/bravoByUser[b].total : 0;
       return rb - ra;
-    }).slice(0,12);
+    });
+    // Bước 1: populate bảng IX.4 trước để đo chiều cao thực tế
+    (function() {
+      var ix4Tbl = document.getElementById('ix4QualTable');
+      if (!ix4Tbl || !quNV.length) return;
+      var _e = function(s){ return String(s==null?'':s).replace(/[&<>'"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m];}); };
+      var totKB=0, totSua=0, totLan=0;
+      var rows = quNV.map(function(k){
+        var u = bravoByUser[k];
+        var pct = u.total>0 ? u.edited/u.total*100 : 0;
+        totKB  += u.total;
+        totSua += u.edited;
+        totLan += u.totalEdits;
+        var dg, dgCol;
+        if      (pct>=20){ dg='🔴 Rất cao – coaching ngay';        dgCol='#c0392b'; }
+        else if (pct>=10){ dg='🔴 Cao – kiểm tra ngay';            dgCol='#c0392b'; }
+        else if (pct>=5) { dg='⚠ Trên ngưỡng – cần cải thiện';    dgCol='#d68910'; }
+        else if (pct>=2) { dg='⚠ Chấp nhận được';                  dgCol='#d68910'; }
+        else             { dg='✅ Đạt KPI';                          dgCol='#27ae60'; }
+        var pctCls = pct>=20?'qp-bad':pct>=2?'qp-warn':'qp-ok';
+        var sStyle = pct>=10?' style="color:#c0392b;font-weight:bold"':pct>=5?' style="color:#d68910"':'';
+        return '<tr><td>'+_e(k)+'</td>'
+          +'<td align="right">'+fmtVN(u.total)+'</td>'
+          +'<td align="right"'+sStyle+'>'+fmtVN(u.edited)+'</td>'
+          +'<td align="right"><span class="'+pctCls+'">'+pct.toFixed(1).replace('.',',')+'%</span></td>'
+          +'<td align="right">'+fmtVN(u.totalEdits)+'</td>'
+          +'<td style="color:'+dgCol+'">'+dg+'</td></tr>';
+      });
+      var totPct = totKB>0 ? totSua/totKB*100 : 0;
+      rows.push('<tr style="background:#f4f6f7;font-weight:bold"><td>TỔNG LIVE</td>'
+        +'<td align="right">'+fmtVN(totKB)+'</td>'
+        +'<td align="right">'+fmtVN(totSua)+'</td>'
+        +'<td align="right">'+totPct.toFixed(1).replace('.',',')+'%</td>'
+        +'<td align="right">'+fmtVN(totLan)+'</td>'
+        +'<td>Mục tiêu: ≤ 2%</td></tr>');
+      ix4Tbl.querySelector('tbody').innerHTML = rows.join('');
+    })();
+
+    // IX.3: Nhân sự khai báo theo tháng — live render từ bravoByUserMonth
+    (function() {
+      var ix3Head = document.getElementById('ix3TableHead');
+      var ix3Body = document.getElementById('ix3TableBody');
+      if (!ix3Head || !ix3Body || !Object.keys(bravoByUserMonth).length) return;
+
+      // 6 tháng gần nhất
+      var now9 = new Date();
+      var months9 = [];
+      for (var mi = 5; mi >= 0; mi--) {
+        var _d9 = new Date(now9.getFullYear(), now9.getMonth() - mi, 1);
+        months9.push(('0'+(_d9.getMonth()+1)).slice(-2)+'/'+String(_d9.getFullYear()).slice(-2));
+      }
+
+      // Update header với tháng động
+      var hdrH = '<tr><th>Nhân viên</th>';
+      months9.forEach(function(m) { hdrH += '<th>' + m + '</th>'; });
+      hdrH += '<th>Tổng</th><th>TB phút/mã</th><th>Nhận xét</th></tr>';
+      ix3Head.innerHTML = hdrH;
+
+      // avg_min lookup từ SNAPSHOT quality
+      var snapAvgMin = {};
+      var sq9 = (window.SNAPSHOT && window.SNAPSHOT.bravo && window.SNAPSHOT.bravo.quality) || [];
+      sq9.forEach(function(q) { if (q.name) snapAvgMin[norm(q.name)] = +(q.avg_min||0); });
+
+      var _e9 = function(s){ return String(s==null?'':s).replace(/[&<>'"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m];}); };
+
+      var users9 = Object.keys(bravoByUser)
+        .filter(function(k){ return bravoByUser[k].total >= 5; })
+        .sort(function(a,b){ return bravoByUser[b].total - bravoByUser[a].total; });
+
+      if (!users9.length) return;
+
+      var bodyRows = users9.map(function(name) {
+        var u = bravoByUser[name];
+        var byM = bravoByUserMonth[name] || {};
+        var editRate = u.total > 0 ? u.edited / u.total * 100 : 0;
+        var avgM = snapAvgMin[norm(name)] || 0;
+
+        // Kiểm tra ngừng khai báo: 2 tháng gần nhất cùng = 0
+        var last2 = months9.slice(-2).map(function(m){ return byM[m]||0; });
+        var isStopped = last2[0] === 0 && last2[1] === 0;
+        var stoppedFrom = '';
+        if (isStopped) {
+          for (var si = months9.length - 1; si >= 0; si--) {
+            if ((byM[months9[si]]||0) > 0) { stoppedFrom = 'T' + months9[si].split('/')[0]; break; }
+          }
+        }
+
+        var nxCls, nxTxt;
+        if (avgM > 0 && avgM < 1) {
+          nxCls = 'qp-bad'; nxTxt = '🔴 Batch import – xác nhận lại';
+        } else if (isStopped) {
+          nxCls = 'qp-warn'; nxTxt = '⚠ Ngừng từ ' + (stoppedFrom || '?') + ' – kiểm tra';
+        } else if (editRate >= 20) {
+          nxCls = 'qp-bad'; nxTxt = '🔴 % sửa cao – coaching ngay';
+        } else if (editRate >= 5) {
+          nxCls = 'qp-warn'; nxTxt = '⚠ Trên ngưỡng – cần cải thiện';
+        } else {
+          nxCls = 'qp-ok'; nxTxt = '✅ Ổn định';
+        }
+
+        var bgSt = (avgM > 0 && avgM < 1) ? ' style="background:#fff0f0"' : '';
+        var html9 = '<tr' + bgSt + '><td><b>' + _e9(name) + '</b></td>';
+        months9.forEach(function(m) { html9 += '<td>' + (byM[m] ? fmtVN(byM[m]) : '0') + '</td>'; });
+        var avgTxt = avgM > 0 ? '~' + avgM.toFixed(1) : '–';
+        html9 += '<td><b>' + fmtVN(u.total) + '</b></td>'
+          + '<td>' + avgTxt + '</td>'
+          + '<td><span class="' + nxCls + '">' + nxTxt + '</span></td></tr>';
+        return html9;
+      });
+      ix3Body.innerHTML = bodyRows.join('');
+    })();
+
+    // Bước 2: tạo biểu đồ cQual, chiều cao canvas = chiều cao .tbl-wrap của bảng IX.4
     if (quNV.length > 0) {
       var quPct = quNV.map(function(k){ return bravoByUser[k].total>0 ? +(bravoByUser[k].edited/bravoByUser[k].total*100).toFixed(1) : 0; });
       var quFix = quNV.map(function(k){ return [bravoByUser[k].edited, bravoByUser[k].total]; });
@@ -7717,10 +7893,14 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (quCanvas && typeof Chart !== 'undefined') {
         var quOld = Chart.getChart(quCanvas);
         if (quOld) quOld.destroy();
+        // Chiều cao công thức: khớp bảng bên trái (tbl-hdr≈36 + thead≈32 + N×28 + total-row≈32 = N×28+100)
+        // canvas = (N×28+100) - chart-title(32) - subtitle(24) = N×28+44
+        var _canvasH = Math.max(220, quNV.length * 28 + 44);
+        quCanvas.style.height = _canvasH + 'px';
         new Chart(quCanvas, {type:'bar', data:{labels: quLbl, datasets:[
-          {label:'% Mã sửa / Tổng KB', data: quPct, backgroundColor: quCol, borderRadius:3},
+          {label:'% Mã sửa / Tổng KB', data: quPct, backgroundColor: quCol, borderRadius:3, barThickness:16},
           {label:'KPI 2%', data: Array(quLbl.length).fill(2), type:'line', borderColor:'#c0392b', borderDash:[5,3], borderWidth:2, pointRadius:0, fill:false, datalabels:{display:false}}
-        ]}, options:{indexAxis:'y', responsive:true, layout:{padding:{right:150}}, plugins:{datalabels:{display:function(ctx){ return ctx.datasetIndex===0; }, color:'#1c2833', font:{size:10,weight:'bold'}, anchor:'end', align:'right', offset:6, clamp:false, formatter:function(v,ctx){ if(ctx.datasetIndex!==0) return ''; var fx=quFix[ctx.dataIndex]||[0,0]; return v+'%  ('+fx[0]+'/'+fx[1]+' mã)'; }}, tooltip:{callbacks:{label:function(c){ if(c.dataset.label==='KPI 2%') return 'KPI: 2%'; var fx=quFix[c.dataIndex]||[0,0]; return ' '+c.raw+'% – Sửa: '+fx[0]+'/'+fx[1]+' mã'; }}}}, scales:{x:{max:quMax, ticks:{callback:function(v){ return v+'%'; }}}}}});
+        ]}, options:{indexAxis:'y', responsive:false, maintainAspectRatio:false, layout:{padding:{right:150}}, plugins:{datalabels:{display:function(ctx){ return ctx.datasetIndex===0; }, color:'#1c2833', font:{size:10,weight:'bold'}, anchor:'end', align:'right', offset:6, clamp:false, formatter:function(v,ctx){ if(ctx.datasetIndex!==0) return ''; var fx=quFix[ctx.dataIndex]||[0,0]; return v+'%  ('+fx[0]+'/'+fx[1]+' mã)'; }}, tooltip:{callbacks:{label:function(c){ if(c.dataset.label==='KPI 2%') return 'KPI: 2%'; var fx=quFix[c.dataIndex]||[0,0]; return ' '+c.raw+'% – Sửa: '+fx[0]+'/'+fx[1]+' mã'; }}}}, scales:{x:{max:quMax, ticks:{callback:function(v){ return v+'%'; }}}}}});
       }
     }
     // cDong: theo dong san pham
