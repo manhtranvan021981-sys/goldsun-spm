@@ -2208,6 +2208,11 @@ PEOPLE_SCORE =
      BP THIẾT KẾ – CHẾ BẢN | 1 tab duy nhất, scroll đến section
      ════════════════════════════════════════════════════════════ -->
 <div class="tab-content" id="tab-tk-overview" style="padding:12px 0">
+  <!-- Thanh trạng thái đồng bộ — chỉ dành riêng cho BP Thiết kế Chế bản -->
+  <div id="tk-sync-bar" style="display:flex;align-items:center;gap:10px;background:#fef9e7;border-left:4px solid #f39c12;padding:7px 14px;font-size:11.5px;color:#7d6608;margin-bottom:8px;border-radius:0 6px 6px 0">
+    <span id="tk-last-sync">📋 Đang khởi tạo dữ liệu...</span>
+    <button id="tk-sync-btn" onclick="window.TK_loadData&&window.TK_loadData()" style="margin-left:auto;background:#f39c12;border:none;border-radius:5px;padding:4px 10px;font-size:11px;color:#fff;cursor:pointer;font-weight:600">🔄 Đồng bộ</button>
+  </div>
 
   <!-- ══ SECTION 1: TỔNG QUAN ══════════════════════════════ -->
   <div id="tk-sec-overview" style="scroll-margin-top:120px">
@@ -5376,12 +5381,17 @@ function tkInitC4(){
   tkDS('tk-c4');
   const el=document.getElementById('tk-c4'); if(!el) return;
   try{
+    // Derive PIC list dynamically from TK_DATA (sorted by task count desc)
+    const _picAll=[...new Set(TK_DATA.map(r=>tkCL(r.pic)).filter(Boolean))];
+    const _pics=_picAll.sort((a,b)=>TK_DATA.filter(r=>r.pic===b).length-TK_DATA.filter(r=>r.pic===a).length);
+    const _psh=_pics.map(n=>{const p=n.split(' ');return p.slice(0,-1).map(w=>w.charAt(0)+'.').join('')+p[p.length-1];});
+    if(!_pics.length) return;
     const sts=['Hoàn thành trước hạn','Hoàn thành đúng hạn','Trong tiến độ','Hoàn thành sau hạn'];
     const clrs=[TK_C.TL,TK_C.GR,TK_C.YE,TK_C.RD];
     const datasets=sts.map((s,i)=>({label:s,
-      data:TK_PICS.map(p=>TK_DATA.filter(r=>r.pic===p&&r.canh_bao_td===s).length),
+      data:_pics.map(p=>TK_DATA.filter(r=>r.pic===p&&r.canh_bao_td===s).length),
       backgroundColor:clrs[i],borderRadius:3}));
-    const cMax=Math.max(...TK_PICS.map(p=>TK_DATA.filter(r=>r.pic===p).length));
+    const cMax=Math.max(..._pics.map(p=>TK_DATA.filter(r=>r.pic===p).length));
     const numP={id:'tkc4n',afterDraw(ch){
       try{const ctx2=ch.ctx,d=ch.data;
         d.datasets.forEach((ds,di)=>{
@@ -5395,7 +5405,7 @@ function tkInitC4(){
             ctx2.fillText(String(val),x,y+height/2);ctx2.restore();
           });
         });
-        TK_PSH.forEach((_,ci)=>{
+        _psh.forEach((_,ci)=>{
           let sum=0; d.datasets.forEach(ds=>{sum+=(ds.data[ci]||0);});
           if(!sum) return;
           let topY=Infinity;
@@ -5408,7 +5418,7 @@ function tkInitC4(){
         });
       }catch(e2){}
     }};
-    TK_CHS['tk-c4']=new Chart(el,{type:'bar',data:{labels:TK_PSH,datasets},plugins:[numP],
+    TK_CHS['tk-c4']=new Chart(el,{type:'bar',data:{labels:_psh,datasets},plugins:[numP],
       options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:30}},
         plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8,boxWidth:12}},datalabels:{display:false}},
         scales:{x:{stacked:true,ticks:{font:{size:11}},grid:{display:false}},
@@ -5700,30 +5710,63 @@ window.TK_resetF = function(){
   if(e){e.addEventListener('input',tkRenderTbl);e.addEventListener('change',tkRenderTbl);}
 });
 
+// ─── LOAD FROM CACHE (localStorage) — dùng khi offline hoặc fallback ──
+function TK_loadFromCache(){
+  try{
+    const s=localStorage.getItem('tk_snap_v1'); if(!s) return false;
+    const o=JSON.parse(s);
+    if(!o.raw||!o.raw.length) return false;
+    if(Date.now()-o.ts>7*24*60*60*1000) return false; // hết hạn sau 7 ngày
+    TK_DATA.length=0;
+    o.raw.forEach(r=>{
+      const due=tkPD(r.ngay_ket_thuc),done=tkPD(r.ngay_httt),isDone=!!done;
+      const td=tkCL(r.canh_bao_td).toLowerCase();
+      const isOn=done&&due?tkDD(done,due)>=0:td.includes('đúng')||td.includes('trước');
+      const isLt=done&&due?tkDD(due,done)>0:td.includes('sau');
+      let rag={l:'—',c:'gy'};
+      if(isDone){rag={l:'✓ Hoàn thành',c:'tl'};}
+      else if(due){const d=tkDD(TK_TODAY,due);
+        if(d>3)rag={l:'🟢 Còn >3 ngày',c:'gr'};
+        else if(d>=0)rag={l:'🟡 ≤3 ngày',c:'ye'};
+        else if(d>=-7)rag={l:'🔴 Quá hạn ≤7d',c:'rd'};
+        else rag={l:'🚨 Nghiêm trọng',c:'rd'};
+      }
+      TK_DATA.push({...r,_due:due,_done:done,_isDone:isDone,_isOn:isOn,_isLt:isLt,_rag:rag});
+    });
+    return true;
+  }catch(e){return false;}
+}
+
 // ─── LAZY INIT — 1 lần duy nhất, render toàn bộ ────────────────
 window.TK_initIfNeeded = function(tabId){
   // Chỉ init 1 lần (dùng key 'all')
   if(TK_INIT['all']) return;
   TK_INIT['all'] = true;
 
+  const _ts=document.getElementById('tk-last-sync');
+  const _bar=document.getElementById('tk-sync-bar');
+
   // Tự động đồng bộ từ Google Sheet khi lần đầu mở BP Thiết kế
-  // Nếu gvizFetch có sẵn (SPM dashboard đã load) → sync ngay
-  // Nếu không → dùng dữ liệu nhúng tĩnh làm fallback
   if(typeof gvizFetch==='function' && navigator.onLine){
-    const ts=document.getElementById('tk-last-sync');
-    if(ts) ts.textContent='⏳ Đang tự động đồng bộ từ Google Sheet...';
-    // Async: sync xong mới render charts
+    if(_ts) _ts.textContent='⏳ Đang tự động đồng bộ từ Google Sheet...';
     (async()=>{
       try{
-        await window.TK_loadData(); // render bên trong TK_loadData
+        await window.TK_loadData();
       }catch(e){
-        // Fallback: render từ dữ liệu nhúng tĩnh
         console.warn('Auto-sync thất bại, dùng dữ liệu nhúng:',e.message);
         _TK_renderAll();
       }
     })();
   } else {
-    // Offline hoặc gvizFetch chưa sẵn → render từ data nhúng ngay
+    // Offline → ưu tiên localStorage cache, sau đó mới dùng snapshot nhúng
+    const _hasCache=TK_loadFromCache();
+    if(_hasCache){
+      const _cTs=JSON.parse(localStorage.getItem('tk_snap_v1')||'{}').ts||0;
+      const _cDate=new Date(_cTs).toLocaleString('vi-VN');
+      if(_ts) _ts.textContent='📋 Cache '+_cDate+' — '+TK_DATA.length+' công việc · Ngoại tuyến, kết nối để cập nhật';
+    } else {
+      if(_ts) _ts.textContent='📋 Dữ liệu nhúng '+TK_DATA.length+' công việc · Cần kết nối để đồng bộ mới nhất';
+    }
     _TK_renderAll();
   }
 };
@@ -5791,6 +5834,8 @@ window.TK_loadData = async function(){
       });
     });
     if(!newRaw.length) throw new Error('Sheet trả về 0 dòng. Kiểm tra sheet "00_Task_Schedule" và cột STT.');
+    // Cache cho offline fallback
+    try{localStorage.setItem('tk_snap_v1',JSON.stringify({ts:Date.now(),raw:newRaw}));}catch(e){}
     // Rebuild TK_DATA
     TK_DATA.length=0;
     newRaw.forEach(r=>{
@@ -5817,13 +5862,17 @@ window.TK_loadData = async function(){
     const now=new Date().toLocaleString('vi-VN');
     if(ts) ts.textContent='✅ Đồng bộ '+now+' — '+TK_DATA.length+' công việc';
     if(btn){btn.textContent='✅ Đã đồng bộ';btn.style.background='#27AE60';
-      setTimeout(()=>{btn.textContent='🔄 Đồng bộ GSheet';btn.style.background='#006B3F';btn.disabled=false;},3000);}
+      setTimeout(()=>{btn.textContent='🔄 Đồng bộ';btn.style.background='#006B3F';btn.disabled=false;},3000);}
+    const _tkBar=document.getElementById('tk-sync-bar');
+    if(_tkBar)_tkBar.style.cssText='display:flex;align-items:center;gap:10px;background:#eafaf1;border-left:4px solid #27ae60;padding:7px 14px;font-size:11.5px;color:#1d6a39;margin-bottom:8px;border-radius:0 6px 6px 0';
   }catch(err){
     console.error('TK_loadData:',err);
     // Fallback: render từ dữ liệu nhúng tĩnh khi sync online thất bại
     if(typeof _TK_renderAll==='function') _TK_renderAll();
     if(ts) ts.textContent='⚠️ Sync thất bại – hiển thị dữ liệu nhúng: '+err.message;
     if(btn){btn.textContent='❌ Thử lại';btn.style.background='#D93025';btn.disabled=false;}
+    const _tkBarE=document.getElementById('tk-sync-bar');
+    if(_tkBarE)_tkBarE.style.cssText='display:flex;align-items:center;gap:10px;background:#fdecea;border-left:4px solid #D93025;padding:7px 14px;font-size:11.5px;color:#D93025;margin-bottom:8px;border-radius:0 6px 6px 0';
     const d=document.createElement('div');
     d.style.cssText='position:fixed;top:80px;right:20px;z-index:9999;background:#FDECEA;border:1px solid #D93025;border-radius:10px;padding:14px 18px;max-width:380px;font-size:12px;color:#D93025;box-shadow:0 4px 18px rgba(0,0,0,.15)';
     d.innerHTML='<b>⚠️ Không đồng bộ được dữ liệu</b><br><br>'+err.message+'<br><br><i style="color:#667085">Đảm bảo sheet đã chia sẻ: <b>Anyone with the link → Viewer</b></i><br><button onclick="this.parentNode.remove()" style="margin-top:8px;border:none;background:#D93025;color:#fff;padding:4px 12px;border-radius:5px;cursor:pointer">Đóng</button>';
