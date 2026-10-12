@@ -1557,7 +1557,7 @@ PEOPLE_SCORE =
   <div class="tbl-wrap" id="ix4TblWrap">
     <div class="tbl-header tbl-hdr-blue"><span>Phân tích số lần sửa theo nhân viên – Chỉ số chất lượng khai báo ERP</span></div>
     <table id="ix4QualTable">
-      <thead><tr><th>Nhân viên</th><th align="right">Tổng KB</th><th align="right">Có sửa</th><th align="right">% Sửa</th><th align="right">Tổng lần sửa</th><th>Đánh giá</th></tr></thead>
+      <thead><tr><th>Nhân viên</th><th align="right" title="Mã tạo từ 04/07/2026 — mã cũ hơn bị đẩy bộ đếm sửa do lưu hàng loạt">Mã KB từ 04/07/26</th><th align="right">Sửa &gt; 1 lần</th><th align="right">% Sửa</th><th align="right">Tổng lần sửa</th><th>Đánh giá</th></tr></thead>
       <tbody>
         <tr><td colspan="6" style="text-align:center;color:#999;padding:12px;font-size:11px">⏳ Đang tải dữ liệu live...</td></tr>
       </tbody>
@@ -2776,6 +2776,12 @@ function dlcnBravoTable(force) {
   return p;
 }
 window.dlcnBravoTable = dlcnBravoTable;
+// ── MỐC TÍNH CHẤT LƯỢNG KHAI BÁO BRAVO (đã duyệt 12/10/2026) ──
+// "Số lần sửa" (cột D) đếm MỌI lần lưu trên hệ thống. Mã tạo đến hết 03/07/2026 bị đẩy bộ đếm lên ~28–35
+// do các đợt upload/lưu hàng loạt → không phản ánh chất lượng. Chỉ tính chất lượng trên mã tạo từ mốc này.
+// Định nghĩa "khai báo đúng lần đầu" = Số lần sửa trống hoặc ≤ 1. Đổi mốc: sửa 2 dòng dưới.
+const BRAVO_FTR_DATE = new Date(2026, 6, 4);      // 04/07/2026 (tháng 0-based) — mã tạo 01–03/07 vẫn thuộc đợt lưu hàng loạt
+const BRAVO_FTR_LBL  = '04/07/2026';
 // Đọc ngày (giờ) từ 1 ô gviz của Bravo — trước đây chỉ nhận "Date(y,m,d)" nên bỏ sót ô có giờ phút
 function bravoCellDate(cell) {
   if (!cell) return null;
@@ -6539,7 +6545,7 @@ function renderMetrics(s){
   const p0=(s.actions||[]).filter(a=>(a.level||a.p)==='P0').length, p1=(s.actions||[]).filter(a=>(a.level||a.p)==='P1').length;
   const healthBadge=document.querySelector('.health div[style*="margin-top:10px"]'); if(healthBadge) healthBadge.innerHTML=`<span class="badge b-red">P0: ${p0} việc</span> <span class="badge b-yellow">P1: ${p1} việc</span>`;
   const insight=document.querySelectorAll('#kpi .grid.g4 .card');
-  if(insight[0]) insight[0].innerHTML=`<b>Chất lượng khai báo ERP:</b> ${pct(100-(b.edit_rate||0),1)} đúng lần đầu; còn ${fmt(b.edited)} mã có sửa / ${fmt(b.total)} mã.`;
+  if(insight[0]) insight[0].innerHTML=`<b>Chất lượng khai báo ERP:</b> ${pct(100-(b.edit_rate||0),1)} đúng lần đầu; còn ${fmt(b.edited)} mã sửa > 1 lần / ${fmt(b.ftr_total||b.total)} mã tạo từ ${BRAVO_FTR_LBL}.`;
   if(insight[1]) insight[1].innerHTML=`<b>Điểm nghẽn:</b> ${esc(t.group_stats?.[0]?.group||'Khai báo hệ thống khách hàng')} chiếm ${fmt(t.group_stats?.[0]?.late||61)} task trễ. Cần tách khách quan/chủ quan.`;
   if(insight[2]) insight[2].innerHTML=`<b>Rủi ro tài chính:</b> ECN ${esc(e.risk_item)} còn ${fmt(e.risk_inventory)} pcs; cần bổ sung đơn giá/thành tiền để lượng hóa.`;
   if(insight[3]) insight[3].innerHTML=`<b>Dữ liệu nhân sự:</b> ${fmt((s.people||[]).length)} người có record từ Bravo/Task/ECN. Score phải dựa trên volume + đúng hạn + chất lượng + rủi ro.`;
@@ -6634,7 +6640,7 @@ function renderAIAnalysis(s){
     ['Bottleneck tiến độ', `${esc(topGroup.group)}: ${fmt(topGroup.late)}/${fmt(topGroup.total)} task trễ; ${pct(topGroup.ontime_rate,1)} đúng hạn`, 'KPI đúng hạn bị kéo xuống bởi một nhóm việc duy nhất, không phải lỗi toàn bộ bộ phận.', 'RCA nhóm KB hệ thống KH; tách lỗi khách quan/chủ quan; thiết lập SLA đầu vào.', 'Trưởng BP DLCN + GĐ CN', '3 ngày'],
     ['Rủi ro nhân sự', `${esc(latePerson.name||'--')}: ${fmt(latePerson.late||0)} task trễ / ${fmt(latePerson.task||0)} task`, 'Có dấu hiệu quá tải/phụ thuộc hệ thống KH/thiếu điều kiện đầu vào. Không nên quy lỗi cá nhân trước khi RCA.', '1:1, review workload, phân bổ backup, chuẩn hóa checklist nhận yêu cầu.', 'Trưởng BP DLCN', '24h'],
     ['ECN tồn kho', `${esc(e.risk_item)} còn ${fmt(e.risk_inventory)} pcs; hạn ${esc(e.risk_due)}`, 'Rủi ro aging/hủy hàng/không kiểm soát version; dữ liệu thiếu phương án và giá trị tài chính.', 'Yêu cầu PIC nhập phương án xử lý, đơn giá, thành tiền, trạng thái duyệt.', `${esc(e.risk_pic||'ECN PIC')} + Kế toán GT`, '24h'],
-    ['Chất lượng Bravo', `${fmt(b.edited)} mã sửa / ${fmt(b.total)} mã; ${pct(b.edit_rate,2)} sửa`, 'Chỉ số đúng lần đầu sát ngưỡng; nhóm sửa cao có thể làm sai BOM/routing/version nếu không audit.', 'Audit 5–10% record/ngày; coaching người có tỷ lệ sửa >8%; loại batch import khỏi ranking.', 'Data Owner + IT Bravo', '7 ngày'],
+    ['Chất lượng Bravo', `${fmt(b.edited)} mã sửa > 1 lần / ${fmt(b.ftr_total||b.total)} mã tạo từ ${BRAVO_FTR_LBL}; ${pct(b.edit_rate,2)} sửa`, 'Chỉ số đúng lần đầu sát ngưỡng; nhóm sửa cao có thể làm sai BOM/routing/version nếu không audit.', 'Audit 5–10% record/ngày; coaching người có tỷ lệ sửa >8%; loại batch import khỏi ranking.', 'Data Owner + IT Bravo', '7 ngày'],
     ['Dự án thiếu task', 'PLM AppSheet / ECIMS KH / MPS KH chưa có task live rõ', 'Dự án chiến lược không nằm trong task log thì không có quản trị tiến độ thật.', 'Mở Project Task Log chuẩn: task, owner, deadline, RAG, output nghiệm thu.', 'Trưởng BP DLCN', '7 ngày'],
     ['Quyết định quản trị', `${(s.actions||[]).filter(a=>(a.level||a.p)==='P0').length} P0; ${(s.actions||[]).filter(a=>(a.level||a.p)==='P1').length} P1`, 'Nếu không chốt quyết định, dashboard chỉ là báo cáo, không thành công cụ điều hành.', 'Đưa các quyết định vào daily/weekly; việc đỏ phải có owner và deadline mới.', 'GĐ Công nghệ', 'Daily']
   ];
@@ -6686,7 +6692,7 @@ function col(headers, aliases){ const nh=headers.map(norm); for(const a of alias
 function toNum(v){ const x=String(v??'').replace(/\./g,'').replace(',','.').replace(/[^0-9.\-]/g,''); return x?Number(x)||0:0; }
 function _parseDt(s){ const t=String(s||'').trim(); let m; if((m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1],+m[2]-1,+m[3]); if((m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) return new Date(+m[3],+m[2]-1,+m[1]); if((m=t.match(/^Date\((\d+),(\d+),(\d+)\)/))) return new Date(+m[1],+m[2],+m[3]); return null; }
 function _isoWk(d){ const t=new Date(d.getTime()); t.setDate(t.getDate()+3-(t.getDay()+6)%7); const y=t.getFullYear(); const w1=new Date(y,0,4); return y+'-W'+String(1+Math.round(((t-w1)/864e5-3+(w1.getDay()+6)%7)/7)).padStart(2,'0'); }
-function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']), idxDate=col(h,['Ngày tạo mã','Ngày khai báo']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}, by_week_dow={}; let edited=0,total_edits=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); if(ed>0) edited++; total_edits+=ed; byUser[user]??={name:user,total:0,edited:0,total_edits:0}; byUser[user].total++; if(ed>0) byUser[user].edited++; byUser[user].total_edits+=ed; const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; const dt=_parseDt(r[idxDate]); if(dt&&!isNaN(dt)){ const wk=_isoWk(dt),dw=dt.getDay(); if(!by_week_dow[wk]) by_week_dow[wk]=[0,0,0,0,0,0,0]; by_week_dow[wk][dw]++; } }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.total)); return {...fallback,total:valid.length,edited,total_edits,edit_rate:edited*100/Math.max(1,valid.length),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value})),by_week_dow,weeks_available:Object.keys(by_week_dow).sort()}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
+function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']), idxDate=col(h,['Ngày tạo mã','Ngày khai báo']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}, by_week_dow={}; let edited=0,total_edits=0,ftr=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); const _dc=_parseDt(r[idxDate]); const _inF=!!(_dc&&!isNaN(_dc)&&_dc>=BRAVO_FTR_DATE); byUser[user]??={name:user,total:0,qTotal:0,edited:0,total_edits:0}; byUser[user].total++; if(_inF){ ftr++; byUser[user].qTotal++; total_edits+=ed; byUser[user].total_edits+=ed; if(ed>1){ edited++; byUser[user].edited++; } } const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; const dt=_parseDt(r[idxDate]); if(dt&&!isNaN(dt)){ const wk=_isoWk(dt),dw=dt.getDay(); if(!by_week_dow[wk]) by_week_dow[wk]=[0,0,0,0,0,0,0]; by_week_dow[wk][dw]++; } }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.qTotal)); return {...fallback,total:valid.length,ftr_total:ftr,edited,total_edits,edit_rate:edited*100/Math.max(1,ftr),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).filter(o=>o.qTotal>0).map(o=>({...o,total:o.qTotal})).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value})),by_week_dow,weeks_available:Object.keys(by_week_dow).sort()}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
 function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=col(h,['Ngày kết thúc']); const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0; data.forEach(r=>{ const st=norm(r[idxStatus]), al=norm(r[idxAlert]); const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
 function mergePeople(s){ const m={}; function get(n){ const k=norm(n).toUpperCase(); m[k]??={name:String(n||'Không rõ').trim(),bravo:0,task:0,late:0,edit_rate:0,ecn:0,risk_stock:0,score:95}; return m[k]; } (s.bravo.top_creators||[]).forEach(x=>{const p=get(x.name); p.bravo=x.total||0; p.edit_rate=x.edit_rate||0;}); (s.tasks.pic_stats||[]).forEach(x=>{const p=get(x.name||x.pic); p.task=x.total||0; p.late=x.late||0;}); (s.ecn.people||[]).forEach(x=>{const p=get(x.name); p.ecn=x.ecn||0; p.risk_stock=x.risk||0;}); Object.values(m).forEach(p=>{ const ontime=p.task?Math.max(0,100-p.late*100/p.task):100; const quality=Math.max(0,100-(p.edit_rate||0)); const risk=p.risk_stock>0?30:100; p.score=Math.round(ontime*0.35+quality*0.35+risk*0.20+Math.min(100,(p.bravo+p.task+p.ecn)/20)*0.10); }); return Object.values(m).sort((a,b)=>a.score-b.score); }
 async function fetchCSV(id){ const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&cachebust=${Date.now()}`; const ctrl=new AbortController(); const tim=setTimeout(()=>ctrl.abort(),30000); try{ const r=await fetch(url,{signal:ctrl.signal}); clearTimeout(tim); if(!r.ok) throw new Error('HTTP '+r.status); return parseCSV(await r.text()); }finally{ clearTimeout(tim); } }
@@ -7070,11 +7076,12 @@ function renderSectionII_DLCN(td) {
     '</div></div>';
 
   // Item 5: ERP khai báo chất lượng
-  var brQPct = td.bravoTotal > 0 ? td.bravoGood * 100 / td.bravoTotal : 100;
+  var brDen  = td.bravoFtrTotal != null ? td.bravoFtrTotal : td.bravoTotal;   // mẫu số chất lượng
+  var brQPct = brDen > 0 ? td.bravoGood * 100 / brDen : 100;
   var brOk   = brQPct >= 98;
   esc += '<div class="escalate-item"><div class="escalate-num">5</div><div class="escalate-content">' +
     '<strong style="color:' + (brOk ? '#27ae60' : '#d68910') + '">Chất lượng khai báo ERP: ' + brQPct.toFixed(1).replace('.', ',') + '% (' + fV(td.bravoEdited) + ' mã sửa > 1 lần)</strong>' +
-    '<p>Tổng mã khai báo: ' + fV(td.bravoTotal) + '. ' + fV(td.bravoEdited) + ' mã phải sửa >1 lần — gây tiêu hao thời gian khai báo và tăng rủi ro sai lệch dữ liệu.</p>' +
+    '<p>Tổng mã khai báo: ' + fV(td.bravoTotal) + '. Chất lượng tính trên ' + fV(brDen) + ' mã tạo từ ' + BRAVO_FTR_LBL + ' (mã cũ bị đẩy bộ đếm sửa do lưu hàng loạt): ' + fV(td.bravoEdited) + ' mã phải sửa >1 lần — gây tiêu hao thời gian khai báo và tăng rủi ro sai lệch dữ liệu.</p>' +
     '<span class="escalate-action">→ ' + (brOk ? 'Đạt KPI ≥ 98%. Duy trì chuẩn nhập liệu.' : 'GĐ yêu cầu: Truy nguyên nhân sai KB đầu tiên. Kiểm tra training và checklist nhập liệu.') + '</span>' +
     '</div></div>';
 
@@ -7118,7 +7125,8 @@ function renderSectionII_DLCN(td) {
   // ── Panel 4: SO SÁNH KPI MỤC TIÊU vs THỰC TẾ ───────────────────────────
   var kpiEl = document.getElementById('dlcn2-kpiTable');
   if (kpiEl) {
-    var brQNum  = td.bravoTotal > 0 ? td.bravoGood * 100 / td.bravoTotal : 100;
+    var brQDen  = td.bravoFtrTotal != null ? td.bravoFtrTotal : td.bravoTotal;
+    var brQNum  = brQDen > 0 ? td.bravoGood * 100 / brQDen : 100;
     var qhCount = td.taskQuaHan != null ? td.taskQuaHan : td.taskWarnLate;
     var rows = [
       {
@@ -7134,7 +7142,7 @@ function renderSectionII_DLCN(td) {
       {
         label:'Chất lượng KB ERP', target:'≥ 98%',
         val:brQNum.toFixed(1).replace('.', ',') + '%', ok:brQNum >= 98, warn:(brQNum >= 95 && brQNum < 98),
-        note:'Đếm dòng cột L (Mã sản phẩm) ≠ rỗng VÀ cột D (Số lần sửa) ≤ 1 ÷ Tổng mã cột L ≠ rỗng × 100. Thực tế: ' + fV(td.bravoGood) + ' / ' + fV(td.bravoTotal) + ' mã. Nguồn: Bravo'
+        note:'Mã tạo từ ' + BRAVO_FTR_LBL + ' có cột D (Số lần sửa) ≤ 1 ÷ Tổng mã tạo từ ' + BRAVO_FTR_LBL + ' × 100 (mã cũ hơn bị đẩy bộ đếm sửa do lưu hàng loạt nên không tính). Thực tế: ' + fV(td.bravoGood) + ' / ' + fV(brQDen) + ' mã. Nguồn: Bravo'
       },
       {
         label:'ECN tồn kho', target:'= 0 pcs',
@@ -7901,7 +7909,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     // bravoTotal  : dòng có cột G khác rỗng
     // bravoGood   : cột G != rỗng VÀ cột D là rỗng           (khai báo đúng lần đầu)
     // bravoEdited : cột G != rỗng VÀ cột D >= 1              (có sửa ≥ 1 lần)
-    var bravoTotal = 0, bravoGood = 0, bravoEdited = 0;
+    var bravoTotal = 0, bravoGood = 0, bravoEdited = 0, bravoFtrTotal = 0;  // bravoFtrTotal = mẫu số chất lượng (mã tạo từ BRAVO_FTR_DATE)
     var bravoByMonth = {}, bravoByUser = {}, bravoByUserMonth = {}, bravoByLine = {}, bravoByWeek = {}, bravoByDow = [0,0,0,0,0,0,0], bravoByWeekDow = {};
     var bravoByCD = {};
 
@@ -7910,6 +7918,9 @@ window._syncDLCNAllSections = async function(liveCache) {
       var colL_val = cellVal((row.c||[])[iBvMaSP]);
       var hasColL = colL_val && colL_val.trim() !== '';
       if (hasColL) bravoTotal++;
+      // Mã thuộc phạm vi tính chất lượng? (ngày tạo mã ≥ BRAVO_FTR_DATE)
+      var _dTao = iBvNgay >= 0 ? parseGvizDate((row.c||[])[iBvNgay]) : null;
+      var _inFtr = !!(_dTao && !isNaN(_dTao.getTime()) && _dTao >= BRAVO_FTR_DATE);
 
       // Ngày khai báo: chỉ đếm dòng có cột L khác rỗng (L8:L)
       if (hasColL && iBvNgay >= 0) {
@@ -7931,9 +7942,10 @@ window._syncDLCNAllSections = async function(liveCache) {
         var _nSua_u = (_cellSua_u && typeof _cellSua_u.v === 'number') ? _cellSua_u.v : 0;
         var _nguoi_u = iBvUser >= 0 ? getByIdx(row, iBvUser) : '';
         if (_nguoi_u) {
-          if (!bravoByUser[_nguoi_u]) bravoByUser[_nguoi_u] = {total:0, edited:0, totalEdits:0};
-          bravoByUser[_nguoi_u].total++;
-          if (_nSua_u > 1) { bravoByUser[_nguoi_u].edited++; bravoByUser[_nguoi_u].totalEdits += (_nSua_u - 1); }
+          if (!bravoByUser[_nguoi_u]) bravoByUser[_nguoi_u] = {total:0, qTotal:0, edited:0, totalEdits:0};
+          bravoByUser[_nguoi_u].total++;   // khối lượng: toàn bộ mã
+          // chất lượng: chỉ mã tạo từ BRAVO_FTR_DATE (qTotal = mẫu số % sửa)
+          if (_inFtr) { bravoByUser[_nguoi_u].qTotal++; if (_nSua_u > 1) { bravoByUser[_nguoi_u].edited++; bravoByUser[_nguoi_u].totalEdits += (_nSua_u - 1); } }
           if (iBvNgay >= 0) {
             var _nd3 = parseGvizDate((row.c||[])[iBvNgay]);
             if (_nd3 && !isNaN(_nd3.getTime())) {
@@ -7953,8 +7965,11 @@ window._syncDLCNAllSections = async function(liveCache) {
       var colD_cell = (row.c||[])[iBvSua];
       var colD_raw  = cellVal(colD_cell);
       var nSua = (colD_cell && typeof colD_cell.v === 'number') ? colD_cell.v : 0;
-      if (!colD_raw || colD_raw.trim() === '' || nSua <= 1) bravoGood++;  // sửa ≤ 1 = khai báo đúng / lần tạo gốc
-      if (nSua >= 2) bravoEdited++;  // sửa >= 2 = có sửa thực sự
+      if (_inFtr) {
+        bravoFtrTotal++;
+        if (!colD_raw || colD_raw.trim() === '' || nSua <= 1) bravoGood++;  // sửa ≤ 1 = khai báo đúng lần đầu
+        if (nSua >= 2) bravoEdited++;  // sửa ≥ 2 = có sửa thực sự
+      }
 
       var thang = iBvThang >= 0 ? getByIdx(row, iBvThang) : '';
       if (thang) bravoByMonth[thang] = (bravoByMonth[thang]||0) + 1;
@@ -7969,7 +7984,7 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (cd) bravoByCD[cd] = (bravoByCD[cd]||0) + 1;
     });
 
-    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' good(D=empty)=' + bravoGood + ' edited(D>=1)=' + bravoEdited);
+    console.log('[DLCN Bravo] LIVE: total=' + bravoTotal + ' | chất lượng (mã tạo từ ' + BRAVO_FTR_LBL + '): ' + bravoFtrTotal + ' mã, đúng lần đầu(D≤1)=' + bravoGood + ' sửa>1=' + bravoEdited);
 
     // Update Bravo KPIs — I. TỔNG QUAN DỮ LIỆU
     var todayStr = new Date().toLocaleDateString('vi-VN');
@@ -7977,20 +7992,20 @@ window._syncDLCNAllSections = async function(liveCache) {
     setEl('dlcnS-bravoTotal',   'Du lieu LIVE - ' + todayStr);
     setEl('dlcnV-xiErpTotal',   fmtVN(bravoTotal));
     // Khai báo đúng lần đầu: col G != rỗng VÀ col D là rỗng
-    var _goodPct = bravoTotal > 0 ? bravoGood * 100 / bravoTotal : 0;
-    var _editPct = bravoTotal > 0 ? bravoEdited * 100 / bravoTotal : 0;
+    var _goodPct = bravoFtrTotal > 0 ? bravoGood * 100 / bravoFtrTotal : 0;
+    var _editPct = bravoFtrTotal > 0 ? bravoEdited * 100 / bravoFtrTotal : 0;
     setEl('dlcnV-bravoQuality', fmtPct(_goodPct, 1));
-    setEl('dlcnS-bravoQuality', fmtVN(bravoGood) + '/' + fmtVN(bravoTotal) + ' mã khai báo đúng lần đầu');
+    setEl('dlcnS-bravoQuality', fmtVN(bravoGood) + '/' + fmtVN(bravoFtrTotal) + ' mã (tạo từ ' + BRAVO_FTR_LBL + ') sửa ≤ 1 lần');
     // Có sửa >= 1 lần: col G != rỗng VÀ col D >= 1
     setEl('dlcnV-bravoEdited',  fmtVN(bravoEdited));
-    setEl('dlcnS-bravoEdited',  fmtPct(_editPct, 1) + ' mã có sửa ≥ 1 lần');
+    setEl('dlcnS-bravoEdited',  fmtPct(_editPct, 1) + ' mã (tạo từ ' + BRAVO_FTR_LBL + ') sửa > 1 lần');
     // Cập nhật IX.1 KPI cards từ live data
     setEl('dlcnV-ix1Quality', fmtPct(_goodPct, 1));
     var _ix1QEl = document.getElementById('dlcnV-ix1Quality');
-    if (_ix1QEl && _ix1QEl.nextElementSibling) _ix1QEl.nextElementSibling.textContent = fmtVN(bravoGood) + '/' + fmtVN(bravoTotal) + ' mã khai báo đúng lần đầu';
+    if (_ix1QEl && _ix1QEl.nextElementSibling) _ix1QEl.nextElementSibling.textContent = fmtVN(bravoGood) + '/' + fmtVN(bravoFtrTotal) + ' mã (tạo từ ' + BRAVO_FTR_LBL + ') sửa ≤ 1 lần';
     setEl('dlcnV-ix1Edited', fmtVN(bravoEdited));
     var _ix1EEl = document.getElementById('dlcnV-ix1Edited');
-    if (_ix1EEl && _ix1EEl.nextElementSibling) _ix1EEl.nextElementSibling.textContent = fmtPct(_editPct, 1) + ' mã có sửa ≥ 1 lần';
+    if (_ix1EEl && _ix1EEl.nextElementSibling) _ix1EEl.nextElementSibling.textContent = fmtPct(_editPct, 1) + ' mã (tạo từ ' + BRAVO_FTR_LBL + ') sửa > 1 lần';
     // Mã dòng phổ biến nhất: mode của cột J
     var _blSorted = Object.keys(bravoByLine).sort(function(a,b){ return bravoByLine[b]-bravoByLine[a]; });
     if (_blSorted.length > 0) {
@@ -8034,9 +8049,10 @@ window._syncDLCNAllSections = async function(liveCache) {
       }
     }
     // IX.4: bảng + biểu đồ % sửa theo NV — cùng filter >= 10 mã, xếp % giảm dần
-    var quNV = Object.keys(bravoByUser).filter(function(k){ return bravoByUser[k].total >= 10; }).sort(function(a,b){
-      var ra = bravoByUser[a].total>0 ? bravoByUser[a].edited/bravoByUser[a].total : 0;
-      var rb = bravoByUser[b].total>0 ? bravoByUser[b].edited/bravoByUser[b].total : 0;
+    // % sửa theo NV: chỉ mã tạo từ BRAVO_FTR_DATE (qTotal), NV có ≥ 10 mã trong phạm vi này
+    var quNV = Object.keys(bravoByUser).filter(function(k){ return bravoByUser[k].qTotal >= 10; }).sort(function(a,b){
+      var ra = bravoByUser[a].qTotal>0 ? bravoByUser[a].edited/bravoByUser[a].qTotal : 0;
+      var rb = bravoByUser[b].qTotal>0 ? bravoByUser[b].edited/bravoByUser[b].qTotal : 0;
       return rb - ra;
     });
     // Bước 1: populate bảng IX.4 trước để đo chiều cao thực tế
@@ -8047,8 +8063,8 @@ window._syncDLCNAllSections = async function(liveCache) {
       var totKB=0, totSua=0, totLan=0;
       var rows = quNV.map(function(k){
         var u = bravoByUser[k];
-        var pct = u.total>0 ? u.edited/u.total*100 : 0;
-        totKB  += u.total;
+        var pct = u.qTotal>0 ? u.edited/u.qTotal*100 : 0;
+        totKB  += u.qTotal;
         totSua += u.edited;
         totLan += u.totalEdits;
         var dg, dgCol;
@@ -8060,7 +8076,7 @@ window._syncDLCNAllSections = async function(liveCache) {
         var pctCls = pct>=20?'qp-bad':pct>=2?'qp-warn':'qp-ok';
         var sStyle = pct>=10?' style="color:#c0392b;font-weight:bold"':pct>=5?' style="color:#d68910"':'';
         return '<tr><td>'+_e(k)+'</td>'
-          +'<td align="right">'+fmtVN(u.total)+'</td>'
+          +'<td align="right">'+fmtVN(u.qTotal)+'</td>'   // mã tạo từ BRAVO_FTR_DATE (mẫu số % sửa)
           +'<td align="right"'+sStyle+'>'+fmtVN(u.edited)+'</td>'
           +'<td align="right"><span class="'+pctCls+'">'+pct.toFixed(1).replace('.',',')+'%</span></td>'
           +'<td align="right">'+fmtVN(u.totalEdits)+'</td>'
@@ -8112,7 +8128,7 @@ window._syncDLCNAllSections = async function(liveCache) {
       var bodyRows = users9.map(function(name) {
         var u = bravoByUser[name];
         var byM = bravoByUserMonth[name] || {};
-        var editRate = u.total > 0 ? u.edited / u.total * 100 : 0;
+        var editRate = u.qTotal > 0 ? u.edited / u.qTotal * 100 : 0;   // % sửa trên mã tạo từ BRAVO_FTR_DATE
         var avgM = snapAvgMin[norm(name)] || 0;
 
         // Kiểm tra ngừng khai báo: 2 tháng gần nhất cùng = 0
@@ -8152,8 +8168,8 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     // Bước 2: tạo biểu đồ cQual, chiều cao canvas = chiều cao .tbl-wrap của bảng IX.4
     if (quNV.length > 0) {
-      var quPct = quNV.map(function(k){ return bravoByUser[k].total>0 ? +(bravoByUser[k].edited/bravoByUser[k].total*100).toFixed(1) : 0; });
-      var quFix = quNV.map(function(k){ return [bravoByUser[k].edited, bravoByUser[k].total]; });
+      var quPct = quNV.map(function(k){ return bravoByUser[k].qTotal>0 ? +(bravoByUser[k].edited/bravoByUser[k].qTotal*100).toFixed(1) : 0; });
+      var quFix = quNV.map(function(k){ return [bravoByUser[k].edited, bravoByUser[k].qTotal]; });
       var quLbl = quNV.map(function(n){
         var p = String(n||'').trim().split(/\s+/);
         if (p.length <= 1) return n;
@@ -8209,7 +8225,8 @@ window._syncDLCNAllSections = async function(liveCache) {
         ecnXSum:       ecnXSum,
         bravoTotal:    bravoTotal,
         bravoGood:     bravoGood,
-        bravoEdited:   bravoEdited
+        bravoEdited:   bravoEdited,
+        bravoFtrTotal: bravoFtrTotal
       });
     }
 
