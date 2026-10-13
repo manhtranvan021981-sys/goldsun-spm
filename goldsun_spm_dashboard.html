@@ -741,6 +741,86 @@ table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f0f3f6;c
 }
 </style>
 <!-- NB:END CSS -->
+<!-- KBA:BEGIN CSS -->
+<style>
+/* ═══ TAB "THỜI GIAN LÀM MẪU KBA" — dùng lại các lớp nb-* của mục Nội bộ (cùng giao diện),
+       chỉ khai báo biến màu cho #tab-kbamau + vài lớp riêng tiền tố kb- ═══ */
+#tab-kbamau{
+  --nb-green:#1B6B3A; --nb-green2:#2E8B4E; --nb-teal:#0F766E; --nb-gold:#C8952A; --nb-gold-d:#9A6F12;
+  --nb-red:#C8372D; --nb-orange:#D97706; --nb-blue:#2563A8;
+  --nb-ink:#1F2421; --nb-sub:#6B6A64; --nb-line:#E6E3DA; --nb-bg:#F6F5F1; --nb-card:#fff;
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; color:var(--nb-ink);
+  background:var(--nb-bg); padding:0 0 28px; font-size:13px; line-height:1.5;
+}
+#tab-kbamau *{box-sizing:border-box}
+#tab-kbamau b{font-weight:700}
+#tab-kbamau .nb-grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+
+/* chọn nhiều khách hàng */
+.kb-ms{position:relative}
+.kb-msb{font:inherit;font-size:13px;padding:8px 32px 8px 12px;border:1px solid #D6D3CA;border-radius:8px;background:#fff;color:var(--nb-ink);cursor:pointer;min-width:220px;text-align:left;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:320px}
+.kb-msb:after{content:'▾';position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--nb-sub)}
+.kb-msb.on{border-color:var(--nb-green);box-shadow:0 0 0 3px rgba(27,107,58,.12)}
+.kb-msb.has{background:#F1F6EE;border-color:#A9CDB2;font-weight:600;color:var(--nb-green)}
+.kb-msp{position:absolute;z-index:40;top:calc(100% + 6px);left:0;width:300px;background:#fff;border:1px solid var(--nb-line);border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.14);padding:8px;display:none}
+.kb-ms.open .kb-msp{display:block}
+.kb-msa{display:flex;gap:6px;padding:2px 2px 8px;border-bottom:1px solid #EFEDE6;margin-bottom:6px}
+.kb-msa button{font:inherit;font-size:11.5px;font-weight:600;padding:4px 10px;border:1px solid #D6D3CA;border-radius:7px;background:#fff;cursor:pointer;color:var(--nb-ink)}
+.kb-msa button:hover{border-color:var(--nb-green);color:var(--nb-green)}
+.kb-msl{max-height:300px;overflow:auto}
+.kb-mso{display:grid;grid-template-columns:18px 1fr auto;gap:8px;align-items:center;padding:6px 6px;border-radius:7px;cursor:pointer;font-size:12.5px}
+.kb-mso:hover{background:#F4F8F2}
+.nb-f .kb-mso{text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:500;color:var(--nb-ink)}   /* không ăn style nhãn bộ lọc */
+.kb-mso input{margin:0;accent-color:var(--nb-green);width:15px;height:15px;cursor:pointer}
+.kb-mso small{color:var(--nb-sub);font-variant-numeric:tabular-nums}
+.kb-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-4px 0 14px}
+.kb-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:4px 6px 4px 11px;border-radius:999px;background:#E3F1E6;color:var(--nb-green);border:1px solid #C5E0CC}
+.kb-chip button{border:0;background:rgba(27,107,58,.12);color:var(--nb-green);width:18px;height:18px;border-radius:50%;cursor:pointer;font-size:12px;line-height:18px;padding:0}
+.kb-chip button:hover{background:var(--nb-green);color:#fff}
+.kb-clr{font:inherit;font-size:12px;border:0;background:none;color:var(--nb-sub);text-decoration:underline;cursor:pointer}
+.kb-scope{font-size:12px;color:var(--nb-sub)}
+.kb-scope b{color:var(--nb-ink)}
+.kb-hint{font-size:11.5px;color:var(--nb-sub);margin:-4px 0 8px}
+.kb-std td.kb-hl{background:#FFF6DD!important;font-weight:700}
+.kb-sm{color:var(--nb-sub);font-size:11px}
+/* danh sách làm mẫu */
+#kb-ls .nb-q{min-width:380px}
+#kb-ls tr.kb-cont td{background:#FAFAF6}
+#kb-ls .nb-t td.nb-wrap{min-width:160px;max-width:300px}
+#kb-ls .nb-t td.kb-mac{min-width:260px;max-width:380px}
+@media (max-width:640px){#kb-ls .nb-q{min-width:0}}
+/* nhận xét AI */
+.kb-ai-box{background:#fff;border:1px solid var(--nb-line);border-radius:14px;margin:0 0 18px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.kb-ai-h{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:13px 16px;background:linear-gradient(90deg,#EEF4FB,#F1F6EE);border-bottom:1px solid var(--nb-line);font-size:14.5px}
+.kb-ai-h::-webkit-details-marker{display:none}
+.kb-ai-box:not([open]) .kb-ai-h{border-bottom:0}
+.kb-ai-box:not([open]) .nb-chev{transform:rotate(-90deg)}
+div.kb-ai-box>.nb-hint{padding:12px 16px}
+.kb-ai-meta{font-size:12px;color:var(--nb-sub);flex:1 1 260px}
+.kb-ai-sel{font:inherit;font-size:12px;padding:4px 8px;border:1px solid #D6D3CA;border-radius:7px;background:#fff}
+.kb-ai-note{margin:12px 16px 0;padding:8px 12px;background:#FFF8E6;border:1px solid #F3DFA8;border-radius:9px;font-size:12.5px}
+.kb-ai-sum{margin:12px 16px 4px;padding:12px 16px;background:#F6F9F4;border-left:4px solid var(--nb-green);border-radius:8px}
+.kb-ai-st{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--nb-green);margin-bottom:6px}
+.kb-ai-sum ol{margin:0;padding-left:20px;font-size:13px;line-height:1.6}
+.kb-ai-sum li{margin-bottom:4px}
+.kb-ai-chg{font-size:12.5px;color:#4E4D47;margin-top:8px}
+.kb-ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:12px 16px}
+.kb-ai-card{border:1px solid var(--nb-line);border-top:4px solid var(--nb-teal);border-radius:12px;padding:12px 14px;min-width:0}
+.kb-ai-card.warn{border-top-color:var(--nb-red)}.kb-ai-card.care{border-top-color:var(--nb-gold)}.kb-ai-card.good{border-top-color:var(--nb-green2)}
+.kb-ai-ch{display:flex;align-items:center;gap:8px;font-size:14px}
+.kb-ai-ch .nb-tag{margin-left:auto;min-width:0}
+.kb-ai-ic{font-size:18px}
+.kb-ai-tt{font-weight:700;font-size:13px;margin:8px 0 4px;color:var(--nb-ink)}
+.kb-ai-ul{margin:4px 0 8px;padding-left:18px;font-size:12.5px;line-height:1.55;color:#33332F}
+.kb-ai-ul li{margin-bottom:4px}
+.kb-ai-act{background:#FAF9F5;border-radius:9px;padding:8px 10px}
+.kb-ai-at{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--nb-sub);margin-bottom:4px}
+.kb-ai-ai{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;padding:4px 0}
+.kb-ai-moc{flex:0 0 auto;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;background:#FFC107;color:#3A2A00;margin-top:1px}
+.kb-ai-foot{font-size:11.5px;color:var(--nb-sub);padding:4px 16px 12px}
+@media (max-width:1000px){.kb-ai-grid{grid-template-columns:1fr}}
+</style>
+<!-- KBA:END CSS -->
 </head>
 <body>
 
@@ -781,7 +861,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}th{background:#f0f3f6;c
   <button class="l1-btn" data-bp="tqkh" onclick="selectDashBP(this)">🏠 Tổng quan<br>khối CN</button>
   <button class="l1-btn" data-bp="hoptuan" onclick="selectDashBP(this)">📅 Họp tuần</button>
   <button class="l1-btn" data-bp="thietke" onclick="selectDashBP(this)">🎨 BP Thiết kế<br>— Chế bản<span class="bp-badge">2</span></button>
-  <button class="l1-btn active" data-bp="spmnpi" onclick="selectDashBP(this)">⚙️ BP CN triển khai<br>&amp; tối ưu SX<span class="bp-badge">6</span></button>
+  <button class="l1-btn active" data-bp="spmnpi" onclick="selectDashBP(this)">⚙️ BP CN triển khai<br>&amp; tối ưu SX<span class="bp-badge" data-kba="1">7</span></button>
   <button class="l1-btn" data-bp="data" onclick="selectDashBP(this)">🗄️ BP Dữ liệu CN<br>&amp; Hệ thống<span class="bp-badge">4</span></button>
   <button class="l1-btn" data-bp="dev" onclick="selectDashBP(this)">💻 BP Phát triển CN<br>&amp; Ứng dụng<span class="bp-badge">2</span></button>
   <button class="l1-btn" data-bp="noibo" onclick="selectDashBP(this)">🏭 Nội bộ<br>GSQV</button>
@@ -2328,6 +2408,9 @@ PEOPLE_SCORE =
 <!-- NB:BEGIN HTML -->
 <div class="tab-content" id="tab-noibo"><div id="nb-body"></div></div>
 <!-- NB:END HTML -->
+<!-- KBA:BEGIN HTML -->
+<div class="tab-content" id="tab-kbamau"><div id="kb-body"></div></div>
+<!-- KBA:END HTML -->
 <div class="tab-content" id="tab-setup">
   <div class="panel">
     <div class="ph"><div class="pt"><span class="pt-icon">⚙</span>Thông tin hệ thống</div></div>
@@ -4203,6 +4286,7 @@ function goTab(id,idx) {
   // Hiện tab nội dung
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
+  if(id==='kbamau' && window.KBA) setTimeout(()=>KBA.enter(), 30);   // KBA-HOOK
   // Ẩn BP placeholder
   const ph = document.getElementById('bpPlaceholder');
   if(ph) ph.classList.remove('show');
@@ -5166,6 +5250,7 @@ const DASH_BPS = {
     {id:'overview', label:'📊 Tổng quan'},
     {id:'progress', label:'📋 Tiến độ mẫu'},
     {id:'kpi',      label:'🏅 KPI'},
+    {id:'kbamau',   label:'⏱ TG làm mẫu KBA'},   // KBA-SUBTAB
     {id:'ai',       label:'🤖 AI Phân tích'},
     {id:'project',  label:'💼 Dự án'},
     {id:'setup',    label:'⚙️ Cài đặt'},
@@ -9471,5 +9556,512 @@ window.NB = (function(){
 })();
 </script>
 <!-- NB:END JS -->
+<!-- KBA:BEGIN JS -->
+<script>
+// ════════════════════════════════════════════════════════════════
+// TAB "THỜI GIAN LÀM MẪU KBA" — BP CN triển khai & tối ưu SX
+// Nguồn: Google Sheet 16sk2Pgw… tab KBA_PAYLOAD + KBA_META, do KBA_MAU/CAP_NHAT_KBA.bat
+//        đồng bộ hằng ngày từ file "Báo cáo tổng hợp chạy hàng mẫu KBA" (sheet Hàng mẫu) + DATA_NPI.
+// 1 lượt in = 1 dòng, hoặc nhóm dòng gộp ô ở cột N (in nhiều mẫu cùng lúc).
+// Bộ lọc: Tháng · Máy · Khách hàng (chọn nhiều) — mọi KPI, biểu đồ, bảng tính lại theo bộ lọc.
+// ════════════════════════════════════════════════════════════════
+window.KBA = (function(){
+  const SHEET_ID = '16sk2PgwrOMEY1lfNc32KEyvaw2HHyX0EZMmUbnwnO-w';
+  const MIN_PER_SHIFT = 630, SHIFTS = 2;            // 1 ca 12h, thời gian thực đã trừ nghỉ = 630 ph
+  const LONG_RUN = 360;                             // lượt ≥ 6 giờ
+  let D = null, META = {}, loadP = null, charts = {}, RUNS = [], CODES = [], CUST = [], MACH = [], MONTHS = [];
+  let THR = {}, THR_ALL = 0, NMACH = 3;
+  let AI = null, aiP = null;                        // nhận xét AI hằng ngày (tab KBA_AI, do kba_ai.py ghi)
+  const F = {lsQ:'', lsN:100, thang:'', may:'', kh:new Set(), msOpen:false, maQ:'', maAll:false, runAll:false, insOpen:true, aiDay:-1, aiOpen:true};
+
+  // ── tiện ích ────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt = n => n==null||isNaN(n) ? '--' : Math.round(n).toLocaleString('vi-VN');
+  const f1 = n => n==null||isNaN(n) ? '--' : (+n).toLocaleString('vi-VN',{maximumFractionDigits:1});
+  const pct = (a,b) => b>0 ? a*100/b : null;
+  const fpct = v => v==null ? '--' : f1(Math.round(v*10)/10)+'%';
+  const dmy = s => { const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s||''); return m ? m[3]+'/'+m[2]+'/'+m[1] : (s||'--'); };
+  const dm  = s => { const m=/^(\d{4})-(\d{2})-(\d{2})/.exec(s||''); return m ? m[3]+'/'+m[2] : (s||''); };
+  const mLbl = ym => 'T'+(+ym.slice(5,7))+'/'+ym.slice(0,4);
+  const sum = (a,f) => a.reduce((s,x)=>s+(+f(x)||0),0);
+  const r5 = v => v==null ? null : Math.max(5, Math.round(v/5)*5);
+  // phân vị nội suy như Excel PERCENTILE.INC (khớp file Excel phân tích)
+  function q(arr, p){
+    const v = arr.filter(x=>x!=null&&!isNaN(x)).sort((a,b)=>a-b); if (!v.length) return null;
+    const h = (v.length-1)*p, lo = Math.floor(h), hi = Math.min(lo+1, v.length-1);
+    return v[lo] + (v[hi]-v[lo])*(h-lo);
+  }
+  const hrs = m => m/60;
+  const cost = m => m/60*(D?D.don_gia:0)/1e6;   // triệu đồng
+
+  // ── tải dữ liệu ─────────────────────────────────────────────
+  async function decode(b64){
+    const bin = atob(b64), u = new Uint8Array(bin.length);
+    for (let i=0;i<bin.length;i++) u[i] = bin.charCodeAt(i);
+    const txt = await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('gzip'))).text();
+    return JSON.parse(txt);
+  }
+  function load(force){
+    if (loadP && !force) return loadP;
+    loadP = (async () => {
+      const [pl, mt] = await Promise.all([
+        gvizFetch(SHEET_ID, 'KBA_PAYLOAD', null, null, 60000),
+        gvizFetch(SHEET_ID, 'KBA_META', null, null, 30000),
+      ]);
+      META = {};
+      (mt.rows||[]).forEach(r => { const k=r.c&&r.c[0]&&r.c[0].v; if(k) META[k] = r.c[1] ? (r.c[1].f!=null?r.c[1].f:r.c[1].v) : ''; });
+      const parts = (pl.rows||[]).map(r => [+(r.c[0]&&r.c[0].v), r.c[1]&&r.c[1].v||'']).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+      if (!parts.length) throw new Error('Tab KBA_PAYLOAD trống — chưa chạy CAP_NHAT_KBA.bat lần nào?');
+      if (META.payload_chunks && +META.payload_chunks !== parts.length) throw new Error('Dữ liệu đang được ghi dở. Thử tải lại sau 1–2 phút.');
+      D = await decode(parts.join(''));
+      LS = null;
+      prep();
+    })();
+    loadP.catch(() => { loadP = null; });
+    return loadP;
+  }
+
+  // ── chuẩn hoá ───────────────────────────────────────────────
+  function prep(){
+    const ix = {}; D.Rc.forEach((c,i)=>ix[c]=i);
+    RUNS = D.R.map((r,i) => {
+      const o = {i}; D.Rc.forEach(c => o[c] = r[ix[c]]);
+      o.thang = String(o.ngay).slice(0,7); o.so_ma = Math.max(1, +o.so_ma||1); o.phut = +o.phut||0;
+      o.ppm = o.phut/o.so_ma; o.codes = [];
+      return o;
+    });
+    D.M.forEach(([ri, k, p, kh]) => { const r = RUNS[ri]; if (r) r.codes.push({k, p:+p||0, kh}); });
+    // danh sách lọc (xếp theo giờ máy toàn kỳ)
+    const by = (f) => { const m = {}; RUNS.forEach(r => { const k=f(r); m[k]=(m[k]||0)+r.phut; }); return Object.entries(m).sort((a,b)=>b[1]-a[1]); };
+    CUST = by(r=>r.kh); MACH = by(r=>r.may).filter(x=>x[0]!=='(trống)').map(x=>x[0]).sort();
+    MONTHS = [...new Set(RUNS.map(r=>r.thang))].sort();
+    NMACH = Math.max(1, MACH.length);
+    // ngưỡng cảnh báo phút/mã: P90 của chính khách hàng đó (≥ 15 lượt), còn lại dùng P90 toàn bộ
+    THR_ALL = q(RUNS.map(r=>r.ppm), .9);
+    THR = {};
+    CUST.forEach(([k]) => { const v = RUNS.filter(r=>r.kh===k).map(r=>r.ppm); THR[k] = v.length>=15 ? q(v,.9) : THR_ALL; });
+    RUNS.forEach(r => { r.thr = THR[r.kh]||THR_ALL; r.over = r.ppm > r.thr || r.phut >= LONG_RUN; });
+    // giữ lựa chọn khách hàng còn hợp lệ sau khi tải lại
+    const ok = new Set(CUST.map(x=>x[0])); [...F.kh].forEach(k => { if (!ok.has(k)) F.kh.delete(k); });
+  }
+
+  // ── lọc ─────────────────────────────────────────────────────
+  const passTM = r => (!F.thang || r.thang===F.thang) && (!F.may || r.may===F.may);
+  const passKH = r => !F.kh.size || F.kh.has(r.kh);
+  const filtered = () => RUNS.filter(r => passTM(r) && passKH(r));
+  const khLbl = () => !F.kh.size ? 'Tất cả khách hàng' : [...F.kh].join(', ');
+  const scopeLbl = () => [khLbl(), F.thang ? mLbl(F.thang) : 'Cả kỳ', F.may || 'Tất cả máy'].join(' · ');
+
+  // mã in nhiều ngày trong phạm vi lọc
+  function codeStats(R){
+    const m = {};
+    R.forEach(r => r.codes.forEach(c => {
+      if (F.kh.size && !F.kh.has(c.kh) && !F.kh.has(r.kh)) return;
+      const x = m[c.k] || (m[c.k] = {k:c.k, ds:new Set(), p:0, kh:new Set(), may:new Set()});
+      x.ds.add(r.ngay); x.p += c.p; x.kh.add(c.kh||r.kh); x.may.add(r.may);
+    }));
+    return Object.values(m);
+  }
+  // số ngày làm việc (T2–T7) trong khoảng lọc → công suất KBA
+  function capMin(){
+    let a = new Date(D.tu), b = new Date(D.den);
+    if (F.thang) {
+      const y=+F.thang.slice(0,4), mo=+F.thang.slice(5,7)-1;
+      a = new Date(Math.max(a, new Date(y,mo,1))); b = new Date(Math.min(b, new Date(y,mo+1,0)));
+    }
+    let n = 0; for (let d=new Date(a.getFullYear(),a.getMonth(),a.getDate()); d<=b; d.setDate(d.getDate()+1)) if (d.getDay()!==0) n++;
+    return n * (F.may?1:NMACH) * SHIFTS * MIN_PER_SHIFT;
+  }
+
+  const CLS = {
+    moi:     ['Nhiều YC mới, không ghi làm lại', 'o', 'Mỗi ngày in là 1 YC mẫu mới trên DATA_NPI nhưng không ghi "làm lại" — thực chất có thể là làm lại.'],
+    lamlai:  ['Làm lại — NPI có ghi nhận', 'r', 'DATA_NPI ghi lần mẫu ≥ 2 hoặc tình trạng làm lại.'],
+    cung1yc: ['Cùng 1 YC, in nhiều ngày', 'b', 'Một YC nhưng in nhiều ngày: nhiều lượt/mặt hoặc làm lại nội bộ chưa ghi nhận.'],
+    magia:   ['Mã giả GH69-00000A', 'r', 'Mã tạm, không truy được YC.'],
+    khongco: ['Không có trong DATA_NPI', 'o', 'Không tìm thấy mã trong DATA_NPI.'],
+    sau:     ['YC tạo sau ngày in', 'b', 'Có trong NPI nhưng YC được tạo sau ngày in.'],
+    '':      ['Chưa phân loại', 'g2', ''],
+  };
+  const clsOf = k => (D.npi && D.npi[k] && D.npi[k][0]) || '';
+
+  // ── khối giao diện (lớp nb-* dùng chung với mục Nội bộ) ─────
+  let kpiN = 0;
+  function kpi(label, val, sub, tone){
+    const accent = tone || (kpiN++ % 2 ? 'gold' : '');
+    return `<div class="nb-kpi ${accent}"><div class="nb-kl">${label}</div><div class="nb-kv">${val}</div><div class="nb-ks">${sub||''}</div></div>`;
+  }
+  const card = (title, inner, extra) => `<div class="nb-card"><div class="nb-ct">${title}${extra||''}</div>${inner}</div>`;
+  const chartBox = (title, id, h, hint) => card(title, `${hint?`<div class="kb-hint">${hint}</div>`:''}<div class="nb-ch" style="height:${h||270}px"><canvas id="${id}"></canvas></div>`);
+  const pill = (txt, tone) => `<span class="nb-pill ${tone}">${esc(txt)}</span>`;
+  function table(head, rows, empty, cls){
+    return `<div class="nb-tw"><table class="nb-t ${cls||''}"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${
+      rows.length ? rows.join('') : `<tr><td colspan="${head.length}" class="nb-empty">${empty||'Không có dữ liệu'}</td></tr>`}</tbody></table></div>`;
+  }
+  const LV = {warn:['CẢNH BÁO',0], care:['CẦN CHÚ Ý',1], info:['THÔNG TIN',2], good:['TÍCH CỰC',3]};
+  function insights(list){
+    list = list.filter(Boolean).sort((a,b)=>LV[a.lv][1]-LV[b.lv][1]);
+    if (!list.length) return '';
+    const cnt = k => list.filter(x=>x.lv===k).length;
+    const badge = (k,txt) => cnt(k) ? `<span class="nb-cnt ${k}">${cnt(k)} ${txt}</span>` : '';
+    return `<details class="nb-ins" ${F.insOpen?'open':''} ontoggle="KBA._ins(this.open)">
+      <summary><span class="nb-chev">▾</span><b>Nhận định điều hành</b><span class="nb-insc">${esc(scopeLbl())}</span>
+        ${badge('warn','cảnh báo')}${badge('care','cần chú ý')}${badge('good','tích cực')}</summary>
+      <div class="nb-insg">${list.map(x=>`<div class="nb-insi"><span class="nb-tag ${x.lv}">${LV[x.lv][0]}</span>
+        <div><div class="nb-inst">${x.t}</div>${x.a?`<div class="nb-insa">→ ${x.a}</div>`:''}</div></div>`).join('')}</div>
+      <div class="nb-insf">Tự rút ra từ số liệu theo bộ lọc đang chọn, cảnh báo xếp trước. Hướng xử lý là gợi ý để anh/chị cân nhắc.</div></details>`;
+  }
+  function chart(id, cfg){
+    if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+    const cv = $(id); if (!cv || !window.Chart) return;
+    const font = {family:'Inter, system-ui, sans-serif', size:11};
+    cfg.options = cfg.options || {};
+    cfg.options.responsive = true; cfg.options.maintainAspectRatio = false;
+    cfg.options.plugins = Object.assign({legend:{position:'bottom', labels:{font, boxWidth:12, boxHeight:12, usePointStyle:true, pointStyle:'rectRounded'}},
+      tooltip:{titleFont:font, bodyFont:font, padding:8}}, cfg.options.plugins||{});
+    if (cfg.options.scales) Object.values(cfg.options.scales).forEach(s => { s.ticks = Object.assign({font, color:'#6B6A64'}, s.ticks||{}); s.grid = Object.assign({color:'#EFEDE6'}, s.grid||{}); s.border = {display:false}; });
+    // Hiện giá trị ngay trên cột / điểm để đọc nhanh (đơn vị lấy từ dataset.unit)
+    if (window.ChartDataLabels) {
+      const horiz = cfg.options.indexAxis === 'y';
+      // biểu đồ có cả cột + đường: nhãn cột đặt TRONG chân cột (chữ trắng) để không đè nhãn đường; cột thấp thì đặt trên
+      const hasLine = cfg.data.datasets.some(d => d.type === 'line');
+      const isLine = c => c.dataset.type === 'line';
+      const inside = c => hasLine && !isLine(c) && !horiz && (+c.dataset.data[c.dataIndex] || 0) >= 0.22 * Math.max(...c.dataset.data.map(v => +v || 0));
+      cfg.plugins = (cfg.plugins||[]).concat([ChartDataLabels]);
+      cfg.options.plugins.datalabels = Object.assign({
+        display: c => { const v = c.dataset.data[c.dataIndex]; return v != null && v !== 0; },
+        anchor: c => inside(c) ? 'start' : 'end', align: c => isLine(c) ? 'top' : inside(c) ? 'end' : (horiz ? 'right' : 'top'), offset: c => inside(c) ? 6 : 2, clamp: true,
+        font: {family:'Inter, system-ui, sans-serif', size:10.5, weight:'600'},
+        color: c => isLine(c) ? '#8A5F0B' : inside(c) ? '#fff' : '#33332F',
+        backgroundColor: c => c.dataset.type === 'line' ? 'rgba(255,248,225,.92)' : null,
+        borderRadius: 3, padding: c => c.dataset.type === 'line' ? {top:1,bottom:1,left:4,right:4} : 0,
+        formatter: (v, c) => v == null ? '' : (+v).toLocaleString('vi-VN', {maximumFractionDigits:1}) + (c.dataset.unit ? ' ' + c.dataset.unit : ''),
+      }, cfg.options.plugins.datalabels || {});
+      const pad = cfg.options.layout && cfg.options.layout.padding || {};
+      cfg.options.layout = {padding: Object.assign({top: horiz ? 4 : 22, right: horiz ? 64 : 10}, pad)};
+    }
+    charts[id] = new Chart(cv, cfg);
+  }
+  const C = {teal:'#0F766E', gold:'#C8952A', green:'#1B6B3A', green2:'#2E8B4E', red:'#C8372D', orange:'#D97706', gray:'#C9C6BC', light:'#BFD8C6', blue:'#2563A8'};
+
+  // ── bộ lọc ──────────────────────────────────────────────────
+  function filterBar(){
+    const custRows = CUST.map(([k,m]) => `<label class="kb-mso"><input type="checkbox" ${F.kh.has(k)?'checked':''} onchange="KBA._kh(this.dataset.k,this.checked)" data-k="${esc(k)}"><span>${esc(k)}</span><small>${f1(Math.round(hrs(m)*10)/10)} h</small></label>`).join('');
+    const btnTxt = !F.kh.size ? 'Tất cả khách hàng' : F.kh.size===1 ? [...F.kh][0] : F.kh.size+' khách hàng đã chọn';
+    return `<div class="nb-fbar">
+      <div class="nb-f"><label>Tháng</label><select onchange="KBA._f('thang',this.value)"><option value="">Cả kỳ (${esc(dm(D.tu))} – ${esc(dmy(D.den))})</option>${MONTHS.map(m=>`<option value="${m}" ${F.thang===m?'selected':''}>${mLbl(m)}</option>`).join('')}</select></div>
+      <div class="nb-f"><label>Máy in</label><select onchange="KBA._f('may',this.value)"><option value="">Tất cả máy</option>${MACH.map(m=>`<option value="${esc(m)}" ${F.may===m?'selected':''}>${esc(m)}</option>`).join('')}</select></div>
+      <div class="nb-f"><label>Khách hàng (cột G) — chọn nhiều</label>
+        <div class="kb-ms ${F.msOpen?'open':''}" id="kb-ms">
+          <button type="button" class="kb-msb ${F.msOpen?'on':''} ${F.kh.size?'has':''}" onclick="KBA._ms(event)">${esc(btnTxt)}</button>
+          <div class="kb-msp" onclick="event.stopPropagation()">
+            <div class="kb-msa"><button type="button" onclick="KBA._khAll(true)">Chọn tất cả</button><button type="button" onclick="KBA._khAll(false)">Bỏ chọn</button><button type="button" onclick="KBA._ms(event,false)">Đóng</button></div>
+            <div class="kb-msl">${custRows}</div>
+          </div>
+        </div></div>
+      <div class="nb-fnote">Đang xem: <b>${esc(scopeLbl())}</b></div>
+    </div>
+    ${F.kh.size ? `<div class="kb-chips">${[...F.kh].map(k=>`<span class="kb-chip">${esc(k)}<button type="button" title="Bỏ ${esc(k)}" data-k="${esc(k)}" onclick="KBA._kh(this.dataset.k,false)">×</button></span>`).join('')}<button type="button" class="kb-clr" onclick="KBA._khAll(false)">Bỏ lọc khách hàng</button></div>` : ''}`;
+  }
+
+  // ── vẽ toàn tab ─────────────────────────────────────────────
+  function render(){
+    const body = $('kb-body'); if (!body) return;
+    const R = filtered();
+    const tot = sum(R, r=>r.phut), maLuot = sum(R, r=>r.so_ma);
+    const ppm = R.map(r=>r.ppm), p50 = q(ppm,.5), p90 = q(ppm,.9);
+    const days = new Set(R.map(r=>r.ngay)).size;
+    const codes = codeStats(R), multi = codes.filter(c=>c.ds.size>=2), multiMin = sum(multi, c=>c.p), codeMin = sum(codes, c=>c.p);
+    const longR = R.filter(r=>r.phut>=LONG_RUN), over = R.filter(r=>r.over);
+    const cap = capMin(), capPct = pct(tot, cap);
+    const prep30 = R.filter(r=>+r.chuan_bi===30).length;
+    const lech = R.filter(r=>r.khung!=null && r.khung!=='' && Math.abs(r.phut-(+r.khung))>5);
+
+    // nhận định
+    const ins = [];
+    const dp = D.dups || {}, sk = D.skipped || [];
+    if (dp.it) ins.push({lv:'warn', t:`Khi gộp file: <b>${dp.it}</b> ô ngày-ca-máy ở file mới có ÍT lượt hơn file cũ — đang lấy theo file mới.`, a:'Mở THOI GIAN LAM MAU/_KET_QUA_GOP_KBA.xlsx (sheet 2) để xác nhận dòng bị xoá là cố ý.'});
+    if (sk.length) ins.push({lv:'care', t:`<b>${sk.length}</b> file trong thư mục nguồn bị bỏ qua (sai form / không đọc được): ${esc(sk.map(x=>x[0]).join('; '))}.`, a:'Kiểm tra sheet "Hàng mẫu" và dòng tiêu đề 2 giống file gốc.'});
+    if (!R.length) ins.push({lv:'info', t:'Không có lượt in nào khớp bộ lọc.'});
+    else {
+      const mp = pct(multiMin, codeMin);
+      if (multi.length && mp>=30) ins.push({lv: mp>=45?'warn':'care', t:`<b>${fpct(mp)}</b> giờ máy (${f1(Math.round(hrs(multiMin)))} h) dồn vào <b>${multi.length}</b> mã phải in từ 2 ngày trở lên.`, a:'Rà soát nguyên nhân làm lại theo từng mã; chốt màu/data với KH trước khi lên máy.'});
+      const moi = multi.filter(c=>clsOf(c.k)==='moi');
+      if (moi.length) ins.push({lv:'care', t:`<b>${moi.length}</b> mã in nhiều ngày có nhiều YC mới trên DATA_NPI nhưng <b>không ghi "làm lại"</b> (${f1(Math.round(hrs(sum(moi,c=>c.p))))} h).`, a:'Quy định ghi lần mẫu / lý do làm lại khi mở YC mới cho cùng mã.'});
+      if (longR.length) ins.push({lv:'care', t:`<b>${longR.length}</b> lượt kéo dài ≥ 6 giờ, tổng ${f1(Math.round(hrs(sum(longR,r=>r.phut))))} h (${fpct(pct(sum(longR,r=>r.phut),tot))} giờ máy).`, a:'Kiểm tra ghi chú các lượt dài: chỉnh màu, chờ KH duyệt, máy lỗi hay gộp nhiều việc.'});
+      if (p50 && p90/p50 >= 2) ins.push({lv:'info', t:`Phút/mã dao động lớn: P90 = <b>${fmt(p90)}</b> ph, gấp ${f1(Math.round(p90/p50*10)/10)} lần trung vị ${fmt(p50)} ph.`, a:'Dùng ngưỡng P90 làm mốc báo động; lượt vượt ngưỡng cần ghi rõ nguyên nhân.'});
+      if (!F.thang && MONTHS.length>=3) {
+        const full = MONTHS.slice(0,-1);               // tháng cuối thường chưa đủ
+        const a = full[full.length-2], b = full[full.length-1];
+        const pa = q(R.filter(r=>r.thang===a).map(r=>r.ppm),.5), pb = q(R.filter(r=>r.thang===b).map(r=>r.ppm),.5);
+        if (pa && pb) { const d = pct(pb-pa, pa);
+          if (d<=-10) ins.push({lv:'good', t:`Phút/mã trung vị ${mLbl(b)} giảm <b>${fpct(-d)}</b> so với ${mLbl(a)} (${fmt(pa)} → ${fmt(pb)} ph).`});
+          else if (d>=15) ins.push({lv:'care', t:`Phút/mã trung vị ${mLbl(b)} tăng <b>${fpct(d)}</b> so với ${mLbl(a)} (${fmt(pa)} → ${fmt(pb)} ph).`, a:'Xem tháng này có nhiều mẫu mới / KH khó hơn hay phát sinh làm lại.'}); }
+      }
+      if (pct(prep30, R.length) >= 40) ins.push({lv:'info', t:`Cột "chuẩn bị" (K) ghi đúng 30 phút ở <b>${fpct(pct(prep30,R.length))}</b> lượt — có thể là giá trị mặc định, chưa đo thực.`, a:'Ghi thời gian chuẩn bị thực tế để tách chuẩn bị và chạy máy.'});
+      ins.push({lv:'info', t:`Chi phí giờ máy làm mẫu ước tính <b>${f1(Math.round(cost(tot)*10)/10)} triệu đ</b> (${f1(Math.round(hrs(tot)*10)/10)} h × ${fmt(D.don_gia)} đ/h, chưa gồm NVL).`});
+    }
+
+    const kpis = [
+      kpi('Giờ máy làm mẫu', `${f1(Math.round(hrs(tot)*10)/10)} <small>h</small>`, `≈ <b>${f1(Math.round(cost(tot)*10)/10)}</b> triệu đ · ${fmt(D.don_gia)} đ/h, chưa gồm NVL`),
+      kpi('Lượt in mẫu', `${fmt(R.length)} <small>lượt</small>`, `${fmt(maLuot)} mã-lượt · ${fmt(days)} ngày có làm mẫu`),
+      kpi('Phút / mã / lượt', `${fmt(p50)} <small>ph</small>`, `Trung vị · P90 = <b>${fmt(p90)}</b> ph · TB ${fmt(maLuot?tot/maLuot:null)} ph`),
+      kpi('Mã in ≥ 2 ngày', `${fmt(multi.length)} <small>/ ${fmt(codes.length)} mã</small>`, `Chiếm <b>${fpct(pct(multiMin, codeMin))}</b> giờ máy`, multi.length && pct(multiMin,codeMin)>=45 ? 'red' : ''),
+      kpi('Lượt ≥ 6 giờ', `${fmt(longR.length)}`, `${f1(Math.round(hrs(sum(longR,r=>r.phut))))} h · ${fmt(over.length)} lượt vượt ngưỡng P90`),
+      kpi('Tỷ trọng công suất KBA', fpct(capPct), `${F.may?'Máy '+esc(F.may):NMACH+' máy'} × 2 ca × 630 ph, T2–T7`),
+    ];
+
+    body.innerHTML = `
+      <div class="nb-hero"><div class="nb-hl"><h2>Thời gian làm mẫu máy in KBA</h2>
+        <p>Thời gian chạy máy in mẫu theo <b>lượt in</b> (ô gộp cột N = in nhiều mẫu cùng lúc), tách theo tháng, máy, khách hàng, thợ; mã phải in nhiều ngày đối chiếu <b>DATA_NPI</b>. Chọn khách hàng ở bộ lọc hoặc bấm cột trên biểu đồ khách hàng để lọc.</p></div>
+        <div class="nb-hr"><span class="nb-chip">Dữ liệu ${esc(dmy(D.tu))} – ${esc(dmy(D.den))}</span><span class="nb-chip" title="${esc((D.files||[]).map(f=>f[0]).join(' | '))}">Gộp ${fmt((D.files||[]).length||1)} file · sửa ${esc(META.src_modified||'--')}</span><span class="nb-chip ok">Đồng bộ ${esc(META.synced_at||'--')}</span>
+        <a class="nb-chip nb-a" href="javascript:void(0)" onclick="KBA.reload()">↻ Tải lại</a></div></div>
+      <div class="nb-wrapin">
+        ${filterBar()}
+        ${insights(ins)}
+        <div class="nb-grid">${(kpiN=0, kpis.join(''))}</div>
+        <div id="kb-ai">${aiHtml()}</div>
+        <div class="nb-2col">
+          ${chartBox('Giờ máy & phút/mã theo tháng', 'kb-c-thang', 280, 'Cột = giờ máy; đường = phút/mã trung vị. Tháng cuối có thể chưa đủ ngày.')}
+          ${chartBox('Giờ máy theo khách hàng', 'kb-c-kh', 280, 'Bấm vào cột để chọn / bỏ chọn khách hàng. Cột đậm = đang chọn.')}
+        </div>
+        <div class="nb-2col">
+          ${chartBox('Giờ máy theo máy in', 'kb-c-may', 240)}
+          ${chartBox('Tải mẫu theo máy-ngày', 'kb-c-tai', 240, 'Tổng phút làm mẫu trong 1 ngày trên 1 máy.')}
+        </div>
+        <div class="nb-2col">
+          ${chartBox('Số lượng in so với thời gian', 'kb-c-sl', 240, 'Lượt đơn 1 mã — phút trung vị. Thời gian gần như không đổi theo số lượng → chủ yếu là chuẩn bị & chỉnh màu.')}
+          ${chartBox('Theo thợ in', 'kb-c-tho', 240, 'Chỉ để cải tiến quy trình, không dùng đánh giá năng lực — loại mẫu mỗi thợ nhận khác nhau.')}
+        </div>
+        ${stdTable(R)}
+        <div class="nb-sh"><h3>Mã phải in từ 2 ngày trở lên</h3><span class="nb-shn">${fmt(multi.length)} mã · ${f1(Math.round(hrs(multiMin)))} h · phân loại theo DATA_NPI</span></div>
+        <div class="nb-2col">${clsCard(multi)}<div id="kb-ma">${maTable(multi)}</div></div>
+        <div class="nb-sh"><h3>Lượt vượt ngưỡng</h3><span class="nb-shn">phút/mã > P90 của khách hàng, hoặc lượt ≥ 6 giờ · ${fmt(over.length)} lượt · ${f1(Math.round(hrs(sum(over,r=>r.phut))))} h</span></div>
+        ${runTable(over)}
+        <div class="nb-sh"><h3>Danh sách làm mẫu</h3><span class="nb-shn">từng dòng như file gốc (sheet Hàng mẫu) · theo bộ lọc tháng / máy / khách hàng ở trên</span></div>
+        <div id="kb-ls">${listCard()}</div>
+        <div class="nb-sh"><h3>Chất lượng dữ liệu nguồn</h3></div>
+        ${dqCard(R, prep30, lech)}
+        <div class="nb-src">Nguồn: Báo cáo tổng hợp chạy hàng mẫu KBA (sheet Hàng mẫu) + DATA_NPI · đồng bộ ${esc(META.synced_at||'--')} qua KBA_MAU/CAP_NHAT_KBA.bat · đơn giá giờ máy lấy theo sheet "Dữ liệu hàng tháng" (tạm tính, chưa NVL).</div>
+      </div>`;
+    drawCharts(R);
+  }
+
+  // thời gian chuẩn theo khách hàng (trên phạm vi lọc tháng/máy)
+  function stdTable(R){
+    const base = RUNS.filter(passTM);
+    const keys = F.kh.size ? [...F.kh] : CUST.map(x=>x[0]).filter(k => base.filter(r=>r.kh===k).length>=5);
+    const row = (name, rs, hl) => {
+      const v = rs.map(r=>r.ppm), n = rs.length; if (!n) return '';
+      const a = q(v,.25), b = q(v,.5), c = q(v,.75), d = q(v,.9), m = sum(rs,r=>r.phut);
+      return `<tr><td class="${hl?'kb-hl':''}">${esc(name)}${n<15?' <span class="kb-sm">(ít mẫu)</span>':''}</td><td class="r">${fmt(n)}</td><td class="r">${f1(Math.round(hrs(m)*10)/10)}</td><td class="r">${f1(Math.round(cost(m)*10)/10)}</td><td class="r">${fmt(a)}</td><td class="r">${fmt(b)}</td><td class="r">${fmt(c)}</td><td class="r">${fmt(d)}</td><td class="r kb-hl">${fmt(r5(b))}</td><td class="r kb-hl">${fmt(r5(d))}</td></tr>`;
+    };
+    const rows = keys.map(k => row(k, base.filter(r=>r.kh===k), F.kh.has(k)));
+    if (F.kh.size > 1) rows.push(row('Gộp các KH đã chọn', R, true));
+    rows.push(row('Toàn bộ (theo tháng/máy đang lọc)', base));
+    return `<div class="nb-sh"><h3>Thời gian chuẩn theo khách hàng</h3><span class="nb-shn">phút / mã / lượt · chuẩn = trung vị, ngưỡng cảnh báo = P90, làm tròn 5 phút · <b>đề xuất, chờ duyệt</b></span></div>` +
+      table(['Khách hàng','Lượt','Giờ máy','Chi phí (tr đ)','P25','Trung vị','P75','P90','Chuẩn đề xuất','Ngưỡng cảnh báo'], rows.filter(Boolean), 'Không có dữ liệu', 'kb-std');
+  }
+  function clsCard(multi){
+    const g = {}; multi.forEach(c => { const k = clsOf(c.k); (g[k] = g[k] || {n:0,p:0}); g[k].n++; g[k].p += c.p; });
+    const ent = Object.entries(g).sort((a,b)=>b[1].p-a[1].p), tot = sum(ent, e=>e[1].p), max = Math.max(1, ...ent.map(e=>e[1].p));
+    return card('Phân loại theo DATA_NPI', ent.length ? ent.map(([k,v]) => `
+      <div class="nb-br" title="${esc(CLS[k]?CLS[k][2]:'')}"><span class="nb-bl">${esc(CLS[k]?CLS[k][0]:k)}</span><span class="nb-bt"><i style="width:${Math.max(2,v.p/max*100)}%;background:${k==='lamlai'||k==='magia'?'var(--nb-red)':k==='moi'||k==='khongco'?'var(--nb-gold)':'var(--nb-teal)'}"></i></span>
+      <span class="nb-bv"><b>${f1(Math.round(hrs(v.p)*10)/10)} h</b> <small>${v.n} mã · ${fpct(pct(v.p,tot))}</small></span></div>`).join('') +
+      `<div class="nb-hint" style="margin-top:10px">Rê chuột vào từng dòng để xem cách phân loại. Phân loại tính trên toàn kỳ dữ liệu.</div>` : '<div class="nb-empty">Không có mã in nhiều ngày</div>');
+  }
+  function maTable(multi){
+    const qn = F.maQ.trim().toLowerCase();
+    let L = multi.sort((a,b)=>b.p-a.p);
+    if (qn) L = L.filter(c => (c.k+' '+(D.names[c.k]||'')+' '+[...c.kh].join(' ')).toLowerCase().includes(qn));
+    const show = F.maAll ? L : L.slice(0, 25);
+    const rows = show.map(c => { const k = clsOf(c.k), n = (D.npi && D.npi[c.k]) || [];
+      return `<tr><td><b>${esc(c.k)}</b></td><td>${esc([...c.kh].join('/'))}</td><td class="r">${c.ds.size}</td><td class="r">${f1(Math.round(hrs(c.p)*10)/10)}</td><td>${pill(CLS[k]?CLS[k][0]:k, CLS[k]?CLS[k][1]:'g2')}</td><td class="nb-wrap">${esc([...c.ds].sort().map(dm).join(', '))}${n[4]?`<br><span class="kb-sm">Lý do: ${esc(n[4])}</span>`:''}</td></tr>`; });
+    return card(`Danh sách mã (${fmt(L.length)})`,
+      table(['Mã','KH','Ngày in','Giờ','Phân loại NPI','Các ngày in'], rows, 'Không có mã phù hợp') +
+      (L.length > 25 ? `<div class="nb-more"><button class="nb-more-btn" onclick="KBA._maAll()">${F.maAll?'Thu gọn':'Xem tất cả '+L.length+' mã'}</button></div>` : ''),
+      `<input class="nb-q" id="kb-maq" placeholder="Tìm mã / tên / khách hàng…" value="${esc(F.maQ)}" oninput="KBA._maQ(this.value)">`);
+  }
+  function runTable(over){
+    const L = over.slice().sort((a,b)=>b.phut-a.phut), show = F.runAll ? L : L.slice(0, 20);
+    const rows = show.map(r => `<tr><td>${esc(dmy(r.ngay))}</td><td>${esc(r.ca)}</td><td>${esc(r.may)}</td><td>${esc(r.tho)}</td><td>${esc(r.kh)}</td><td class="r">${r.so_ma}</td><td class="r">${fmt(r.sl)}</td><td class="r ${r.phut>=LONG_RUN?'nb-red':''}">${fmt(r.phut)}</td><td class="r nb-red">${fmt(r.ppm)}</td><td class="r">${fmt(r.thr)}</td><td class="nb-wrap">${esc(r.ghi_chu)}</td><td class="r kb-sm" title="${esc(D.files&&r.file!=null&&D.files[r.file]?D.files[r.file][0]:'')}">${r.dong}</td></tr>`);
+    return card('', table(['Ngày','Ca','Máy','Thợ','KH','Số mã','SL in','Phút','Ph/mã','Ngưỡng P90','Ghi chú','Dòng'], rows, 'Không có lượt vượt ngưỡng') +
+      (L.length > 20 ? `<div class="nb-more"><button class="nb-more-btn" onclick="KBA._runAll()">${F.runAll?'Thu gọn':'Xem tất cả '+L.length+' lượt'}</button></div>` : ''));
+  }
+  // danh sách từng dòng làm mẫu — đủ cột A..O của file gốc
+  const nrm = x => String(x==null?'':x).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
+  let LS = null;
+  function listRows(){
+    if (!D.L) return null;
+    if (!LS) {                                         // dựng 1 lần: đối tượng + chuỗi tìm kiếm không dấu
+      const ix = {}; D.Lc.forEach((c,i)=>ix[c]=i);
+      LS = D.L.map(r => { const o = {}; D.Lc.forEach(c => o[c] = r[ix[c]]);
+        o.fname = D.files && D.files[o.file] ? D.files[o.file][0] : '';
+        o.q = nrm([dmy(o.ngay), 'ca'+o.ca, 'ca '+o.ca, o.may, o.tho, o.kh, o.model, o.ma, o.sl, o.ghi_chu, o.fname].join(' | ')); return o; });
+      LS.sort((a,b) => a.ngay < b.ngay ? 1 : a.ngay > b.ngay ? -1 : (a.file - b.file) || (a.dong - b.dong));   // mới nhất trước
+    }
+    const ok = new Set(filtered().map(r=>r.i));
+    const terms = nrm(F.lsQ).split(/\s+/).filter(Boolean);
+    return LS.filter(o => ok.has(o.luot) && terms.every(t => o.q.includes(t)));
+  }
+  function listCard(){
+    const L = listRows();
+    if (!L) return card('', '<div class="nb-hint">Chưa có danh sách chi tiết — sẽ có sau lần đồng bộ kế tiếp (CAP_NHAT_KBA.bat hoặc 12:00).</div>');
+    const multiFile = (D.files||[]).length > 1;
+    const head = ['Tháng','Số ngày','Ngày','Ca','Máy in','Thợ in','Khách hàng','Model','Mã hàng','Số lượng','Chuẩn bị (ph)','Bắt đầu','Kết thúc','Tổng (phút)','Ghi chú','Dòng'].concat(multiFile?['File nguồn']:[]);
+    const show = L.slice(0, F.lsN), totMin = L.reduce((s,o)=>s+(+o.phut||0),0);
+    const rows = show.map(o => `<tr${o.phut==null?' class="kb-cont"':''}><td class="r">${esc(o.thang)}</td><td class="r">${esc(o.so_ngay)}</td><td>${esc(dmy(o.ngay))}</td><td>${esc(o.ca)}</td><td>${esc(o.may)}</td><td>${esc(o.tho)}</td><td>${esc(o.kh)}</td>
+      <td>${esc(o.model)}</td><td class="nb-wrap kb-mac"><b>${esc(o.ma)}</b></td><td class="r">${fmt(o.sl)}</td><td class="r">${o.chuan_bi==null?'':fmt(o.chuan_bi)}</td><td>${esc(o.bd)}</td><td>${esc(o.kt)}</td>
+      <td class="r">${o.phut==null?'<span class="kb-sm" title="Ô gộp: in cùng lượt với dòng trên">↑ gộp</span>':'<b>'+fmt(o.phut)+'</b>'}</td><td class="nb-wrap">${esc(o.ghi_chu)}</td><td class="r kb-sm">${o.dong}</td>${multiFile?`<td class="kb-sm">${esc(o.fname)}</td>`:''}</tr>`);
+    return card(`<span>Danh sách làm mẫu <span class="kb-sm" style="font-weight:600">· ${fmt(L.length)} dòng · ${f1(Math.round(totMin/6)/10)} giờ máy</span></span>`,
+      table(head, rows, F.lsQ ? 'Không có dòng nào khớp từ khoá' : 'Không có dữ liệu') +
+      `<div class="nb-more">Đang hiện ${fmt(show.length)}/${fmt(L.length)} dòng, mới nhất trước.${L.length > show.length ? ` <button class="nb-more-btn" onclick="KBA._lsMore()">Xem thêm 100 dòng</button> <button class="nb-more-btn" onclick="KBA._lsMore(1)">Xem tất cả</button>` : ''} Dòng "↑ gộp" = in cùng lượt với dòng trên (ô gộp cột N).</div>`,
+      `<input class="nb-q" id="kb-lsq" placeholder="Tìm mã hàng, model, khách hàng, thợ, máy, ghi chú, ngày dd/mm…" value="${esc(F.lsQ)}" oninput="KBA._lsQ(this.value)">`);
+  }
+  function renderList(keepFocus){
+    const el = $('kb-ls'); if (!el) return;
+    el.innerHTML = listCard();
+    if (keepFocus) { const i = $('kb-lsq'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }
+  }
+  function dqCard(R, prep30, lech){
+    const khTrong = R.filter(r=>r.kh==='(không ghi)').length, thoTrong = R.filter(r=>r.tho==='(trống)').length;
+    const prepGt = R.filter(r=>(+r.chuan_bi||0) > r.phut).length;
+    const it = (lb, n, note, bad) => `<tr><td>${lb}</td><td class="r ${bad&&n?'nb-red':''}">${fmt(n)}</td><td class="r">${fpct(pct(n,R.length))}</td><td class="nb-wrap">${note}</td></tr>`;
+    const lst = lech.slice(0,15).map(r=>`dòng ${r.dong} (${esc(r.bd)}–${esc(r.kt)}: khung ${fmt(r.khung)} ph, ghi ${fmt(r.phut)} ph)`).join('; ');
+    return card('', table(['Kiểm tra','Số lượt','Tỷ lệ','Ghi chú'], [
+      it('Cột K "chuẩn bị" = 30 phút', prep30, 'Nhiều khả năng là giá trị mặc định → chưa tách được thời gian chuẩn bị thực.', true),
+      it('Tổng phút (N) lệch khung giờ L–M > 5 phút', lech.length, lech.length ? lst + (lech.length>15?' …':'') : 'Không có', true),
+      it('Không ghi khách hàng (cột G)', khTrong, 'Các lượt này không lọc được theo khách hàng.', true),
+      it('Không ghi thợ (cột F)', thoTrong, '', true),
+      it('Chuẩn bị > tổng phút của lượt', prepGt, '', true),
+    ], '') + (D.files ? `<div class="nb-hint" style="margin-top:10px">Gộp <b>${D.files.length}</b> file nguồn (${D.files.map(f=>esc(f[0])+' ['+dm(f[1])+'–'+dm(f[2])+', dùng '+f[4]+'/'+f[3]+' lượt]').join('; ')}). Loại trùng theo ô ngày + ca + máy, giữ file có dữ liệu mới nhất: đã loại <b>${fmt((D.dups||{}).luot||0)}</b> lượt trùng (${fmt((D.dups||{}).giong||0)} ô giống hệt, ${fmt((D.dups||{}).khac||0)} ô lấy số đã sửa, ${fmt((D.dups||{}).it||0)} ô file mới ít lượt hơn). Chi tiết: THOI GIAN LAM MAU/_KET_QUA_GOP_KBA.xlsx.${(D.skipped||[]).length?' Bỏ qua: '+esc(D.skipped.map(x=>x[0]+' ('+x[1]+')').join('; ')):''}</div>` : ''));
+  }
+
+  function drawCharts(R){
+    const base = RUNS.filter(passTM);
+    // theo tháng (theo KH đang chọn + máy; bỏ lọc tháng để thấy xu hướng)
+    const TR = RUNS.filter(r => passKH(r) && (!F.may || r.may===F.may));
+    chart('kb-c-thang', {type:'bar', data:{labels:MONTHS.map(mLbl), datasets:[
+      {type:'bar', label:'Giờ máy', unit:'h', data:MONTHS.map(m=>Math.round(hrs(sum(TR.filter(r=>r.thang===m),r=>r.phut))*10)/10), backgroundColor:MONTHS.map(m=>!F.thang||F.thang===m?C.green2:C.light), borderRadius:5, yAxisID:'y', order:2},
+      {type:'line', label:'Phút/mã (trung vị)', unit:'ph', data:MONTHS.map(m=>{ const v=q(TR.filter(r=>r.thang===m).map(r=>r.ppm),.5); return v==null?null:Math.round(v); }), borderColor:C.gold, backgroundColor:C.gold, tension:.3, pointRadius:4, yAxisID:'y2', order:1}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grace:'10%', title:{display:true,text:'Giờ'}}, y2:{beginAtZero:true, grace:'12%', position:'right', grid:{display:false}, title:{display:true,text:'Phút/mã'}}},
+        plugins:{tooltip:{callbacks:{afterBody:(it)=>{ const m=MONTHS[it[0].dataIndex]; const mm=sum(TR.filter(r=>r.thang===m),r=>r.phut); return 'Chi phí ≈ '+f1(Math.round(cost(mm)*10)/10)+' triệu đ'; }}}}}});
+    // theo khách hàng (giữ đủ KH để so sánh, tô đậm KH đang chọn)
+    const kh = {}; base.forEach(r => kh[r.kh] = (kh[r.kh]||0) + r.phut);
+    const ke = Object.entries(kh).sort((a,b)=>b[1]-a[1]).slice(0, 14);
+    chart('kb-c-kh', {type:'bar', data:{labels:ke.map(e=>e[0]), datasets:[{label:'Giờ máy', unit:'h', data:ke.map(e=>Math.round(hrs(e[1])*10)/10),
+        backgroundColor:ke.map(e=>!F.kh.size ? C.green2 : F.kh.has(e[0]) ? C.green : C.light), borderRadius:4}]},
+      options:{indexAxis:'y', scales:{x:{beginAtZero:true}, y:{grid:{display:false}}}, plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:(c)=>{ const m=ke[c.dataIndex][1], rs=base.filter(r=>r.kh===ke[c.dataIndex][0]); return [' '+f1(c.raw)+' h · '+fpct(pct(m,sum(base,r=>r.phut))), ' '+rs.length+' lượt · trung vị '+fmt(q(rs.map(r=>r.ppm),.5))+' ph/mã', ' ≈ '+f1(Math.round(cost(m)*10)/10)+' triệu đ']; }}}},
+        onClick:(e, els)=>{ if (els.length) { const k = ke[els[0].index][0]; setTimeout(()=>toggleKH(k), 0); } },   // vẽ lại sau khi Chart xử lý xong sự kiện
+        onHover:(e, els)=>{ e.native.target.style.cursor = els.length ? 'pointer' : 'default'; }}});
+    // theo máy
+    const my = {}; R.forEach(r => { const k=r.may; (my[k]=my[k]||{m:0,v:[]}); my[k].m+=r.phut; my[k].v.push(r.ppm); });
+    const me = Object.entries(my).sort((a,b)=>a[0].localeCompare(b[0]));
+    chart('kb-c-may', {type:'bar', data:{labels:me.map(e=>e[0]), datasets:[{label:'Giờ máy', unit:'h', data:me.map(e=>Math.round(hrs(e[1].m)*10)/10), backgroundColor:C.teal, borderRadius:5, yAxisID:'y'},
+        {type:'line', label:'Phút/mã (trung vị)', unit:'ph', data:me.map(e=>Math.round(q(e[1].v,.5))), borderColor:C.gold, backgroundColor:C.gold, showLine:false, pointRadius:6, yAxisID:'y2'}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true}, y2:{beginAtZero:true, grace:'12%', position:'right', grid:{display:false}}}}});
+    // tải máy-ngày
+    const md = {}; R.forEach(r => { const k=r.ngay+'|'+r.may; md[k]=(md[k]||0)+r.phut; });
+    const bins = [[0,60,'≤1h'],[60,120,'1–2h'],[120,240,'2–4h'],[240,360,'4–6h'],[360,480,'6–8h'],[480,600,'8–10h'],[600,1e9,'>10h']];
+    const vals = Object.values(md);
+    chart('kb-c-tai', {type:'bar', data:{labels:bins.map(b=>b[2]), datasets:[{label:'Số máy-ngày', unit:'', data:bins.map(b=>vals.filter(v=>v>b[0]&&v<=b[1]).length), backgroundColor:bins.map(b=>b[0]>=360?C.orange:C.green2), borderRadius:5}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true, ticks:{precision:0}}}, plugins:{legend:{display:false}}}});
+    // số lượng vs thời gian
+    const bands = [['≤ 50',0,50],['51–100',50,100],['101–200',100,200],['> 200',200,1e12]];
+    const single = R.filter(r=>!r.gop && r.so_ma===1 && r.sl!=null);
+    chart('kb-c-sl', {type:'bar', data:{labels:bands.map(b=>b[0]+' tờ'), datasets:[{label:'Phút/lượt (trung vị)', unit:'ph', data:bands.map(b=>{ const v=q(single.filter(r=>+r.sl>b[1]&&+r.sl<=b[2]).map(r=>r.phut),.5); return v==null?null:Math.round(v); }), backgroundColor:C.green2, borderRadius:5}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true}}, plugins:{legend:{display:false}, tooltip:{callbacks:{afterLabel:(c)=>'n = '+single.filter(r=>+r.sl>bands[c.dataIndex][1]&&+r.sl<=bands[c.dataIndex][2]).length+' lượt'}}}}});
+    // theo thợ
+    const th = {}; R.forEach(r => { const k=r.tho; (th[k]=th[k]||{m:0,v:[]}); th[k].m+=r.phut; th[k].v.push(r.ppm); });
+    const te = Object.entries(th).filter(e=>e[1].v.length>=3).sort((a,b)=>b[1].m-a[1].m).slice(0,12);
+    chart('kb-c-tho', {type:'bar', data:{labels:te.map(e=>e[0]), datasets:[{label:'Giờ máy', unit:'h', data:te.map(e=>Math.round(hrs(e[1].m)*10)/10), backgroundColor:C.teal, borderRadius:5, yAxisID:'y'},
+        {type:'line', label:'Phút/mã (trung vị)', unit:'ph', data:te.map(e=>Math.round(q(e[1].v,.5))), borderColor:C.gold, backgroundColor:C.gold, showLine:false, pointRadius:6, yAxisID:'y2'}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true}, y2:{beginAtZero:true, grace:'12%', position:'right', grid:{display:false}}},
+        plugins:{tooltip:{callbacks:{afterBody:(it)=>'Số lượt: '+te[it[0].dataIndex][1].v.length}}}}});
+  }
+
+  // ── nhận xét AI (4 chuyên gia) ─────────────────────────────
+  function loadAI(force){
+    if (aiP && !force) return aiP;
+    aiP = (async () => {
+      const t = await gvizFetch(SHEET_ID, 'KBA_AI', null, null, 30000);
+      const parts = (t.rows||[]).map(r => [+(r.c[0]&&r.c[0].v), r.c[1]&&r.c[1].v||'']).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+      if (!parts.length) throw new Error('chưa có');
+      AI = await decode(parts.join(''));
+    })();
+    aiP.catch(() => { AI = {err:true}; });
+    return aiP;
+  }
+  const AILV = {tot:['TỐT','good'], chu_y:['CẦN CHÚ Ý','care'], canh_bao:['CẢNH BÁO','warn']};
+  const ROLE_IC = {pd:'🧪', cto:'⚙️', g7:'🎨', ops:'📊'};
+  const ymd = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  function aiHtml(){
+    const head = '<div class="kb-ai-h"><b>🤖 Nhận xét AI — Hội đồng 4 chuyên gia</b></div>';
+    if (!AI) return `<div class="kb-ai-box">${head}<div class="nb-hint"><span class="nb-spin"></span>Đang tải nhận xét AI…</div></div>`;
+    if (AI.err || !(AI.days||[]).length) return `<div class="kb-ai-box">${head}<div class="nb-hint">Chưa có nhận xét AI. Nhận xét được tạo tự động lúc 12:00 hằng ngày (KBA_MAU/kba_ai.py).</div></div>`;
+    const days = AI.days, di = F.aiDay >= 0 && F.aiDay < days.length ? F.aiDay : days.length - 1, day = days[di];
+    const one = F.kh.size === 1 ? [...F.kh][0] : null;
+    const sc = one && day.scopes[one] ? one : 'ALL', o = day.scopes[sc];
+    if (!o) return '';
+    const stale = di === days.length - 1 && day.ngay !== ymd(new Date());
+    const note = one && sc === 'ALL' ? `<div class="kb-ai-note">Khách hàng <b>${esc(one)}</b> chưa có nhận xét riêng (cần ≥ 15 lượt) — đang hiển thị nhận xét toàn bộ.</div>`
+               : F.kh.size > 1 ? `<div class="kb-ai-note">Đang chọn nhiều khách hàng — hiển thị nhận xét <b>toàn bộ</b>. Chọn đúng 1 khách hàng (≥ 15 lượt) để xem nhận xét riêng.</div>` : '';
+    const lv = k => AILV[k] || AILV.chu_y;
+    const th = o.tong_hop || {};
+    return `<details class="kb-ai-box" ${F.aiOpen?'open':''} ontoggle="KBA._aiOpen(this.open)">
+      <summary class="kb-ai-h"><span class="nb-chev">▾</span><b>🤖 Nhận xét AI — Hội đồng 4 chuyên gia</b>
+        <span class="nb-pill b">${sc==='ALL'?'Toàn bộ':'KH '+esc(sc)}</span>
+        <span class="nb-tag ${lv(th.muc)[1]}">${lv(th.muc)[0]}</span>
+        <span class="kb-ai-meta">Phân tích lúc ${esc(day.luc)} · dữ liệu đến ${esc(dmy(day.du_lieu_den))}${o.cu_tu?` · <span class="nb-red">giữ nhận xét ngày ${esc(dmy(o.cu_tu))} (lần chạy này lỗi)</span>`:''}${stale?' · <span class="nb-red">chưa cập nhật hôm nay</span>':''}</span>
+        <select class="kb-ai-sel" title="Xem nhận xét các ngày trước" onclick="event.stopPropagation()" onchange="KBA._aiDay(this.value)">${days.map((d,i)=>`<option value="${i}" ${i===di?'selected':''}>${esc(dmy(d.ngay))}${i===days.length-1?' (mới nhất)':''}</option>`).reverse().join('')}</select>
+      </summary>
+      ${note}
+      <div class="kb-ai-sum"><div class="kb-ai-st">Tổng hợp điều hành</div>
+        <ol>${(th.y_chinh||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
+        ${th.thay_doi?`<div class="kb-ai-chg"><b>Thay đổi so với lần trước:</b> ${esc(th.thay_doi)}</div>`:''}</div>
+      <div class="kb-ai-grid">${(o.vai_tro||[]).map(v=>`<div class="kb-ai-card ${lv(v.muc)[1]}">
+        <div class="kb-ai-ch"><span class="kb-ai-ic">${ROLE_IC[v.id]||'•'}</span><b>${esc(v.ten)}</b><span class="nb-tag ${lv(v.muc)[1]}">${lv(v.muc)[0]}</span></div>
+        ${v.tieu_de?`<div class="kb-ai-tt">${esc(v.tieu_de)}</div>`:''}
+        <ul class="kb-ai-ul">${(v.nhan_xet||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+        ${(v.hanh_dong||[]).length?`<div class="kb-ai-act"><div class="kb-ai-at">Hành động đề xuất</div>${v.hanh_dong.map(h=>`<div class="kb-ai-ai"><span class="kb-ai-moc">${esc(h.moc||'')}</span><div>${esc(h.viec)}${h.phu_trach?`<div class="kb-sm">Phụ trách: ${esc(h.phu_trach)}</div>`:''}</div></div>`).join('')}</div>`:''}
+      </div>`).join('')}</div>
+      <div class="kb-ai-foot">Nhận xét do AI (Claude) tạo tự động mỗi ngày từ số liệu tóm tắt của tab này, theo vai 4 chuyên gia. Đây là gợi ý tham khảo — cần người kiểm chứng trước khi ra quyết định; so sánh theo thợ chỉ để cải tiến quy trình, không đánh giá cá nhân.</div>
+    </details>`;
+  }
+  function renderAI(){ const el = $('kb-ai'); if (el) el.innerHTML = aiHtml(); }
+
+  // ── sự kiện ────────────────────────────────────────────────
+  function toggleKH(k){ F.kh.has(k) ? F.kh.delete(k) : F.kh.add(k); F.maAll=false; F.runAll=false; render(); }
+  let docBound = false;
+  function bindDoc(){
+    if (docBound) return; docBound = true;
+    document.addEventListener('click', e => { if (F.msOpen && !e.target.closest('#kb-ms')) { F.msOpen=false; const m=$('kb-ms'); if(m){ m.classList.remove('open'); m.querySelector('.kb-msb').classList.remove('on'); } } });
+  }
+  function shell(html){ const b = $('kb-body'); if (b) b.innerHTML = html; }
+  async function enter(force){
+    bindDoc();
+    if (!D || force) shell('<div class="nb-loading"><span class="nb-spin"></span>Đang tải dữ liệu thời gian làm mẫu KBA…</div>');
+    try { await load(force); render(); loadAI(force).finally(renderAI); }
+    catch(e){ shell(`<div class="nb-err"><b>Không tải được dữ liệu.</b><br>${esc(e.message)}<br><br>Kiểm tra: đã chạy <b>KBA_MAU\\CAP_NHAT_KBA.bat</b> chưa; Google Sheet có chia sẻ "Bất kỳ ai có đường liên kết" không. <a class="nb-chip nb-a" href="javascript:void(0)" onclick="KBA.reload()">↻ Thử lại</a></div>`); }
+  }
+  return {
+    enter, reload: () => enter(true),
+    _f(k, v){ F[k] = v; F.maAll=false; F.runAll=false; render(); },
+    _kh(k, on){ on ? F.kh.add(k) : F.kh.delete(k); render(); },
+    _khAll(on){ F.kh = on ? new Set(CUST.map(x=>x[0])) : new Set(); render(); },
+    _ms(e, v){ if (e) e.stopPropagation(); F.msOpen = v==null ? !F.msOpen : v; const m=$('kb-ms'); if(m){ m.classList.toggle('open',F.msOpen); m.querySelector('.kb-msb').classList.toggle('on',F.msOpen); } },
+    _maQ(v){ F.maQ = v; const R = filtered(); const el = $('kb-ma'); if (el) { el.innerHTML = maTable(codeStats(R).filter(c=>c.ds.size>=2)); const i=$('kb-maq'); if(i){ i.focus(); i.setSelectionRange(v.length, v.length); } } },
+    _maAll(){ F.maAll = !F.maAll; const el=$('kb-ma'); if(el) el.innerHTML = maTable(codeStats(filtered()).filter(c=>c.ds.size>=2)); },
+    _runAll(){ F.runAll = !F.runAll; render(); },
+    _lsQ(v){ F.lsQ = v; F.lsN = 100; renderList(true); },
+    _lsMore(all){ F.lsN = all ? 1e9 : F.lsN + 100; renderList(false); },
+    _ins(o){ F.insOpen = o; },
+    _aiDay(i){ F.aiDay = +i; renderAI(); },
+    _aiOpen(o){ F.aiOpen = o; },
+  };
+})();
+</script>
+<!-- KBA:END JS -->
 </body>
 </html>
