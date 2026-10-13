@@ -1467,7 +1467,8 @@ PEOPLE_SCORE =
 </div>
 
 <!-- ══ ZONE V: TASK TRỄ ══ -->
-<div id="task-tre" class="section-title">V. DANH SÁCH CHI TIẾT 63 TASK TRỄ HẠN – THÁNG 5/2026</div>
+<div id="task-tre" class="section-title">V. DANH SÁCH CHI TIẾT <span id="dlcnLateTitleN">63</span> TASK TRỄ HẠN</div>
+<div id="dlcnLateMtNote" style="display:none;margin:6px 0 8px;padding:7px 12px;background:#EEF4FB;border:1px solid #C9D9EE;border-radius:6px;font-size:12px;color:#1A3A5C"></div>
 <div class="tbl-wrap">
   <div class="filter-bar">
     <input type="text" id="searchInput" placeholder="🔍 Tìm theo tên, dự án, PIC..." oninput="filterTable()">
@@ -2829,6 +2830,80 @@ function gvizFetch(sheetId, tabName, startRow, tqQuery, timeoutMs, endCol) {
     document.head.appendChild(script);
   });
 }
+
+// ── MIỄN TRỪ TRỄ HẠN (anh duyệt 13/10/2026) ─────────────────────
+// Tab MIEN_TRU (Google Sheet 16sk2Pgw…): mỗi dòng = 1 quy tắc. Việc "Hoàn thành sau hạn" khớp quy tắc
+// được TÍNH NHƯ HOÀN THÀNH ĐÚNG HẠN ở mọi nơi (DLCN, Họp tuần), kèm ghi chú miễn trừ. Không sửa dữ liệu gốc.
+// Cột: Mã | Bộ phận (DLCN/TKCB/CNTK/PTCN/TẤT CẢ) | Người phụ trách | Từ ngày | Đến ngày (theo NGÀY KẾT THÚC của việc)
+//      | STT (tuỳ chọn: 414-439, 945) | Nhóm công việc (tuỳ chọn) | Lý do | Người duyệt | Ngày duyệt | Hiệu lực (Có/Không)
+window.MIENTRU = (function(){
+  const SHEET = '16sk2PgwrOMEY1lfNc32KEyvaw2HHyX0EZMmUbnwnO-w', TAB = 'MIEN_TRU';
+  const BP = {data:'dlcn', thietke:'tkcb', spmnpi:'cntk', dev:'ptcn'};
+  const n = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/\s+/g,' ').trim();
+  function pd(v){
+    if (v == null || v === '') return null;
+    if (v instanceof Date) return new Date(v.getFullYear(), v.getMonth(), v.getDate());
+    const s = String(v).trim(); let m;
+    if ((m = /^Date\((\d+),(\d+),(\d+)/.exec(s))) return new Date(+m[1], +m[2], +m[3]);
+    if ((m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s))) return new Date(+m[1], +m[2]-1, +m[3]);
+    if ((m = /^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/.exec(s))) { let y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[2]-1, +m[1]); }
+    return null;
+  }
+  function sttSet(s){            // "414-439, 945" → hàm kiểm tra
+    const parts = String(s||'').split(/[,;\s]+/).filter(Boolean).map(p => { const m = /^(\d+)\s*-\s*(\d+)$/.exec(p); return m ? [+m[1], +m[2]] : [+p, +p]; }).filter(x => !isNaN(x[0]));
+    return parts.length ? (v => { v = parseInt(v, 10); return !isNaN(v) && parts.some(([a,b]) => v >= a && v <= b); }) : null;
+  }
+  let rules = [], err = '', p = null;
+  function load(){
+    if (p) return p;
+    p = (async () => {
+      try {
+        const t = await gvizFetch(SHEET, TAB, null, null, 20000);
+        const L = (t.cols||[]).map(c => n(c.label));
+        const ix = k => L.findIndex(l => l.indexOf(k) === 0);
+        const I = {ma:ix('ma'), bp:ix('bo phan'), pic:ix('nguoi phu trach'), tu:ix('tu ngay'), den:ix('den ngay'), stt:ix('stt'), nhom:ix('nhom cong viec'),
+                   lydo:ix('ly do'), duyet:ix('nguoi duyet'), ngay:ix('ngay duyet'), hl:ix('hieu luc')};
+        // Tab không tồn tại → gviz trả tab đầu tiên: phải đúng tiêu đề mới dùng
+        if (I.pic < 0 || I.ma < 0) throw new Error('chưa có tab MIEN_TRU (hoặc sai tiêu đề)');
+        const g = (r, k) => { const c = I[k] >= 0 ? (r.c||[])[I[k]] : null; return c ? String(c.f != null ? c.f : (c.v != null ? c.v : '')).trim() : ''; };
+        // ô ngày: ưu tiên giá trị gốc Date(y,m,d) — chuỗi hiển thị có thể theo định dạng m/d/y của Sheet
+        const gv = (r, k) => { const c = I[k] >= 0 ? (r.c||[])[I[k]] : null; if (!c) return ''; const v = c.v != null ? String(c.v) : ''; return /^Date\(/.test(v) ? v : g(r, k); };
+        rules = (t.rows||[]).map(r => ({id:g(r,'ma'), bp:n(g(r,'bp')), pic:n(g(r,'pic')), tu:pd(gv(r,'tu')), den:pd(gv(r,'den')), stt:sttSet(g(r,'stt')), nhom:n(g(r,'nhom')),
+                                      lydo:g(r,'lydo'), duyet:g(r,'duyet'), ngay:g(r,'ngay'), hl:n(g(r,'hl')), tuTxt:g(r,'tu'), denTxt:g(r,'den'), picTxt:g(r,'pic')}))
+                      .filter(r => r.id && r.pic && r.hl !== 'khong');
+        console.log('[MIEN_TRU] ' + rules.length + ' quy tắc: ' + rules.map(r => r.id).join(', '));
+      } catch(e) { err = e.message; rules = []; console.warn('[MIEN_TRU] ' + e.message); }
+      return rules;
+    })();
+    return p;
+  }
+  // bpKey: data | thietke | spmnpi | dev ;  o = {pic, kt (ngày kết thúc), nhom, stt}
+  function match(bpKey, o){
+    if (!rules.length) return null;
+    const bp = BP[bpKey] || n(bpKey), pic = n(o.pic), kt = pd(o.kt), nh = n(o.nhom);
+    for (const r of rules) {
+      if (r.bp && r.bp !== 'tat ca' && r.bp !== bp) continue;
+      if (r.pic !== pic) continue;
+      if ((r.tu || r.den) && !kt) continue;
+      if (r.tu && kt < r.tu) continue;
+      if (r.den && kt > r.den) continue;
+      if (r.nhom && nh.indexOf(r.nhom) < 0) continue;
+      if (r.stt && !r.stt(o.stt)) continue;
+      return r;
+    }
+    return null;
+  }
+  // Dòng ghi chú hiển thị: "57 việc được tính đúng hạn theo miễn trừ MT-001 (…, duyệt …)"
+  function note(cnt, used){
+    const rs = Object.values(used||{});
+    if (!cnt || !rs.length) return '';
+    return '🛈 <b>' + cnt + '</b> việc "Hoàn thành sau hạn" được tính là <b>đúng hạn</b> theo miễn trừ đã duyệt: ' +
+      rs.map(r => '<b>' + esc2(r.id) + '</b> – ' + esc2(r.picTxt) + (r.tuTxt||r.denTxt ? ' (hạn ' + esc2(r.tuTxt||'…') + ' – ' + esc2(r.denTxt||'…') + ')' : '') +
+                 (r.duyet ? ', duyệt: ' + esc2(r.duyet) : '') + (r.ngay ? ' ngày ' + esc2(r.ngay) : '') + (r.lydo ? ' · ' + esc2(r.lydo) : '')).join('; ') + '.';
+  }
+  function esc2(s){ return String(s==null?'':s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  return {load, match, note, rules: () => rules, error: () => err};
+})();
 
 // ── BRAVO (KHAI BÁO HỆ THỐNG) — BỘ TẢI DÙNG CHUNG ─────────────────
 // Sheet Bravo ~46k dòng x 25 cột: tải "select *" qua JSONP = khối script ~85 MB, trình duyệt
@@ -6197,7 +6272,10 @@ let _dlcnInitialized = false;
 function initDLCN() {
   if (_dlcnInitialized) return;
   _dlcnInitialized = true;
-  setTimeout(function(){ if (window._syncDLCNAllSections) window._syncDLCNAllSections(window._dlcnLiveData); }, 300);
+  setTimeout(function(){
+    if (window._syncDLCNAllSections) window._syncDLCNAllSections(window._dlcnLiveData);
+    if (window._syncDLCNLateTasks) window._syncDLCNLateTasks();   // mục V: luôn lấy danh sách trễ live (đã trừ miễn trừ)
+  }, 300);
   // Re-init Chart.js font defaults for DLCN charts
   // (Trước đây đặt Chart.defaults.font.family = Times New Roman → đổi font MỌI biểu đồ trong dashboard.
   //  Font của biểu đồ DLCN giờ được đặt riêng bằng plugin bên dưới, chỉ áp cho canvas nằm trong #tab-dlcn.)
@@ -6217,7 +6295,7 @@ function initDLCN() {
 if(window.ChartDataLabels) Chart.register(ChartDataLabels);
 
 // ── Late task data ──
-const lateData = [
+var lateData = [   // var (không const): _syncDLCNLateTasks thay bằng dữ liệu live
   {stt:1,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46593A",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"15/05/26",canh_bao:"Hoàn thành sau hạn"},
   {stt:2,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46595B",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"16/05/26",canh_bao:"Hoàn thành sau hạn"},
   {stt:3,du_an:"Bảo mật Q8 (F976)",nhom:"KB hệ thống khách hàng",uu_tien:"Ưu tiên trọng điểm",noi_dung:"GH69-46595A",pic:"TRẦN THỊ THU HƯƠNG",ngay_kt:"09/05/26",ngay_ht:"16/05/26",canh_bao:"Hoàn thành sau hạn"},
@@ -6251,6 +6329,8 @@ function renderTable(data) {
   document.getElementById('rowCount').textContent = data.length;
 }
 renderTable(lateData);
+// Cho _syncDLCNLateTasks (ở ngoài initDLCN) thay danh sách task trễ bằng dữ liệu live
+window._dlcnSetLate = function(arr){ lateData = arr; renderTable(lateData); };
 function filterTable() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   const proj = document.getElementById('projFilter').value;
@@ -6778,7 +6858,7 @@ function toNum(v){ const x=String(v??'').replace(/\./g,'').replace(',','.').repl
 function _parseDt(s){ const t=String(s||'').trim(); let m; if((m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/))) return new Date(+m[1],+m[2]-1,+m[3]); if((m=t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/))) return new Date(+m[3],+m[2]-1,+m[1]); if((m=t.match(/^Date\((\d+),(\d+),(\d+)\)/))) return new Date(+m[1],+m[2],+m[3]); return null; }
 function _isoWk(d){ const t=new Date(d.getTime()); t.setDate(t.getDate()+3-(t.getDay()+6)%7); const y=t.getFullYear(); const w1=new Date(y,0,4); return y+'-W'+String(1+Math.round(((t-w1)/864e5-3+(w1.getDay()+6)%7)/7)).padStart(2,'0'); }
 function summarizeBravoRows(rows, fallback){ try{ const hi=findHeader(rows,['Ngày tạo mã','Người khai báo','Mã sản phẩm']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean)); const idxEdit=col(h,['Số lần sửa']), idxUser=col(h,['Người khai báo']), idxMonth=col(h,['Tháng khai báo']), idxLine=col(h,['Mã dòng sp/ NVL','Mã dòng']), idxDate=col(h,['Ngày tạo mã','Ngày khai báo']); const valid=data.filter(r=>(r[0]||r[col(h,['Mã sản phẩm'])])); const byUser={}, byMonth={}, byLine={}, by_week_dow={}; let edited=0,total_edits=0,ftr=0; valid.forEach(r=>{ const user=(r[idxUser]||'Không rõ').trim(); const ed=toNum(r[idxEdit]); const _dc=_parseDt(r[idxDate]); const _inF=!!(_dc&&!isNaN(_dc)&&_dc>=BRAVO_FTR_DATE); byUser[user]??={name:user,total:0,qTotal:0,edited:0,total_edits:0}; byUser[user].total++; if(_inF){ ftr++; byUser[user].qTotal++; total_edits+=ed; byUser[user].total_edits+=ed; if(ed>1){ edited++; byUser[user].edited++; } } const m=r[idxMonth]||'Không rõ'; byMonth[m]=(byMonth[m]||0)+1; const line=r[idxLine]||'Không rõ'; byLine[line]=(byLine[line]||0)+1; const dt=_parseDt(r[idxDate]); if(dt&&!isNaN(dt)){ const wk=_isoWk(dt),dw=dt.getDay(); if(!by_week_dow[wk]) by_week_dow[wk]=[0,0,0,0,0,0,0]; by_week_dow[wk][dw]++; } }); Object.values(byUser).forEach(o=>o.edit_rate=o.edited*100/Math.max(1,o.qTotal)); return {...fallback,total:valid.length,ftr_total:ftr,edited,total_edits,edit_rate:edited*100/Math.max(1,ftr),top_creators:Object.values(byUser).sort((a,b)=>b.total-a.total).slice(0,20),quality:Object.values(byUser).filter(o=>o.qTotal>0).map(o=>({...o,total:o.qTotal})).sort((a,b)=>b.edit_rate-a.edit_rate).slice(0,20),by_month:Object.entries(byMonth).map(([label,value])=>({label,value})),top_lines:Object.entries(byLine).sort((a,b)=>b[1]-a[1]).slice(0,20).map(([label,value])=>({label,value})),by_week_dow,weeks_available:Object.keys(by_week_dow).sort()}; }catch(e){ console.warn('Bravo parse failed',e); return fallback; } }
-function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=col(h,['Ngày kết thúc']); const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0; data.forEach(r=>{ const st=norm(r[idxStatus]), al=norm(r[idxAlert]); const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
+function summarizeTaskRows(rows, fallback){ try{ const hi=findHeader(rows,['Dự án','Nhóm công việc','Tình trạng công việc']); const h=rows[hi]; const data=rows.slice(hi+1).filter(r=>r.some(Boolean) && !norm(r.join(' ')).includes('dong mau khong xoa')); const idxProject=col(h,['Dự án']), idxGroup=col(h,['Nhóm công việc']), idxStatus=col(h,['Tình trạng công việc']), idxPic=col(h,['Pic triển khai','PIC']), idxAlert=col(h,['Cảnh báo tiến độ']), idxDue=(c=>c<0?11:c)(col(h,['Ngày kết thúc'])), idxStt=(c=>c<0?0:c)(col(h,['STT']));   /* tiêu đề cột ngày/STT có thể trống → cột L / cột A */ const stats={}, groups={}, pics={}; let completed=0,late=0,ontime=0,early=0,overdue_open=0,mtN=0; const mtUsed={}; data.forEach(r=>{ const st=norm(r[idxStatus]); let al=norm(r[idxAlert]).replace(/đ/g,'d');   /* norm() không đổi đ → 'đúng hạn' không khớp 'dung han' */ if(al.includes('sau han')&&window.MIENTRU){ const mr=MIENTRU.match('data',{pic:r[idxPic],kt:r[idxDue],nhom:r[idxGroup],stt:r[idxStt]}); if(mr){ al='hoan thanh dung han'; mtN++; mtUsed[mr.id]=mr; } } const isDone=st.includes('hoan thanh')||al.includes('hoan thanh'); if(isDone) completed++; if(al.includes('sau han')||al.includes('tre')) late++; else if(al.includes('dung han')) ontime++; else if(al.includes('truoc han')) early++; const pr=r[idxProject]||'Không rõ', gr=r[idxGroup]||'Không rõ', pic=r[idxPic]||'Không rõ'; stats[pr]??={project:pr,total:0,late:0}; stats[pr].total++; if(al.includes('sau han')||al.includes('tre')) stats[pr].late++; groups[gr]??={group:gr,total:0,late:0}; groups[gr].total++; if(al.includes('sau han')||al.includes('tre')) groups[gr].late++; pics[pic]??={name:pic,total:0,late:0}; pics[pic].total++; if(al.includes('sau han')||al.includes('tre')) pics[pic].late++; }); const total=data.length; return {...fallback,total,total_log_rows:total,completed,completion_rate:completed*100/Math.max(1,total),late,ontime,early,overdue_open,ontime_rate:(ontime+early)*100/Math.max(1,total),mien_tru:mtN,mien_tru_note:(window.MIENTRU?MIENTRU.note(mtN,mtUsed):''),project_stats:Object.values(stats).sort((a,b)=>b.late-a.late||b.total-a.total),group_stats:Object.values(groups).sort((a,b)=>b.late-a.late||b.total-a.total),pic_stats:Object.values(pics).sort((a,b)=>b.total-a.total)}; }catch(e){ console.warn('Task parse failed',e); return fallback; } }
 function mergePeople(s){ const m={}; function get(n){ const k=norm(n).toUpperCase(); m[k]??={name:String(n||'Không rõ').trim(),bravo:0,task:0,late:0,edit_rate:0,ecn:0,risk_stock:0,score:95}; return m[k]; } (s.bravo.top_creators||[]).forEach(x=>{const p=get(x.name); p.bravo=x.total||0; p.edit_rate=x.edit_rate||0;}); (s.tasks.pic_stats||[]).forEach(x=>{const p=get(x.name||x.pic); p.task=x.total||0; p.late=x.late||0;}); (s.ecn.people||[]).forEach(x=>{const p=get(x.name); p.ecn=x.ecn||0; p.risk_stock=x.risk||0;}); Object.values(m).forEach(p=>{ const ontime=p.task?Math.max(0,100-p.late*100/p.task):100; const quality=Math.max(0,100-(p.edit_rate||0)); const risk=p.risk_stock>0?30:100; p.score=Math.round(ontime*0.35+quality*0.35+risk*0.20+Math.min(100,(p.bravo+p.task+p.ecn)/20)*0.10); }); return Object.values(m).sort((a,b)=>a.score-b.score); }
 async function fetchCSV(id){ const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&cachebust=${Date.now()}`; const ctrl=new AbortController(); const tim=setTimeout(()=>ctrl.abort(),30000); try{ const r=await fetch(url,{signal:ctrl.signal}); clearTimeout(tim); if(!r.ok) throw new Error('HTTP '+r.status); return parseCSV(await r.text()); }finally{ clearTimeout(tim); } }
 // ── gvizToCSV: convert gvizFetch table → array-of-arrays (CSV format) ──
@@ -6802,7 +6882,7 @@ async function refreshLiveV5(){
   try{ var rows; try{ const _bt=await dlcnBravoTable(); rows=gvizToCSV(_bt); }catch(_fe){ try{ rows=await fetchCSV(LIVE_SOURCES.bravo.id); }catch(_fe2){ rows=await fetchGvizCSV(LIVE_SOURCES.bravo.id); } } live.bravo=summarizeBravoRows(rows,SNAPSHOT.bravo); status.push('Bravo: LIVE '+rows.length+' dòng'); }catch(e){ status.push('Bravo: snapshot ('+e.message+')'); }
   // Fetch cột ngày: bước 1 tìm đúng cột, bước 2 kéo hết cột đó
   try{ const _hdrt=await dlcnBravoTable(); const _hcols=_hdrt.cols||[],_tg=['ngay tao ma','ngay khai bao']; let _dc=null; _hcols.forEach(function(c){ const nl=norm(c.label||c.id||''); if(!_dc&&_tg.some(function(t){ return nl===t||nl.includes(t); })) _dc=c.id; }); if(!_dc) throw new Error('no date col'); const _ci=_hcols.findIndex(function(c){ return c.id===_dc; }); const _dbt={rows:(_hdrt.rows||[]).map(function(r){ return {c:[r.c[_ci]]}; })}; const _wd={}; (_dbt.rows||[]).forEach(function(r){ const cell=r.c&&r.c[0]; if(!cell) return; const dt=bravoCellDate(cell); if(dt&&!isNaN(dt)){ const wk=_isoWk(dt),dw=dt.getDay(); _wd[wk]=_wd[wk]||[0,0,0,0,0,0,0]; _wd[wk][dw]++; } }); if(Object.keys(_wd).length){ live.bravo.by_week_dow=_wd; live.bravo.weeks_available=Object.keys(_wd).sort(); status.push('DOW: '+Object.keys(_wd).length+' tuần'); } }catch(_de){ status.push('DOW: '+_de.message); }
-  try{ var rows2; rows2=await fetchGvizCSV(LIVE_SOURCES.tasks.id,'00_Task_Schedule'); live.tasks=summarizeTaskRows(rows2,SNAPSHOT.tasks); status.push('Task: LIVE '+rows2.length+' dòng'); }catch(e){ status.push('Task: snapshot ('+e.message+')'); }
+  try{ var rows2; rows2=await fetchGvizCSV(LIVE_SOURCES.tasks.id,'00_Task_Schedule'); await MIENTRU.load(); live.tasks=summarizeTaskRows(rows2,SNAPSHOT.tasks); status.push('Task: LIVE '+rows2.length+' dòng'); }catch(e){ status.push('Task: snapshot ('+e.message+')'); }
   try{ const rows=await fetchGvizCSV(LIVE_SOURCES.ecn.id,'Báo cáo theo dõi quản lý ECN V2'); status.push(`ECN: LIVE ${rows.length} dòng (giữ rules snapshot nếu thiếu header)`); }catch(e){ status.push('ECN: dùng snapshot ('+e.message+')'); }
   live.people=mergePeople(live); live.generated_at=new Date().toLocaleString('vi-VN');
   window._dlcnLiveData = live;
@@ -7032,7 +7112,8 @@ window._syncDLCNLateTasks = async function() {
   var statusEl = document.getElementById('dlcnLiveStatus');
   try {
     if (statusEl) statusEl.textContent = 'Dang keo du lieu...';
-    var table = await gvizFetch(TASKS_ID, '00_Task_Schedule', null, 'select * limit 99999');
+    var table = await gvizFetch(TASKS_ID, '00_Task_Schedule', 3, 'select * limit 99999', 60000);   // tiêu đề ở dòng 3
+    await MIENTRU.load(); var mtN = 0, mtUsed = {};
     var hdr = {};
     var ltn=function(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/\s+/g,' ').trim();};
     (table.cols||[]).forEach(function(c,i){ var lb=ltn(c.label||c.id||''); if(lb) hdr[lb]=i; });
@@ -7056,6 +7137,11 @@ window._syncDLCNLateTasks = async function() {
       var isSauHan = cbNorm.indexOf('sau han') > -1 && cbNorm.indexOf('hoan thanh') > -1;
       var isQuaHan = cbNorm.indexOf('qua han') > -1 && cbNorm.indexOf('chua') > -1;
       if (!isSauHan && !isQuaHan) return;
+      // Miễn trừ đã duyệt → coi như hoàn thành đúng hạn: không đưa vào danh sách trễ
+      if (isSauHan) {
+        var mr = MIENTRU.match('data', {pic:getV(row,['pic triển khai']), kt:getV(row,['ngày kết thúc (2)','ngay ket thuc']), nhom:getV(row,['nhóm công việc']), stt:getV(row,['stt'])});
+        if (mr) { mtN++; mtUsed[mr.id] = mr; return; }
+      }
       stt++;
       live.push({
         stt: stt,
@@ -7069,13 +7155,14 @@ window._syncDLCNLateTasks = async function() {
         canh_bao: cbRaw||cb
       });
     });
-    if (live.length > 0 && typeof lateData !== 'undefined') {
-      lateData = live;
-      if (typeof renderTable === 'function') renderTable(lateData);
+    if (window._dlcnSetLate) {   // đọc sheet thành công → luôn dùng dữ liệu live (kể cả 0 việc)
+      window._dlcnSetLate(live);
+      var tN = document.getElementById('dlcnLateTitleN'); if (tN) tN.textContent = live.length;
+      var mtEl = document.getElementById('dlcnLateMtNote'); if (mtEl) { var nt = MIENTRU.note(mtN, mtUsed); mtEl.innerHTML = nt; mtEl.style.display = nt ? '' : 'none'; }
       var cntEl = document.getElementById('rowCount');
-      if (cntEl) cntEl.textContent = lateData.length;
+      if (cntEl) cntEl.textContent = live.length;
       var cntSpan = document.querySelector('.filter-bar span[style*="margin-left:auto"]');
-      if (cntSpan) cntSpan.innerHTML = 'Hien thi: <strong id="rowCount">' + lateData.length + '</strong> / ' + lateData.length + ' task tre (LIVE)';
+      if (cntSpan) cntSpan.innerHTML = 'Hien thi: <strong id="rowCount">' + live.length + '</strong> / ' + live.length + ' task tre (LIVE)';
     }
     if (statusEl) statusEl.textContent = 'LIVE ' + new Date().toLocaleTimeString('vi-VN');
   } catch(e) {
@@ -7391,6 +7478,10 @@ window._syncDLCNAllSections = async function(liveCache) {
 
     console.log('[DLCN Tasks 00_Task_Schedule] content=' + iContent + ' colS=' + iColS + ' colT=' + iColT + ' proj=' + iProj + ' nhaMay=' + iNhaMay + ' iGroup=' + iGroup + ' totalRows=' + taskRows.length);
 
+    await MIENTRU.load();
+    var iDue = findCol(tm, ['ngay ket thuc (2)','ngay ket thuc']); if (iDue < 0) iDue = 11;   // Col L
+    var iStt = findCol(tm, ['stt']); if (iStt < 0) iStt = 0;
+    var mtN = 0, mtUsed = {};
     var taskTotal = 0, taskDone = 0, taskLate = 0, taskOntime = 0;
     var taskBeforeHan = 0, taskDungHan = 0, taskQuaHan = 0;
     var taskWarnGreen = 0, taskWarnYellow = 0, taskWarnLate = 0;
@@ -7417,6 +7508,11 @@ window._syncDLCNAllSections = async function(liveCache) {
       var colSRaw = getByIdx(row, iColS).toLowerCase();
       var colTRaw = getByIdx(row, iColT).toLowerCase();
       var colTNorm = norm(getByIdx(row, iColT));  // normalized: bỏ dấu để so khớp ổn định
+      // Miễn trừ đã duyệt: "Hoàn thành sau hạn" → tính như "Hoàn thành đúng hạn"
+      if (colTNorm.indexOf('sau han') > -1 && colTNorm.indexOf('hoan thanh') > -1) {
+        var mtR = MIENTRU.match('data', {pic:getByIdx(row, iPic), kt:getByIdx(row, iDue), nhom:getByIdx(row, iGroup), stt:getByIdx(row, iStt)});
+        if (mtR) { colTNorm = 'hoan thanh dung han'; mtN++; mtUsed[mtR.id] = mtR; }
+      }
 
       // TỶ LỆ HOÀN THÀNH: Col S = "Kết thúc công việc"
       if (colSRaw.indexOf('kết thúc') > -1 || colSRaw.indexOf('ket thuc') > -1) taskDone++;
@@ -7505,7 +7601,8 @@ window._syncDLCNAllSections = async function(liveCache) {
     setEl('dlcnV-taskOntime',  fmtPct(ontimePct, 1));
     setEl('dlcnS-taskOntime',  fmtVN(taskOntime) + ' đúng/trước hạn / ' + fmtVN(taskTotal));
     setEl('dlcnV-taskLate',    fmtVN(taskLate));
-    setEl('dlcnS-taskLate',    latePct.toFixed(1).replace('.', ',') + '% tổng task | Cột T: Hoàn thành sau hạn');
+    setEl('dlcnS-taskLate',    latePct.toFixed(1).replace('.', ',') + '% tổng task | Cột T: Hoàn thành sau hạn' + (mtN ? ' | đã tính đúng hạn ' + fmtVN(mtN) + ' việc miễn trừ' : ''));
+    window._dlcnMienTru = {n: mtN, note: MIENTRU.note(mtN, mtUsed)};
     setEl('dlcnV-xiTaskLate',  fmtVN(taskLate));
     setEl('dlcnV-warnGreen',   fmtVN(taskWarnGreen));
     setEl('dlcnS-warnGreen',   'Trong ' + fmtVN(taskTotal) + ' công việc');
@@ -8569,8 +8666,8 @@ const HT_COLS_STD = {duan:1,nhom:2,uutien:3,tinhtrang:5,noidung:6,ketqua:7,pic:8
 const HT_BP = {
   thietke: {label:'BP Thiết kế – Chế bản',        id:'1BulsA8W5YR4EIlLmEkbfn3wCI6GnHE2p8hkDWONZxq4', tab:'00_Task_Schedule', hr:3, cols:HT_COLS_STD},
   spmnpi:  {label:'BP CN triển khai & tối ưu SX', id:'1PtSaH6m10bFJRnpc9uIVpNGRgbMl2HneBqxR4lfJQu4', tab:'00_Task_Schedule', hr:3, cols:HT_COLS_STD},
-  data:    {label:'BP Dữ liệu CN & Hệ thống',     id:'1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ', tab:'', hr:3, cols:HT_COLS_STD},
-  dev:     {label:'BP Phát triển CN & Ứng dụng',  id:'1nEx5haJpYZiPAVzEYjL7hV1z_QXTid2keWEccdTy_lY', tab:'', hr:3, cols:HT_COLS_STD},
+  data:    {label:'BP Dữ liệu CN & Hệ thống',     id:'1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ', tab:'00_Task_Schedule', hr:3, cols:HT_COLS_STD},
+  dev:     {label:'BP Phát triển CN & Ứng dụng',  id:'1nEx5haJpYZiPAVzEYjL7hV1z_QXTid2keWEccdTy_lY', tab:'00_Task_Schedule', hr:3, cols:HT_COLS_STD},
 };
 
 // Apps Script Web App — đã bật ghi (action=addWeeklyTask / addDiscussionNote)
@@ -8651,6 +8748,7 @@ async function HT_refresh(){
   const statusEl=document.getElementById('ht-status');
   statusEl.textContent='⏳ Đang tải dữ liệu live từ 4 sheet CV...';
   const keys=Object.keys(HT_BP);
+  await MIENTRU.load();   // quy tắc miễn trừ trễ hạn (tab MIEN_TRU)
   const results=await Promise.allSettled(keys.map(k=>htFetchBP(k)));
   const errs=[];
   results.forEach((r,i)=>{ if(r.status==='fulfilled') HT_STATE.data[keys[i]]=r.value; else errs.push(HT_BP[keys[i]].label+': '+r.reason.message); });
@@ -8687,7 +8785,7 @@ function htRenderKhoiA(){
 }
 
 // ── KHỐI B: Phân tích tổng hợp theo từng Bộ phận ─────────────
-function htAnalyzeBPFull(cfg, rows){
+function htAnalyzeBPFull(cfg, rows, bpKey){
   rows = rows || [];
   const total = rows.length;
   let completed=0, late=0, overdueOpen=0;
@@ -8701,7 +8799,8 @@ function htAnalyzeBPFull(cfg, rows){
     const duan=String(r[cfg.cols.duan]||'').trim() || nhom;
     const pic=String(r[cfg.cols.pic]||'Chưa có PIC').trim() || 'Chưa có PIC';
     const isDone=/hoàn thành/i.test(tinhtrang);
-    const isLate=/sau hạn/i.test(cb_td);
+    let isLate=/sau hạn/i.test(cb_td);
+    if(isLate && window.MIENTRU && MIENTRU.match(bpKey, {pic:r[cfg.cols.pic], kt:r[cfg.cols.ketthuc], nhom:r[cfg.cols.nhom], stt:r[0]})) isLate=false;   // miễn trừ đã duyệt
     const isOverdueOpen=/quá hạn chưa/i.test(cb_td) || (/cảnh báo (vàng|quá hạn)/i.test(cb_cv) && !isDone);
     if(isDone) completed++;
     if(isLate) late++;
@@ -8742,7 +8841,7 @@ function htAnalyzeBPFull(cfg, rows){
 }
 function htRenderKhoiB(){
   const el=document.getElementById('ht-khoib');
-  const summaries = Object.entries(HT_BP).map(([key,cfg])=>htAnalyzeBPFull(cfg, HT_STATE.data[key]||[]));
+  const summaries = Object.entries(HT_BP).map(([key,cfg])=>htAnalyzeBPFull(cfg, HT_STATE.data[key]||[], key));
   el.innerHTML = summaries.map(s=>{
     const ontimeColor = s.ontimeRate>=95?'#1B6B3A':(s.ontimeRate>=85?'#B7791F':'#D93025');
     const projHtml = s.topProjects.length
