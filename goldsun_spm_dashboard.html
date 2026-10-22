@@ -821,6 +821,84 @@ body:has(#tab-noibo.active) > .content{padding:0}
 @media (max-width:1000px){.kb-ai-grid{grid-template-columns:1fr}}
 </style>
 <!-- KBA:END CSS -->
+<!-- BT:BEGIN CSS -->
+<style>
+/* ═══ BẢN TIN ĐIỀU HÀNH BP DLCN — chỉ áp dụng trong #bt-root (tiền tố bt-) ═══ */
+#bt-root{--g1:#1B6B3A;--g2:#2E8B4E;--teal:#0F766E;--gold:#C8952A;--goldd:#9A6F12;--red:#C8372D;--blue:#2563A8;--ink:#1F2421;--sub:#6B6A64;--line:#E6E3DA;--bg:#F6F5F1;
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:13px;line-height:1.5;margin:-14px -14px 16px;padding-bottom:18px}
+#bt-root *{box-sizing:border-box}
+#bt-root .bt-hero{background:linear-gradient(120deg,var(--g1),var(--g2));color:#fff;padding:18px 22px;display:flex;flex-wrap:wrap;gap:10px 24px;align-items:flex-end;justify-content:space-between}
+#bt-root .bt-hero h2{margin:0 0 6px;font-size:22px;font-weight:800;color:#fff}
+#bt-root .bt-hero p{margin:0;max-width:820px;opacity:.95}
+#bt-root .bt-hero p b{color:#FFE8A8}
+#bt-root .bt-srcs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px}
+#bt-root .bt-src{padding:4px 10px;border-radius:999px;font-weight:600;font-size:11.5px}
+#bt-root .bt-src.ok{background:#E3F4E8;color:var(--g1)}
+#bt-root .bt-src.old{background:#FFF1D6;color:#8A5300}
+#bt-root .bt-btn{display:inline-block;padding:4px 11px;border-radius:999px;background:#F5B800;color:#3A2A00;font-weight:700;font-size:11.5px;text-decoration:none}
+#bt-root .bt-wrap{padding:14px 20px 0}
+#bt-root .bt-bar{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin-bottom:6px}
+#bt-root .bt-bar button{font:inherit;font-size:12.5px;font-weight:600;padding:6px 14px;border:1px solid #D6D3CA;border-radius:999px;background:#fff;color:var(--ink);cursor:pointer}
+#bt-root .bt-bar button.on{background:var(--g1);border-color:var(--g1);color:#fff}
+#bt-root .bt-bar input{font:inherit;font-size:12.5px;padding:5px 8px;border:1px solid #D6D3CA;border-radius:8px}
+#bt-root .bt-per{font-size:12px;color:var(--sub);margin-left:6px}
+#bt-root .bt-sh{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin:20px 0 10px}
+#bt-root .bt-sh h3{margin:0;font-size:17px;font-weight:800;color:var(--g1)}
+#bt-root .bt-sh span{font-size:12px;color:var(--sub)}
+#bt-root .bt-acts{display:grid;gap:8px}
+#bt-root .bt-act{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;padding:11px 14px}
+#bt-root .bt-act.warn{border-left-color:var(--red)}#bt-root .bt-act.care{border-left-color:var(--gold)}#bt-root .bt-act.good{border-left-color:var(--g2)}
+#bt-root .bt-lv{flex:0 0 auto;min-width:38px;text-align:center;font-size:11px;font-weight:800;padding:3px 8px;border-radius:6px;background:#E2ECF8;color:var(--blue)}
+#bt-root .bt-lv.warn{background:#FCE4E1;color:var(--red)}#bt-root .bt-lv.care{background:#FDF0D2;color:var(--goldd)}#bt-root .bt-lv.good{background:#DFF3E4;color:var(--g1)}
+#bt-root .bt-aa{color:#4E4D47;font-size:12.5px;margin-top:3px}
+#bt-root .bt-own{display:inline-block;margin-left:6px;font-size:11px;font-weight:700;color:var(--teal);background:#E0F1EF;padding:1px 8px;border-radius:999px}
+#bt-root .bt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}
+#bt-root .bt-kpi{background:#fff;border:1px solid var(--line);border-top:4px solid var(--teal);border-radius:12px;padding:12px 14px}
+#bt-root .bt-kpi.red{border-top-color:var(--red)}#bt-root .bt-kpi.gold{border-top-color:var(--gold)}
+#bt-root .bt-kl{font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#55544E}
+#bt-root .bt-kv{font-size:26px;font-weight:800;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+#bt-root .bt-kv small{font-size:13px;color:var(--sub);font-weight:600}
+#bt-root .bt-kpi.red .bt-kv{color:var(--red)}
+#bt-root .bt-ks{font-size:11.5px;color:var(--sub)}
+#bt-root .bt-dt{font-weight:600}#bt-root .bt-dt.up{color:var(--g1)}#bt-root .bt-dt.down{color:var(--red)}
+#bt-root .bt-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+#bt-root .bt-2.in{gap:16px}
+#bt-root .bt-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:14px;min-width:0}
+#bt-root .bt-2>.bt-card{margin-bottom:0}
+#bt-root .bt-2 + .bt-card,#bt-root .bt-2{margin-bottom:14px}
+#bt-root .bt-ct{font-size:14px;font-weight:700;margin-bottom:10px}
+#bt-root .bt-ct small{font-weight:500;color:var(--sub);font-size:12px}
+#bt-root .bt-ch{position:relative;height:230px;margin-bottom:10px}
+#bt-root .bt-box{border:1px solid #DDD9CE;border-radius:10px;padding:10px 10px 6px;background:#FFFEFC;box-shadow:0 1px 2px rgba(31,36,33,.05)}
+#bt-root .bt-tw{overflow:auto;max-height:360px;border:1px solid #DDD9CE;border-radius:10px;margin-bottom:10px;background:#fff;box-shadow:0 1px 2px rgba(31,36,33,.05)}
+#bt-root .bt-t{width:100%;border-collapse:collapse;font-size:12px}
+#bt-root .bt-t th{position:sticky;top:0;z-index:1;background:#F5F3EE;color:#4A4943;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;text-align:left;padding:8px 10px;white-space:nowrap;border-bottom:1px solid #DDD9CE}
+#bt-root .bt-t th.r{text-align:right}
+#bt-root .bt-t th + th,#bt-root .bt-t td + td{border-left:1px solid #F0EEE7}
+#bt-root .bt-t td{padding:7px 10px;border-top:1px solid #F0EEE7;vertical-align:top;white-space:nowrap}
+#bt-root .bt-t tbody tr:first-child td{border-top:0}
+#bt-root .bt-t tbody tr:nth-child(even) td{background:#FCFBF8}
+#bt-root .bt-t tbody tr:hover td{background:#F3F8F1}
+#bt-root .bt-t td.w{white-space:normal;min-width:180px}
+#bt-root .bt-t td.r{text-align:right;font-variant-numeric:tabular-nums}
+#bt-root .bt-empty{text-align:center;color:var(--sub);padding:14px!important}
+#bt-root .bt-red{color:var(--red);font-weight:700}
+#bt-root .bt-pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:10.5px;font-weight:700}
+#bt-root .bt-pill.r{background:#FCE4E1;color:var(--red)}
+#bt-root .bt-sub,#bt-root .bt-more{font-size:11.5px;color:var(--sub);margin:4px 0 6px}
+#bt-root .bt-dir{margin:0;padding-left:20px;line-height:1.65}
+#bt-root .bt-dir li{margin-bottom:5px}
+#bt-root .bt-foot{font-size:11px;color:#8F8D85;margin-top:6px}
+#bt-root .bt-loading{margin:20px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:32px;text-align:center;color:var(--sub)}
+#bt-root .bt-spin{display:inline-block;width:14px;height:14px;border:2px solid #D6D3CA;border-top-color:var(--g1);border-radius:50%;margin-right:8px;vertical-align:-2px;animation:btspin .8s linear infinite}
+@keyframes btspin{to{transform:rotate(360deg)}}
+#bt-root .bt-err{margin:10px 0;background:#FDF0EF;border:1px solid #F0C9C4;border-radius:10px;padding:10px 14px;color:#5a2a26}
+/* phần cũ của tab: thu gọn thành phụ lục */
+details.bt-legacy{margin:0 0 10px;border:1px dashed #C9C6BC;border-radius:10px;background:#FAFAF7}
+details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color:#55544E;font-size:13px}
+@media (max-width:1000px){#bt-root .bt-2{grid-template-columns:1fr}}
+</style>
+<!-- BT:END CSS -->
 </head>
 <body>
 
@@ -890,6 +968,8 @@ body:has(#tab-noibo.active) > .content{padding:0}
 
 <!-- ══ TDT TAB — Tóm tắt điều hành ══ -->
 <div class="tab-content" id="tab-tdt">
+<div id="bt-root"></div><!-- BT-ROOT -->
+<details class="bt-legacy"><summary>Phụ lục: bản tóm tắt cũ &amp; công cụ kỹ thuật (AI Engine, log, nguồn, quy tắc)</summary>
   <div class="tct-scope" style="max-width:100%;overflow-x:hidden">
 
 <main class="wrap">
@@ -1202,6 +1282,7 @@ PEOPLE_SCORE =
 </div>
 </main>
   </div>
+</details><!-- BT-LEGACY-END -->
 </div>
 
 <!-- ══ DLCN DASHBOARD TAB ══ -->
@@ -7079,6 +7160,7 @@ initEngineUrl();
 // ── initTDT: auto-refresh LIVE khi lần đầu mở BP Dữ liệu ──
 var _tdtLastRefresh = 0;
 function initTDT() {
+  if (window.BT) BT.enter();   // BT-HOOK bản tin điều hành
   if (typeof window.renderV5 === 'function') window.renderV5(window.SNAPSHOT, 'snapshot');
   var _now = Date.now();
   if (_now - _tdtLastRefresh < 60000) return;
@@ -9662,5 +9744,352 @@ window.KBA = (function(){
 })();
 </script>
 <!-- KBA:END JS -->
+<!-- BT:BEGIN JS -->
+<script>
+// ════════════════════════════════════════════════════════════════
+// BẢN TIN ĐIỀU HÀNH — BP DỮ LIỆU CN & HỆ THỐNG (tab "Tóm tắt điều hành")
+// Anh duyệt 22/10/2026: phương án A (nhận định theo quy tắc; AI bổ sung sau),
+//   ECN tồn kho chuẩn = cột "Số lượng tồn kho xác nhận (1)", bảng tải việc thay cho chấm điểm/xếp loại,
+//   kỳ mặc định = Tuần này.
+// Nguồn (đọc trực tiếp, không dùng snapshot): CONGVIEC_NHOM_DATA/00_Task_Schedule (tiêu đề dòng 3),
+//   Bravo (dlcnBravoTable), ECN V2 (tiêu đề dòng 7), X7_ACTION_PLAN, MIEN_TRU (miễn trừ trễ hạn).
+// ════════════════════════════════════════════════════════════════
+window.BT = (function(){
+  const TASK_ID = '1YHHwolm58OTsC27XiHGHfyDtzw88arv5rpWo8Qd46YQ';
+  const ECN_ID  = '1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg';
+  const ECN_TAB = 'Báo cáo theo dõi quản lý ECN V2';
+  // Ngưỡng điều hành (giả định theo tab cũ: mục tiêu ≥ 98%) — đổi ở đây nếu anh chốt khác
+  const TARGET = {ontime: 98, ftr: 98};
+  const FTR_FROM = new Date(2026, 6, 4);       // KPI đúng lần đầu chỉ tính mã tạo từ 04/07/2026 (đã duyệt 12/10/2026)
+  const BULK_PER_DAY = 300;                    // tài khoản tạo ≥ 300 mã trong 1 ngày = nhập hàng loạt, tách khỏi bảng tải việc
+  const STALE_DAYS = 2;                        // nguồn có bản ghi mới nhất cũ hơn 2 ngày → cảnh báo
+  let D = null, loadP = null, charts = {};
+  const F = {ky: 'tuan', tu: '', den: ''};
+
+  // ── tiện ích ────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt = n => n==null||isNaN(n) ? '--' : Math.round(n).toLocaleString('vi-VN');
+  const f1 = n => n==null||isNaN(n) ? '--' : (Math.round(n*10)/10).toLocaleString('vi-VN');
+  const pct = (a,b) => b>0 ? a*100/b : null;
+  const fpct = v => v==null ? '--' : f1(v) + '%';
+  const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/\s+/g,' ').trim();
+  const d0 = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const addD = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+  const dm = d => d ? String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') : '--';
+  const dmy = d => d ? dm(d) + '/' + d.getFullYear() : '--';
+  const ymd = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  const isoWeek = d => { const t = d0(d); t.setDate(t.getDate()+3-((t.getDay()+6)%7)); const w1 = new Date(t.getFullYear(),0,4); return 1+Math.round(((t-w1)/86400000-3+((w1.getDay()+6)%7))/7); };
+  const monday = d => addD(d0(d), -((d.getDay()+6)%7));
+  function pd(v){
+    if (v == null || v === '') return null;
+    if (v instanceof Date) return d0(v);
+    const s = String(v).trim(); let m;
+    if ((m = /^Date\((\d+),(\d+),(\d+)/.exec(s))) return new Date(+m[1], +m[2], +m[3]);
+    if ((m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s))) return new Date(+m[1], +m[2]-1, +m[3]);
+    if ((m = /^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/.exec(s))) { let y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[2]-1, +m[1]); }
+    return null;
+  }
+  const cdate = c => !c ? null : (typeof c.v === 'string' && /^Date\(/.test(c.v) ? pd(c.v) : pd(c.f != null ? c.f : c.v));
+  const ctext = c => !c ? '' : String(c.f != null ? c.f : (c.v != null ? c.v : '')).trim();
+  function cnum(c){
+    if (!c) return 0;
+    if (typeof c.v === 'number') return c.v;
+    let s = String(c.f != null ? c.f : (c.v != null ? c.v : '')).trim().replace(/\s/g,'');
+    if (!s || s.indexOf(':') >= 0) return 0;
+    if (s.indexOf(',') >= 0) s = s.replace(/\./g,'').replace(',','.');
+    const v = parseFloat(s); return isNaN(v) ? 0 : v;
+  }
+  const inR = (d, a, b) => d && d >= a && d <= b;
+
+  // ── kỳ báo cáo ─────────────────────────────────────────────
+  function period(){
+    const t = d0(new Date());
+    let a, b, gran, label;
+    if (F.ky === 'ngay') { a = b = t; gran = 'day'; label = 'Hôm nay ' + dmy(t); }
+    else if (F.ky === 'thang') { a = new Date(t.getFullYear(), t.getMonth(), 1); b = new Date(t.getFullYear(), t.getMonth()+1, 0); gran = 'month'; label = 'Tháng ' + (t.getMonth()+1) + '/' + t.getFullYear(); }
+    else if (F.ky === 'tuy' && F.tu && F.den) { a = pd(F.tu); b = pd(F.den); if (b < a) [a,b] = [b,a]; gran = (b-a)/86400000 > 45 ? 'week' : 'day'; label = dmy(a) + ' – ' + dmy(b); }
+    else { a = monday(t); b = addD(a, 6); gran = 'week'; label = 'Tuần ' + isoWeek(t) + ' (' + dm(a) + ' – ' + dmy(b) + ')'; }
+    const len = Math.round((b-a)/86400000)+1;
+    let pa, pb;
+    if (F.ky === 'thang') { pa = new Date(a.getFullYear(), a.getMonth()-1, 1); pb = new Date(a.getFullYear(), a.getMonth(), 0); }
+    else { pb = addD(a, -1); pa = addD(pb, -(len-1)); }
+    // kỳ chưa kết thúc → so với CÙNG SỐ NGÀY đã qua của kỳ trước (tránh so 4 ngày với 7 ngày)
+    if (b > t) { const el = Math.round((t-a)/86400000); const pe = addD(pa, el); if (pe < pb) pb = pe; }
+    const asof = b < t ? b : t;          // tình trạng "đang mở / quá hạn" tính tại min(cuối kỳ, hôm nay)
+    return {a, b, pa, pb, gran, label, asof, today: t, prevLabel: F.ky==='ngay' ? 'hôm qua' : F.ky==='thang' ? 'tháng trước' : 'kỳ trước'};
+  }
+  // các mốc cho biểu đồ xu hướng (kết thúc ở kỳ đang xem)
+  function buckets(P){
+    const out = [];
+    if (P.gran === 'month' ) { for (let i = 5; i >= 0; i--) { const a = new Date(P.a.getFullYear(), P.a.getMonth()-i, 1); out.push({a, b:new Date(a.getFullYear(), a.getMonth()+1, 0), lb:'T'+(a.getMonth()+1)}); } }
+    else if (P.gran === 'week' && F.ky !== 'tuy') { const m = monday(P.a); for (let i = 7; i >= 0; i--) { const a = addD(m, -7*i); out.push({a, b:addD(a,6), lb:'W'+isoWeek(a)}); } }
+    else if (P.gran === 'week') { let a = monday(P.a); while (a <= P.b) { out.push({a, b:addD(a,6), lb:'W'+isoWeek(a)}); a = addD(a,7); } }
+    else { const n = F.ky === 'tuy' ? Math.round((P.b-P.a)/86400000)+1 : 14; for (let i = n-1; i >= 0; i--) { const a = addD(P.b, -i); out.push({a, b:a, lb:dm(a)}); } }
+    return out;
+  }
+
+  // ── tải & chuẩn hoá dữ liệu ─────────────────────────────────
+  function load(force){
+    if (loadP && !force) return loadP;
+    loadP = (async () => {
+      const [mt, tt, bt, et, x7] = await Promise.allSettled([
+        window.MIENTRU ? MIENTRU.load() : Promise.resolve([]),
+        gvizFetch(TASK_ID, '00_Task_Schedule', 3, 'select * limit 99999', 90000),
+        dlcnBravoTable(force),
+        gvizFetch(ECN_ID, ECN_TAB, 7, 'select * limit 99999', 120000),
+        gvizFetch(ECN_ID, 'X7_ACTION_PLAN', 1, 'select * limit 200', 30000),
+      ]);
+      const err = {};
+      const d = {tasks:[], bravo:[], ecn:[], x7:[], fresh:{}, err};
+      // Công việc
+      if (tt.status === 'fulfilled') {
+        (tt.value.rows||[]).forEach(r => {
+          const c = r.c||[], g = i => ctext(c[i]);
+          if (!g(6)) return;                                          // cột G Nội dung trống = dòng mẫu
+          const T = nz(g(19)), S = nz(g(18)), kt = cdate(c[11]), ht = cdate(c[13]);
+          const done = S.indexOf('ket thuc') >= 0 || !!ht || nz(g(5)).indexOf('hoan thanh') === 0;
+          let late = T.indexOf('sau han') >= 0 && T.indexOf('hoan thanh') >= 0, mt = null;
+          if (late && window.MIENTRU) { mt = MIENTRU.match('data', {pic:g(8), kt:g(11), nhom:g(2), stt:g(0)}); if (mt) late = false; }
+          d.tasks.push({stt:g(0), duan:g(1), nhom:g(2)||'(trống)', nd:g(6), pic:g(8)||'(chưa có PIC)', kt, ht, done, late, mt, T});
+        });
+      } else err.task = tt.reason && tt.reason.message;
+      // Bravo
+      if (bt.status === 'fulfilled') {
+        const cols = bt.value.cols||[], ix = L => cols.findIndex(c => c.id === L);
+        const iB = ix('B'), iD = ix('D'), iE = ix('E'), iG = ix('G'), iI = ix('I');
+        (bt.value.rows||[]).forEach(r => {
+          const c = r.c||[], dt = (typeof bravoCellDate === 'function') ? bravoCellDate(c[iB]) : cdate(c[iB]);
+          if (!dt) return;
+          d.bravo.push({d:d0(dt), sua:cnum(c[iD]), nguoi:ctext(c[iE])||'(trống)', kho:ctext(c[iG])||'(trống)', cd:ctext(c[iI])||'(trống)'});
+        });
+      } else err.bravo = bt.reason && bt.reason.message;
+      // ECN (tồn kho chuẩn = "Số lượng tồn kho xác nhận (1)")
+      if (et.status === 'fulfilled') {
+        const L = (et.value.cols||[]).map(c => nz(c.label));
+        const ix = k => L.findIndex(l => l.indexOf(nz(k)) === 0);
+        const I = {ngay:ix('Ngày ECN'), han:ix('Thời hạn ECN'), so:ix('Số ECN'), ma:ix('Mã vật tư'), code:ix('Tên Code'), kh:ix('Tên khách hàng (Viết tắt)'), kh2:ix('Tên khách hàng (Theo'),
+                   ht:ix('Hình thức ECN'), ton:ix('Số lượng tồn kho xác nhận'), tien:ix('Thành tiền'), gia:ix('Đơn giá'), pa:ix('Phương án xử lý'), tn:ix('Chịu trách nhiệm xử lý'),
+                   nguoi:ix('Người khai báo'), nm:ix('Nhà máy triển khai'), dg:ix('Diễn giải')};
+        if (I.ton < 0 || I.han < 0) err.ecn = 'Không thấy cột tồn kho xác nhận / thời hạn ECN';
+        (et.value.rows||[]).forEach(r => {
+          const c = r.c||[], g = k => I[k] >= 0 ? ctext(c[I[k]]) : '';
+          const ngay = I.ngay >= 0 ? cdate(c[I.ngay]) : null;
+          if (!ngay && !g('ma')) return;
+          const pa = g('pa');
+          d.ecn.push({ngay, han: I.han >= 0 ? cdate(c[I.han]) : null, so:g('so'), ma:g('ma')||g('code'), code:g('code'), kh:g('kh')||g('kh2')||'(trống)', ht:g('ht'),
+                      ton: I.ton >= 0 ? cnum(c[I.ton]) : 0, tien: I.tien >= 0 ? cnum(c[I.tien]) : 0, gia: I.gia >= 0 ? cnum(c[I.gia]) : 0,
+                      pa: (pa && pa.indexOf(':') < 0) ? pa : '', tn:g('tn'), nguoi:g('nguoi')||'(trống)', nm:g('nm'), dg:g('dg')});
+        });
+      } else err.ecn = et.reason && et.reason.message;
+      if (x7.status === 'fulfilled') {
+        const L = (x7.value.cols||[]).map(c => nz(c.label)), ix = k => L.findIndex(l => l.indexOf(nz(k)) === 0);
+        d.x7 = (x7.value.rows||[]).map(r => { const c = r.c||[], g = k => ix(k) >= 0 ? ctext(c[ix(k)]) : '';
+          return {vd:g('Vấn đề'), muc:g('Mức độ'), hd:g('Hành động'), tn:g('Người TN'), ph:g('Phối hợp'), han:g('Thời hạn'), out:g('Kết quả'), gen:g('generated_at')}; }).filter(x => x.vd);
+      }
+      const t = d0(new Date()), mx = a => a.reduce((m, x) => (!m || x > m) ? x : m, null);   // không dùng Math.max(...a): mảng 130k phần tử tràn stack
+      d.fresh = {task: mx(d.tasks.map(x => x.ht).filter(x => x && x <= t)), bravo: mx(d.bravo.map(x => x.d).filter(x => x <= t)), ecn: mx(d.ecn.map(x => x.ngay).filter(x => x && x <= t))};
+      // tài khoản nhập hàng loạt (≥ 300 mã / 1 ngày) — tách khỏi bảng tải việc
+      const perDay = {}; d.bravo.forEach(x => { const k = x.nguoi + '|' + ymd(x.d); perDay[k] = (perDay[k]||0) + 1; });
+      d.bulk = new Set(Object.entries(perDay).filter(([,v]) => v >= BULK_PER_DAY).map(([k]) => k.split('|')[0]));
+      D = d;
+    })();
+    loadP.catch(() => { loadP = null; });
+    return loadP;
+  }
+
+  // ── tính chỉ số cho 1 kỳ ───────────────────────────────────
+  function stats(a, b, asof){
+    const fin = D.tasks.filter(x => inR(x.ht, a, b));
+    const late = fin.filter(x => x.late), mtN = fin.filter(x => x.mt).length;
+    const br = D.bravo.filter(x => inR(x.d, a, b)), brQ = br.filter(x => x.d >= FTR_FROM), ok = brQ.filter(x => x.sua <= 1).length;
+    const en = D.ecn.filter(x => inR(x.ngay, a, b));
+    const so = new Set(en.map(x => x.so).filter(Boolean));
+    const od = D.tasks.filter(x => !x.done && x.kt && x.kt < asof);
+    return {fin:fin.length, late:late.length, ontime:pct(fin.length - late.length, fin.length), mtN, br:br.length, ftr:pct(ok, brQ.length), brQ:brQ.length, ecnRows:en.length, ecnSo:so.size, od:od.length};
+  }
+  function ecnRisk(asof){
+    const ton = D.ecn.filter(x => x.ton > 0);
+    const qh = ton.filter(x => x.han && x.han < asof), soon = ton.filter(x => x.han && x.han >= asof && x.han <= addD(asof, 7));
+    return {ton, qh, soon, ma:new Set(qh.map(x => x.ma)).size, pcs:qh.reduce((s,x) => s + x.ton, 0), tien:qh.reduce((s,x) => s + x.tien, 0),
+            noPa:qh.filter(x => !x.pa).length, noGia:qh.filter(x => !(x.gia > 0) && !(x.tien > 0)).length, noTn:qh.filter(x => !x.tn).length};
+  }
+
+  // ── khối giao diện ─────────────────────────────────────────
+  function delta(now, prev, unit, goodUp){
+    if (now == null || prev == null) return '';
+    const dlt = now - prev;
+    if (Math.abs(dlt) < 0.05) return '<span class="bt-dt">= ' + esc(P_.prevLabel) + '</span>';
+    const good = goodUp == null ? '' : ((dlt > 0) === goodUp ? 'up' : 'down');
+    return '<span class="bt-dt ' + good + '">' + (dlt > 0 ? '▲ ' : '▼ ') + f1(Math.abs(dlt)) + (unit||'') + ' so với ' + esc(P_.prevLabel) + '</span>';
+  }
+  const kpi = (label, val, sub, tone) => `<div class="bt-kpi ${tone||''}"><div class="bt-kl">${label}</div><div class="bt-kv">${val}</div><div class="bt-ks">${sub||''}</div></div>`;
+  const card = (title, inner, extra) => `<div class="bt-card"><div class="bt-ct"><span>${title}</span>${extra||''}</div>${inner}</div>`;
+  function table(head, rows, empty, max){
+    const show = max ? rows.slice(0, max) : rows;
+    // tiêu đề canh theo cột: cột số (td.r) → tiêu đề canh phải; lấy theo dòng đầu tiên
+    const first = show[0] || '', al = [...first.matchAll(/<td([^>]*)>/g)].map(m => /class="([^"]* )?r( [^"]*)?"/.test(m[1]) ? 'r' : '');
+    return `<div class="bt-tw"><table class="bt-t"><thead><tr>${head.map((h, i) => `<th class="${al[i]||''}">${h}</th>`).join('')}</tr></thead><tbody>${
+      show.length ? show.join('') : `<tr><td colspan="${head.length}" class="bt-empty">${empty||'Không có dữ liệu'}</td></tr>`}</tbody></table></div>` +
+      (max && rows.length > max ? `<div class="bt-more">Hiện ${max}/${fmt(rows.length)} dòng — xem đủ ở tab <a href="javascript:void(0)" onclick="BT._goDlcn()">Dashboard DLCN &amp; HT</a>.</div>` : '');
+  }
+  const pill = (t, tone) => `<span class="bt-pill ${tone}">${esc(t)}</span>`;
+  function chart(id, cfg){
+    if (charts[id]) { charts[id].destroy(); delete charts[id]; }
+    const cv = $(id); if (!cv || !window.Chart) return;
+    const font = {family:'Inter, system-ui, sans-serif', size:11};
+    cfg.options = Object.assign({responsive:true, maintainAspectRatio:false}, cfg.options||{});
+    cfg.options.plugins = Object.assign({legend:{position:'bottom', labels:{font, boxWidth:12, usePointStyle:true}}, tooltip:{titleFont:font, bodyFont:font}}, cfg.options.plugins||{});
+    Object.values(cfg.options.scales||{}).forEach(s => { s.ticks = Object.assign({font, color:'#6B6A64'}, s.ticks||{}); s.grid = Object.assign({color:'#EFEDE6'}, s.grid||{}); s.border = {display:false}; });
+    if (window.ChartDataLabels) {
+      cfg.plugins = [ChartDataLabels];
+      cfg.options.plugins.datalabels = {display: c => { const v = c.dataset.data[c.dataIndex]; return v != null && v !== 0; }, anchor:'end', align:'top', offset:1,
+        font:{family:'Inter, sans-serif', size:10, weight:'600'}, color: c => c.dataset.type === 'line' ? '#8A5F0B' : '#33332F',
+        formatter: (v, c) => (c.dataset.unit === '%' ? f1(v) + '%' : fmt(v))};
+      cfg.options.layout = {padding:{top:18}};
+    }
+    charts[id] = new Chart(cv, cfg);
+  }
+  const C = {green:'#2E8B4E', teal:'#0F766E', gold:'#C8952A', red:'#C8372D', orange:'#D97706', light:'#BFD8C6'};
+
+  // ── vẽ ─────────────────────────────────────────────────────
+  let P_ = null;
+  function render(){
+    const root = $('bt-root'); if (!root) return;
+    const P = P_ = period(), S = stats(P.a, P.b, P.asof), SP = stats(P.pa, P.pb, P.pb), R = ecnRisk(P.today);
+    const t = P.today, stale = d => !d || (t - d)/86400000 > STALE_DAYS;
+    const fr = (lb, d) => `<span class="bt-src ${stale(d)?'old':'ok'}">${lb} ${d ? dm(d) : '—'}${stale(d)?' ⚠':''}</span>`;
+    const errs = Object.entries(D.err||{}).filter(([,v]) => v);
+
+    // ① cần quyết / xử lý (quy tắc)
+    const act = [];
+    const topQh = R.qh.slice().sort((a,b) => b.ton - a.ton);
+    if (R.qh.length) act.push({lv:'P0', t:`<b>${fmt(R.qh.length)}</b> dòng ECN (<b>${fmt(R.ma)}</b> mã) đã quá hạn nhưng còn tồn kho xác nhận — <b>${fmt(R.pcs)}</b> pcs; ${fmt(R.noPa)} dòng chưa có phương án, ${fmt(R.noTn)} dòng chưa có người chịu trách nhiệm.`,
+      a:`Giao đầu mối và chốt phương án (dùng tiếp / đổi version / hủy / thương lượng KH) cho 5 mã lớn nhất: ${topQh.slice(0,5).map(x => esc(x.ma) + ' ' + fmt(x.ton)).join(', ')}.`, o:'GĐ CN + Trưởng BP DLCN'});
+    const od = D.tasks.filter(x => !x.done && x.kt && x.kt < P.asof);
+    if (od.length) act.push({lv:'P0', t:`<b>${od.length}</b> việc quá hạn chưa hoàn thành.`, a:'Người phụ trách báo mốc mới trong ngày; quá 7 ngày đưa vào họp tuần.', o:'Trưởng BP DLCN'});
+    if (R.soon.length) act.push({lv:'P1', t:`<b>${R.soon.length}</b> dòng ECN đến hạn trong 7 ngày tới vẫn còn tồn (${fmt(R.soon.reduce((s,x)=>s+x.ton,0))} pcs).`, a:'Lập kế hoạch tiêu tồn trước ngày hết hạn ECN.', o:'BP DLCN + Kế hoạch'});
+    if (S.ftr != null && S.brQ >= 20 && S.ftr < TARGET.ftr) act.push({lv:'P1', t:`Khai báo Bravo đúng lần đầu <b>${fpct(S.ftr)}</b> trong kỳ, dưới mục tiêu ${TARGET.ftr}%.`, a:'Rà các mã sửa > 1 lần theo người/kho ở mục 3.2, hướng dẫn lại theo lỗi lặp.', o:'Data owner'});
+    if (S.ontime != null && S.fin >= 10 && S.ontime < TARGET.ontime) act.push({lv:'P1', t:`Đúng hạn công việc <b>${fpct(S.ontime)}</b>, dưới mục tiêu ${TARGET.ontime}%.`, a:'Phân loại nguyên nhân trễ: khách quan (khách hàng, hệ thống) hay nội bộ; khách quan đã duyệt thì ghi vào tab MIEN_TRU.', o:'Trưởng BP DLCN'});
+    const staleSrc = [['công việc', D.fresh.task], ['Bravo', D.fresh.bravo], ['ECN', D.fresh.ecn]].filter(([,d]) => stale(d));
+    if (staleSrc.length) act.push({lv:'P1', t:`Nguồn chậm cập nhật: ${staleSrc.map(([n,d]) => n + ' (đến ' + (d?dm(d):'—') + ')').join(', ')}.`, a:'Chạy đồng bộ (CHAY_DONG_BO_BRAVO.bat / dong_bo_ecn_v2.bat) hoặc nhắc người nhập liệu.', o:'BP DLCN'});
+    if (R.noGia) act.push({lv:'P2', t:`<b>${fmt(R.noGia)}</b> dòng ECN quá hạn còn tồn chưa có đơn giá/thành tiền → chưa lượng hoá được rủi ro tài chính (mới ghi nhận ${fmt(R.tien)} đ).`, a:'Bổ sung đơn giá cho các mã tồn lớn.', o:'BP DLCN + Kế toán'});
+    if (SP.fin >= 20 && S.fin < SP.fin*0.7 && F.ky !== 'ngay' && P.b <= t) act.push({lv:'P2', t:`Khối lượng việc hoàn thành giảm ${fpct(100 - pct(S.fin, SP.fin))} so với ${P.prevLabel} (${fmt(SP.fin)} → ${fmt(S.fin)}).`, a:'Kiểm tra: khối lượng giảm thật hay chưa cập nhật nhật ký công việc.', o:'Trưởng BP DLCN'});
+    const LVT = {P0:'warn', P1:'care', P2:'info'};
+
+    // ③ dữ liệu cho các chuyên đề
+    const fin = D.tasks.filter(x => inR(x.ht, P.a, P.b));
+    const grp = {}; fin.forEach(x => { const g = grp[x.nhom] || (grp[x.nhom] = {n:0, late:0, mt:0}); g.n++; if (x.late) g.late++; if (x.mt) g.mt++; });
+    const dueSoon = D.tasks.filter(x => !x.done && x.kt && x.kt >= P.asof && x.kt <= addD(P.asof, 7));
+    const br = D.bravo.filter(x => inR(x.d, P.a, P.b));
+    const brBy = (k) => { const m = {}; br.forEach(x => { if (D.bulk.has(x.nguoi) && k === 'nguoi') return; const key = x[k]; const o = m[key] || (m[key] = {n:0, q:0, bad:0}); o.n++; if (x.d >= FTR_FROM) { o.q++; if (x.sua > 1) o.bad++; } }); return Object.entries(m); };
+    const brP = brBy('nguoi').sort((a,b) => b[1].n - a[1].n), brK = brBy('kho').filter(([,o]) => o.bad).sort((a,b) => b[1].bad - a[1].bad), brC = brBy('cd').filter(([,o]) => o.bad).sort((a,b) => b[1].bad - a[1].bad);
+    const bulkN = br.filter(x => D.bulk.has(x.nguoi)).length;
+    const en = D.ecn.filter(x => inR(x.ngay, P.a, P.b));
+    const khQ = {}; R.qh.forEach(x => { const o = khQ[x.kh] || (khQ[x.kh] = {n:0, ma:new Set(), pcs:0}); o.n++; o.ma.add(x.ma); o.pcs += x.ton; });
+    // tải việc theo người (kỳ) — không chấm điểm, không xếp loại
+    const ppl = {}, key = s => nz(s).toUpperCase();
+    const P0 = s => { const k = key(s); return ppl[k] || (ppl[k] = {ten:String(s).toUpperCase(), task:0, late:0, od:0, br:0, brq:0, bad:0, ecn:0}); };
+    fin.forEach(x => { if (x.pic === '(chưa có PIC)') return; const o = P0(x.pic); o.task++; if (x.late) o.late++; });
+    od.forEach(x => { if (x.pic !== '(chưa có PIC)') P0(x.pic).od++; });
+    br.forEach(x => { if (D.bulk.has(x.nguoi) || x.nguoi === '(trống)') return; const o = P0(x.nguoi); o.br++; if (x.d >= FTR_FROM) { o.brq++; if (x.sua > 1) o.bad++; } });
+    en.forEach(x => { if (x.nguoi !== '(trống)') P0(x.nguoi).ecn++; });
+    const pplRows = Object.values(ppl).filter(o => o.task || o.br || o.ecn || o.od).sort((a,b) => (b.task + b.br + b.ecn) - (a.task + a.br + a.ecn));
+
+    // ④ định hướng
+    const dir = [];
+    if (R.qh.length) dir.push(`<b>Rủi ro tồn kho ECN</b> là ưu tiên số 1: lập sổ phương án cho ${fmt(R.ma)} mã quá hạn còn tồn, bắt đầu từ nhóm khách hàng ${Object.entries(khQ).sort((a,b)=>b[1].pcs-a[1].pcs).slice(0,2).map(([k,o]) => esc(k) + ' (' + fmt(o.pcs) + ' pcs)').join(', ')}; bắt buộc ghi "Chịu trách nhiệm xử lý" khi ECN có tồn.`);
+    if (R.noGia) dir.push('<b>Lượng hoá rủi ro:</b> bổ sung đơn giá để dashboard tính được giá trị tồn ECN (hiện đa số dòng chưa có thành tiền).');
+    if (brK.length || brC.length) dir.push(`<b>Chất lượng khai báo:</b> tập trung vào ${brK.slice(0,2).map(([k,o]) => 'kho ' + esc(k) + ' (' + o.bad + ' mã sửa > 1)').join(', ')}${brC.length ? '; công đoạn ' + brC.slice(0,2).map(([k,o]) => esc(k) + ' (' + o.bad + ')').join(', ') : ''} — chuẩn hoá biểu mẫu/checklist cho lỗi lặp.`);
+    if (staleSrc.length) dir.push('<b>Kỷ luật dữ liệu:</b> chốt lịch đồng bộ Bravo/ECN hằng ngày (hoặc đặt lịch tự động như mục Nội bộ/KBA) để bản tin luôn phản ánh đúng hôm nay.');
+    if (dueSoon.length) dir.push(`<b>Tuần tới:</b> ${dueSoon.length} việc đến hạn trong 7 ngày — kiểm soát tiến độ từ đầu tuần.`);
+    dir.push('<b>Bước tiếp theo của dashboard:</b> nhận xét AI hằng ngày theo 4 vai (GĐ Công nghệ, Trưởng phòng CN, GĐ điều hành, chuyên gia dữ liệu) — giai đoạn B đã duyệt.');
+
+    const tabs = [['ngay','Hôm nay'],['tuan','Tuần này'],['thang','Tháng này'],['tuy','Chọn kỳ']];
+    root.innerHTML = `
+    <div class="bt-hero"><div><h2>Bản tin điều hành · BP Dữ liệu CN &amp; Hệ thống</h2>
+      <p>Tổng hợp trực tiếp từ công việc hằng ngày, khai báo Bravo và ECN — <b>${esc(P.label)}</b>. Việc cần quyết ở mục ①; chi tiết từng chuyên đề ở mục ③.</p></div>
+      <div class="bt-srcs">Dữ liệu mới nhất: ${fr('Công việc', D.fresh.task)} ${fr('Bravo', D.fresh.bravo)} ${fr('ECN', D.fresh.ecn)}
+      <a class="bt-btn" href="javascript:void(0)" onclick="BT.reload()">↻ Tải lại</a></div></div>
+    <div class="bt-wrap">
+      <div class="bt-bar">${tabs.map(([k,l]) => `<button class="${F.ky===k?'on':''}" onclick="BT._ky('${k}')">${l}</button>`).join('')}
+        ${F.ky==='tuy' ? `<input type="date" value="${esc(F.tu)}" onchange="BT._tu(this.value)"> → <input type="date" value="${esc(F.den)}" onchange="BT._den(this.value)">` : ''}
+        <span class="bt-per">Đang xem: <b>${esc(P.label)}</b> · so sánh với ${esc(P.prevLabel)} (${dm(P.pa)} – ${dm(P.pb)})</span></div>
+      ${errs.length ? `<div class="bt-err">Không tải được: ${errs.map(([k,v]) => esc(k) + ' (' + esc(v) + ')').join('; ')}</div>` : ''}
+
+      <div class="bt-sh"><h3>① Cần anh quyết / xử lý</h3><span>tự sinh theo quy tắc · P0 xử lý trong 24h, P1 trong tuần, P2 theo dõi</span></div>
+      <div class="bt-acts">${act.length ? act.map(x => `<div class="bt-act ${LVT[x.lv]}"><span class="bt-lv ${LVT[x.lv]}">${x.lv}</span><div><div>${x.t}</div><div class="bt-aa">→ ${x.a} <span class="bt-own">${esc(x.o)}</span></div></div></div>`).join('') : '<div class="bt-act good"><span class="bt-lv good">OK</span><div>Không có việc cần can thiệp theo các quy tắc hiện tại.</div></div>'}</div>
+
+      <div class="bt-sh"><h3>② Chỉ số kỳ</h3><span>so sánh với ${esc(P.prevLabel)}</span></div>
+      <div class="bt-grid">
+        ${kpi('Việc hoàn thành', fmt(S.fin), delta(S.fin, SP.fin, '', true))}
+        ${kpi('Đúng hạn', fpct(S.ontime), (S.mtN ? 'gồm ' + S.mtN + ' việc miễn trừ · ' : '') + delta(S.ontime, SP.ontime, ' điểm', true), S.ontime != null && S.ontime < TARGET.ontime ? 'red' : '')}
+        ${kpi('Việc quá hạn đang mở', fmt(S.od), 'tại ' + dm(P.asof), S.od ? 'red' : '')}
+        ${kpi('Mã Bravo mới', fmt(S.br), delta(S.br, SP.br, '', null))}
+        ${kpi('Đúng lần đầu (Bravo)', fpct(S.ftr), 'mã tạo từ 04/07/2026, sửa ≤ 1 · ' + delta(S.ftr, SP.ftr, ' điểm', true), S.ftr != null && S.ftr < TARGET.ftr ? 'gold' : '')}
+        ${kpi('ECN mới', fmt(S.ecnSo) + ' <small>số ECN</small>', fmt(S.ecnRows) + ' dòng mã · ' + delta(S.ecnRows, SP.ecnRows, ' dòng', null))}
+        ${kpi('ECN quá hạn còn tồn', fmt(R.ma) + ' <small>mã</small>', fmt(R.qh.length) + ' dòng · ' + fmt(R.pcs) + ' pcs (tại hôm nay)', R.qh.length ? 'red' : '')}
+      </div>
+
+      <div class="bt-sh"><h3>③ Chuyên đề</h3></div>
+      <div class="bt-2">
+        ${card('3.1 Công việc & tiến độ', `<div class="bt-ch bt-box"><canvas id="bt-c-task"></canvas></div>` +
+          table(['Nhóm công việc', 'Hoàn thành', 'Sau hạn', 'Miễn trừ'], Object.entries(grp).sort((a,b)=>b[1].n-a[1].n).map(([k,o]) => `<tr><td>${esc(k)}</td><td class="r">${fmt(o.n)}</td><td class="r ${o.late?'bt-red':''}">${fmt(o.late)}</td><td class="r">${o.mt?fmt(o.mt):''}</td></tr>`), 'Không có việc hoàn thành trong kỳ', 8) +
+          `<div class="bt-sub">Việc đến hạn 7 ngày tới chưa xong: <b>${dueSoon.length}</b>${od.length ? ' · Quá hạn đang mở: <b class="bt-red">' + od.length + '</b>' : ''}</div>` +
+          (od.length ? table(['Hạn', 'Nội dung', 'PIC'], od.sort((a,b)=>a.kt-b.kt).map(x => `<tr><td>${dmy(x.kt)}</td><td class="w">${esc(x.nd.slice(0,90))}</td><td>${esc(x.pic)}</td></tr>`), '', 6) : ''))}
+        ${card('3.2 Chất lượng khai báo hệ thống (Bravo)', `<div class="bt-ch bt-box"><canvas id="bt-c-br"></canvas></div>` +
+          table(['Kho', 'Mã sửa > 1 lần', '% trong kho'], brK.map(([k,o]) => `<tr><td>${esc(k)}</td><td class="r bt-red">${fmt(o.bad)}</td><td class="r">${fpct(pct(o.bad,o.q))}</td></tr>`), 'Không có mã sửa > 1 lần trong kỳ', 5) +
+          table(['Công đoạn', 'Mã sửa > 1 lần', '% trong công đoạn'], brC.map(([k,o]) => `<tr><td>${esc(k)}</td><td class="r bt-red">${fmt(o.bad)}</td><td class="r">${fpct(pct(o.bad,o.q))}</td></tr>`), 'Không có mã sửa > 1 lần trong kỳ', 5) +
+          (bulkN ? `<div class="bt-sub">${fmt(bulkN)} mã của tài khoản nhập hàng loạt (${[...D.bulk].map(esc).join(', ')}) không tính vào bảng theo người.</div>` : ''))}
+      </div>
+      ${card('3.3 ECN & rủi ro tồn kho', `<div class="bt-2 in"><div><div class="bt-ch bt-box"><canvas id="bt-c-ecn"></canvas></div>
+          <div class="bt-sub">Đang có tồn kho xác nhận: <b>${fmt(R.ton.length)}</b> dòng · quá hạn còn tồn: <b class="bt-red">${fmt(R.qh.length)}</b> dòng / ${fmt(R.ma)} mã / ${fmt(R.pcs)} pcs · chưa phương án ${fmt(R.noPa)} · chưa người chịu TN ${fmt(R.noTn)} · đến hạn 7 ngày ${fmt(R.soon.length)}</div>
+          ${table(['Khách hàng', 'Dòng quá hạn còn tồn', 'Mã', 'Tồn (pcs)'], Object.entries(khQ).sort((a,b)=>b[1].pcs-a[1].pcs).map(([k,o]) => `<tr><td>${esc(k)}</td><td class="r">${fmt(o.n)}</td><td class="r">${fmt(o.ma.size)}</td><td class="r">${fmt(o.pcs)}</td></tr>`), 'Không có', 6)}</div>
+          <div>${table(['Mã vật tư', 'Khách hàng', 'Hết hạn ECN', 'Tồn (pcs)', 'Phương án', 'Chịu TN'], topQh.map(x => `<tr><td><b>${esc(x.ma)}</b></td><td>${esc(x.kh)}</td><td>${dmy(x.han)}</td><td class="r bt-red">${fmt(x.ton)}</td><td>${x.pa ? esc(x.pa.slice(0,40)) : pill('chưa có','r')}</td><td>${x.tn ? esc(x.tn) : pill('chưa có','r')}</td></tr>`), 'Không có ECN quá hạn còn tồn', 10)}
+          ${D.x7.length ? `<div class="bt-sub" style="margin-top:10px"><b>Kế hoạch hành động ECN (Apps Script, ${esc(D.x7[0].gen)})</b></div>` + table(['Vấn đề', 'Mức', 'Hành động', 'Người TN'], D.x7.map(x => `<tr><td class="w">${esc(x.vd)}</td><td>${esc(x.muc)}</td><td class="w">${esc(x.hd.slice(0,140))}</td><td>${esc(x.tn)}</td></tr>`), '', 5) : ''}</div></div>`)}
+      ${card('3.4 Tải việc & hỗ trợ theo người <small>(kỳ đang xem · không chấm điểm, không xếp loại)</small>',
+          table(['Người', 'Việc hoàn thành', 'Sau hạn', 'Quá hạn đang mở', 'Mã Bravo tạo', '% mã sửa > 1', 'Dòng ECN khai báo'], pplRows.map(o => `<tr><td>${esc(o.ten)}</td><td class="r">${fmt(o.task)}</td><td class="r ${o.late?'bt-red':''}">${o.late?fmt(o.late):''}</td><td class="r ${o.od?'bt-red':''}">${o.od?fmt(o.od):''}</td><td class="r">${o.br?fmt(o.br):''}</td><td class="r ${pct(o.bad,o.brq)>=20&&o.brq>=20?'bt-red':''}">${o.brq?fpct(pct(o.bad,o.brq)):''}</td><td class="r">${o.ecn?fmt(o.ecn):''}</td></tr>`), 'Không có hoạt động trong kỳ') +
+          '<div class="bt-sub">Dùng để cân đối tải và hỗ trợ kịp thời. Tỷ lệ sửa chỉ tô đỏ khi ≥ 20% và người đó có ≥ 20 mã trong kỳ.</div>')}
+
+      <div class="bt-sh"><h3>④ Định hướng tiếp theo</h3><span>đề xuất từ số liệu kỳ đang xem — cần anh xác nhận</span></div>
+      <div class="bt-card"><ol class="bt-dir">${dir.map(x => `<li>${x}</li>`).join('')}</ol></div>
+      <div class="bt-foot">Quy tắc: việc hoàn thành theo "Ngày hoàn thành thực tế"; đúng hạn = cột T trước/đúng hạn (việc miễn trừ tính đúng hạn); quá hạn = chưa xong và hạn trước ${dm(P.asof)}; đúng lần đầu = mã tạo từ 04/07/2026 có số lần sửa ≤ 1; ECN tồn = "Số lượng tồn kho xác nhận (1)"; mục tiêu đúng hạn / đúng lần đầu ${TARGET.ontime}% (giả định). Bản cũ và công cụ kỹ thuật ở mục Phụ lục bên dưới.</div>
+    </div>`;
+    drawCharts(P);
+  }
+
+  function drawCharts(P){
+    const B = buckets(P), lab = B.map(x => x.lb);
+    const fin = B.map(x => D.tasks.filter(t => inR(t.ht, x.a, x.b)));
+    chart('bt-c-task', {type:'bar', data:{labels:lab, datasets:[
+      {label:'Việc hoàn thành', data:fin.map(a => a.length), backgroundColor:C.green, borderRadius:4, yAxisID:'y'},
+      {type:'line', label:'Đúng hạn %', unit:'%', data:fin.map(a => a.length ? Math.round(pct(a.length - a.filter(t => t.late).length, a.length)*10)/10 : null), borderColor:C.gold, backgroundColor:C.gold, yAxisID:'y2', tension:.3, spanGaps:true}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grace:'10%'}, y2:{position:'right', min:0, max:110, grid:{display:false}, ticks:{callback:v => v <= 100 ? v + '%' : ''}}}}});
+    const br = B.map(x => D.bravo.filter(t => inR(t.d, x.a, x.b)));
+    chart('bt-c-br', {type:'bar', data:{labels:lab, datasets:[
+      {label:'Mã Bravo mới', data:br.map(a => a.length), backgroundColor:C.teal, borderRadius:4, yAxisID:'y'},
+      {type:'line', label:'Đúng lần đầu %', unit:'%', data:br.map(a => { const q = a.filter(t => t.d >= FTR_FROM); return q.length ? Math.round(pct(q.filter(t => t.sua <= 1).length, q.length)*10)/10 : null; }), borderColor:C.gold, backgroundColor:C.gold, yAxisID:'y2', tension:.3, spanGaps:true}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grace:'10%'}, y2:{position:'right', min:0, max:110, grid:{display:false}, ticks:{callback:v => v <= 100 ? v + '%' : ''}}}}});
+    chart('bt-c-ecn', {type:'bar', data:{labels:lab, datasets:[
+      {label:'Dòng ECN mới', data:B.map(x => D.ecn.filter(t => inR(t.ngay, x.a, x.b)).length), backgroundColor:C.teal, borderRadius:4},
+      {label:'Hết hạn ECN mà vẫn còn tồn (dòng)', data:B.map(x => D.ecn.filter(t => t.ton > 0 && inR(t.han, x.a, x.b) && t.han < P.today).length), backgroundColor:C.red, borderRadius:4}]},
+      options:{scales:{x:{grid:{display:false}}, y:{beginAtZero:true, grace:'10%'}}}});
+  }
+
+  async function enter(force){
+    const root = $('bt-root'); if (!root) return;
+    if (!D || force) root.innerHTML = '<div class="bt-loading"><span class="bt-spin"></span>Đang tổng hợp bản tin từ công việc, Bravo và ECN (lần đầu khoảng 20–40 giây)…</div>';
+    try { await load(force); render(); }
+    catch(e) { root.innerHTML = `<div class="bt-err">Không tạo được bản tin: ${esc(e.message)} <a class="bt-btn" href="javascript:void(0)" onclick="BT.reload()">↻ Thử lại</a></div>`; }
+  }
+  return {
+    enter, reload: () => enter(true),
+    _ky(k){ F.ky = k; if (k === 'tuy' && !F.tu) { const t = d0(new Date()); F.tu = ymd(addD(t, -29)); F.den = ymd(t); } if (D) render(); },
+    _tu(v){ F.tu = v; if (D) render(); }, _den(v){ F.den = v; if (D) render(); },
+    _goDlcn(){ const b = document.querySelector('.l2-btn[data-sub="tab-dlcn"]'); if (b) b.click(); },
+  };
+})();
+</script>
+<!-- BT:END JS -->
 </body>
 </html>
