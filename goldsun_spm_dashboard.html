@@ -946,9 +946,10 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #ecns-root .ecns-k small{font-size:11.5px;color:var(--sub);font-weight:500}
 #ecns-root .ecns-tw{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(31,36,33,.05)}
 #ecns-root .ecns-t{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
-#ecns-root .ecns-t th{position:sticky;top:0;z-index:2;background:#F5F3EE;color:#4A4943;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;text-align:left;padding:8px 10px;white-space:nowrap;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
+#ecns-root .ecns-t th{position:sticky;top:0;z-index:2;background:#0F766E;color:#fff;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;text-align:left;padding:8px 10px;white-space:nowrap;border-bottom:1px solid #0B5F58;cursor:pointer;user-select:none}
 #ecns-root .ecns-t th.r{text-align:right}
-#ecns-root .ecns-t th.on{color:var(--teal);background:#EAF3F1}
+#ecns-root .ecns-t th.on{color:#FFE58A;background:#0B5F58}
+#ecns-root .ecns-t th + th{border-left:1px solid rgba(255,255,255,.18)}
 #ecns-root .ecns-t th + th,#ecns-root .ecns-t td + td{border-left:1px solid #F0EEE7}
 #ecns-root .ecns-t td{padding:6px 10px;border-top:1px solid #F0EEE7;vertical-align:top;white-space:nowrap;background:#fff}
 #ecns-root .ecns-t th:first-child,#ecns-root .ecns-t td:first-child{position:sticky;left:0;z-index:1;border-right:1px solid var(--line)}
@@ -977,8 +978,26 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #ecnx-flt .ecnx-bar button{font:inherit;font-size:12px;font-weight:600;padding:4px 12px;border:1px solid #D9B84A;border-radius:8px;background:#fff;color:#4A3B00;cursor:pointer}
 #ecnx-flt .ecnx-bar button:hover{background:#FFF1C2}
 #ecnx-flt .ecnx-bar small{flex-basis:100%;color:#7A6A2E;font-size:11.5px}
+/* Tiêu đề cột mọi bảng trong mục X (anh yêu cầu 24/10/2026): nền teal đậm + chữ trắng, tách rõ khỏi nội dung — chỉ trong #ecn */
+#ecn table:not(.ecns-t) th{background:#0F766E!important;color:#fff!important;border-bottom:2px solid #0B5F58}   /* !important: bảng X.7 gốc gắn màu nhạt trực tiếp trên th */
+#ecn table:not(.ecns-t) th + th{border-left:1px solid rgba(255,255,255,.18)}
+/* X.6: mã vật tư liền một dòng */
+#ecnRiskTable th:nth-child(2),#ecnRiskTable td:nth-child(2){white-space:nowrap;min-width:120px}
 </style>
 <!-- ECNS:END CSS -->
+<!-- DLV:BEGIN CSS -->
+<style>
+/* ═══ DLCN LIVE — chỉ các phần tử tiền tố dlv- (bảng VII #dlvNsTable, mục VIII, nhãn "đã nghỉ") ═══ */
+#dlvNsTable th.dlv-r,#dlvNsTable td.dlv-r{text-align:right;font-variant-numeric:tabular-nums}
+#dlvNsTable .dlv-sub{font-size:10.5px;color:#8a6d1f;margin-top:2px}
+.dlv-note{font-size:11.5px;color:#566573;margin:6px 2px 10px;line-height:1.5}
+.dlv-err{color:#c0392b;font-weight:600}
+.dlv-off{display:inline-block;margin-left:4px;padding:0 6px;border-radius:999px;background:#EEE;color:#6B6A64;font-size:10px;font-weight:600;vertical-align:1px;white-space:nowrap}
+.dlv-tag{display:inline-block;margin-left:4px;padding:0 6px;border-radius:999px;background:#E2ECF8;color:#2563A8;font-size:10px;font-weight:600;white-space:nowrap}
+.dlv-lv{display:inline-block;min-width:24px;text-align:center;padding:0 5px;border-radius:5px;font-size:10px;font-weight:800;vertical-align:1px}
+.dlv-P0{background:#FCE4E1;color:#C8372D}.dlv-P1{background:#FDF0D2;color:#9A6F12}.dlv-P2{background:#E2ECF8;color:#2563A8}
+</style>
+<!-- DLV:END CSS -->
 </head>
 <body>
 
@@ -1696,7 +1715,7 @@ PEOPLE_SCORE =
   </div>
   <div class="alert-box">
     <div class="alert-title">🏢 TỔ CHỨC BỘ PHẬN & NHÂN SỰ QV1</div>
-    <table style="width:100%;font-size:12px">
+    <table id="dlvNsTable" style="width:100%;font-size:12px">
       <tr><th>Vị trí</th><th>Tên nhân viên</th><th>Nhóm công việc chính</th></tr>
       <tr><td>Trưởng bộ phận</td><td>TRẦN THỊ THU HƯƠNG</td><td>Quản trị BOM SX, routing, audit data</td></tr>
       <tr><td>NV KB Hệ thống ERP</td><td>NGUYỄN NGỌC PHÚ</td><td>Khai báo ERP – 280 task T5 | 1.978 mã T10/25-T5/26</td></tr>
@@ -1714,11 +1733,12 @@ PEOPLE_SCORE =
 
 <!-- ══ ZONE VIII: HÀNH ĐỘNG ══ -->
 <div id="hanh-dong" class="section-title">VIII. KẾ HOẠCH HÀNH ĐỘNG – GĐ CÔNG NGHỆ CẦN XỬ LÝ</div>
+<div id="dlvViiiNote" class="dlv-note"></div>
 <div class="tbl-wrap">
   <div class="tbl-scroll">
     <table>
       <thead><tr><th>#</th><th>Vấn đề</th><th>Mức độ</th><th>Hành động cần thực hiện</th><th>Người chịu TN</th><th>Thời hạn</th><th>Kết quả đầu ra</th></tr></thead>
-      <tbody>
+      <tbody id="dlvViiiBody">
         <tr><td>1</td><td>KPI đúng hạn 94,1% – chưa đạt 98%</td><td><span class="badge badge-red">🔴 Cao</span></td><td>RCA nhóm KB KH: nguyên nhân gốc (quá tải, hệ thống KH delay, thiếu quy trình nhận request?)</td><td>Trưởng BP DLCN + GĐ CN</td><td>30/05/26</td><td>Báo cáo RCA + Giải pháp</td></tr>
         <tr><td>2</td><td>TRẦN THỊ THU HƯƠNG: 100% task trễ</td><td><span class="badge badge-red">🔴 Cao</span></td><td>1:1 với NV; phân bổ lại hoặc hỗ trợ kỹ thuật</td><td>Trưởng BP DLCN</td><td>T22 (27–31/05)</td><td>Kế hoạch phân công lại</td></tr>
         <tr style="background:#fff8f8"><td>3</td><td><strong style="color:#8e24aa">🔴 ECN: 1.492 pcs SSA-MLR-00154 chưa có phương án</strong></td><td><span class="badge badge-red">🔴 KHẨN</span></td><td>HÀ VIỆT ANH báo cáo phương án xử lý tồn kho: tiêu hủy, tái sử dụng hay thương lượng với Samsung</td><td>HÀ VIỆT ANH + GĐ CN</td><td><strong>Trước 07/06/26</strong></td><td>Quyết định xử lý tồn kho + cập nhật dữ liệu ECN</td></tr>
@@ -1841,7 +1861,7 @@ PEOPLE_SCORE =
   <span>91+ bản ghi | Q1/2026 | GS1 (Hà Nội) + GS5 (Quế Võ 1) | Nguồn: ECN_TRACKING</span>
 </div>
 <div id="ecns-root"></div><!-- ECNS-ROOT tra cứu ECN -->
-<div class="notice-box notice-red">
+<div class="notice-box notice-red" id="ecnxAlert">
   <strong style="color:#c0392b">🚨 CẢNH BÁO TỒN KHO:</strong>
   Phát hiện <strong>1 mã ECN có tồn kho thực tế 1.492 pcs chưa có phương án xử lý</strong>:
   SSA-MLR-00154 (GH90-70262H) – Model MANUAL-L500 – GS5 Quế Võ 1 – ECN ban hành 09/01/2026 – Hạn dừng đã qua 23/02/2026.
@@ -1859,7 +1879,7 @@ PEOPLE_SCORE =
         <div class="kpi-label">TỔNG ECN XỬ LÝ</div>
         <div class="kpi-value" id="dlcnV-ecnTotal2" style="font-size:22px">91+</div>
         <div class="kpi-sub" id="dlcnS-ecnTotal2">Q1/2026 | 2 nhà máy | 3 PIC</div>
-        <span class="kpi-target target-ok">Cập nhật 100% đúng hạn</span>
+        <span class="kpi-target target-ok" id="ecnxB-new">Cập nhật 100% đúng hạn</span>
       </div>
       <div class="kpi-card red" style="padding:12px 14px;border-top-color:#8e24aa">
         <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
@@ -1935,7 +1955,7 @@ PEOPLE_SCORE =
         <tr><td>SM-A176 (GH69-45658A)</td><td>—</td><td>Cải tiến khuôn – Add "N" sau GS (Ms Huynh)</td><td><span class="pill pill-drain">SX hết tồn</span></td><td>28/02/26</td><td style="color:#1a7a3e">0 pcs ✅</td></tr>
       </tbody>
     </table>
-    <div style="padding:8px 14px"><p class="footnote">🔍 PIC: HÀ VIỆT ANH (GS5 QV1) – Nguồn ECN: Samsung SEV (Mr Toản, Ms Thuần) + SEVT (Mr Tiệp). Hàng loạt upversion 1.0/1.1/1.2→2.5 trong tháng 1–3/2026.</p></div>
+    <div style="padding:8px 14px"><p class="footnote" id="ecnxFn-sam">🔍 PIC: HÀ VIỆT ANH (GS5 QV1) – Nguồn ECN: Samsung SEV (Mr Toản, Ms Thuần) + SEVT (Mr Tiệp). Hàng loạt upversion 1.0/1.1/1.2→2.5 trong tháng 1–3/2026.</p></div>
   </div>
   <div class="tbl-wrap">
     <div class="tbl-header tbl-hdr-teal"><span id="ecnX3T2Hdr">🏭 ECN Canon + Khách hàng khác – GS1 Hà Nội | ~23 ECN</span></div>
@@ -1953,7 +1973,7 @@ PEOPLE_SCORE =
         <tr><td>TIN-BSB-03755</td><td>ANZ Hansefloor</td><td>Đổi tên vật tư, kích thước</td><td><span class="pill pill-unused">Không SD</span></td><td>07/01/26</td><td style="color:#1a7a3e">0 ✅</td></tr>
       </tbody>
     </table>
-    <div style="padding:8px 14px"><p class="footnote">🔍 PIC: NGUYỄN THỊ KHA (GS1 HN) + PHAN THANH HẢI (GS1). Canon: Đổi hàng loạt keo bồi/phủ và mực in trong T1/2026.</p></div>
+    <div style="padding:8px 14px"><p class="footnote" id="ecnxFn-can">🔍 PIC: NGUYỄN THỊ KHA (GS1 HN) + PHAN THANH HẢI (GS1). Canon: Đổi hàng loạt keo bồi/phủ và mực in trong T1/2026.</p></div>
   </div>
 </div>
 
@@ -2193,7 +2213,7 @@ PEOPLE_SCORE =
   </div>
 </div>
 <div class="alert-box" style="margin-top:10px;border-left:4px solid #2980b9">
-  <div class="alert-title" style="color:#1a5276">📊 CHỈ SỐ TỔNG QUAN NHÓM – THÁNG 5/2026</div>
+  <div class="alert-title" style="color:#1a5276" id="dlvXiTitle">📊 CHỈ SỐ TỔNG QUAN NHÓM – THÁNG 5/2026</div>
   <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;text-align:center">
     <div style="padding:10px;background:#eafaf1;border-radius:6px"><div id="dlcnV-xiNvActive" style="font-size:18px;font-weight:bold;color:#1a7a3e">9</div><div style="font-size:10px;color:#566573">NV hoạt động</div></div>
     <div style="padding:10px;background:#eaf2fb;border-radius:6px"><div id="dlcnV-xiTaskDone" style="font-size:18px;font-weight:bold;color:#1a5276">1.066</div><div style="font-size:10px;color:#566573">Task hoàn thành</div></div>
@@ -8038,6 +8058,47 @@ window._syncDLCNAllSections = async function(liveCache) {
       if (!etK.length) updChart('cEcnType', [], [{data: []}]);
       if (!Object.keys(ecnKHMap).length) updChart('cEcnKH', [], [{data: []}]);
       if (!Object.keys(ecnNMMap).length) { updChart('cEcnNM', [], [{data: []}]); setEl('dlcnV-cEcnNMTotal', '0'); }
+      // ── Hộp cảnh báo đầu mục X (thay số tĩnh 1.492 pcs tháng 01) — cùng quy tắc Bản tin / X.0: quá hạn còn tồn = tồn xác nhận > 0 và Thời hạn ECN trước hôm nay
+      var xd = function(c) { var m = /^Date\((\d+),(\d+),(\d+)/.exec(String(c && c.v)); return m ? new Date(+m[1], +m[2], +m[3]) : null; };
+      var xdm = function(d) { return d ? String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear() : '—'; };
+      var xesc = function(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); };
+      var t0 = new Date(); t0.setHours(0,0,0,0);
+      var d30 = new Date(t0.getTime() - 30*86400000), d90 = new Date(t0.getTime() - 90*86400000);
+      var qhN = 0, qhPcs = 0, qhNoPa = 0, qhMa = {}, qhTop = null, so30 = {}, fn = {sam: {kb: {}, ng: {}, n: 0}, can: {kb: {}, ng: {}, n: 0}};
+      ecnRows.forEach(function(row) {
+        var c = row.c || [], q = cellNum(c[iEcnQ]), han = xd(c[iEcnN]), ngay = xd(c[18]);
+        if (q > 0 && han && han < t0) {
+          qhN++; qhPcs += q; if (!cellVal(c[25])) qhNoPa++; qhMa[cellVal(c[iEcnE])] = 1;
+          if (!qhTop || q > qhTop.q) qhTop = {q: q, ma: cellVal(c[iEcnE]), model: cellVal(c[iEcnB]) || cellVal(c[2]), nm: cellVal(c[iEcnNM]), kh: cellVal(c[iEcnAE]), ngay: ngay, han: han, pa: cellVal(c[25])};
+        }
+        if (ngay && ngay >= d30) { var so = cellVal(c[iEcnAB]); if (so) so30[so] = 1; }
+        if (ngay && ngay >= d90) {     // ghi chú X.3: ai khai báo, nguồn cấp nào — 90 ngày gần nhất, cùng cách chia nhóm bảng X.3
+          var ae2 = norm(cellVal(c[iEcnAE])); if (!ae2) ae2 = norm(cellVal(c[iEcnKH >= 0 ? iEcnKH : 30]));
+          var g = ae2.indexOf('sev') >= 0 ? fn.sam : norm(cellVal(c[iEcnNM >= 0 ? iEcnNM : 20])).indexOf('gs1') >= 0 ? fn.can : null;
+          if (g) { g.n++; var kb = cellVal(c[iEcnT]).trim(), ng = cellVal(c[11]).trim();
+            if (kb) g.kb[kb] = (g.kb[kb]||0) + 1; if (ng) g.ng[ng] = (g.ng[ng]||0) + 1; }
+        }
+      });
+      var al = document.getElementById('ecnxAlert');
+      if (al) {
+        var nMa = Object.keys(qhMa).length;
+        al.className = 'notice-box ' + (qhN ? 'notice-red' : 'notice-teal');
+        al.innerHTML = qhN
+          ? '<strong style="color:#c0392b">🚨 CẢNH BÁO TỒN KHO (live ' + xdm(t0) + '):</strong> <strong>' + fmtVN(qhN) + ' dòng / ' + fmtVN(nMa) + ' mã ECN đã quá hạn nhưng còn tồn kho xác nhận — tổng ' + fmtVN(qhPcs) + ' pcs</strong>; ' +
+            fmtVN(qhNoPa) + ' dòng chưa có phương án xử lý.<br>Lớn nhất: <b>' + xesc(qhTop.ma) + '</b>' + (qhTop.model ? ' (' + xesc(qhTop.model) + ')' : '') + ' – ' + xesc(qhTop.kh || '—') + ' – ' + xesc(qhTop.nm || '—') +
+            ' – ECN ' + xdm(qhTop.ngay) + ' – hạn ' + xdm(qhTop.han) + ' – <b>' + fmtVN(qhTop.q) + ' pcs</b>' + (qhTop.pa ? ' – phương án: ' + xesc(qhTop.pa) : ' – <b style="color:#c0392b">chưa có phương án</b>') + '. Danh sách đầy đủ: bảng X.6 hoặc X.0 (Tình trạng: Quá hạn còn tồn).'
+          : '<strong style="color:#0e6655">✅ TỒN KHO ECN (live ' + xdm(t0) + '):</strong> không có dòng ECN nào quá hạn mà còn tồn kho xác nhận.';
+      }
+      var top = function(m, k) { return Object.keys(m).sort(function(a,b){ return m[b]-m[a]; }).slice(0, k); };
+      [['sam', 'ecnxFn-sam'], ['can', 'ecnxFn-can']].forEach(function(x) {
+        var g = fn[x[0]], el = document.getElementById(x[1]); if (!el) return;
+        el.innerHTML = g.n
+          ? '🔍 90 ngày gần nhất: <b>' + fmtVN(g.n) + '</b> dòng ECN · Người khai báo: ' + top(g.kb, 3).map(function(k){ return xesc(k) + ' (' + fmtVN(g.kb[k]) + ')'; }).join(', ') +
+            (Object.keys(g.ng).length ? ' · Nguồn cấp chính: ' + top(g.ng, 3).map(xesc).join(', ') : '')
+          : '🔍 Không có dòng ECN mới trong 90 ngày gần nhất.';
+      });
+      var bNew = document.getElementById('ecnxB-new');
+      if (bNew) bNew.textContent = fmtVN(Object.keys(so30).length) + ' ECN mới / 30 ngày';
     // ECNX-PRE:END
     if (Object.keys(ecnTypeMap).length > 0) {
       var etL = Object.keys(ecnTypeMap).sort(function(a,b){ return ecnTypeMap[b]-ecnTypeMap[a]; });
@@ -9964,21 +10025,22 @@ window.BT = (function(){
   const inR = (d, a, b) => d && d >= a && d <= b;
 
   // ── kỳ báo cáo ─────────────────────────────────────────────
-  function period(){
+  function period(ky){
+    ky = ky || F.ky;
     const t = d0(new Date());
     let a, b, gran, label;
-    if (F.ky === 'ngay') { a = b = t; gran = 'day'; label = 'Hôm nay ' + dmy(t); }
-    else if (F.ky === 'thang') { a = new Date(t.getFullYear(), t.getMonth(), 1); b = new Date(t.getFullYear(), t.getMonth()+1, 0); gran = 'month'; label = 'Tháng ' + (t.getMonth()+1) + '/' + t.getFullYear(); }
-    else if (F.ky === 'tuy' && F.tu && F.den) { a = pd(F.tu); b = pd(F.den); if (b < a) [a,b] = [b,a]; gran = (b-a)/86400000 > 45 ? 'week' : 'day'; label = dmy(a) + ' – ' + dmy(b); }
+    if (ky === 'ngay') { a = b = t; gran = 'day'; label = 'Hôm nay ' + dmy(t); }
+    else if (ky === 'thang') { a = new Date(t.getFullYear(), t.getMonth(), 1); b = new Date(t.getFullYear(), t.getMonth()+1, 0); gran = 'month'; label = 'Tháng ' + (t.getMonth()+1) + '/' + t.getFullYear(); }
+    else if (ky === 'tuy' && F.tu && F.den) { a = pd(F.tu); b = pd(F.den); if (b < a) [a,b] = [b,a]; gran = (b-a)/86400000 > 45 ? 'week' : 'day'; label = dmy(a) + ' – ' + dmy(b); }
     else { a = monday(t); b = addD(a, 6); gran = 'week'; label = 'Tuần ' + isoWeek(t) + ' (' + dm(a) + ' – ' + dmy(b) + ')'; }
     const len = Math.round((b-a)/86400000)+1;
     let pa, pb;
-    if (F.ky === 'thang') { pa = new Date(a.getFullYear(), a.getMonth()-1, 1); pb = new Date(a.getFullYear(), a.getMonth(), 0); }
+    if (ky === 'thang') { pa = new Date(a.getFullYear(), a.getMonth()-1, 1); pb = new Date(a.getFullYear(), a.getMonth(), 0); }
     else { pb = addD(a, -1); pa = addD(pb, -(len-1)); }
     // kỳ chưa kết thúc → so với CÙNG SỐ NGÀY đã qua của kỳ trước (tránh so 4 ngày với 7 ngày)
     if (b > t) { const el = Math.round((t-a)/86400000); const pe = addD(pa, el); if (pe < pb) pb = pe; }
     const asof = b < t ? b : t;          // tình trạng "đang mở / quá hạn" tính tại min(cuối kỳ, hôm nay)
-    return {a, b, pa, pb, gran, label, asof, today: t, prevLabel: F.ky==='ngay' ? 'hôm qua' : F.ky==='thang' ? 'tháng trước' : 'kỳ trước'};
+    return {a, b, pa, pb, gran, label, asof, today: t, ky, prevLabel: ky==='ngay' ? 'hôm qua' : ky==='thang' ? 'tháng trước' : 'kỳ trước'};
   }
   // các mốc cho biểu đồ xu hướng (kết thúc ở kỳ đang xem)
   function buckets(P){
@@ -10076,6 +10138,26 @@ window.BT = (function(){
             noPa:qh.filter(x => !x.pa).length, noGia:qh.filter(x => !(x.gia > 0) && !(x.tien > 0)).length, noTn:qh.filter(x => !x.tn).length};
   }
 
+  // ── ① cần quyết / xử lý (quy tắc) — dùng chung: bản tin + mục VIII tab DLCN (BT.weekActions) ──
+  // mỗi việc: lv (P0 xử lý 24h / P1 trong tuần / P2 theo dõi), t vấn đề, a hành động, o người chịu TN (vai trò), out kết quả đầu ra
+  function actions(P, S, SP, R){
+    const t = P.today, stale = d => !d || (t - d)/86400000 > STALE_DAYS;
+    const act = [];
+    const topQh = R.qh.slice().sort((a,b) => b.ton - a.ton);
+    if (R.qh.length) act.push({lv:'P0', t:`<b>${fmt(R.qh.length)}</b> dòng ECN (<b>${fmt(R.ma)}</b> mã) đã quá hạn nhưng còn tồn kho xác nhận — <b>${fmt(R.pcs)}</b> pcs; ${fmt(R.noPa)} dòng chưa có phương án, ${fmt(R.noTn)} dòng chưa có người chịu trách nhiệm.`,
+      a:`Giao đầu mối và chốt phương án (dùng tiếp / đổi version / hủy / thương lượng KH) cho 5 mã lớn nhất: ${topQh.slice(0,5).map(x => esc(x.ma) + ' ' + fmt(x.ton)).join(', ')}.`, o:'GĐ CN + Trưởng BP DLCN', out:'Phương án được duyệt cho 5 mã lớn nhất; cột "Phương án xử lý" cập nhật'});
+    const od = D.tasks.filter(x => !x.done && x.kt && x.kt < P.asof);
+    if (od.length) act.push({lv:'P0', t:`<b>${od.length}</b> việc quá hạn chưa hoàn thành.`, a:'Người phụ trách báo mốc mới trong ngày; quá 7 ngày đưa vào họp tuần.', o:'Trưởng BP DLCN', out:'Mốc hoàn thành mới cho từng việc'});
+    if (R.soon.length) act.push({lv:'P1', t:`<b>${R.soon.length}</b> dòng ECN đến hạn trong 7 ngày tới vẫn còn tồn (${fmt(R.soon.reduce((s,x)=>s+x.ton,0))} pcs).`, a:'Lập kế hoạch tiêu tồn trước ngày hết hạn ECN.', o:'BP DLCN + Kế hoạch', out:'Không phát sinh ECN quá hạn mới'});
+    if (S.ftr != null && S.brQ >= 20 && S.ftr < TARGET.ftr) act.push({lv:'P1', t:`Khai báo Bravo đúng lần đầu <b>${fpct(S.ftr)}</b> trong kỳ, dưới mục tiêu ${TARGET.ftr}%.`, a:'Rà các mã sửa > 1 lần theo người/kho ở mục 3.2, hướng dẫn lại theo lỗi lặp.', o:'Data owner', out:'Đúng lần đầu đạt mục tiêu kỳ sau'});
+    if (S.ontime != null && S.fin >= 10 && S.ontime < TARGET.ontime) act.push({lv:'P1', t:`Đúng hạn công việc <b>${fpct(S.ontime)}</b>, dưới mục tiêu ${TARGET.ontime}%.`, a:'Phân loại nguyên nhân trễ: khách quan (khách hàng, hệ thống) hay nội bộ; khách quan đã duyệt thì ghi vào tab MIEN_TRU.', o:'Trưởng BP DLCN', out:'Đúng hạn đạt mục tiêu; miễn trừ ghi đủ'});
+    const staleSrc = [['công việc', D.fresh.task], ['Bravo', D.fresh.bravo], ['ECN', D.fresh.ecn]].filter(([,d]) => stale(d));
+    if (staleSrc.length) act.push({lv:'P1', t:`Nguồn chậm cập nhật: ${staleSrc.map(([n,d]) => n + ' (đến ' + (d?dm(d):'—') + ')').join(', ')}.`, a:'Chạy đồng bộ (CHAY_DONG_BO_BRAVO.bat / dong_bo_ecn_v2.bat) hoặc nhắc người nhập liệu.', o:'BP DLCN', out:'Nguồn cập nhật đến hôm qua'});
+    if (R.noGia) act.push({lv:'P2', t:`<b>${fmt(R.noGia)}</b> dòng ECN quá hạn còn tồn chưa có đơn giá/thành tiền → chưa lượng hoá được rủi ro tài chính (mới ghi nhận ${fmt(R.tien)} đ).`, a:'Bổ sung đơn giá cho các mã tồn lớn.', o:'BP DLCN + Kế toán', out:'Giá trị tồn ECN lượng hoá được'});
+    if (SP.fin >= 20 && S.fin < SP.fin*0.7 && P.ky !== 'ngay' && P.b <= t) act.push({lv:'P2', t:`Khối lượng việc hoàn thành giảm ${fpct(100 - pct(S.fin, SP.fin))} so với ${P.prevLabel} (${fmt(SP.fin)} → ${fmt(S.fin)}).`, a:'Kiểm tra: khối lượng giảm thật hay chưa cập nhật nhật ký công việc.', o:'Trưởng BP DLCN', out:'Xác nhận nguyên nhân giảm'});
+    return act;
+  }
+
   // ── khối giao diện ─────────────────────────────────────────
   function delta(now, prev, unit, goodUp){
     if (now == null || prev == null) return '';
@@ -10122,20 +10204,9 @@ window.BT = (function(){
     const fr = (lb, d) => `<span class="bt-src ${stale(d)?'old':'ok'}">${lb} ${d ? dm(d) : '—'}${stale(d)?' ⚠':''}</span>`;
     const errs = Object.entries(D.err||{}).filter(([,v]) => v);
 
-    // ① cần quyết / xử lý (quy tắc)
-    const act = [];
-    const topQh = R.qh.slice().sort((a,b) => b.ton - a.ton);
-    if (R.qh.length) act.push({lv:'P0', t:`<b>${fmt(R.qh.length)}</b> dòng ECN (<b>${fmt(R.ma)}</b> mã) đã quá hạn nhưng còn tồn kho xác nhận — <b>${fmt(R.pcs)}</b> pcs; ${fmt(R.noPa)} dòng chưa có phương án, ${fmt(R.noTn)} dòng chưa có người chịu trách nhiệm.`,
-      a:`Giao đầu mối và chốt phương án (dùng tiếp / đổi version / hủy / thương lượng KH) cho 5 mã lớn nhất: ${topQh.slice(0,5).map(x => esc(x.ma) + ' ' + fmt(x.ton)).join(', ')}.`, o:'GĐ CN + Trưởng BP DLCN'});
-    const od = D.tasks.filter(x => !x.done && x.kt && x.kt < P.asof);
-    if (od.length) act.push({lv:'P0', t:`<b>${od.length}</b> việc quá hạn chưa hoàn thành.`, a:'Người phụ trách báo mốc mới trong ngày; quá 7 ngày đưa vào họp tuần.', o:'Trưởng BP DLCN'});
-    if (R.soon.length) act.push({lv:'P1', t:`<b>${R.soon.length}</b> dòng ECN đến hạn trong 7 ngày tới vẫn còn tồn (${fmt(R.soon.reduce((s,x)=>s+x.ton,0))} pcs).`, a:'Lập kế hoạch tiêu tồn trước ngày hết hạn ECN.', o:'BP DLCN + Kế hoạch'});
-    if (S.ftr != null && S.brQ >= 20 && S.ftr < TARGET.ftr) act.push({lv:'P1', t:`Khai báo Bravo đúng lần đầu <b>${fpct(S.ftr)}</b> trong kỳ, dưới mục tiêu ${TARGET.ftr}%.`, a:'Rà các mã sửa > 1 lần theo người/kho ở mục 3.2, hướng dẫn lại theo lỗi lặp.', o:'Data owner'});
-    if (S.ontime != null && S.fin >= 10 && S.ontime < TARGET.ontime) act.push({lv:'P1', t:`Đúng hạn công việc <b>${fpct(S.ontime)}</b>, dưới mục tiêu ${TARGET.ontime}%.`, a:'Phân loại nguyên nhân trễ: khách quan (khách hàng, hệ thống) hay nội bộ; khách quan đã duyệt thì ghi vào tab MIEN_TRU.', o:'Trưởng BP DLCN'});
+    const act = actions(P, S, SP, R);
     const staleSrc = [['công việc', D.fresh.task], ['Bravo', D.fresh.bravo], ['ECN', D.fresh.ecn]].filter(([,d]) => stale(d));
-    if (staleSrc.length) act.push({lv:'P1', t:`Nguồn chậm cập nhật: ${staleSrc.map(([n,d]) => n + ' (đến ' + (d?dm(d):'—') + ')').join(', ')}.`, a:'Chạy đồng bộ (CHAY_DONG_BO_BRAVO.bat / dong_bo_ecn_v2.bat) hoặc nhắc người nhập liệu.', o:'BP DLCN'});
-    if (R.noGia) act.push({lv:'P2', t:`<b>${fmt(R.noGia)}</b> dòng ECN quá hạn còn tồn chưa có đơn giá/thành tiền → chưa lượng hoá được rủi ro tài chính (mới ghi nhận ${fmt(R.tien)} đ).`, a:'Bổ sung đơn giá cho các mã tồn lớn.', o:'BP DLCN + Kế toán'});
-    if (SP.fin >= 20 && S.fin < SP.fin*0.7 && F.ky !== 'ngay' && P.b <= t) act.push({lv:'P2', t:`Khối lượng việc hoàn thành giảm ${fpct(100 - pct(S.fin, SP.fin))} so với ${P.prevLabel} (${fmt(SP.fin)} → ${fmt(S.fin)}).`, a:'Kiểm tra: khối lượng giảm thật hay chưa cập nhật nhật ký công việc.', o:'Trưởng BP DLCN'});
+    const topQh = R.qh.slice().sort((a,b) => b.ton - a.ton), od = D.tasks.filter(x => !x.done && x.kt && x.kt < P.asof);
     const LVT = {P0:'warn', P1:'care', P2:'info'};
 
     // ③ dữ liệu cho các chuyên đề
@@ -10248,6 +10319,12 @@ window.BT = (function(){
     _ky(k){ F.ky = k; if (k === 'tuy' && !F.tu) { const t = d0(new Date()); F.tu = ymd(addD(t, -29)); F.den = ymd(t); } if (D) render(); },
     _tu(v){ F.tu = v; if (D) render(); }, _den(v){ F.den = v; if (D) render(); },
     _goDlcn(){ const b = document.querySelector('.l2-btn[data-sub="tab-dlcn"]'); if (b) b.click(); },
+    // việc cần quyết tuần hiện tại (cùng quy tắc mục ①) — mục VIII tab DLCN dùng
+    async weekActions(){ await load(); const P = period('tuan'); return {P, act: actions(P, stats(P.a, P.b, P.asof), stats(P.pa, P.pb, P.pb), ecnRisk(P.today))}; },
+    async data(){ await load(); return D; },
+    // chỉ số + việc cần quyết cho 1 kỳ (vd 'thang') — mục XI tab DLCN dùng
+    async view(ky){ await load(); const P = period(ky), S = stats(P.a, P.b, P.asof), SP = stats(P.pa, P.pb, P.pb), R = ecnRisk(P.today);
+      return {P, S, SP, R, act: actions(P, S, SP, R), D, TARGET, STALE_DAYS}; },
   };
 })();
 </script>
@@ -10527,5 +10604,176 @@ window.ECNS = (function(){
 })();
 </script>
 <!-- ECNS:END JS -->
+<!-- DLV:BEGIN JS -->
+<script>
+/* ═══ DLCN LIVE — dọn số tĩnh tab Dashboard DLCN & HT (anh duyệt 24/10/2026) ═══
+   - VII bảng tổ chức & nhân sự  ← tab NHAN_SU_DLCN (Sheet 16sk2…) + hoạt động 30 ngày (việc, mã Bravo, dòng ECN) — không chấm điểm.
+   - VIII kế hoạch hành động GĐ CN ← BT.weekActions(): cùng quy tắc "Việc cần quyết P0–P2" của Bản tin, tuần hiện tại.
+   - X.7 ghép thêm tab X7_THU_CONG (X7_ACTION_PLAN do Apps Script xoá & ghi lại nên không nhập tay vào đó).
+   - XI tổng kết: tháng hiện tại, cùng quy tắc Bản tin (BT.view('thang')); tổng hợp theo nhóm, không khen/chê từng người.
+   - Người có Hiệu lực = "Không" trong NHAN_SU_DLCN: gắn nhãn "đã nghỉ" ở X.4, X.6, IX.3, VII; ở X.7 cột Người TN chính đổi thành "Trưởng nhóm ECN".
+   Chỉ đọc Sheet, không ghi. */
+window.DLV = (function(){
+  const SHEET = '16sk2PgwrOMEY1lfNc32KEyvaw2HHyX0EZMmUbnwnO-w', NS_TAB = 'NHAN_SU_DLCN', X7_TAB = 'X7_THU_CONG';
+  const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/\s+/g,' ').trim();
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt = n => n ? Math.round(n).toLocaleString('vi-VN') : '';
+  const p2 = n => String(n).padStart(2,'0');
+  const dm = d => d ? p2(d.getDate()) + '/' + p2(d.getMonth()+1) : '';
+  const dmy = d => d ? dm(d) + '/' + d.getFullYear() : '';
+  const $ = id => document.getElementById(id);
+  let NS = null, X7 = null, OFF = new Map(), started = false, tmr = null;
+
+  // đọc 1 tab (tiêu đề dòng 1); kiểm tra tiêu đề vì gviz trả TAB ĐẦU TIÊN khi sai tên tab
+  async function tab(name, must){
+    const t = await gvizFetch(SHEET, name, 1, 'select * limit 500', 30000);
+    const L = (t.cols||[]).map(c => nz(c.label));
+    if (L.indexOf(nz(must)) < 0) return null;
+    return (t.rows||[]).map(r => { const c = r.c||[], o = {};
+      L.forEach((l, i) => { const x = c[i]; o[l] = x ? String(x.f != null ? x.f : (x.v != null ? x.v : '')).trim() : ''; });
+      return o; });
+  }
+  const isOff = o => nz(o['hieu luc']).indexOf('khong') === 0;
+
+  // ── nhãn "đã nghỉ" + X.7 thủ công (chạy lại mỗi khi phần gốc vẽ lại các khối này) ──
+  function apply(){
+    const tb = $('dlcnX7Tbody');
+    if (tb && X7 && X7.length && !tb.querySelector('tr.dlv-x7')) {
+      const B = {'🔴 KHẨN':'badge-red', '⚠ T.Bình':'badge-yellow', 'ℹ Đề xuất':'badge-blue'};
+      tb.insertAdjacentHTML('beforeend', X7.map(o => '<tr class="dlv-x7"><td>' + esc(o['#']) + '</td><td>' + esc(o['van de ecn']) +
+        ' <span class="dlv-tag">nhập tay</span></td><td><span class="badge ' + (B[o['muc do']] || 'badge-blue') + '">' + esc(o['muc do'] || 'ℹ Đề xuất') + '</span></td><td>' +
+        esc(o['hanh dong cu the']) + '</td><td>' + esc(o['nguoi tn chinh']) + '</td><td>' + esc(o['phoi hop']) + '</td><td>' + (o['thoi han'] ? '<b>' + esc(o['thoi han']) + '</b>' : '') +
+        '</td><td>' + esc(o['ket qua dau ra']) + '</td></tr>').join(''));
+    }
+    if (!OFF.size) return;
+    if (tb) tb.querySelectorAll('tr').forEach(tr => { const td = tr.cells[4]; if (!td || td.dataset.dlv) return;
+      const ten = OFF.get(nz(td.textContent)); if (!ten) return;
+      td.dataset.dlv = '1'; td.innerHTML = 'Trưởng nhóm ECN <span class="dlv-off">thay ' + esc(ten) + ' – đã nghỉ</span>'; });
+    ['dlcnV-nvCardsWrap', 'ecnRiskTableBody', 'ix3TableBody'].forEach(id => {
+      const box = $(id); if (!box) return;
+      box.querySelectorAll('*').forEach(el => {
+        if (el.children.length || el.closest('.dlv-off')) return;
+        const t = nz(el.textContent).replace(/^[^a-z]+/, '');
+        for (const [k] of OFF) if (t === k || t.indexOf(k + ' ') === 0) { el.insertAdjacentHTML('beforeend', ' <span class="dlv-off">đã nghỉ</span>'); break; }
+      });
+    });
+  }
+
+  // ── VII: tổ chức & nhân sự ───────────────────────────────────
+  async function renderVII(){
+    const tbl = $('dlvNsTable'); if (!tbl) return;
+    let note = $('dlvNsNote'); if (!note) { tbl.insertAdjacentHTML('afterend', '<div id="dlvNsNote" class="dlv-note"></div>'); note = $('dlvNsNote'); }
+    if (!NS) { note.innerHTML = 'Bảng trên là số liệu tĩnh tháng 05/2026. Chạy <b>DLCN_LIVE\\TAO_TAB_NHANSU_X7.bat</b> để tạo tab NHAN_SU_DLCN, sau đó bảng tự lấy theo tab.'; return; }
+    const on = NS.filter(o => o['ho ten'] && !isOff(o)), off = NS.filter(o => o['ho ten'] && isOff(o));
+    const head = '<tr><th>Vị trí</th><th>Tên nhân viên</th><th>Nhóm công việc chính</th><th class="dlv-r">Việc HT 30 ngày</th><th class="dlv-r">Mã Bravo 30 ngày</th><th class="dlv-r">Dòng ECN 30 ngày</th><th>Hoạt động gần nhất</th></tr>';
+    const rows = A => A.map(o => { const a = A_[nz(o['ho ten'])] || {};
+      return '<tr><td>' + esc(o['vi tri']) + '</td><td><b>' + esc(o['ho ten']) + '</b></td><td>' + esc(o['nhom cong viec chinh']) + (o['ghi chu'] ? '<div class="dlv-sub">' + esc(o['ghi chu']) + '</div>' : '') +
+        '</td><td class="dlv-r">' + fmt(a.task) + '</td><td class="dlv-r">' + fmt(a.br) + '</td><td class="dlv-r">' + fmt(a.ecn) + '</td><td>' + (a.last ? dmy(a.last) : (A_.ok ? '—' : '…')) + '</td></tr>'; }).join('');
+    let A_ = {};
+    tbl.innerHTML = head + rows(on);
+    note.innerHTML = 'Nguồn: tab <b>NHAN_SU_DLCN</b> (sửa trực tiếp trên Sheet) · ' + on.length + ' người đang làm' + (off.length ? ' · đã nghỉ: ' + off.map(o => esc(o['ho ten'])).join(', ') : '') + ' · đang tải số liệu hoạt động…';
+    try {
+      const D = await BT.data(), t = new Date(); t.setHours(0,0,0,0); const d30 = new Date(t.getTime() - 30*86400000);
+      const up = (name, k, d) => { const n = nz(name); if (!n || !d) return; const o = A_[n] || (A_[n] = {task:0, br:0, ecn:0, last:null});
+        if (d >= d30 && d <= t) o[k]++; if (d <= t && (!o.last || d > o.last)) o.last = d; };
+      D.tasks.forEach(x => up(x.pic, 'task', x.ht)); D.bravo.forEach(x => up(x.nguoi, 'br', x.d)); D.ecn.forEach(x => up(x.nguoi, 'ecn', x.ngay));
+      A_.ok = true;
+      tbl.innerHTML = head + rows(on);
+      note.innerHTML = 'Nguồn: tab <b>NHAN_SU_DLCN</b> (sửa trực tiếp trên Sheet) · ' + on.length + ' người đang làm' + (off.length ? ' · đã nghỉ (ẩn khỏi bảng): ' + off.map(o => esc(o['ho ten'])).join(', ') : '') +
+        ' · số liệu 30 ngày đến ' + dmy(t) + ' (việc theo ngày hoàn thành; mã Bravo theo ngày tạo; ECN theo ngày ECN) — để điều phối, không chấm điểm.';
+    } catch(e) { note.innerHTML += ' <span class="dlv-err">Không tải được số liệu hoạt động: ' + esc(e.message) + '</span>'; }
+  }
+
+  // ── VIII: việc cần quyết tuần này (quy tắc Bản tin) ──────────
+  async function renderVIII(){
+    const tb = $('dlvViiiBody'), note = $('dlvViiiNote'); if (!tb) return;
+    if (note) note.innerHTML = 'Đang tổng hợp theo quy tắc Bản tin điều hành…';
+    try {
+      const r = await BT.weekActions(), P = r.P, t = P.today, mai = new Date(t.getTime() + 86400000);
+      const LV = {P0:['badge-red','🔴 KHẨN (24h)'], P1:['badge-yellow','⚠ Trong tuần'], P2:['badge-blue','ℹ Theo dõi']};
+      tb.innerHTML = r.act.length ? r.act.map((x, i) => '<tr' + (x.lv === 'P0' ? ' style="background:#fff8f8"' : '') + '><td>' + (i+1) + '</td><td>' + x.t + '</td><td><span class="badge ' + LV[x.lv][0] + '">' + LV[x.lv][1] +
+          '</span></td><td>' + x.a + '</td><td>' + esc(x.o) + '</td><td><b>' + (x.lv === 'P0' ? dmy(mai) : x.lv === 'P1' ? dmy(P.b) : 'Theo dõi') + '</b></td><td>' + esc(x.out || '') + '</td></tr>').join('')
+        : '<tr><td colspan="7" style="text-align:center;color:#1a7a3e">✅ Không có việc cần can thiệp theo các quy tắc hiện tại (' + esc(P.label) + ').</td></tr>';
+      if (note) note.innerHTML = 'Tự sinh theo quy tắc "① Cần anh quyết / xử lý" của Bản tin điều hành — <b>' + esc(P.label) + '</b>. P0 xử lý trong 24 giờ, P1 trong tuần, P2 theo dõi. Người chịu trách nhiệm ghi theo vai trò. Kế hoạch nhập tay (dự án, tổ chức) ở bảng X.7 — tab X7_THU_CONG.';
+    } catch(e) { if (note) note.innerHTML = '<span class="dlv-err">Không tổng hợp được: ' + esc(e.message) + '</span> — bảng dưới là số liệu tĩnh tuần 22.'; }
+  }
+
+  // ── XI: tổng kết tháng hiện tại — cùng quy tắc Bản tin; tổng hợp theo nhóm, không khen/chê từng người ──
+  let XI = null, xiTmr = null;
+  function keepXI(){                      // phần gốc có thể ghi đè XI sau khi tải xong → ghi lại bản live
+    if (!XI) return;
+    Object.keys(XI).forEach(id => { const el = $(id); if (el && el.innerHTML !== XI[id]) el.innerHTML = XI[id]; });
+  }
+  async function renderXI(){
+    const sEl = $('dlcnXiStrong'), wEl = $('dlcnXiWeak'); if (!sEl || !wEl) return;
+    try {
+      const v = await BT.view('thang'), P = v.P, S = v.S, R = v.R, D = v.D, T = v.TARGET, t = P.today;
+      const f1 = n => (Math.round(n*10)/10).toLocaleString('vi-VN'), fm = n => Math.round(n||0).toLocaleString('vi-VN');
+      const inR = d => d && d >= P.a && d <= P.b;
+      const strong = [];
+      if (S.fin && S.ontime != null && S.ontime >= T.ontime) strong.push('Đúng hạn <b>' + f1(S.ontime) + '%</b> trên ' + fm(S.fin) + ' việc hoàn thành' + (S.mtN ? ' (gồm ' + S.mtN + ' việc miễn trừ)' : '') + ' — đạt mục tiêu ' + T.ontime + '%');
+      if (!S.od) strong.push('Không có việc quá hạn đang mở (tại ' + dmy(P.asof) + ')');
+      if (S.ftr != null && S.brQ >= 20 && S.ftr >= T.ftr) strong.push('Khai báo Bravo đúng lần đầu <b>' + f1(S.ftr) + '%</b> (' + fm(S.brQ) + ' mã tạo từ 04/07/2026) — đạt mục tiêu ' + T.ftr + '%');
+      const grp = {}; D.tasks.filter(x => inR(x.ht)).forEach(x => { const g = grp[x.nhom] || (grp[x.nhom] = {n:0, late:0}); g.n++; if (x.late) g.late++; });
+      const okG = Object.entries(grp).filter(([, g]) => g.n >= 20 && !g.late).sort((a, b) => b[1].n - a[1].n).slice(0, 3);
+      if (okG.length) strong.push('Nhóm ' + okG.map(([k, g]) => esc(k) + ' (' + fm(g.n) + ' việc)').join(' + ') + ': 100% đúng hạn');
+      if (!R.soon.length) strong.push('Không có dòng ECN còn tồn sắp đến hạn trong 7 ngày');
+      if (S.ecnRows) strong.push('Khai báo <b>' + fm(S.ecnSo) + '</b> số ECN mới (' + fm(S.ecnRows) + ' dòng mã) trong tháng');
+      const stale = d => !d || (t - d)/86400000 > v.STALE_DAYS;
+      if (![D.fresh.task, D.fresh.bravo, D.fresh.ecn].some(stale)) strong.push('Nguồn công việc, Bravo, ECN đều cập nhật trong ' + v.STALE_DAYS + ' ngày gần nhất');
+      const weak = v.act.map(x => '<span class="dlv-lv dlv-' + x.lv + '">' + x.lv + '</span> ' + x.t);
+      // người hoạt động trong tháng: người trong NHAN_SU_DLCN (Hiệu lực ≠ Không) có việc / mã Bravo / dòng ECN; chưa có tab → người phụ trách việc + người khai báo ECN
+      const act = new Set();
+      D.tasks.forEach(x => { if (inR(x.ht) && x.pic !== '(chưa có PIC)') act.add(nz(x.pic)); });
+      D.ecn.forEach(x => { if (inR(x.ngay) && x.nguoi !== '(trống)') act.add(nz(x.nguoi)); });
+      let nv;
+      if (NS) { const on = new Set(NS.filter(o => o['ho ten'] && !isOff(o)).map(o => nz(o['ho ten'])));
+        D.bravo.forEach(x => { if (inR(x.d) && on.has(nz(x.nguoi))) act.add(nz(x.nguoi)); });
+        nv = [...act].filter(k => on.has(k)).length; }
+      else nv = act.size;
+      XI = {
+        dlcnXiStrong: (strong.length ? strong : ['Chưa có chỉ số đạt mục tiêu trong tháng — xem cột bên phải.']).map(x => '<li>' + x + '</li>').join(''),
+        dlcnXiWeak: (weak.length ? weak : ['✅ Không có điểm cần can thiệp theo các quy tắc hiện tại.']).map(x => '<li>' + x + '</li>').join(''),
+        dlvXiTitle: '📊 CHỈ SỐ TỔNG QUAN NHÓM – ' + esc(P.label) + ' (live, đến ' + dmy(t) + ')',
+        'dlcnV-xiNvActive': fm(nv), 'dlcnV-xiTaskDone': fm(S.fin), 'dlcnV-xiErpTotal': fm(S.br), 'dlcnV-xiEcnTotal': fm(S.ecnRows),
+        'dlcnV-xiTaskLate': fm(S.late), 'dlcnV-xiEcnRisk': fm(R.pcs),
+      };
+      // nhãn dưới ô số — định nghĩa theo tháng
+      const lab = {'dlcnV-xiNvActive':'Người hoạt động (tháng)', 'dlcnV-xiTaskDone':'Việc hoàn thành', 'dlcnV-xiErpTotal':'Mã Bravo mới', 'dlcnV-xiEcnTotal':'Dòng ECN mới',
+                   'dlcnV-xiTaskLate':'Việc sau hạn (trừ miễn trừ)', 'dlcnV-xiEcnRisk':'ECN quá hạn còn tồn (pcs, hôm nay)'};
+      Object.keys(lab).forEach(id => { const e = $(id); if (e && e.nextElementSibling) e.nextElementSibling.textContent = lab[id]; });
+      keepXI();
+      let note = $('dlvXiNote');
+      if (!note) { const g = $('dlcnV-xiNvActive'), box = g && g.closest('.alert-box'); if (box) { box.insertAdjacentHTML('beforeend', '<div id="dlvXiNote" class="dlv-note"></div>'); note = $('dlvXiNote'); } }
+      if (note) note.innerHTML = 'Kỳ: ' + esc(P.label) + ' (' + dmy(P.a) + ' – ' + dmy(t) + '). Cùng quy tắc với Bản tin điều hành: đúng hạn theo cột T (việc miễn trừ tính đúng hạn), đúng lần đầu = mã tạo từ 04/07/2026 sửa ≤ 1 lần, ECN tồn = "Số lượng tồn kho xác nhận (1)". Điểm cần cải thiện = việc cần quyết P0–P2 của tháng. Tổng hợp theo nhóm, không đánh giá từng người.';
+      const tiles = $('dlcnV-xiNvActive') ? $('dlcnV-xiNvActive').parentElement.parentElement : null;
+      [sEl, wEl, $('dlvXiTitle'), tiles].filter(Boolean).forEach(el =>
+        new MutationObserver(() => { clearTimeout(xiTmr); xiTmr = setTimeout(keepXI, 150); }).observe(el, {childList:true, subtree:true, characterData:true}));
+    } catch(e) { wEl.insertAdjacentHTML('afterend', '<div class="dlv-note"><span class="dlv-err">Không tổng hợp được mục XI live: ' + esc(e.message) + '</span></div>'); }
+  }
+
+  async function start(){
+    if (started || typeof gvizFetch !== 'function') return; started = true;
+    const [ns, x7] = await Promise.allSettled([tab(NS_TAB, 'Họ tên'), tab(X7_TAB, 'Vấn đề ECN')]);
+    NS = ns.status === 'fulfilled' ? ns.value : null;
+    X7 = x7.status === 'fulfilled' && x7.value ? x7.value.filter(o => o['van de ecn'] && !isOff(o)) : null;
+    OFF = new Map((NS||[]).filter(o => o['ho ten'] && isOff(o)).map(o => [nz(o['ho ten']), o['ho ten'].toUpperCase()]));
+    apply();
+    ['dlcnX7Tbody', 'dlcnV-nvCardsWrap', 'ecnRiskTableBody', 'ix3TableBody'].forEach(id => { const el = $(id);
+      if (el) new MutationObserver(() => { clearTimeout(tmr); tmr = setTimeout(apply, 120); }).observe(el, {childList:true, subtree:true}); });
+    renderVII(); renderVIII(); renderXI();
+  }
+  function init(){
+    const els = ['dlvNsTable', 'dlvViiiBody', 'dlcnX7Tbody', 'ecn', 'tong-ket'].map($).filter(Boolean);
+    if (!els.length) return;
+    if (!('IntersectionObserver' in window)) return start();
+    const io = new IntersectionObserver(en => { if (en.some(x => x.isIntersecting)) { io.disconnect(); start(); } }, {rootMargin:'600px'});
+    els.forEach(e => io.observe(e));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  return {start, apply, _s: () => ({NS, X7, OFF})};
+})();
+</script>
+<!-- DLV:END JS -->
 </body>
 </html>
