@@ -972,6 +972,11 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #ecns-root .ecns-more button{padding:4px 10px;font-size:12px}
 #ecns-root .ecns-spin{display:inline-block;width:12px;height:12px;border:2px solid #D6D3CA;border-top-color:var(--teal);border-radius:50%;margin-right:6px;vertical-align:-2px;animation:ecnsspin .8s linear infinite}
 @keyframes ecnsspin{to{transform:rotate(360deg)}}
+/* dải "đang lọc" phía trên X.1 — chỉ trong #ecnx-flt */
+#ecnx-flt .ecnx-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0 0 12px;padding:9px 14px;background:#FFF8E1;border:1px solid #F1D98A;border-left:4px solid #E0A800;border-radius:10px;font-size:12.5px;color:#4A3B00}
+#ecnx-flt .ecnx-bar button{font:inherit;font-size:12px;font-weight:600;padding:4px 12px;border:1px solid #D9B84A;border-radius:8px;background:#fff;color:#4A3B00;cursor:pointer}
+#ecnx-flt .ecnx-bar button:hover{background:#FFF1C2}
+#ecnx-flt .ecnx-bar small{flex-basis:100%;color:#7A6A2E;font-size:11.5px}
 </style>
 <!-- ECNS:END CSS -->
 </head>
@@ -1843,6 +1848,7 @@ PEOPLE_SCORE =
   Đây là rủi ro hàng aging có thể phát sinh chi phí hủy hàng. Cần quyết định xử lý trong tuần này.
 </div>
 
+<div id="ecnx-flt"></div><!-- ECNX-FLT -->
 <!-- X.1 + X.2 in one row -->
 <div class="grid-2" style="margin-bottom:14px;align-items:start">
   <!-- LEFT: X.1 KPI -->
@@ -1859,19 +1865,19 @@ PEOPLE_SCORE =
         <div class="kpi-label" style="color:#6c3483">TỒN KHO ECN RỦI RO</div>
         <div class="kpi-value" id="dlcnV-ecnRisk2" style="color:#8e24aa;font-size:22px">1.492 pcs</div>
         <div class="kpi-sub" id="dlcnS-ecnRisk2">SSA-MLR-00154 | MANUAL-L500</div>
-        <span class="kpi-target target-miss">🔴 CHƯA CÓ PHƯƠNG ÁN</span>
+        <span class="kpi-target target-miss" id="ecnxB-risk">🔴 CHƯA CÓ PHƯƠNG ÁN</span>
       </div>
       <div class="kpi-card blue" style="padding:12px 14px">
         <div class="kpi-label">ECN SAMSUNG</div>
-        <div class="kpi-value" style="font-size:22px">~68</div>
-        <div class="kpi-sub">GS5 QV1 | Upversion Q1/2026</div>
-        <span class="kpi-target target-ok">HÀ VIỆT ANH – PIC</span>
+        <div class="kpi-value" id="ecnxV-sam" style="font-size:22px">~68</div>
+        <div class="kpi-sub">SEV / SEVT | theo bảng X.3</div>
+        <span class="kpi-target target-ok" id="ecnxP-sam">—</span>
       </div>
       <div class="kpi-card green" style="padding:12px 14px">
         <div class="kpi-label">ECN CANON + KHÁC</div>
-        <div class="kpi-value" style="font-size:22px">~23</div>
-        <div class="kpi-sub">GS1 HN | Canon + ANZ + Tân An</div>
-        <span class="kpi-target target-ok">NGUYỄN THỊ KHA – PIC</span>
+        <div class="kpi-value" id="ecnxV-can" style="font-size:22px">~23</div>
+        <div class="kpi-sub">GS1 HN – KH khác | theo bảng X.3</div>
+        <span class="kpi-target target-ok" id="ecnxP-can">—</span>
       </div>
     </div>
     <!-- X.2 detail table -->
@@ -1879,7 +1885,7 @@ PEOPLE_SCORE =
       <div class="tbl-header tbl-hdr-teal"><span>X.2 – Phân tích chi tiết từng loại ECN</span></div>
       <table>
         <thead><tr><th>Hình thức ECN</th><th align="right">SL</th><th align="right">Tỷ lệ</th><th>Đánh giá rủi ro</th></tr></thead>
-        <tbody>
+        <tbody id="ecnxT2Body">
           <tr><td><span class="pill pill-moment">Dừng tại thời điểm</span></td><td align="right"><b>66</b></td><td align="right">72,5%</td><td><span class="badge badge-yellow">⚠ Theo dõi tồn kho</span></td></tr>
           <tr style="background:#fff0f0"><td><span class="pill pill-drain">SX đến hết tồn</span></td><td align="right"><b>12</b></td><td align="right">13,2%</td><td><span class="badge badge-yellow">⚠ Theo dõi tiêu thụ</span></td></tr>
           <tr style="background:#fff8f8"><td><span class="pill pill-stop">Dừng ngay lập tức</span></td><td align="right"><b>10</b></td><td align="right">11,0%</td><td><span class="badge badge-red">🔴 Rủi ro hàng tồn</span></td></tr>
@@ -1893,7 +1899,7 @@ PEOPLE_SCORE =
   <div>
     <div class="section-title ecn">X.2 – PHÂN LOẠI ECN THEO HÌNH THỨC XỬ LÝ</div>
     <div class="chart-w" style="position:relative">
-      <div class="chart-t teal">Phân bố hình thức ECN – Tổng: 91 bản ghi</div>
+      <div class="chart-t teal">Phân bố hình thức ECN – Tổng: <span id="ecnxTypeTotal">91</span> bản ghi</div>
       <div style="position:relative;max-width:380px;margin:0 auto">
         <canvas id="cEcnType" height="300" role="img" aria-label="Biểu đồ phân loại ECN"></canvas>
         <div id="ecnCenterLabel" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);text-align:center;pointer-events:none">
@@ -1901,7 +1907,7 @@ PEOPLE_SCORE =
           <div style="font-size:11px;color:#566573;font-weight:bold">TỔNG ECN</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+      <div id="ecnxTypeLegend" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
         <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#2980b9;flex-shrink:0"></span>Dừng TĐ: <strong>66</strong> (72,5%)</div>
         <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#f39c12;flex-shrink:0"></span>SX hết tồn: <strong>12</strong> (13,2%)</div>
         <div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:#e74c3c;flex-shrink:0"></span>Dừng ngay: <strong>10</strong> (11,0%)</div>
@@ -7958,6 +7964,81 @@ window._syncDLCNAllSections = async function(liveCache) {
     var ecnHdr = document.querySelector('#ecn .zone-hdr span');
     if (ecnHdr) ecnHdr.textContent = ecnTotal + '+ ban ghi | Nguon: ECN_TRACKING LIVE';
 
+    // ECNX-PRE:BEGIN
+    // ECNX-FN: X.1–X.6 vẽ từ danh sách dòng ECN (anh duyệt 24/10/2026, phương án A).
+    // Mở tab: vẽ với toàn bộ dòng như trước; lọc ở X.0 (ECNS.applyX) gọi lại với các dòng đang lọc.
+    // Mục I, IX, XI và X.7, X.8 KHÔNG đi qua hàm này → luôn tính trên toàn bộ dữ liệu.
+    window._ecnRenderX = function(ecnRows) {
+      var ecnTotal = 0, ecnRiskStock = 0, ecnTypeMap = {}, ecnKHMap = {}, ecnNMMap = {};
+      var samN = 0, canN = 0, riskMa = 0, riskNoPa = 0, riskTop = null, lastSam = null, lastCan = null;
+      // người khai báo của ECN mới nhất trong nhóm (thay nhãn PIC ghi cứng — anh báo 24/10: Hà Việt Anh đã nghỉ)
+      function newer(cur, cells) { var m = /^Date\((\d+),(\d+),(\d+)/.exec(String(cells[18] && cells[18].v)); if (!m) return cur;
+        var t = new Date(+m[1], +m[2], +m[3]).getTime(), who = cellVal(cells[iEcnT]);
+        return (who && (!cur || t > cur.t)) ? { t: t, who: who.trim() } : cur; }
+      ecnRows.forEach(function(row) {
+        var cells = row.c || [];
+        var qNum = cellNum(cells[iEcnQ]);
+        if (qNum > 0) {
+          riskMa++;
+          if (!cellVal(cells[25])) riskNoPa++;
+          if (!riskTop || qNum > riskTop.q) riskTop = { q: qNum, ma: cellVal(cells[iEcnE]) };
+        }
+        // cùng cách chia bảng X.3: Samsung (SEV/SEVT) | GS1 – khách hàng khác
+        var ae = norm(cellVal(cells[iEcnAE]));
+        if (!ae) ae = norm(cellVal(cells[iEcnKH >= 0 ? iEcnKH : 30]));
+        if (ae.indexOf('sev') >= 0) { samN++; lastSam = newer(lastSam, cells); }
+        else if (norm(cellVal(cells[iEcnNM >= 0 ? iEcnNM : 20])).indexOf('gs1') >= 0) { canN++; lastCan = newer(lastCan, cells); }
+        // cùng quy tắc vòng tính gốc (cột M)
+        var vM = cellVal(cells[iEcnM]);
+        if (!vM || vM === '0') return;
+        if (norm(vM) === 'khong su dung' || norm(vM) === 'loai ecn' || norm(vM) === 'hinh thuc') return;
+        ecnTotal++;
+        if (qNum > 0) ecnRiskStock += qNum;
+        var eType = vM;
+        if (eType.length > 30) eType = eType.substring(0, 30);
+        ecnTypeMap[eType] = (ecnTypeMap[eType]||0) + 1;
+        var kh = iEcnKH >= 0 ? getByIdx(row, iEcnKH) : '';
+        if (kh && norm(kh) !== 'khach hang') ecnKHMap[kh] = (ecnKHMap[kh]||0) + 1;
+        var nm = iEcnNM >= 0 ? getByIdx(row, iEcnNM) : '';
+        if (nm && norm(nm) !== 'nha may') ecnNMMap[nm] = (ecnNMMap[nm]||0) + 1;
+      });
+      // X.1 KPI
+      setEl('dlcnV-ecnTotal2', ecnTotal > 0 ? ecnTotal + '+' : '--');
+      setEl('dlcnS-ecnTotal2', ecnTotal + ' ban ghi | ' + Object.keys(ecnNMMap).length + ' nha may');
+      setEl('dlcnV-ecnRisk2',  fmtVN(ecnRiskStock) + ' pcs');
+      setEl('dlcnS-ecnRisk2',  riskTop ? fmtVN(riskMa) + ' dòng tồn | lớn nhất ' + riskTop.ma : 'Không có mã còn tồn');
+      var bRisk = document.getElementById('ecnxB-risk');
+      if (bRisk) { bRisk.className = 'kpi-target ' + (riskNoPa ? 'target-miss' : 'target-ok');
+        bRisk.textContent = riskNoPa ? '🔴 ' + fmtVN(riskNoPa) + ' dòng chưa có phương án' : '✅ Đã có phương án'; }
+      setEl('ecnxV-sam', fmtVN(samN));
+      setEl('ecnxV-can', fmtVN(canN));
+      setEl('ecnxP-sam', lastSam ? 'ECN mới nhất: ' + lastSam.who : 'Chưa có ECN');
+      setEl('ecnxP-can', lastCan ? 'ECN mới nhất: ' + lastCan.who : 'Chưa có ECN');
+      // X.2 bảng chi tiết + tổng
+      setEl('dlcnV-ecnCenter', String(ecnTotal));
+      setEl('ecnxTypeTotal', fmtVN(ecnTotal));
+      var etK = Object.keys(ecnTypeMap).sort(function(a,b){ return ecnTypeMap[b]-ecnTypeMap[a]; });
+      var etCol = ['#1a7a4a','#e74c3c','#e67e22','#7f8c8d','#2980b9','#8e44ad'];
+      var x2Body = document.getElementById('ecnxT2Body');
+      if (x2Body) x2Body.innerHTML = etK.length ? etK.map(function(k) {
+        var n = norm(k), pct = (ecnTypeMap[k] * 100 / ecnTotal).toFixed(1).replace('.', ',') + '%';
+        var pill = n.indexOf('dung ngay') >= 0 ? 'pill-stop' : n.indexOf('het ton') >= 0 ? 'pill-drain' : (n.indexOf('thoi diem') >= 0 || n.indexOf('dung td') >= 0) ? 'pill-moment' : 'pill-teal';
+        var dg = n.indexOf('dung ngay') >= 0 ? '<span class="badge badge-red">🔴 Rủi ro hàng tồn</span>'
+               : n.indexOf('het ton') >= 0 ? '<span class="badge badge-yellow">⚠ Theo dõi tiêu thụ</span>'
+               : (n.indexOf('thoi diem') >= 0 || n.indexOf('dung td') >= 0) ? '<span class="badge badge-yellow">⚠ Theo dõi tồn kho</span>'
+               : '<span class="badge badge-blue">ℹ Thấp</span>';
+        return '<tr><td><span class="pill ' + pill + '">' + k.replace(/[&<>"']/g, '') + '</span></td><td align="right"><b>' + fmtVN(ecnTypeMap[k]) + '</b></td><td align="right">' + pct + '</td><td>' + dg + '</td></tr>';
+      }).join('') : '<tr><td colspan="4" style="text-align:center;color:#566573">Không có dữ liệu</td></tr>';
+      var lg = document.getElementById('ecnxTypeLegend');
+      if (lg) lg.innerHTML = etK.map(function(k, i) {
+        return '<div style="display:flex;align-items:center;gap:6px;font-size:11px"><span style="width:12px;height:12px;border-radius:50%;background:' + etCol[i % etCol.length] + ';flex-shrink:0"></span>' +
+          k.replace(/[&<>"']/g, '') + ': <strong>' + fmtVN(ecnTypeMap[k]) + '</strong> (' + (ecnTypeMap[k] * 100 / ecnTotal).toFixed(1).replace('.', ',') + '%)</div>';
+      }).join('');
+      // biểu đồ không còn dòng nào → xoá dữ liệu cũ (đoạn gốc chỉ cập nhật khi có dữ liệu)
+      if (!etK.length) updChart('cEcnType', [], [{data: []}]);
+      if (!Object.keys(ecnKHMap).length) updChart('cEcnKH', [], [{data: []}]);
+      if (!Object.keys(ecnNMMap).length) { updChart('cEcnNM', [], [{data: []}]); setEl('dlcnV-cEcnNMTotal', '0'); }
+    // ECNX-PRE:END
     if (Object.keys(ecnTypeMap).length > 0) {
       var etL = Object.keys(ecnTypeMap).sort(function(a,b){ return ecnTypeMap[b]-ecnTypeMap[a]; });
       var etV = etL.map(function(k){ return ecnTypeMap[k]; });
@@ -8219,6 +8300,9 @@ window._syncDLCNAllSections = async function(liveCache) {
         '</div>';
       }).join('');
     })();
+    };
+    window._ecnRenderX(ecnRows);
+    if (window.ECNS && ECNS.applyX) ECNS.applyX();   // ECNX-FN END
 
     // ══ FETCH 3: BRAVO ══════════════════════════════════════════
     // Row 7 là header thực tế → range=A7:ZZ; headers=1 → gviz tiêu thụ row 7 làm cols, rows[] bắt đầu từ row 8
@@ -10178,7 +10262,7 @@ window.BT = (function(){
 window.ECNS = (function(){
   const ID = '1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', TAB = 'Báo cáo theo dõi quản lý ECN V2', PAGE = 100;
   const S = {cols:[], rows:[], loaded:false, loading:false, err:'', at:null, q:'', toks:[], df:'ngay', from:'', to:'',
-             kh:new Set(), nm:new Set(), ht:new Set(), tt:'', ver:'', vers:[], sort:{i:-1, d:-1}, shown:PAGE, res:[], open:new Set()};
+             kh:new Set(), nm:new Set(), ht:new Set(), tt:'', ver:'', vers:[], all:[], xsig:'', sort:{i:-1, d:-1}, shown:PAGE, res:[], open:new Set()};
   let C = {}, root = null, tmr = null;
   const SEP = /[\s\-_.\/|,;:()]+/g;            // so khớp bỏ dấu nối/khoảng trắng: "c26100042" khớp "C2610-0042", "gh9072852a" khớp "GH90-72852A"
   const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
@@ -10206,6 +10290,7 @@ window.ECNS = (function(){
     cols.forEach(c => { c.num = c.type==='number' && c.i!==C.stt; c.date = /date/.test(c.type) && C.ver.indexOf(c.i)<0;
       c.wide = /ten code|ten vat tu|dien giai|ten khach hang \(theo|nguyen nhan|phuong an/.test(nz(c.lab)); });
     S.cols = cols;
+    S.all = (t.rows||[]).filter(r => r && r.c);          // đúng tập dòng phần gốc X.1–X.6 dùng
     S.rows = (t.rows||[]).filter(r => r && r.c && r.c.some(x => x && x.v!=null && x.v!=='')).map((r, n) => {
       const v = [], s = [];
       cols.forEach(c => { const x = r.c[c.i]; let txt = '', key = null;
@@ -10223,7 +10308,7 @@ window.ECNS = (function(){
       const extra = [ngay, han].filter(Boolean).map(d => { const m = p2(d.getMonth()+1)+'/'+d.getFullYear();
         return (d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear())+' '+m+' w'+isoW(d)+' w'+p2(isoW(d)); }).join(' ');
       const k = nz(v.join(' | ')+' | '+extra);
-      return {n, v, s, ngay, han, ton:g(C.ton)||0, gia:g(C.gia), tien:g(C.tien)||0, k, k2: k.replace(SEP,'')};
+      return {n, raw:r, v, s, ngay, han, ton:g(C.ton)||0, gia:g(C.gia), tien:g(C.tien)||0, k, k2: k.replace(SEP,'')};
     });
     S.loaded = true; S.loading = false; S.err = ''; S.at = new Date();
     if (root) { buildOpts(); run(); }
@@ -10271,7 +10356,7 @@ window.ECNS = (function(){
       if (x==='' || x==null) return 1; if (y==='' || y==null) return -1;          // ô trống luôn xuống cuối
       return (typeof x==='number' && typeof y==='number' ? x-y : String(x).localeCompare(String(y),'vi')) * d; });
     S.shown = PAGE; S.open.clear();
-    draw();
+    draw(); applyX();
   }
 
   // ── hiển thị ────────────────────────────────────────────────
@@ -10323,6 +10408,30 @@ window.ECNS = (function(){
       ? 'Đang hiện '+fN(S.shown)+' / '+fN(R.length)+' dòng · <button type="button" data-act="more">Xem thêm '+fN(Math.min(PAGE, R.length-S.shown))+' dòng</button> <button type="button" data-act="all">Hiện tất cả</button>'
       : (R.length ? 'Hiện đủ '+fN(R.length)+' dòng' : '');
   }
+  // ── X.1–X.6 lọc theo X.0: gọi lại phần vẽ gốc (window._ecnRenderX) với các dòng đang lọc ──
+  const TT = {qh:'quá hạn còn tồn', ton:'còn tồn', '7n':'còn tồn, đến hạn 7 ngày', pa:'còn tồn, chưa có phương án', gia:'còn tồn, chưa có đơn giá'};
+  function applyX(){
+    if (typeof window._ecnRenderX !== 'function' || !S.loaded) return;
+    const on = !!(S.toks.length || S.vers.length || filterCount());
+    const sig = on ? JSON.stringify([S.q, S.ver, S.from, S.to, S.df, [...S.kh], [...S.nm], [...S.ht], S.tt]) : '';
+    if (sig === S.xsig) return;                       // chỉ sắp xếp / xem thêm → không vẽ lại
+    S.xsig = sig;
+    try { window._ecnRenderX(on ? S.res.map(r => r.raw) : S.all); } catch(e){ console.warn('[ECNS] X.1–X.6', e); }
+    banner(on);
+  }
+  function banner(on){
+    const el = document.getElementById('ecnx-flt'); if (!el) return;
+    if (!on){ el.innerHTML = ''; return; }
+    const d = [], fd = s => s ? s.split('-').reverse().join('/') : '…';
+    if (S.q.trim()) d.push('“'+esc(S.q.trim())+'”');
+    if (S.ver.trim()) d.push('Version '+esc(S.ver.trim()));
+    if (S.from || S.to) d.push((S.df==='han'?'Thời hạn ':'Ngày ECN ')+fd(S.from)+' – '+fd(S.to));
+    [['kh','KH'],['nm','Nhà máy'],['ht','Hình thức']].forEach(([k,l]) => { if (S[k].size) d.push(l+': '+esc([...S[k]].map(x => x||'(trống)').join(', '))); });
+    if (S.tt) d.push(TT[S.tt]);
+    el.innerHTML = '<div class="ecnx-bar"><span>🔎 X.1–X.6 đang lọc theo X.0: <b>'+d.join(' · ')+'</b> — <b>'+fN(S.res.length)+'</b> / '+fN(S.rows.length)+' dòng ECN</span>'+
+      '<button type="button">Bỏ lọc</button><small>X.7, X.8 và các mục I, IX, XI vẫn tính trên toàn bộ dữ liệu.</small></div>';
+    el.querySelector('button').onclick = () => clearAll();
+  }
   function filterCount(){ return (S.from||S.to?1:0)+(S.kh.size?1:0)+(S.nm.size?1:0)+(S.ht.size?1:0)+(S.tt?1:0)+(S.ver?1:0); }
 
   // ── danh sách chọn nhiều (KH, nhà máy, hình thức) ───────────
@@ -10332,7 +10441,7 @@ window.ECNS = (function(){
       const cnt = {}; S.rows.forEach(r => { const x = r.v[C[key]] || '(trống)'; cnt[x] = (cnt[x]||0)+1; });
       const ks = Object.keys(cnt).sort((a,b) => cnt[b]-cnt[a] || a.localeCompare(b,'vi'));
       const box = $('.ecns-dd[data-k="'+key+'"]');
-      box.querySelector('.ecns-ddl').innerHTML = ks.map(x => '<label data-s="'+esc(nz(x))+'"><input type="checkbox" value="'+esc(x==='(trống)'?'':x)+'"> '+esc(x)+' <small>'+fN(cnt[x])+'</small></label>').join('');
+      box.querySelector('.ecns-ddl').innerHTML = ks.map(x => '<label data-s="'+esc(nz(x))+'"><input type="checkbox" value="'+esc(x==='(trống)'?'':x)+'"'+(S[key].has(x==='(trống)'?'':x)?' checked':'')+'> '+esc(x)+' <small>'+fN(cnt[x])+'</small></label>').join('');
       ddLabel(key);
     });
   }
@@ -10414,7 +10523,7 @@ window.ECNS = (function(){
     }
   }
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
-  return {feed, load, init, _S:S};
+  return {feed, load, init, applyX, _S:S};
 })();
 </script>
 <!-- ECNS:END JS -->
