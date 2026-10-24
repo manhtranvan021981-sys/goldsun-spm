@@ -998,6 +998,87 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 .dlv-P0{background:#FCE4E1;color:#C8372D}.dlv-P1{background:#FDF0D2;color:#9A6F12}.dlv-P2{background:#E2ECF8;color:#2563A8}
 </style>
 <!-- DLV:END CSS -->
+<!-- TCM:BEGIN CSS -->
+<style>
+/* ═══ TRA CỨU LỊCH SỬ LÀM MẪU — chỉ áp dụng trong #tcm-root (tiền tố tcm-) ═══ */
+#tcm-root{--g1:#1B5E20;--g2:#2E7D32;--gold:#E2B500;--ink:#1F2421;--sub:#5F6B66;--line:#E3E1D8;margin:0 0 14px;color:var(--ink);font-size:13px}
+#tcm-root *{box-sizing:border-box}
+#tcm-root .tcm-card{background:#fff;border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:14px 16px}
+#tcm-root .tcm-kick{font-size:11px;font-weight:800;letter-spacing:2px;color:var(--g2);margin-bottom:8px}
+#tcm-root .tcm-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#tcm-root .tcm-q{flex:1 1 480px;min-width:240px;font:inherit;font-size:14px;padding:10px 14px;border:1.5px solid #CFCFC4;border-radius:9px;outline:none}
+#tcm-root .tcm-q:focus{border-color:var(--g2);box-shadow:0 0 0 3px rgba(46,125,50,.12)}
+#tcm-root button{font:inherit;font-size:12.5px;font-weight:700;padding:8px 14px;border:1.5px solid #CFCFC4;border-radius:8px;background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
+#tcm-root button:hover{border-color:var(--g2)}
+#tcm-root button.p{background:var(--g1);border-color:var(--g1);color:#fff}
+#tcm-root .tcm-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:12px 0 4px;color:var(--sub);font-size:12px}
+#tcm-root .tcm-chip{padding:4px 11px;border-radius:999px;font-weight:600;font-size:12px}
+#tcm-root .tcm-chip.on{background:#E7F2E8;border-color:#9CC7A1;color:var(--g1)}
+#tcm-root .tcm-tabs{display:flex;gap:6px;margin:12px 0 -1px;position:relative;z-index:1}
+#tcm-root .tcm-tab{border-radius:9px 9px 0 0;border-bottom:0;background:#EEEEE8;color:#4A4F4B;padding:9px 16px}
+#tcm-root .tcm-tab.on{background:#fff;color:var(--g1);border-top:3px solid var(--gold)}
+#tcm-root .tcm-body{border:1px solid var(--line);border-radius:0 12px 12px 12px;padding:16px 16px 12px;background:#fff}
+#tcm-root .tcm-hd h3{margin:0;font-size:19px;color:var(--g1)}
+#tcm-root .tcm-hd p{margin:4px 0 0;color:var(--sub);font-size:12.5px}
+#tcm-root .tcm-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 6px}
+#tcm-root .tcm-kpi{border:1px solid var(--line);border-top:4px solid var(--g2);border-radius:9px;padding:9px 12px;background:#FDFDFB}
+#tcm-root .tcm-kpi.y{border-top-color:var(--gold)}
+#tcm-root .tcm-kpi.r{border-top-color:#C62828}
+#tcm-root .tcm-kpi .l{font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:var(--g1)}
+#tcm-root .tcm-kpi.r .l{color:#B71C1C}
+#tcm-root .tcm-kpi .v{font-size:21px;font-weight:800;margin:2px 0}
+#tcm-root .tcm-kpi.r .v{color:#C62828}
+#tcm-root .tcm-kpi .s{font-size:11.5px;color:var(--sub);line-height:1.45}
+/* trục thời gian: lưới 5 hàng — ô chữ trên / vòng tròn trên / dải / vòng tròn dưới / ô chữ dưới */
+#tcm-root .tcm-tlw{overflow-x:auto;overflow-y:hidden;padding:4px 0 8px}
+#tcm-root .tcm-grid{display:grid;grid-template-rows:auto 150px 30px 150px auto;width:max-content;margin:0 auto}
+#tcm-root .tcm-top{align-self:end;padding-bottom:6px}
+#tcm-root .tcm-bot{align-self:start;padding-top:6px}
+#tcm-root .tcm-ev{font-size:12.5px;line-height:1.5;cursor:pointer;position:relative}
+#tcm-root .tcm-ev h4{margin:0 0 6px;font-size:15px;text-align:center}
+#tcm-root .tcm-ev h4:after{content:'';display:block;width:60px;height:3px;border-radius:2px;margin:6px auto 0;background:currentColor;opacity:.8}
+#tcm-root .tcm-s{color:var(--sub);font-size:11.5px}
+#tcm-root .tcm-red{color:#C62828}
+#tcm-root .tcm-ok{color:var(--g1)}
+#tcm-root .tcm-warn{margin-top:7px;padding:7px 10px;border:1.5px solid #F2B8B5;background:#FDECEA;border-radius:7px;color:#8E1C14;font-size:12px;line-height:1.45}
+#tcm-root .tcm-info{margin-top:7px;padding:7px 10px;border:1.5px solid #EBD38A;background:#FFF8E1;border-radius:7px;color:#6B5200;font-size:12px;line-height:1.45}
+#tcm-root .tcm-nd{display:flex;flex-direction:column;align-items:center}
+#tcm-root .tcm-nd.up{justify-content:flex-end}
+#tcm-root .tcm-nd.dn{justify-content:flex-start;flex-direction:column-reverse}
+#tcm-root .tcm-node{width:118px;height:118px;border-radius:50%;border:7px solid;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.08);cursor:pointer;flex:0 0 auto}
+#tcm-root .tcm-node b{font-size:14px}
+#tcm-root .tcm-node span{font-size:10.5px;color:var(--sub);line-height:1.25;margin-top:3px;padding:0 6px}
+#tcm-root .tcm-stem{width:3px;flex:1 1 auto;min-height:12px}
+/* dải giữa: mũi tên nối tiếp (tam giác viền — xuất ảnh vẫn giữ hình) */
+#tcm-root .tcm-seg{position:relative;height:30px;margin-top:0;color:#fff;font-size:11.5px;display:flex;align-items:center;justify-content:center;white-space:nowrap;padding:0 8px 0 22px}
+#tcm-root .tcm-seg span{overflow:hidden;text-overflow:ellipsis}
+#tcm-root .tcm-seg b{font-weight:800;letter-spacing:.4px;margin-right:4px}
+#tcm-root .tcm-seg:before{content:'';position:absolute;left:0;top:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:15px solid #fff;z-index:2}
+#tcm-root .tcm-seg:after{content:'';position:absolute;right:-11px;top:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:15px solid var(--c);z-index:3}
+#tcm-root .tcm-seg.first{border-radius:15px 0 0 15px;padding-left:12px}
+#tcm-root .tcm-seg.first:before{display:none}
+#tcm-root .tcm-now{text-align:center;color:var(--sub);font-size:12px;line-height:1.5;margin:0 auto}
+#tcm-root .tcm-now b{color:var(--g1)}
+#tcm-root .tcm-foot{border-top:1.5px dashed var(--line);margin-top:10px;padding-top:8px;font-size:11.5px;color:var(--sub);line-height:1.55}
+#tcm-root .tcm-msg,#tcm-root .tcm-empty{padding:14px;color:var(--sub);text-align:center}
+#tcm-root .tcm-spin{display:inline-block;width:12px;height:12px;border:2px solid #D6D3CA;border-top-color:var(--g2);border-radius:50%;margin-right:6px;vertical-align:-2px;animation:tcmspin .8s linear infinite}
+@keyframes tcmspin{to{transform:rotate(360deg)}}
+/* bảng kết quả — tiêu đề nổi rõ, thẳng cột, viền nhẹ */
+#tcm-root .tcm-flt{margin:6px 0;font-size:12px;color:var(--sub)}
+#tcm-root .tcm-flt button{padding:3px 9px;font-size:11.5px}
+#tcm-root .tcm-tw{overflow:auto;max-height:520px;border:1px solid var(--line);border-radius:10px;margin-top:8px}
+#tcm-root .tcm-t{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+#tcm-root .tcm-t th{position:sticky;top:0;background:var(--g1);color:#fff;text-align:left;padding:8px 10px;font-size:11px;letter-spacing:.3px;white-space:nowrap}
+#tcm-root .tcm-t th + th,#tcm-root .tcm-t td + td{border-left:1px solid #F0EEE7}
+#tcm-root .tcm-t th + th{border-left-color:rgba(255,255,255,.2)}
+#tcm-root .tcm-t td{padding:6px 10px;border-top:1px solid #F0EEE7;vertical-align:top}
+#tcm-root .tcm-t td.nw,#tcm-root .tcm-t td:first-child,#tcm-root .tcm-t td:nth-child(2){white-space:nowrap}
+#tcm-root .tcm-t tbody tr:nth-child(even) td{background:#FBFBF8}
+#tcm-root .tcm-t tbody tr.w td{background:#FDF1F0}
+@media (max-width:1100px){#tcm-root .tcm-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#tcm-root .tcm-png{margin-left:auto;align-self:center;background:#E7F2E8;border-color:#9CC7A1;color:var(--g1)}
+</style>
+<!-- TCM:END CSS -->
 </head>
 <body>
 
@@ -2382,6 +2463,7 @@ PEOPLE_SCORE =
 
 <!-- TAB TIẾN ĐỘ MẪU -->
 <div class="tab-content" id="tab-progress">
+  <div id="tcm-root"></div><!-- TCM-ROOT tra cứu lịch sử làm mẫu -->
   <div class="panel">
     <div class="ph"><div class="pt"><span class="pt-icon">📊</span>BC_TOMTAT — Tổng hợp theo phân loại KH</div></div>
     <div style="overflow-x:auto;margin-bottom:12px"><table class="bct"><thead>
@@ -10775,5 +10857,343 @@ window.DLV = (function(){
 })();
 </script>
 <!-- DLV:END JS -->
+<!-- TCM:BEGIN JS -->
+<script>
+/* ═══ TRA CỨU LỊCH SỬ LÀM MẪU — đầu tab "Tiến độ mẫu" (BP CN triển khai & tối ưu SX), anh duyệt 24/10/2026 ═══
+   - Ô tìm: mã hàng / tên hàng / nội dung mẫu (không phân biệt dấu, nhiều từ = AND) trên DATA_NPI.
+   - Trục thời gian theo sản phẩm (kiểu DEMO_TrucThoiGian_MAU_46249B): YC mẫu (DATA_NPI) · mã tạo trên Bravo (truy vấn theo tên/mã SP)
+     · ECN (ECN V2) · SO (PHANTICH_MAU_DONHANG) · cảnh báo dữ liệu sai ngày.
+   - Bảng kết quả + tải Excel (CSV UTF-16 + tab). Chỉ đọc Sheet, không ghi. */
+window.TCM = (function(){
+  const NPI = {id:'1dXqdesaXALqaIahaIh7jOn0Y0jN5ZsI1Sf7mr_Fw8Dk', tab:'DATA_NPI', hr:9};
+  const BRAVO_ID = '17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU';
+  const ECN = {id:'1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', tab:'Báo cáo theo dõi quản lý ECN V2', hr:7};
+  const PH = {id:'1V9kJpx6Ae-jWYSMYOjnfOoR1QxIlLsqKU5UXaQLKdGc', tab:'✅ TỔNG HỢP V4', hr:1};
+  const COL = ['#E8A317','#2563A8','#0F766E','#7B1FA2','#C2185B','#2E7D32','#D84315','#00838F'];   // màu theo lượt mẫu
+  const C_BR = '#2E7D32', C_ECN = '#C2185B', C_SO = '#B8860B', C_NOW = '#8C979C';
+  const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/\s+/g,' ').trim();
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const p2 = n => String(n).padStart(2,'0');
+  const dm = d => d ? p2(d.getDate()) + '/' + p2(d.getMonth()+1) : '—';
+  const dmy = d => d ? dm(d) + '/' + d.getFullYear() : '—';
+  const fN = n => n==null||isNaN(n) ? '' : Math.round(n).toLocaleString('vi-VN');
+  const cut = (s, n) => { s = String(s||''); return s.length > n ? s.slice(0, n-1) + '…' : s; };
+  const days = (a, b) => Math.round((b - a) / 86400000);
+  const today = () => { const t = new Date(); t.setHours(0,0,0,0); return t; };
+  function gd(c){                                     // ô ngày gviz: Date(y,m,d) hoặc chuỗi dd/mm/yy(yy)
+    if (!c || c.v == null || c.v === '') return null;
+    let m = /^Date\((\d+),(\d+),(\d+)/.exec(String(c.v)); if (m) return new Date(+m[1], +m[2], +m[3]);
+    m = /^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/.exec(String(c.f != null ? c.f : c.v)); if (!m) return null;
+    let y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[2]-1, +m[1]);
+  }
+  const gt = c => !c || c.v == null ? '' : String(c.f != null && typeof c.v !== 'number' ? c.f : c.v).trim();
+  const gnum = c => c && typeof c.v === 'number' ? c.v : null;
+  // mã sản phẩm dạng GH69-46249B, RX1-7485-000, BB314… trong tên mẫu / model / diễn giải
+  const CODE_RE = /(?<![A-Z0-9])[A-Z]{1,4}\d{1,3}(?:-[A-Z0-9]{3,})+(?![A-Z0-9])/g;
+
+  const S = {npi:null, ecn:null, ph:null, loading:null, q:'', toks:[], res:[], prods:[], key:'', view:'tl', ev:null, data:null, seq:0, br:{}};
+  let root = null, tmr = null;
+  const $ = s => root.querySelector(s);
+
+  // ── tải nguồn (1 lần; nút "Tải mới" xoá bộ nhớ tạm) ─────────
+  function hdrMap(t){ return (t.cols||[]).map(c => nz(c.label)); }
+  const fc = (L, keys, fb) => { for (const k of keys){ const i = L.findIndex(l => l.indexOf(nz(k)) === 0); if (i >= 0) return i; } return fb; };
+  async function loadAll(){
+    if (S.loading) return S.loading;
+    S.loading = (async () => {
+      const [n, e, h] = await Promise.allSettled([
+        gvizFetch(NPI.id, NPI.tab, NPI.hr, 'select * limit 99999', 120000),
+        gvizFetch(ECN.id, ECN.tab, ECN.hr, 'select * limit 99999', 120000),
+        gvizFetch(PH.id, PH.tab, PH.hr, 'select * limit 99999', 60000)]);
+      if (n.status !== 'fulfilled') throw new Error('DATA_NPI: ' + (n.reason && n.reason.message));
+      const L = hdrMap(n.value), I = {
+        stt:fc(L,['stt'],0), ngayYC:fc(L,['ngay yeu cau'],1), tp:fc(L,['ngay tp duyet'],2), qt:fc(L,['ngay duyet qt mau'],4), pic:fc(L,['pic trien khai mau'],5),
+        ht:fc(L,['ngay duyet hoan thien'],6), dkht:fc(L,['ngay dkht mau'],7), nguoiYC:fc(L,['nguoi yeu cau mau'],8), soKH:fc(L,['so yc khach hang'],9), so:fc(L,['so yc mau'],10),
+        kh:fc(L,['ten khach hang'],11), nm:fc(L,['nha may thuc hien'],14), dg:fc(L,['dien giai'],15), lan:fc(L,['lan lam mau thu'],17), lydo:fc(L,['ly do lam lai'],18),
+        slMau:fc(L,['so luong mau'],19), slDH:fc(L,['so luong don hang du kien'],23), gtDH:fc(L,['gia tri don hang du kien'],24), dong:fc(L,['ma dong hang'],25), md:fc(L,['muc dich lam mau'],26),
+        model:fc(L,['ten model'],27), tensp:fc(L,['ten san pham mau'],28), mota:fc(L,['mo ta mau'],29), qtsx:fc(L,['quy trinh san xuat mau'],30), kc:fc(L,['ket cau san pham'],31),
+        tuongduong:fc(L,['san pham tuong duong'],36), maSP:fc(L,['ma san pham sau khi tao'],42), bg:fc(L,['ngay ban giao mau'],43), tt:fc(L,['tinh trang mau'],46),
+        duyet:fc(L,['ngay duyet mau'],47), ph:fc(L,['noi dung phan hoi mau'],50), keo:fc(L,['ngay keo lenh'],51)};
+      S.npi = (n.value.rows||[]).filter(r => r && r.c && gnum(r.c[I.stt]) > 0).map(r => { const c = r.c, g = k => gt(c[I[k]]), d = k => gd(c[I[k]]);
+        const o = {stt:gnum(c[I.stt]), ngayYC:d('ngayYC'), tp:d('tp'), qt:d('qt'), ht:d('ht'), dkht:d('dkht'), bg:d('bg'), duyet:d('duyet'), keo:d('keo'),
+          so:g('so'), soKH:g('soKH'), kh:g('kh'), nm:g('nm'), dg:g('dg'), lan:gnum(c[I.lan]) || 1, lydo:g('lydo'), pic:g('pic'), nguoiYC:g('nguoiYC'),
+          slMau:gnum(c[I.slMau]), slDH:gnum(c[I.slDH]), gtDH:gnum(c[I.gtDH]), dong:g('dong'), md:g('md'), model:g('model'), tensp:g('tensp'), mota:g('mota'),
+          qtsx:g('qtsx'), kc:g('kc'), tuongduong:g('tuongduong'), maSP:g('maSP'), tt:g('tt'), ph:g('ph')};
+        o.text = [o.so, o.soKH, o.dg, o.model, o.tensp, o.mota, o.maSP, o.dong, o.kh, o.md, o.qtsx].join(' | ');
+        o.k = nz(o.text); o.k2 = o.k.replace(/[\s\-_.\/|,;:()+]+/g, ''); return o; });
+      if (e.status === 'fulfilled') {
+        const L2 = hdrMap(e.value), J = {code:fc(L2,['ten code'],2), ma:fc(L2,['ma vat tu'],4), ten:fc(L2,['ten vat tu'],5), dg:fc(L2,['dien giai'],8), ht:fc(L2,['hinh thuc ecn'],12),
+          han:fc(L2,['thoi han ecn'],13), ton:fc(L2,['so luong ton kho xac nhan'],16), ngay:fc(L2,['ngay ecn'],18), kb:fc(L2,['nguoi khai bao'],19), nm:fc(L2,['nha may trien khai'],20),
+          tien:fc(L2,['thanh tien'],23), pa:fc(L2,['phuong an xu ly'],25), so:fc(L2,['so ecn'],27), nc:fc(L2,['nguon cap'],11), ver0:fc(L2,['ver cu'],6), ver1:fc(L2,['ver moi'],7)};
+        S.ecn = (e.value.rows||[]).filter(r => r && r.c).map(r => { const c = r.c, g = k => gt(c[J[k]]);
+          const o = {code:g('code'), ma:g('ma'), ten:g('ten'), dg:g('dg'), ht:g('ht'), han:gd(c[J.han]), ton:gnum(c[J.ton]) || 0, ngay:gd(c[J.ngay]), kb:g('kb'), nm:g('nm'),
+            tien:gnum(c[J.tien]) || 0, pa:g('pa'), so:g('so'), nc:g('nc'), ver0:c[J.ver0] ? String(c[J.ver0].f != null ? c[J.ver0].f : c[J.ver0].v) : '', ver1:c[J.ver1] ? String(c[J.ver1].f != null ? c[J.ver1].f : c[J.ver1].v) : ''};
+          o.k = nz([o.code, o.ma, o.ten, o.dg].join(' | ')); return o; });
+      } else S.ecn = [];
+      if (h.status === 'fulfilled') {
+        const L3 = hdrMap(h.value), K = {so:fc(L3,['so yc'],1), tt:fc(L3,['tinh trang mau'],6), n:fc(L3,['so dong dh'],7), gt:fc(L3,['tong gia tri'],8), sos:fc(L3,['danh sach so'],9)};
+        S.ph = {}; (h.value.rows||[]).forEach(r => { const c = r.c||[], so = gt(c[K.so]); if (so) S.ph[so] = {n:gnum(c[K.n]) || 0, gt:gnum(c[K.gt]) || 0, sos:gt(c[K.sos]), tt:gt(c[K.tt])}; });
+      } else S.ph = {};
+    })();
+    S.loading.catch(() => { S.loading = null; });
+    return S.loading;
+  }
+  // Bravo: dashboard chỉ tải vài cột (không có tên SP) → hỏi riêng theo tên / mã sản phẩm
+  function bravoFor(key){
+    const k = key.replace(/'/g, '').trim(); if (!k) return Promise.resolve([]);
+    if (S.br[k]) return S.br[k];
+    const q = "select B,E,G,H,I,L,M,O,U where lower(M) contains '" + k.toLowerCase() + "' or lower(L) contains '" + k.toLowerCase() + "' limit 300";
+    S.br[k] = gvizFetch(BRAVO_ID, '', 7, q, 60000).then(t => (t.rows||[]).filter(r => r && r.c).map(r => { const c = r.c;
+      const d = (typeof bravoCellDate === 'function') ? bravoCellDate(c[0]) : gd(c[0]); const dd = d ? new Date(d.getFullYear(), d.getMonth(), d.getDate()) : null;
+      const o = {d:dd, kb:gt(c[1]), kho:gt(c[2]), tenKho:gt(c[3]), cd:gt(c[4]), ma:gt(c[5]), ten:gt(c[6]), kh:gt(c[7]), qt:gt(c[8])};
+      o.mau = /sample/i.test(o.ma) || /m[aẫ]u\)?\s*$|\(\s*m[aẫ]u\s*\)/i.test(o.ten); return o; }))
+      .catch(e => { delete S.br[k]; throw e; });
+    return S.br[k];
+  }
+
+  // ── tìm & nhóm theo sản phẩm ─────────────────────────────────
+  function search(){
+    S.toks = nz(S.q).split(/\s+/).filter(x => x.length >= 2);
+    if (!S.toks.length || !S.npi) { S.res = []; S.prods = []; return; }
+    const tk2 = S.toks.map(t => { const c = t.replace(/[\s\-_.\/|,;:()+]+/g, ''); return c.length >= 5 && /[a-z]/.test(c) && /\d/.test(c) ? c : null; });
+    S.res = S.npi.filter(o => S.toks.every((t, j) => o.k.indexOf(t) >= 0 || (tk2[j] && o.k2.indexOf(tk2[j]) >= 0)));
+    const cnt = {};
+    S.res.forEach(o => { const set = new Set(); [o.tensp, o.model, o.dg].join(' ').toUpperCase().replace(CODE_RE, m => { set.add(m); return m; }); set.forEach(m => cnt[m] = (cnt[m]||0) + 1); });
+    const qn = S.toks.join('').replace(/[\s\-_.\/]/g, '');
+    S.prods = Object.entries(cnt).map(([k, n]) => ({k, n, hit: nz(k).replace(/[\s\-_.\/]/g, '').indexOf(qn) >= 0})).sort((a, b) => (b.hit - a.hit) || (b.n - a.n)).slice(0, 8);
+    S.key = S.prods.length && S.prods[0].hit ? S.prods[0].k : '';
+  }
+
+  // ── dựng dữ liệu cho 1 sản phẩm (hoặc tất cả kết quả) ────────
+  async function build(){
+    const seq = ++S.seq, key = S.key, t0 = today();
+    const yc = (key ? S.res.filter(o => (o.tensp + ' ' + o.model + ' ' + o.dg).toUpperCase().indexOf(key) >= 0) : S.res.slice())
+      .sort((a, b) => (a.ngayYC || 0) - (b.ngayYC || 0) || a.stt - b.stt);
+    const bkey = key || (S.toks.length === 1 && S.toks[0].length >= 5 ? S.q.trim() : '');
+    let br = [], brErr = '';
+    if (bkey) { try { br = await bravoFor(bkey); } catch(e) { brErr = e.message; } }
+    if (seq !== S.seq) return null;
+    const brMa = new Set(br.map(x => x.ma));
+    const kk = nz(bkey);
+    const ecn = bkey ? S.ecn.filter(x => brMa.has(x.ma) || (kk && x.k.indexOf(kk) >= 0)) : [];
+    const so = yc.map(o => Object.assign({so:o.so}, S.ph[o.so] || {})).filter(x => x.n > 0);
+    // sự kiện
+    const ev = [];
+    yc.forEach((o, i) => {
+      const warn = [];
+      if (o.ngayYC && o.bg && o.bg < o.ngayYC) warn.push('bàn giao ' + dm(o.bg) + ' trước ngày YC ' + dm(o.ngayYC) + ' (cột 18 = ' + days(o.ngayYC, o.bg) + ')');
+      if (o.ngayYC && o.tp && days(o.ngayYC, o.tp) > 20) warn.push('TP duyệt ' + dm(o.tp) + ' sau ngày YC ' + days(o.ngayYC, o.tp) + ' ngày — kiểm tra ngày YC');
+      const m = /^SA(\d{2})(\d{2})-/.exec(o.so); if (m && o.ngayYC && (+m[2] !== o.ngayYC.getMonth()+1 || 2000 + +m[1] !== o.ngayYC.getFullYear())) warn.push('số YC thuộc tháng ' + m[2] + '/20' + m[1] + ' nhưng ngày YC ' + dmy(o.ngayYC));
+      if (!o.bg && o.dkht && o.dkht < t0) warn.push('chưa bàn giao, đã quá hạn DKHT ' + dmy(o.dkht));
+      ev.push({id:'yc' + i, type:'yc', d:o.ngayYC || o.tp || o.bg, col:COL[i % COL.length], o, warn});
+    });
+    const brS = br.slice().sort((a, b) => (a.d || 0) - (b.d || 0)), cl = [];
+    brS.forEach(x => { const g = cl[cl.length-1]; if (g && x.d && g.d1 && days(g.d1, x.d) <= 7) { g.list.push(x); g.d1 = x.d; } else cl.push({d:x.d, d1:x.d, list:[x]}); });
+    cl.forEach((g, i) => ev.push({id:'br' + i, type:'br', d:g.d, d1:g.d1, col:C_BR, list:g.list}));
+    const byS = {}; ecn.forEach(x => { (byS[x.so || '(không số)'] = byS[x.so || '(không số)'] || []).push(x); });
+    Object.keys(byS).forEach(k => { const L = byS[k], d = L.map(x => x.ngay).filter(Boolean).sort((a, b) => a - b)[0];
+      const qh = L.filter(x => x.ton > 0 && x.han && x.han < t0); ev.push({id:'ecn' + k, type:'ecn', d, col:C_ECN, so:k, list:L, qh}); });
+    ev.sort((a, b) => (a.d || 0) - (b.d || 0));
+    // chỉ số
+    const lt = yc.filter(o => o.ngayYC && o.bg && o.bg >= o.ngayYC).map(o => days(o.ngayYC, o.bg));
+    const lamlai = yc.filter(o => /lam lai/.test(nz(o.tt))).length;
+    const ecnQh = {}; ecn.forEach(x => { if (x.ton > 0 && x.han && x.han < t0 && !x.pa) ecnQh[x.ma] = Math.max(ecnQh[x.ma] || 0, x.ton); });
+    const qhPcs = Object.values(ecnQh).reduce((s, v) => s + v, 0);
+    const warnYC = ev.filter(e => e.type === 'yc' && e.warn.length).length;
+    const top = (arr, f) => { const m = {}; arr.forEach(x => { const v = f(x); if (v) m[v] = (m[v]||0) + 1; }); return Object.keys(m).sort((a, b) => m[b] - m[a])[0] || ''; };
+    return {key, bkey, yc, br, brErr, ecn, so, ev, lt, lamlai, qhPcs, nQhMa:Object.keys(ecnQh).length, warnYC,
+      model:top(yc, o => o.model), kh:top(yc, o => o.kh), nm:[...new Set(yc.map(o => o.nm).filter(Boolean))].join(', '),
+      pic:[...new Set(yc.map(o => o.pic).filter(Boolean))].join(', '), nguoiYC:[...new Set(yc.map(o => o.nguoiYC).filter(Boolean))].join(', ')};
+  }
+
+  // ── hiển thị ─────────────────────────────────────────────────
+  function cardYC(e){
+    const o = e.o, red = /lam lai|khong dat|huy/.test(nz(o.tt));
+    const step = [['YC', o.ngayYC], ['TP duyệt', o.tp], ['bàn giao', o.bg], ['duyệt mẫu', o.duyet], ['kéo lệnh', o.keo]].filter(x => x[1]).map(x => x[0] + ' ' + (x[0] === 'bàn giao' ? '<b>' + dm(x[1]) + '</b>' : dm(x[1]))).join(' → ');
+    return '<h4 style="color:' + e.col + '">' + esc(o.so || 'YC') + ' · Lần ' + o.lan + (o.md ? ' · ' + esc(cut(o.md, 32)) : '') + '</h4>' +
+      '<div>' + esc(cut(o.tensp || o.model || o.dg, 110)) + '</div>' +
+      (o.mota || o.kc ? '<div>' + esc(cut([o.mota, o.kc !== '.' ? o.kc : ''].filter(Boolean).join(' · '), 90)) + (o.slMau ? ' · ' + fN(o.slMau) + ' mẫu' : '') + '</div>' : '') +
+      (o.qtsx ? '<div class="tcm-s">' + esc(cut(o.qtsx.replace(/\s+/g, ' '), 120)) + '</div>' : '') +
+      '<div>' + step + (o.bg && o.ngayYC && o.bg >= o.ngayYC ? ' (' + days(o.ngayYC, o.bg) + ' ngày)' : '') + '</div>' +
+      (o.maSP ? '<div>Mã mẫu: <b>' + esc(o.maSP) + '</b></div>' : '') +
+      (o.slDH || o.gtDH ? '<div class="tcm-s">ĐH dự kiến ' + (o.slDH ? fN(o.slDH) + ' pcs' : '') + (o.gtDH ? ' · ' + (o.gtDH/1e9).toLocaleString('vi-VN', {maximumFractionDigits:2}) + ' tỷ đ' : '') + '</div>' : '') +
+      '<div>Kết quả: <b class="' + (red ? 'tcm-red' : 'tcm-ok') + '">' + esc(o.tt || 'chưa có') + '</b>' + (o.ph ? ' · ' + esc(cut(o.ph, 80)) : '') + (o.lydo ? ' · lý do làm lại: ' + esc(cut(o.lydo, 60)) : '') + '</div>' +
+      '<div class="tcm-s">PIC: ' + esc(o.pic || '—') + (o.nguoiYC ? ' · người YC: ' + esc(o.nguoiYC) : '') + '</div>' +
+      (e.warn.length ? '<div class="tcm-warn">⚠ Ngày lệch: ' + e.warn.map(esc).join('; ') + ' → cần sửa DATA_NPI</div>' : '');
+  }
+  function cardBR(e){
+    const L = e.list, mau = L.filter(x => x.mau), sx = L.filter(x => !x.mau);
+    return '<h4 style="color:' + C_BR + '">Bravo · tạo ' + L.length + ' mã' + (mau.length && sx.length ? ' (' + sx.length + ' SX, ' + mau.length + ' mẫu)' : mau.length ? ' mẫu' : ' sản xuất') + '</h4>' +
+      L.slice(0, 8).map(x => '<div><b>' + esc(x.ma) + '</b> · ' + esc(cut(x.ten, 48)) + '</div>').join('') + (L.length > 8 ? '<div class="tcm-s">… và ' + (L.length - 8) + ' mã khác (xem bảng kết quả)</div>' : '') +
+      '<div class="tcm-s">Người khai báo: ' + esc([...new Set(L.map(x => x.kb))].join(', ')) + ' · ' + esc([...new Set(L.map(x => x.tenKho).filter(Boolean))].slice(0, 3).join(', ')) + '</div>';
+  }
+  function cardECN(e){
+    const L = e.list, x0 = L[0], han = [...new Set(L.map(x => dmy(x.han)))].join(', '), ton = L.filter(x => x.ton > 0);
+    return '<h4 style="color:' + C_ECN + '">' + esc(e.so) + '</h4>' +
+      '<div>' + esc(x0.ht || '') + ' · <b>' + esc(cut(x0.dg, 90)) + '</b></div>' +
+      '<div>Ngày ECN ' + dmy(e.d) + ' · thời hạn <b>' + esc(han) + '</b>' + (x0.nc ? ' · nguồn ' + esc(x0.nc) : '') + '</div>' +
+      L.slice(0, 6).map(x => '<div>' + esc(x.ma) + ' (' + esc(cut(x.ten, 30)) + ')' + (x.ver0 || x.ver1 ? ' · ver ' + esc(x.ver0 || '—') + ' → ' + esc(x.ver1 || '—') : '') + (x.ton > 0 ? ' · tồn <b>' + fN(x.ton) + ' pcs</b>' + (x.tien ? ' (' + fN(x.tien) + ' đ)' : '') : '') + '</div>').join('') +
+      '<div class="tcm-s">Người khai báo: ' + esc([...new Set(L.map(x => x.kb))].join(', ')) + ' · ' + esc(x0.nm) + '</div>' +
+      (e.qh.length ? '<div class="tcm-warn">⚠ Đã quá hạn ECN mà còn tồn ' + fN(e.qh.reduce((s, x) => s + x.ton, 0)) + ' pcs' + (e.qh.some(x => !x.pa) ? ' · chưa có phương án xử lý' : '') + '</div>'
+        : ton.length ? '<div class="tcm-info">⏳ Còn tồn ' + fN(ton.reduce((s, x) => s + x.ton, 0)) + ' pcs, chưa tới hạn ECN</div>' : '');
+  }
+  const segLb = {yc:'Mẫu', br:'Bravo', ecn:'ECN'};
+  function drawTL(D){
+    const E = D.ev, t0 = today();
+    if (!E.length) return '<div class="tcm-empty">Không có mốc nào cho sản phẩm này.</div>';
+    const N = E.length + 1, W = Math.max(210, Math.floor(((root.clientWidth || 1340) - 60) / (N + 0.6)));   // đủ rộng thì vừa khung, nhiều mốc thì cuộn ngang
+    const cols = 'grid-template-columns:repeat(' + N + ',' + W + 'px)';
+    const cell = (i, row, html, cls) => '<div class="' + (cls||'') + '" style="grid-column:' + (i+1) + ';grid-row:' + row + '">' + html + '</div>';
+    let h = '';
+    E.forEach((e, i) => {
+      const up = i % 2 === 0, card = e.type === 'yc' ? cardYC(e) : e.type === 'br' ? cardBR(e) : cardECN(e);
+      const cw = Math.min(2*W - 24, 440);
+      const cardHtml = '<div class="tcm-ev" data-ev="' + e.id + '" style="width:' + cw + 'px;margin-left:' + ((W - cw)/2) + 'px">' + card + '</div>';
+      const sub = e.type === 'yc' ? esc(e.o.so) + '<br>Lần ' + e.o.lan : e.type === 'br' ? 'Bravo<br>' + e.list.length + ' mã' : esc(e.so.replace(/^ECN-/, '')) + '<br>' + e.list.length + ' dòng';
+      const dl = e.d1 && e.d && e.d1 > e.d ? dm(e.d) + '–' + dm(e.d1) : dmy(e.d);
+      const node = '<div class="tcm-node" data-ev="' + e.id + '" style="border-color:' + e.col + '"><b style="color:' + e.col + '">' + dl + '</b><span>' + sub + '</span></div>';
+      h += cell(i, up ? 1 : 5, cardHtml, up ? 'tcm-top' : 'tcm-bot');
+      h += cell(i, up ? 2 : 4, node + '<div class="tcm-stem" style="background:' + e.col + '"></div>', up ? 'tcm-nd up' : 'tcm-nd dn');
+      const nx = E[i+1], to = nx ? nx.d : t0;
+      h += cell(i, 3, '<div class="tcm-seg' + (i === 0 ? ' first' : '') + '" style="background:' + e.col + ';--c:' + e.col + '"><span><b>' + segLb[e.type].toUpperCase() + '</b> ' + (e.d && to && days(e.d, to) === 0 ? dm(e.d) : dm(e.d) + ' → ' + (nx ? dm(to) : 'nay') + (e.d && to ? ' · ' + days(e.d, to) + ' ngày' : '')) + '</span></div>');
+    });
+    const so = D.so.length ? 'Đã có <b>' + D.so.length + '</b> YC ra đơn hàng: ' + D.so.map(x => esc(x.so) + ' (' + fN(x.n) + ' dòng SO' + (x.gt ? ', ' + (x.gt/1e9).toLocaleString('vi-VN', {maximumFractionDigits:2}) + ' tỷ' : '') + ')').join('; ')
+      : 'Chưa có SO nào nối với ' + D.yc.length + ' YC mẫu (PHANTICH_MAU_DONHANG)';
+    h += cell(E.length, E.length % 2 === 0 ? 1 : 5, '<div class="tcm-now" style="width:' + (W - 10) + 'px"><b>HÔM NAY ' + dmy(t0) + '</b><br>' + so + '</div>', E.length % 2 === 0 ? 'tcm-top' : 'tcm-bot');
+    h += cell(E.length, 3, '<div class="tcm-seg last" style="background:' + C_NOW + ';--c:' + C_NOW + '"><span><b>HIỆN TẠI</b></span></div>');
+    const pad = Math.max(0, Math.ceil((Math.min(2*W - 24, 440) - W) / 2));
+    return '<div class="tcm-grid" style="' + cols + ';padding:0 ' + pad + 'px">' + h + '</div>';
+  }
+  function rowsOf(D){
+    const R = [];
+    D.ev.forEach(e => {
+      if (e.type === 'yc') { const o = e.o; R.push({ev:e.id, loai:'YC mẫu', ngay:o.ngayYC, so:o.so, nd:[o.tensp || o.model, o.md, o.mota].filter(Boolean).join(' · '),
+        tt:[o.tt, o.bg ? 'bàn giao ' + dmy(o.bg) : '', o.duyet ? 'duyệt ' + dmy(o.duyet) : ''].filter(Boolean).join(' · '), nguoi:o.pic, gc:[o.maSP ? 'mã ' + o.maSP : '', e.warn.length ? '⚠ ' + e.warn.join('; ') : ''].filter(Boolean).join(' · '), warn:e.warn.length > 0}); }
+      if (e.type === 'br') e.list.forEach(x => R.push({ev:e.id, loai:x.mau ? 'Mã mẫu Bravo' : 'Mã SX Bravo', ngay:x.d, so:x.ma, nd:x.ten, tt:x.tenKho, nguoi:x.kb, gc:x.qt}));
+      if (e.type === 'ecn') e.list.forEach(x => { const qh = x.ton > 0 && x.han && x.han < today(); R.push({ev:e.id, loai:'ECN', ngay:x.ngay, so:x.so + ' · ' + x.ma, nd:x.ht + ' · ' + x.dg,
+        tt:'hạn ' + dmy(x.han) + (x.ton ? ' · tồn ' + fN(x.ton) + ' pcs' : ''), nguoi:x.kb, gc:qh ? '⚠ quá hạn còn tồn' + (x.pa ? '' : ', chưa có phương án') : (x.pa || ''), warn:qh}); });
+    });
+    D.so.forEach(x => R.push({ev:'so', loai:'Đơn hàng (SO)', ngay:null, so:x.so, nd:x.sos, tt:fN(x.n) + ' dòng · ' + fN(x.gt) + ' đ', nguoi:'', gc:x.tt}));
+    return R;
+  }
+  function drawTable(D){
+    const R = rowsOf(D).filter(r => !S.ev || r.ev === S.ev);
+    return (S.ev ? '<div class="tcm-flt">Đang lọc theo 1 mốc trên trục · <button type="button" data-act="unev">Bỏ lọc</button></div>' : '') +
+      '<div class="tcm-tw"><table class="tcm-t"><thead><tr><th>Loại</th><th>Ngày</th><th>Số YC / Mã</th><th>Nội dung</th><th>Trạng thái</th><th>Người</th><th>Ghi chú</th></tr></thead><tbody>' +
+      (R.length ? R.map(r => '<tr' + (r.warn ? ' class="w"' : '') + '><td>' + esc(r.loai) + '</td><td>' + (r.ngay ? dmy(r.ngay) : '') + '</td><td class="nw"><b>' + esc(r.so) + '</b></td><td>' + esc(cut(r.nd, 160)) +
+        '</td><td>' + esc(r.tt) + '</td><td>' + esc(r.nguoi) + '</td><td>' + esc(cut(r.gc, 140)) + '</td></tr>').join('') : '<tr><td colspan="7" class="tcm-empty">Không có dòng nào.</td></tr>') + '</tbody></table></div>';
+  }
+  function render(){
+    const out = $('.tcm-out'), D = S.data;
+    if (!S.q.trim()) { out.innerHTML = ''; return; }
+    if (!S.npi) { out.innerHTML = '<div class="tcm-msg"><span class="tcm-spin"></span>Đang tải DATA_NPI, ECN, mẫu → đơn hàng…</div>'; return; }
+    if (!S.res.length) { out.innerHTML = '<div class="tcm-msg">Không có yêu cầu mẫu nào khớp "' + esc(S.q) + '".</div>'; return; }
+    const chips = '<div class="tcm-chips">Sản phẩm khớp: ' + S.prods.map(p => '<button type="button" class="tcm-chip' + (p.k === S.key ? ' on' : '') + '" data-key="' + esc(p.k) + '">' + esc(p.k) + ' · ' + p.n + ' YC</button>').join('') +
+      '<button type="button" class="tcm-chip' + (!S.key ? ' on' : '') + '" data-key="">Tất cả kết quả · ' + S.res.length + ' YC</button></div>';
+    if (!D) { out.innerHTML = chips + '<div class="tcm-msg"><span class="tcm-spin"></span>Đang tra Bravo và ECN…</div>'; return; }
+    const nRows = rowsOf(D).length, t0 = today();
+    const kpi = (cls, l, v, s) => '<div class="tcm-kpi ' + cls + '"><div class="l">' + l + '</div><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+    const span = D.yc.length ? dmy(D.yc[0].ngayYC) + ' → ' + dmy(D.yc[D.yc.length-1].ngayYC) : '';
+    const brSX = D.br.filter(x => !x.mau).length, nWarn = (D.qhPcs ? 1 : 0) + (D.warnYC ? 1 : 0) + (D.so.length ? 0 : 1);
+    out.innerHTML = chips +
+      '<div class="tcm-tabs"><button type="button" class="tcm-tab' + (S.view === 'tl' ? ' on' : '') + '" data-view="tl">⟿ Trục thời gian làm mẫu</button>' +
+      '<button type="button" class="tcm-tab' + (S.view === 'tb' ? ' on' : '') + '" data-view="tb">☰ Bảng kết quả (' + nRows + ' dòng: ' + D.yc.length + ' YC mẫu · ' + D.br.length + ' mã Bravo · ' + D.ecn.length + ' dòng ECN)</button>' +
+      '<button type="button" class="tcm-png" data-act="png">🖼 Xuất ảnh trục thời gian</button></div>' +
+      '<div class="tcm-body"><div class="tcm-hd"><h3>' + esc(D.key || ('Kết quả "' + S.q.trim() + '"')) + (D.model && D.model.toUpperCase() !== D.key ? ' · ' + esc(cut(D.model, 70)) : '') + '</h3>' +
+      '<p>' + esc(D.kh || '') + (D.nm ? ' · nhà máy ' + esc(D.nm) : '') + ' · ' + D.yc.length + ' yêu cầu mẫu ' + span + ' · ' + D.br.length + ' mã Bravo · ' + new Set(D.ecn.map(x => x.so)).size + ' ECN' +
+        (D.nguoiYC ? ' · người yêu cầu: ' + esc(D.nguoiYC) : '') + (D.pic ? ' · PIC mẫu: ' + esc(D.pic) : '') + '</p></div>' +
+      (D.brErr ? '<div class="tcm-warn">Không tra được Bravo: ' + esc(D.brErr) + '</div>' : '') +
+      '<div class="tcm-kpis">' +
+        kpi('', 'LỊCH SỬ LÀM MẪU', D.yc.length + ' YC', 'lần làm mẫu cao nhất: ' + Math.max(...D.yc.map(o => o.lan), 1) + (D.lamlai ? ' · ' + D.lamlai + '/' + D.yc.length + ' YC ghi "Làm lại mẫu"' : '')) +
+        kpi('y', 'THỜI GIAN 1 VÒNG MẪU', D.lt.length ? (Math.min(...D.lt) === Math.max(...D.lt) ? D.lt[0] : Math.min(...D.lt) + ' – ' + Math.max(...D.lt)) + ' ngày' : '—',
+          'YC → bàn giao (cột 18)' + (D.lt.length ? ' · TB ' + (D.lt.reduce((s, v) => s + v, 0) / D.lt.length).toLocaleString('vi-VN', {maximumFractionDigits:1}) + ' ngày trên ' + D.lt.length + ' YC hợp lệ' : '') + (D.yc.length - D.lt.length ? ' · ' + (D.yc.length - D.lt.length) + ' YC chưa giao / ngày lỗi' : '')) +
+        kpi('', 'MÃ TRÊN BRAVO', D.br.length + ' mã', D.bkey ? brSX + ' mã sản xuất · ' + (D.br.length - brSX) + ' mã mẫu' + (D.br.length ? ' · từ ' + dmy(D.br.map(x => x.d).filter(Boolean).sort((a, b) => a - b)[0]) : '') : 'chọn 1 sản phẩm để tra Bravo') +
+        kpi(nWarn ? 'r' : 'g', 'CẦN XỬ LÝ', nWarn ? nWarn + ' cảnh báo' : 'Không có', [D.qhPcs ? 'ECN quá hạn còn tồn ' + fN(D.qhPcs) + ' pcs (' + D.nQhMa + ' mã)' : '', D.warnYC ? D.warnYC + ' YC sai thứ tự ngày' : '', D.so.length ? '' : 'chưa ghi nhận SO'].filter(Boolean).join(' · ') || 'Dữ liệu đầy đủ') +
+      '</div>' +
+      (S.view === 'tl' ? '<div class="tcm-tlw">' + drawTL(D) + '</div>' : drawTable(D)) +
+      '<div class="tcm-foot">Mỗi vòng tròn là một mốc trong lịch sử làm mẫu (yêu cầu mẫu, mã tạo trên Bravo, ECN); màu dải = khoảng thời gian tới mốc kế tiếp; khung đỏ = cần xử lý / dữ liệu sai ngày, khung vàng = lưu ý. Bấm vòng tròn hoặc ô chữ → lọc bảng kết quả theo mốc đó; trục tự co giãn vừa khung, nút "Xuất ảnh" lưu toàn bộ trục ở cỡ thật; mã Bravo tạo cách nhau ≤ 7 ngày gộp 1 mốc. Nguồn: DATA_NPI · Bravo (tra theo tên/mã SP) · ECN V2 · PHANTICH_MAU_DONHANG — đọc trực tiếp, không ghi.</div></div>';
+    if (S.view === 'tl') fit();
+  }
+  // co giãn trục cho vừa bề ngang khung (zoom), không cần cuộn ngang
+  function fit(){
+    const w = root.querySelector('.tcm-tlw'), g = w && w.querySelector('.tcm-grid'); if (!g) return;
+    g.style.zoom = 1; const r = w.clientWidth / g.scrollWidth;
+    if (r < 1) g.style.zoom = Math.max(r - 0.002, 0.1).toFixed(3);   // luôn vừa khung; nhiều mốc → bấm nút sản phẩm hoặc xuất ảnh để xem cỡ thật
+  }
+  // xuất ảnh PNG toàn bộ trục thời gian (tiêu đề + chỉ số + trục) — html2canvas tải khi cần
+  function loadH2C(){
+    if (window.html2canvas) return Promise.resolve();
+    return new Promise((ok, no) => { const sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      sc.onload = ok; sc.onerror = () => no(new Error('Không tải được thư viện xuất ảnh (cần mạng)')); document.head.appendChild(sc); });
+  }
+  async function png(btn){
+    if (!S.data) return;
+    if (S.view !== 'tl') { S.view = 'tl'; render(); }
+    const old = btn.textContent; btn.textContent = 'Đang xuất ảnh…'; btn.disabled = true;
+    const body = $('.tcm-body'), w = $('.tcm-tlw'), g = $('.tcm-grid');
+    try {
+      await loadH2C();
+      g.style.zoom = 1; w.style.overflow = 'visible';
+      body.style.width = Math.max(body.clientWidth, g.scrollWidth + 34) + 'px';   // khổ ảnh = đủ chiều ngang trục ở cỡ thật
+      const cv = await html2canvas(body, {scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false, windowWidth: body.scrollWidth + 60});
+      const d = new Date(), a = document.createElement('a');
+      a.href = cv.toDataURL('image/png');
+      a.download = 'GSP_OPS_TrucThoiGianMau_' + (S.data.key || S.q.trim()).replace(/[^A-Za-z0-9-]+/g, '_').slice(0, 40) + '_' + d.getFullYear() + p2(d.getMonth()+1) + p2(d.getDate()) + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    } catch(e) { alertBox('Không xuất được ảnh: ' + e.message); }
+    finally { body.style.width = ''; w.style.overflow = ''; fit(); btn.textContent = old; btn.disabled = false; }
+  }
+  function alertBox(m){ const o = $('.tcm-out'); if (o) o.insertAdjacentHTML('afterbegin', '<div class="tcm-warn">' + esc(m) + '</div>'); }
+  async function run(){
+    S.q = $('.tcm-q').value; S.ev = null; S.data = null; S.key = '';
+    if (!S.q.trim()) return render();
+    if (!S.npi) { render(); try { await loadAll(); } catch(e) { $('.tcm-out').innerHTML = '<div class="tcm-warn">Không tải được dữ liệu: ' + esc(e.message) + '</div>'; return; } }
+    search(); render();
+    if (!S.res.length) return;
+    try { const D = await build(); if (D) { S.data = D; render(); } } catch(e) { $('.tcm-out').insertAdjacentHTML('beforeend', '<div class="tcm-warn">Lỗi dựng lịch sử: ' + esc(e.message) + '</div>'); }
+  }
+  async function pick(key){ S.key = key; S.ev = null; S.data = null; render(); const D = await build(); if (D) { S.data = D; render(); } }
+
+  // ── tải Excel (CSV UTF-16 + tab) ─────────────────────────────
+  function csv(){
+    if (!S.data) return;
+    const cl = s => String(s==null?'':s).replace(/[\t\r\n]+/g, ' ').trim();
+    const L = [['Loại','Ngày','Số YC / Mã','Nội dung','Trạng thái','Người','Ghi chú'].join('\t')].concat(rowsOf(S.data).map(r => [r.loai, r.ngay ? dmy(r.ngay) : '', r.so, r.nd, r.tt, r.nguoi, r.gc].map(cl).join('\t')));
+    const str = L.join('\r\n'), buf = new Uint8Array(2 + str.length*2); buf[0] = 0xFF; buf[1] = 0xFE;
+    for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); buf[2+2*i] = c & 255; buf[3+2*i] = c >> 8; }
+    const d = new Date(), a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([buf], {type:'text/csv'}));
+    a.download = 'GSP_OPS_LichSuMau_' + (S.data.key || S.q.trim()).replace(/[^A-Za-z0-9-]+/g, '_').slice(0, 40) + '_' + d.getFullYear() + p2(d.getMonth()+1) + p2(d.getDate()) + '.csv';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
+  function init(){
+    root = document.getElementById('tcm-root'); if (!root || root.dataset.ok) return; root.dataset.ok = '1';
+    root.innerHTML = '<div class="tcm-card"><div class="tcm-kick">TRA CỨU LỊCH SỬ LÀM MẪU</div>' +
+      '<div class="tcm-bar"><input type="search" class="tcm-q" placeholder="Nhập mã hàng / tên hàng / nội dung mẫu — vd 46249B, R540, test keo… (tìm trong Số YC, Diễn giải, Tên model / SP mẫu, Mô tả, Mã SP sau khi tạo, Khách hàng)">' +
+      '<button type="button" data-act="clear">Xoá điều kiện</button><button type="button" data-act="reload">⟳ Tải mới</button><button type="button" class="p" data-act="csv">↓ Tải Excel kết quả</button></div>' +
+      '<div class="tcm-out"></div></div>';
+    $('.tcm-q').addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(run, 450); });
+    $('.tcm-q').addEventListener('focus', () => { if (!S.npi) loadAll().catch(() => {}); }, {once:true});
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button'), ev = e.target.closest('[data-ev]');
+      if (b && b.dataset.key != null && b.classList.contains('tcm-chip')) return pick(b.dataset.key);
+      if (b && b.dataset.view) { S.view = b.dataset.view; return render(); }
+      const act = b && b.dataset.act;
+      if (act === 'clear') { $('.tcm-q').value = ''; S.key = ''; return run(); }
+      if (act === 'reload') { S.npi = S.ecn = S.ph = null; S.loading = null; S.br = {}; return run(); }
+      if (act === 'csv') return csv();
+      if (act === 'png') return png(b);
+      if (act === 'unev') { S.ev = null; return render(); }
+      if (ev) { S.ev = ev.dataset.ev; S.view = 'tb'; render(); }
+    });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (S.data && S.view === 'tl' && root.offsetParent) render(); }, 200); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  return {init, run, _S:S};
+})();
+</script>
+<!-- TCM:END JS -->
 </body>
 </html>
