@@ -978,6 +978,58 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #ecnx-flt .ecnx-bar button{font:inherit;font-size:12px;font-weight:600;padding:4px 12px;border:1px solid #D9B84A;border-radius:8px;background:#fff;color:#4A3B00;cursor:pointer}
 #ecnx-flt .ecnx-bar button:hover{background:#FFF1C2}
 #ecnx-flt .ecnx-bar small{flex-basis:100%;color:#7A6A2E;font-size:11.5px}
+/* ── trục thời gian version (X.0) ── */
+#ecns-root .ecns-vt{display:flex;gap:6px;align-items:flex-end;margin:4px 0 -1px;position:relative;z-index:1}
+#ecns-root .ecns-vtab{border-radius:9px 9px 0 0;border-bottom:0;background:#EEEEE8;color:#4A4F4B}
+#ecns-root .ecns-vtab.on{background:#fff;color:var(--teal);border-top:3px solid #E2B500}
+#ecns-root .ecns-vtab.off{color:#9A9890}
+#ecns-root .ecns-png{margin-left:auto;align-self:center;background:#E7F2E8;border-color:#9CC7A1;color:#1B5E20}
+#ecns-root .ecns-tlbox{border:1px solid var(--line);border-radius:0 10px 10px 10px;padding:12px 14px;background:#fff}
+#ecns-root .ecns-msg{padding:16px;text-align:center;color:var(--sub);background:#FAFAF7;border-radius:8px}
+#ecns-root .ecns-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 10px;font-size:12px;color:var(--sub)}
+#ecns-root .ecns-chip{padding:4px 11px;border-radius:999px;font-size:12px}
+#ecns-root .ecns-chip.on{background:#E0F1EF;border-color:#9FD3CC;color:var(--teal)}
+#ecns-root .ecns-tlb{background:#fff}
+#ecns-root .ecns-th h3{margin:0;font-size:18px;color:var(--teal)}
+#ecns-root .ecns-th p{margin:3px 0 0;color:var(--sub);font-size:12.5px}
+#ecns-root .ecns-kps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:10px 0 6px}
+#ecns-root .ecns-kp{border:1px solid #E3E1D8;border-top:4px solid var(--teal);border-radius:9px;padding:8px 12px;background:#FDFDFB}
+#ecns-root .ecns-kp.y{border-top-color:#E2B500}
+#ecns-root .ecns-kp.r{border-top-color:#C62828}
+#ecns-root .ecns-kp .l{font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:var(--teal)}
+#ecns-root .ecns-kp.r .l{color:#B71C1C}
+#ecns-root .ecns-kp .v{font-size:20px;font-weight:800;margin:2px 0}
+#ecns-root .ecns-kp.r .v{color:#C62828}
+#ecns-root .ecns-kp .s{font-size:11.5px;color:var(--sub);line-height:1.45}
+#ecns-root .ecns-tlw{overflow-x:auto;overflow-y:hidden;padding:4px 0 8px}
+#ecns-root .ecns-tg{display:grid;grid-template-rows:auto 150px 30px 150px auto;width:max-content;margin:0 auto}
+#ecns-root .ecns-tc{align-self:end;padding-bottom:6px}
+#ecns-root .ecns-bc{align-self:start;padding-top:6px}
+#ecns-root .ecns-ev{font-size:12.5px;line-height:1.55;cursor:pointer}
+#ecns-root .ecns-ev h4{margin:0 0 6px;font-size:15px;text-align:center}
+#ecns-root .ecns-ev h4:after{content:'';display:block;width:60px;height:3px;border-radius:2px;margin:6px auto 0;background:currentColor;opacity:.8}
+#ecns-root .ecns-s{color:var(--sub);font-size:11.5px}
+#ecns-root .ecns-warn{margin-top:7px;padding:7px 10px;border:1.5px solid #F2B8B5;background:#FDECEA;border-radius:7px;color:#8E1C14;font-size:12px;line-height:1.45}
+#ecns-root .ecns-info{margin-top:7px;padding:7px 10px;border:1.5px solid #EBD38A;background:#FFF8E1;border-radius:7px;color:#6B5200;font-size:12px;line-height:1.45}
+#ecns-root .ecns-nd{display:flex;flex-direction:column;align-items:center}
+#ecns-root .ecns-nd.up{justify-content:flex-end}
+#ecns-root .ecns-nd.dn{flex-direction:column-reverse;justify-content:flex-start}
+#ecns-root .ecns-node{width:118px;height:118px;border-radius:50%;border:7px solid;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.08);cursor:pointer;flex:0 0 auto}
+#ecns-root .ecns-node b{font-size:14px}
+#ecns-root .ecns-node em{font-style:normal;font-size:15px;font-weight:800;margin-top:2px}
+#ecns-root .ecns-node span{font-size:10.5px;color:var(--sub)}
+#ecns-root .ecns-stem{width:3px;flex:1 1 auto;min-height:12px}
+#ecns-root .ecns-sg{position:relative;height:30px;color:#fff;font-size:11.5px;display:flex;align-items:center;justify-content:center;white-space:nowrap;padding:0 8px 0 22px}
+#ecns-root .ecns-sg span{overflow:hidden;text-overflow:ellipsis}
+#ecns-root .ecns-sg b{font-weight:800;letter-spacing:.4px;margin-right:4px}
+#ecns-root .ecns-sg:before{content:'';position:absolute;left:0;top:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:15px solid #fff;z-index:2}
+#ecns-root .ecns-sg:after{content:'';position:absolute;right:-11px;top:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:15px solid var(--c);z-index:3}
+#ecns-root .ecns-sg.first{border-radius:15px 0 0 15px;padding-left:12px}
+#ecns-root .ecns-sg.first:before{display:none}
+#ecns-root .ecns-now{text-align:center;color:var(--sub);font-size:12px;line-height:1.6;margin:0 auto;max-width:300px}
+#ecns-root .ecns-now b{color:var(--teal)}
+#ecns-root .ecns-tfoot{border-top:1.5px dashed #E3E1D8;margin-top:8px;padding-top:8px;font-size:11.5px;color:var(--sub);line-height:1.55}
+@media (max-width:1100px){#ecns-root .ecns-kps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* Tiêu đề cột mọi bảng trong mục X (anh yêu cầu 24/10/2026): nền teal đậm + chữ trắng, tách rõ khỏi nội dung — chỉ trong #ecn */
 #ecn table:not(.ecns-t) th{background:#0F766E!important;color:#fff!important;border-bottom:2px solid #0B5F58}   /* !important: bảng X.7 gốc gắn màu nhạt trực tiếp trên th */
 #ecn table:not(.ecns-t) th + th{border-left:1px solid rgba(255,255,255,.18)}
@@ -10417,11 +10469,14 @@ window.BT = (function(){
    - Dữ liệu: bảng ECN V2 mà _syncDLCNAllSections đã tải (ECNS.feed); chưa có thì module tự tải. Chỉ đọc, không ghi Sheet.
    - Ô tìm nhanh: nhiều từ = AND, không phân biệt hoa/thường/dấu; ngày dạng 16/10/2026 · 10/2026 · W43 (Ngày ECN, Thời hạn ECN).
    - Bộ lọc nâng cao: khoảng ngày (Ngày ECN ↔ Thời hạn ECN), KH, nhà máy, hình thức, tình trạng tồn (tồn = "Số lượng tồn kho xác nhận (1)").
-   - Bảng đủ 31 cột như nguồn, sắp xếp theo cột, bấm dòng xem chi tiết, xuất CSV kết quả đang lọc. */
+   - Bảng đủ 31 cột như nguồn, sắp xếp theo cột, bấm dòng xem chi tiết, xuất CSV kết quả đang lọc.
+   - Trục thời gian version (anh duyệt 24/10/2026): chỉ từ các dòng ECN đang tra; mỗi số ECN = 1 lần đổi version;
+     kết quả rộng hơn giới hạn (TL_MAX_ECN số ECN / TL_MAX_SP sản phẩm) thì chỉ hiện bảng, không vẽ trục. */
 window.ECNS = (function(){
   const ID = '1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', TAB = 'Báo cáo theo dõi quản lý ECN V2', PAGE = 100;
+  const TL_MAX_ECN = 15, TL_MAX_SP = 5;          // giới hạn vẽ trục thời gian (tra chung chung như "samsung" → chỉ bảng)
   const S = {cols:[], rows:[], loaded:false, loading:false, err:'', at:null, q:'', toks:[], df:'ngay', from:'', to:'',
-             kh:new Set(), nm:new Set(), ht:new Set(), tt:'', ver:'', vers:[], all:[], xsig:'', sort:{i:-1, d:-1}, shown:PAGE, res:[], open:new Set()};
+             kh:new Set(), nm:new Set(), ht:new Set(), tt:'', ver:'', vers:[], all:[], xsig:'', sort:{i:-1, d:-1}, shown:PAGE, res:[], open:new Set(), view:'tb', pk:'', only:'', tl:null};
   let C = {}, root = null, tmr = null;
   const SEP = /[\s\-_.\/|,;:()]+/g;            // so khớp bỏ dấu nối/khoảng trắng: "c26100042" khớp "C2610-0042", "gh9072852a" khớp "GH90-72852A"
   const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
@@ -10445,7 +10500,9 @@ window.ECNS = (function(){
     C = { stt:fc(['stt'],0), ma:fc(['ma vat tu'],4), ver:[fc(['ver cu'],6), fc(['ver moi'],7)], ht:fc(['hinh thuc ecn'],12),
           han:fc(['thoi han ecn'],13), ton:fc(['so luong ton kho xac nhan (1)','so luong ton kho xac nhan'],16), ngay:fc(['ngay ecn'],18),
           nm:fc(['nha may trien khai'],20), gia:fc(['don gia'],22), tien:fc(['thanh tien'],23), pa:fc(['phuong an xu ly'],25),
-          so:fc(['so ecn'],27), kh:fc(['ten khach hang (viet tat)'],30) };
+          so:fc(['so ecn'],27), kh:fc(['ten khach hang (viet tat)'],30),
+          code:fc(['ten code'],2), ten:fc(['ten vat tu'],5), dg:fc(['dien giai'],8), dong:fc(['dong hang'],9), nc:fc(['nguon cap'],11),
+          end:fc(['gio ket thuc ecn'],14), snt:fc(['so ngay ton kho'],17), kb:fc(['nguoi khai bao'],19), nhan:fc(['ngay nhan thong tin'],21) };
     cols.forEach(c => { c.num = c.type==='number' && c.i!==C.stt; c.date = /date/.test(c.type) && C.ver.indexOf(c.i)<0;
       c.wide = /ten code|ten vat tu|dien giai|ten khach hang \(theo|nguyen nhan|phuong an/.test(nz(c.lab)); });
     S.cols = cols;
@@ -10467,7 +10524,7 @@ window.ECNS = (function(){
       const extra = [ngay, han].filter(Boolean).map(d => { const m = p2(d.getMonth()+1)+'/'+d.getFullYear();
         return (d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear())+' '+m+' w'+isoW(d)+' w'+p2(isoW(d)); }).join(' ');
       const k = nz(v.join(' | ')+' | '+extra);
-      return {n, raw:r, v, s, ngay, han, ton:g(C.ton)||0, gia:g(C.gia), tien:g(C.tien)||0, k, k2: k.replace(SEP,'')};
+      return {n, raw:r, v, s, ngay, han, end:gDate(r.c[C.end]), nhan:gDate(r.c[C.nhan]), ton:g(C.ton)||0, gia:g(C.gia), tien:g(C.tien)||0, k, k2: k.replace(SEP,'')};
     });
     S.loaded = true; S.loading = false; S.err = ''; S.at = new Date();
     if (root) { buildOpts(); run(); }
@@ -10514,7 +10571,7 @@ window.ECNS = (function(){
       if (x===y || (x==='' && y==='')) return a.n-b.n;
       if (x==='' || x==null) return 1; if (y==='' || y==null) return -1;          // ô trống luôn xuống cuối
       return (typeof x==='number' && typeof y==='number' ? x-y : String(x).localeCompare(String(y),'vi')) * d; });
-    S.shown = PAGE; S.open.clear();
+    S.shown = PAGE; S.open.clear(); S.only = '';
     draw(); applyX();
   }
 
@@ -10555,7 +10612,8 @@ window.ECNS = (function(){
       const d = S.sort.i<0 ? -1 : S.sort.d;
       return '<th data-i="'+c.i+'" class="'+(c.num?'r':'')+(on?' on':'')+'" title="Bấm để sắp xếp">'+esc(c.lab)+(on ? (d>0?' ▲':' ▼') : '')+'</th>'; }).join('')+'</tr>';
     const W = S.cols.length, dgW = Math.max(300, $('.ecns-tw').clientWidth - 30);   // khung chi tiết vừa phần nhìn thấy, không chạy theo cuộn ngang
-    $('.ecns-t tbody').innerHTML = R.length ? R.slice(0, S.shown).map(r => {
+    const RT = S.only ? R.filter(r => r.v[C.so] === S.only) : R;
+    $('.ecns-t tbody').innerHTML = RT.length ? RT.slice(0, S.shown).map(r => {
       const qh = r.ton>0 && r.han && r.han < t0;
       let h = '<tr data-n="'+r.n+'" class="'+(S.open.has(r.n)?'op':'')+'">'+S.cols.map(c => { const t = r.v[c.i];
         const cl = [c.num?'r':'', c.wide?'w':'', (qh && c.i===C.han)?'ecns-qh':''].filter(Boolean).join(' ');
@@ -10563,9 +10621,123 @@ window.ECNS = (function(){
       if (S.open.has(r.n)) h += '<tr class="ecns-dt"><td colspan="'+W+'"><div class="ecns-dg" style="width:'+dgW+'px">'+S.cols.map(c =>
         '<div><span>'+esc(c.lab)+'</span><b>'+(r.v[c.i] ? hl(r.v[c.i], C.ver.indexOf(c.i)>=0) : '<i>—</i>')+'</b></div>').join('')+'</div></td></tr>';
       return h; }).join('') : '<tr><td colspan="'+W+'" class="ecns-empty">Không có dòng ECN nào khớp điều kiện tìm.</td></tr>';
-    $('.ecns-more').innerHTML = R.length > S.shown
-      ? 'Đang hiện '+fN(S.shown)+' / '+fN(R.length)+' dòng · <button type="button" data-act="more">Xem thêm '+fN(Math.min(PAGE, R.length-S.shown))+' dòng</button> <button type="button" data-act="all">Hiện tất cả</button>'
-      : (R.length ? 'Hiện đủ '+fN(R.length)+' dòng' : '');
+    $('.ecns-more').innerHTML = (S.only ? 'Đang xem ECN <b>'+esc(S.only)+'</b> (bấm từ trục thời gian) · <button type="button" data-act="unonly">Bỏ lọc</button> · ' : '') + (RT.length > S.shown
+      ? 'Đang hiện '+fN(S.shown)+' / '+fN(RT.length)+' dòng · <button type="button" data-act="more">Xem thêm '+fN(Math.min(PAGE, RT.length-S.shown))+' dòng</button> <button type="button" data-act="all">Hiện tất cả</button>'
+      : (RT.length ? 'Hiện đủ '+fN(RT.length)+' dòng' : ''));
+    tlUpdate();
+  }
+
+  // ══ TRỤC THỜI GIAN VERSION (chỉ từ các dòng ECN đang tra) ══════════
+  const pkey = r => (r.v[C.code] || r.v[C.ten] || '(không tên code)').replace(/\s*[–—-]\s*\d{1,2}\s*$/, '').replace(/\s+/g, ' ').trim();
+  const VCOL = ['#E0A82E','#E07A2E','#C2185B','#7B1FA2','#2563A8','#0F766E'], C0 = '#8C979C', CNOW = '#1B5E20';
+  const dm = d => d ? p2(d.getDate())+'/'+p2(d.getMonth()+1) : '—';
+  const days = (a, b) => Math.round((b - a)/86400000);
+  const mode = a => { const m = {}; a.filter(Boolean).forEach(x => m[x] = (m[x]||0)+1); return Object.keys(m).sort((x, y) => m[y]-m[x])[0] || ''; };
+  const cut = (x, n) => { x = String(x||''); return x.length > n ? x.slice(0, n-1)+'…' : x; };
+  const loai = ma => /^TIN-/i.test(ma) ? 'tờ in' : /^BTP-/i.test(ma) ? 'BTP' : /^LIK-/i.test(ma) ? 'linh kiện' : /^PHO-/i.test(ma) ? 'phôi' : 'TP';
+  function tlData(){
+    const R = S.res, so = new Set(R.map(r => r.v[C.so] || '(không số)'));
+    const P = {}; R.forEach(r => { const k = pkey(r); (P[k] = P[k] || {k, rows:[], so:new Set()}).rows.push(r); P[k].so.add(r.v[C.so] || '(không số)'); });
+    const prods = Object.values(P).sort((a, b) => b.so.size - a.so.size || b.rows.length - a.rows.length);
+    const wide = !R.length || so.size > TL_MAX_ECN || prods.length > TL_MAX_SP;
+    if (wide) return {wide, nSo:so.size, nSp:prods.length, n:R.length};
+    if (!prods.some(p => p.k === S.pk)) S.pk = prods[0].k;
+    const rows = P[S.pk].rows, t0 = today(), G = {};
+    rows.forEach(r => { const k = r.v[C.so] || '(không số)'; (G[k] = G[k] || []).push(r); });
+    const ev = Object.keys(G).map(k => { const L = G[k], d = L.map(r => r.ngay).filter(Boolean).sort((a, b) => a-b)[0] || null;
+      const han = L.map(r => r.han).filter(Boolean).sort((a, b) => a-b)[0] || null, end = L.map(r => r.end).filter(Boolean).sort((a, b) => a-b)[0] || null;
+      const qh = L.filter(r => r.ton > 0 && r.han && r.han < t0), soon = L.filter(r => r.ton > 0 && r.han && r.han >= t0 && days(t0, r.han) <= 7);
+      return {so:k, d, han, end, L, v0:mode(L.map(r => r.v[C.ver[0]])), v1:mode(L.map(r => r.v[C.ver[1]])), qh, soon,
+        ton:L.reduce((x, r) => x + r.ton, 0), tien:L.reduce((x, r) => x + r.tien, 0), noPa:qh.some(r => !r.v[C.pa])}; })
+      .sort((a, b) => (a.d||0) - (b.d||0));
+    ev.forEach((e, i) => e.col = i === ev.length-1 ? CNOW : VCOL[i % VCOL.length]);
+    const uniq = k => [...new Set(rows.map(r => r.v[C[k]]).filter(Boolean))];
+    return {wide:false, prods, pk:S.pk, rows, ev, t0, kh:uniq('kh').join(', '), nm:uniq('nm').join(', '), dong:uniq('dong').join(', '),
+      kb:uniq('kb').join(', '), nc:uniq('nc').join(', '), nMa:uniq('ma').length};
+  }
+  const vlab = (e, after) => after ? (e.v1 ? 'VER ' + e.v1 : 'SAU ' + e.so.replace(/^ECN-/, '')) : (e.v0 ? 'VER ' + e.v0 : 'TRƯỚC ' + e.so.replace(/^ECN-/, ''));
+  function tlCard(e){
+    const L = e.L, by = {}; L.forEach(r => { const m = r.v[C.ma]; if (m) by[m] = by[m] || r; });
+    const ma = Object.keys(by), ntd = Math.max(0, ...L.map(r => parseFloat(String(r.v[C.snt]||'').replace(/\./g,'').replace(',','.')) || 0));
+    return '<h4 style="color:'+e.col+'">'+esc(e.so)+'</h4>' +
+      '<div>'+esc(mode(L.map(r => r.v[C.ht])))+' · <b>'+esc(cut(mode(L.map(r => r.v[C.dg])), 90))+'</b></div>' +
+      '<div>'+(e.end ? 'Kết thúc <b>'+dm(e.end)+'</b> · ' : '')+'thời hạn <b>'+fD(e.han)+'</b></div>' +
+      '<div>Mã '+(e.v0 ? 'ver '+esc(e.v0) : 'liên quan')+': '+ma.slice(0, 4).map(m => '<b>'+esc(m)+'</b> ('+loai(m)+')').join(' · ')+(ma.length > 4 ? ' … +'+(ma.length-4)+' mã' : '')+'</div>' +
+      '<div>Tồn xác nhận (file ECN): <b>'+fN(e.ton, 0)+' pcs</b>'+(e.tien ? ' · '+fN(e.tien, 0)+' đ' : '')+(ntd ? ' · số ngày tồn '+fN(ntd, 0) : '')+'</div>' +
+      '<div class="ecns-s">Khai báo: '+esc(mode(L.map(r => r.v[C.kb])) || '—')+(L[0].nhan ? ' · nhận tin '+dm(L[0].nhan) : '')+(mode(L.map(r => r.v[C.nc])) ? ' · nguồn '+esc(mode(L.map(r => r.v[C.nc]))) : '')+'</div>' +
+      (e.qh.length ? '<div class="ecns-warn">⚠ Quá thời hạn '+dm(e.han)+' ('+days(e.han, today())+' ngày) mà còn tồn '+fN(e.qh.reduce((x, r) => x + r.ton, 0), 0)+' pcs'+(e.noPa ? ' · chưa có phương án xử lý' : '')+'</div>'
+       : e.soon.length ? '<div class="ecns-info">⏳ Còn '+days(today(), e.han)+' ngày tới thời hạn '+dm(e.han)+' · còn tồn '+fN(e.soon.reduce((x, r) => x + r.ton, 0), 0)+' pcs → lập kế hoạch tiêu tồn</div>' : '');
+  }
+  function tlGrid(T){
+    const E = T.ev, N = 2*E.length + 2, box = $('.ecns-tlbox');
+    const u = Math.max(105, Math.floor(((box && box.clientWidth) || root.clientWidth || 1300) - 60) / N | 0);
+    const cw = Math.min(4*u - 24, 440), cell = (c, span, row, html, cls) => '<div class="'+(cls||'')+'" style="grid-column:'+c+' / span '+span+';grid-row:'+row+'">'+html+'</div>';
+    const seg = (c, span, col, html, cls) => cell(c, span, 3, '<div class="ecns-sg '+(cls||'')+'" style="background:'+col+';--c:'+col+'"><span>'+html+'</span></div>');
+    let h = '';
+    E.forEach((e, i) => { const up = i % 2 === 0;
+      h += cell(2*i+1, 2, up ? 1 : 5, '<div class="ecns-ev" data-ecn="'+esc(e.so)+'" style="width:'+cw+'px;margin-left:'+((2*u - cw)/2)+'px">'+tlCard(e)+'</div>', up ? 'ecns-tc' : 'ecns-bc');
+      h += cell(2*i+1, 2, up ? 2 : 4, '<div class="ecns-node" data-ecn="'+esc(e.so)+'" style="border-color:'+e.col+'"><b style="color:'+e.col+'">'+fD(e.d)+'</b><em style="color:'+e.col+'">'+(e.v0 || e.v1 ? esc(e.v0 || '—')+' → '+esc(e.v1 || '—') : 'ECN')+'</em><span>Ngày ECN</span></div><div class="ecns-stem" style="background:'+e.col+'"></div>', up ? 'ecns-nd up' : 'ecns-nd dn');
+    });
+    const e0 = E[0], eL = E[E.length-1];
+    h += seg(1, 1, C0, '<b>'+esc(vlab(e0, false))+'</b> trước '+dm(e0.d), 'first');
+    for (let i = 1; i < E.length; i++) h += seg(2*i, 2, E[i-1].col, '<b>'+esc(vlab(E[i-1], true))+'</b> '+dm(E[i-1].d)+' → '+dm(E[i].d)+' · '+days(E[i-1].d, E[i].d)+' ngày');
+    h += seg(2*E.length, 2, eL.col, '<b>'+esc(vlab(eL, true))+'</b> '+dm(eL.d)+' → nay · '+(eL.d ? days(eL.d, T.t0) : 0)+' ngày');
+    h += seg(N, 1, C0, '<b>HIỆN HÀNH</b>', 'last');
+    const nowUp = E.length % 2 === 0;
+    h += cell(2*E.length+1, 2, nowUp ? 1 : 5, '<div class="ecns-now"><b>HÔM NAY '+fD(T.t0)+'</b><br>'+esc(vlab(eL, true).replace('VER', 'Ver').replace('SAU', 'Sau'))+' đang dùng · '+(eL.d ? days(eL.d, T.t0) : 0)+' ngày kể từ ECN cuối</div>', nowUp ? 'ecns-tc' : 'ecns-bc');
+    const pad = Math.max(0, Math.ceil((cw - 2*u)/2));
+    return '<div class="ecns-tg" style="grid-template-columns:repeat('+N+','+u+'px);padding:0 '+pad+'px">'+h+'</div>';
+  }
+  function tlUpdate(){
+    const vt = $('.ecns-vt'), box = $('.ecns-tlbox'); if (!vt || !box) return;
+    const T = S.tl = tlData(), rows = S.only ? S.res.filter(r => r.v[C.so] === S.only).length : S.res.length;
+    vt.innerHTML = '<button type="button" class="ecns-vtab'+(S.view === 'tb' ? ' on' : '')+'" data-view="tb">☰ Bảng kết quả ('+fN(rows)+' dòng)</button>' +
+      '<button type="button" class="ecns-vtab'+(S.view === 'tl' ? ' on' : '')+(T.wide ? ' off' : '')+'" data-view="tl">⟿ Trục thời gian version'+(T.wide ? ' — kết quả quá rộng' : '')+'</button>' +
+      (S.view === 'tl' && !T.wide ? '<button type="button" class="ecns-png" data-act="png">🖼 Xuất ảnh trục thời gian</button>' : '');
+    const tl = S.view === 'tl', drawTl = tl && !T.wide;            // quá rộng: vẫn hiện bảng kết quả, chỉ không vẽ trục
+    $('.ecns-tw').hidden = drawTl; $('.ecns-more').hidden = drawTl; box.hidden = !tl;
+    if (!tl) return;
+    if (T.wide) { box.innerHTML = '<div class="ecns-msg">'+(T.n ? 'Kết quả tra cứu quá rộng: <b>'+fN(T.nSo)+'</b> số ECN / <b>'+fN(T.nSp)+'</b> sản phẩm (giới hạn '+TL_MAX_ECN+' số ECN, '+TL_MAX_SP+' sản phẩm) — chỉ hiển thị bảng kết quả. Gõ mã / tên cụ thể hơn để xem trục thời gian version.' : 'Chưa có kết quả để vẽ trục.')+'</div>'; return; }
+    const E = T.ev, t0 = T.t0, last = E[E.length-1], first = E[0];
+    const mid = E.slice(0, -1).map((e, i) => ({lb:vlab(e, true), a:e.d, b:E[i+1].d}));
+    const qhE = E.filter(e => e.qh.length), soonE = E.filter(e => e.soon.length), noPa = E.reduce((x, e) => x + e.qh.filter(r => !r.v[C.pa]).length, 0);
+    const tonAll = E.reduce((x, e) => x + e.ton, 0), tienAll = E.reduce((x, e) => x + e.tien, 0);
+    const kpi = (cls, l, v, s) => '<div class="ecns-kp '+cls+'"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';
+    box.innerHTML = (T.prods.length > 1 ? '<div class="ecns-chips">Sản phẩm (Tên code, bỏ hậu tố version): '+T.prods.map(p => '<button type="button" class="ecns-chip'+(p.k === T.pk ? ' on' : '')+'" data-pk="'+esc(p.k)+'">'+esc(cut(p.k, 60))+' · '+p.so.size+' ECN</button>').join('')+'</div>' : '') +
+      '<div class="ecns-tlb"><div class="ecns-th"><h3>'+esc(T.pk)+'</h3><p>'+[T.kh, T.nm ? 'nhà máy '+T.nm : '', T.dong ? 'dòng hàng '+T.dong : '', E.length+' ECN', T.nMa+' mã vật tư',
+        (first.v0 || last.v1) ? 'version '+(first.v0 || '—')+' → '+(last.v1 || '—') : '', T.kb ? 'người khai báo: '+T.kb : '', T.nc ? 'nguồn cấp '+T.nc : ''].filter(Boolean).map(esc).join(' · ')+'</p></div>' +
+      '<div class="ecns-kps">' +
+        kpi('', 'VERSION HIỆN HÀNH', esc(vlab(last, true).replace('VER', 'Ver').replace('SAU', 'Sau')), 'từ '+fD(last.d)+' · '+(last.d ? days(last.d, t0) : 0)+' ngày · '+esc(last.so)) +
+        kpi('y', 'VÒNG ĐỜI CÁC VERSION', mid.length ? mid.map(m => days(m.a, m.b)).join(' · ')+' ngày' : '—', mid.length ? mid.map(m => esc(m.lb.replace('VER', 'Ver'))+': '+dm(m.a)+' → '+dm(m.b)).join(' · ') : 'Mới có 1 lần đổi version') +
+        kpi('', 'TỒN VERSION CŨ (FILE ECN)', fN(tonAll, 0)+' pcs', E.filter(e => e.ton).map(e => esc(e.v0 ? 'ver '+e.v0 : e.so)+': '+fN(e.ton, 0)).join(' · ')+(tienAll ? ' · '+fN(tienAll, 0)+' đ' : (tonAll ? ' · chưa có đơn giá' : ''))) +
+        kpi(qhE.length || soonE.length ? 'r' : 'g', 'CẦN XỬ LÝ', (qhE.length + soonE.length) ? (qhE.length + soonE.length)+' cảnh báo' : 'Không có',
+          [qhE.length ? qhE.length+' ECN quá hạn còn tồn '+fN(qhE.reduce((x, e) => x + e.qh.reduce((y, r) => y + r.ton, 0), 0), 0)+' pcs' : '', soonE.length ? soonE.length+' ECN còn ≤ 7 ngày tới hạn' : '', noPa ? noPa+' dòng chưa có phương án' : ''].filter(Boolean).join(' · ') || 'Không có ECN quá hạn hay sắp tới hạn còn tồn') +
+      '</div><div class="ecns-tlw">'+tlGrid(T)+'</div>' +
+      '<div class="ecns-tfoot">Mỗi vòng tròn là một lần đổi version (ngày ECN, ver cũ → ver mới); ô chữ: số ECN, hình thức, nội dung thay đổi, kết thúc / thời hạn, mã vật tư của version cũ, tồn xác nhận trên file ECN và cảnh báo. Dải mũi tên = vòng đời từng version; khung đỏ = quá hạn còn tồn, khung vàng = còn ≤ 7 ngày tới hạn. Chỉ dùng dữ liệu ECN V2 đúng kết quả đang tra ở X.0; tra rộng hơn '+TL_MAX_ECN+' số ECN / '+TL_MAX_SP+' sản phẩm thì chỉ hiện bảng. Bấm vòng tròn / ô chữ → bảng lọc theo ECN đó.</div></div>';
+    tlFit();
+  }
+  function tlFit(){
+    const w = $('.ecns-tlw'), g = w && w.querySelector('.ecns-tg'); if (!g) return;
+    g.style.zoom = 1; const r = w.clientWidth / g.scrollWidth;
+    if (r < 1) g.style.zoom = Math.max(r - 0.002, 0.1).toFixed(3);
+  }
+  function loadH2C(){
+    if (window.html2canvas) return Promise.resolve();
+    return new Promise((ok, no) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      sc.onload = ok; sc.onerror = () => no(new Error('Không tải được thư viện xuất ảnh (cần mạng)')); document.head.appendChild(sc); });
+  }
+  async function tlPng(btn){
+    const body = $('.ecns-tlb'), w = $('.ecns-tlw'), g = $('.ecns-tg'); if (!body || !g) return;
+    const old = btn.textContent; btn.textContent = 'Đang xuất ảnh…'; btn.disabled = true;
+    try {
+      await loadH2C();
+      g.style.zoom = 1; w.style.overflow = 'visible'; body.style.width = Math.max(body.clientWidth, g.scrollWidth + 34) + 'px';
+      const cv = await html2canvas(body, {scale:2, backgroundColor:'#ffffff', logging:false, windowWidth: body.scrollWidth + 60});
+      const d = new Date(), a = document.createElement('a'); a.href = cv.toDataURL('image/png');
+      a.download = 'GSP_OPS_TrucThoiGianECN_' + (S.pk || 'ECN').replace(/[^A-Za-z0-9-]+/g, '_').slice(0, 40) + '_' + d.getFullYear() + p2(d.getMonth()+1) + p2(d.getDate()) + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+    } catch(e) { const b = $('.ecns-tlbox'); if (b) b.insertAdjacentHTML('afterbegin', '<div class="ecns-warn">Không xuất được ảnh: '+esc(e.message)+'</div>'); }
+    finally { body.style.width = ''; w.style.overflow = ''; tlFit(); btn.textContent = old; btn.disabled = false; }
   }
   // ── X.1–X.6 lọc theo X.0: gọi lại phần vẽ gốc (window._ecnRenderX) với các dòng đang lọc ──
   const TT = {qh:'quá hạn còn tồn', ton:'còn tồn', '7n':'còn tồn, đến hạn 7 ngày', pa:'còn tồn, chưa có phương án', gia:'còn tồn, chưa có đơn giá'};
@@ -10647,7 +10819,7 @@ window.ECNS = (function(){
       '<select class="ecns-tt"><option value="">Tình trạng: Tất cả</option><option value="qh">Quá hạn còn tồn</option><option value="ton">Còn tồn kho</option>'+
       '<option value="7n">Còn tồn, đến hạn trong 7 ngày</option><option value="pa">Còn tồn, chưa có phương án</option><option value="gia">Còn tồn, chưa có đơn giá</option></select></div>'+
       '<div class="ecns-note">Tồn kho = cột "Số lượng tồn kho xác nhận (1)". Quá hạn = Thời hạn ECN trước hôm nay.</div></div>'+
-      '<div class="ecns-sum"></div><div class="ecns-tw"><table class="ecns-t"><thead></thead><tbody></tbody></table></div><div class="ecns-more"></div>'+
+      '<div class="ecns-sum"></div><div class="ecns-vt"></div><div class="ecns-tlbox" hidden></div><div class="ecns-tw"><table class="ecns-t"><thead></thead><tbody></tbody></table></div><div class="ecns-more"></div>'+
       '<div class="ecns-note">Gõ nhiều từ để thu hẹp (phải khớp tất cả); gõ ver:02 để lọc đúng version. Bấm tiêu đề cột để sắp xếp, bấm một dòng để xem đầy đủ thông tin. CSV xuất đúng các dòng đang lọc.</div></div>';
     $('.ecns-q').addEventListener('input', e => { clearTimeout(tmr); tmr = setTimeout(() => { S.q = e.target.value; run(); }, 250); });
     $('.ecns-ver').addEventListener('input', e => { clearTimeout(tmr); tmr = setTimeout(() => { S.ver = e.target.value; run(); }, 250); });
@@ -10659,12 +10831,17 @@ window.ECNS = (function(){
     root.addEventListener('change', e => { const cb = e.target; if (cb.type!=='checkbox') return; const key = cb.closest('.ecns-dd').dataset.k;
       cb.checked ? S[key].add(cb.value) : S[key].delete(cb.value); ddLabel(key); run(); });
     root.addEventListener('click', e => {
-      const b = e.target.closest('button'), th = e.target.closest('.ecns-t th'), tr = e.target.closest('.ecns-t tbody tr[data-n]');
+      const b = e.target.closest('button'), th = e.target.closest('.ecns-t th'), tr = e.target.closest('.ecns-t tbody tr[data-n]'), en = e.target.closest('[data-ecn]');
+      if (b && b.dataset.view){ S.view = b.dataset.view; return tlUpdate(); }
+      if (b && b.dataset.pk != null){ S.pk = b.dataset.pk; return tlUpdate(); }
+      if (en && !b){ S.only = en.dataset.ecn; S.view = 'tb'; S.shown = PAGE; return draw(); }
       if (b && b.dataset.df){ S.df = b.dataset.df; root.querySelectorAll('.ecns-seg button').forEach(x => x.classList.toggle('on', x===b)); run(); return; }
       const act = b && b.dataset.act;
       if (act==='adv'){ const a = $('.ecns-adv'); a.hidden = !a.hidden; b.classList.toggle('on', !a.hidden); return; }
       if (act==='clear') return clearAll();
       if (act==='csv') return csv();
+      if (act==='png') return tlPng(b);
+      if (act==='unonly'){ S.only = ''; return draw(); }
       if (act==='reload'){ S.err = ''; return load(); }
       if (act==='more'){ S.shown += PAGE; return draw(); }
       if (act==='all'){ S.shown = S.res.length; return draw(); }
@@ -10673,6 +10850,7 @@ window.ECNS = (function(){
         S.sort = {i, d: i===cur ? -d : (S.cols[i].num || S.cols[i].date ? -1 : 1)}; const keep = S.shown; run(); S.shown = keep; return draw(); }
       if (tr && !window.getSelection().toString()){ const n = +tr.dataset.n; S.open.has(n) ? S.open.delete(n) : S.open.add(n); draw(); }
     });
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (S.view === 'tl' && root.offsetParent) tlUpdate(); }, 200); });
     document.addEventListener('click', e => { root.querySelectorAll('.ecns-dd[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); }); });
     status();
     if (S.loaded){ buildOpts(); run(); }
