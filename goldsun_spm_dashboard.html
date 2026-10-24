@@ -899,6 +899,80 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 @media (max-width:1000px){#bt-root .bt-2{grid-template-columns:1fr}}
 </style>
 <!-- BT:END CSS -->
+<!-- ECNS:BEGIN CSS -->
+<style>
+/* ═══ X.0 TRA CỨU ECN — chỉ áp dụng trong #ecns-root (tiền tố ecns-) ═══ */
+#ecns-root{--g1:#1B6B3A;--teal:#0F766E;--red:#C8372D;--ink:#1F2421;--sub:#6B6A64;--line:#DDD9CE;margin:0 0 16px;font-size:13px;color:var(--ink)}
+#ecns-root *{box-sizing:border-box}
+#ecns-root .ecns-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:0 1px 2px rgba(31,36,33,.05)}
+#ecns-root .ecns-hd{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 14px;margin-bottom:10px}
+#ecns-root .ecns-hd>b{font-size:14px;font-weight:800;color:var(--teal);letter-spacing:.3px}
+#ecns-root .ecns-st{font-size:12px;color:var(--sub)}
+#ecns-root .ecns-bad{color:var(--red);font-weight:600}
+#ecns-root button{font:inherit;font-size:12.5px;font-weight:600;padding:6px 12px;border:1px solid #D6D3CA;border-radius:8px;background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}
+#ecns-root button:hover{border-color:var(--teal)}
+#ecns-root button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+#ecns-root .ecns-csv{background:#E0F1EF;border-color:#B9DDD8;color:var(--teal)}
+#ecns-root .ecns-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#ecns-root .ecns-q{flex:1 1 420px;min-width:220px;font:inherit;font-size:13.5px;padding:8px 12px;border:1.5px solid #C9D9D6;border-radius:10px;outline:none}
+#ecns-root .ecns-q:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,118,110,.12)}
+#ecns-root .ecns-adv{margin-top:10px;padding:10px 12px;border:1px solid #E6E3DA;border-radius:10px;background:#FAFAF7}
+#ecns-root .ecns-row{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin-bottom:8px}
+#ecns-root .ecns-lb{font-size:12px;font-weight:700;color:#55544E}
+#ecns-root .ecns-seg{display:inline-flex}
+#ecns-root .ecns-seg button{border-radius:0}
+#ecns-root .ecns-seg button:first-child{border-radius:8px 0 0 8px}
+#ecns-root .ecns-seg button:last-child{border-radius:0 8px 8px 0;border-left:0}
+#ecns-root .ecns-adv label{font-size:12px;color:#55544E}
+#ecns-root input[type=date],#ecns-root select{font:inherit;font-size:12.5px;padding:5px 8px;border:1px solid #D6D3CA;border-radius:8px;background:#fff}
+#ecns-root .ecns-dd{position:relative}
+#ecns-root .ecns-dd summary{list-style:none;cursor:pointer;font-size:12.5px;font-weight:600;padding:6px 26px 6px 12px;border:1px solid #D6D3CA;border-radius:8px;background:#fff;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ecns-root .ecns-dd summary::-webkit-details-marker{display:none}
+#ecns-root .ecns-dd summary:after{content:'▾';position:absolute;right:10px;top:6px;color:var(--sub)}
+#ecns-root .ecns-ddp{position:absolute;z-index:20;top:calc(100% + 4px);left:0;width:300px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 18px rgba(31,36,33,.12);padding:8px}
+#ecns-root .ecns-ddq{width:100%;font:inherit;font-size:12.5px;padding:5px 8px;border:1px solid #D6D3CA;border-radius:8px}
+#ecns-root .ecns-ddb{margin:6px 0;text-align:right}
+#ecns-root .ecns-ddb button{padding:3px 9px;font-size:11.5px}
+#ecns-root .ecns-ddl{max-height:240px;overflow:auto}
+#ecns-root .ecns-ddl label{display:flex;gap:6px;align-items:center;padding:3px 4px;border-radius:6px;font-size:12.5px;color:var(--ink);cursor:pointer}
+#ecns-root .ecns-ddl label:hover{background:#F3F8F1}
+#ecns-root .ecns-ddl small{margin-left:auto;color:var(--sub)}
+#ecns-root .ecns-note{font-size:11.5px;color:var(--sub);margin-top:6px}
+#ecns-root .ecns-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:12px 0 10px}
+#ecns-root .ecns-k{border:1px solid #E6E3DA;border-top:3px solid var(--teal);border-radius:10px;padding:7px 10px;background:#FFFEFC}
+#ecns-root .ecns-k span{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#55544E}
+#ecns-root .ecns-k b{font-size:17px;font-variant-numeric:tabular-nums}
+#ecns-root .ecns-k small{font-size:11.5px;color:var(--sub);font-weight:500}
+#ecns-root .ecns-tw{overflow:auto;max-height:560px;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:0 1px 2px rgba(31,36,33,.05)}
+#ecns-root .ecns-t{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+#ecns-root .ecns-t th{position:sticky;top:0;z-index:2;background:#F5F3EE;color:#4A4943;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;text-align:left;padding:8px 10px;white-space:nowrap;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
+#ecns-root .ecns-t th.r{text-align:right}
+#ecns-root .ecns-t th.on{color:var(--teal);background:#EAF3F1}
+#ecns-root .ecns-t th + th,#ecns-root .ecns-t td + td{border-left:1px solid #F0EEE7}
+#ecns-root .ecns-t td{padding:6px 10px;border-top:1px solid #F0EEE7;vertical-align:top;white-space:nowrap;background:#fff}
+#ecns-root .ecns-t th:first-child,#ecns-root .ecns-t td:first-child{position:sticky;left:0;z-index:1;border-right:1px solid var(--line)}
+#ecns-root .ecns-t th:first-child{z-index:3}
+#ecns-root .ecns-t tbody tr:first-child td{border-top:0}
+#ecns-root .ecns-t tbody tr[data-n]{cursor:pointer}
+#ecns-root .ecns-t tbody tr:nth-child(even) td{background:#FCFBF8}
+#ecns-root .ecns-t tbody tr[data-n]:hover td,#ecns-root .ecns-t tbody tr.op td{background:#F3F8F1}
+#ecns-root .ecns-t td.r{text-align:right;font-variant-numeric:tabular-nums}
+#ecns-root .ecns-t td.w{max-width:280px;overflow:hidden;text-overflow:ellipsis}
+#ecns-root .ecns-t td.ecns-qh{color:var(--red);font-weight:700}
+#ecns-root .ecns-t mark{background:#FFE58A;color:inherit;padding:0 1px;border-radius:2px}
+#ecns-root .ecns-t tr.ecns-dt td{position:static;background:#F8FBF7;white-space:normal;padding:10px 12px;border-top:0}
+#ecns-root .ecns-dg{position:sticky;left:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px 18px}
+#ecns-root .ecns-dg div{display:flex;flex-direction:column;border-bottom:1px dashed #E6E3DA;padding-bottom:4px}
+#ecns-root .ecns-dg span{font-size:10.5px;color:var(--sub);text-transform:uppercase;letter-spacing:.3px}
+#ecns-root .ecns-dg b{font-weight:600;word-break:break-word}
+#ecns-root .ecns-dg i{color:#B5B2A8;font-style:normal}
+#ecns-root .ecns-empty{text-align:center;color:var(--sub);padding:16px!important}
+#ecns-root .ecns-more{font-size:12px;color:var(--sub);margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#ecns-root .ecns-more button{padding:4px 10px;font-size:12px}
+#ecns-root .ecns-spin{display:inline-block;width:12px;height:12px;border:2px solid #D6D3CA;border-top-color:var(--teal);border-radius:50%;margin-right:6px;vertical-align:-2px;animation:ecnsspin .8s linear infinite}
+@keyframes ecnsspin{to{transform:rotate(360deg)}}
+</style>
+<!-- ECNS:END CSS -->
 </head>
 <body>
 
@@ -1760,6 +1834,7 @@ PEOPLE_SCORE =
   <h2>X – QUẢN LÝ THAY ĐỔI SẢN PHẨM (ECN – Engineering Change Notice)</h2>
   <span>91+ bản ghi | Q1/2026 | GS1 (Hà Nội) + GS5 (Quế Võ 1) | Nguồn: ECN_TRACKING</span>
 </div>
+<div id="ecns-root"></div><!-- ECNS-ROOT tra cứu ECN -->
 <div class="notice-box notice-red">
   <strong style="color:#c0392b">🚨 CẢNH BÁO TỒN KHO:</strong>
   Phát hiện <strong>1 mã ECN có tồn kho thực tế 1.492 pcs chưa có phương án xử lý</strong>:
@@ -7774,6 +7849,7 @@ window._syncDLCNAllSections = async function(liveCache) {
     // Col X (idx 23) = Thành tiền (3) = (1)*(2) → SUM = GIÁ TRỊ ECN
     // Col AB(idx 27) = Số ECN → distinct count = TỔNG SỰ VỤ
     var ecnTable = await gvizFetch(ECN_ID, 'Báo cáo theo dõi quản lý ECN V2', 7, 'select * limit 99999');
+    if (window.ECNS) ECNS.feed(ecnTable);   // ECNS-HOOK tra cứu ECN
     var ecnRows  = (ecnTable.rows||[]).filter(function(r){ return r && r.c; });
 
     var ecnTotal = 0, ecnRiskStock = 0;
@@ -10091,5 +10167,241 @@ window.BT = (function(){
 })();
 </script>
 <!-- BT:END JS -->
+<!-- ECNS:BEGIN JS -->
+<script>
+/* ═══ X.0 TRA CỨU ECN — mục X. ECN, tab BP Dữ liệu CN & HT (anh duyệt 24/10/2026, phương án B) ═══
+   - Dữ liệu: bảng ECN V2 mà _syncDLCNAllSections đã tải (ECNS.feed); chưa có thì module tự tải. Chỉ đọc, không ghi Sheet.
+   - Ô tìm nhanh: nhiều từ = AND, không phân biệt hoa/thường/dấu; ngày dạng 16/10/2026 · 10/2026 · W43 (Ngày ECN, Thời hạn ECN).
+   - Bộ lọc nâng cao: khoảng ngày (Ngày ECN ↔ Thời hạn ECN), KH, nhà máy, hình thức, tình trạng tồn (tồn = "Số lượng tồn kho xác nhận (1)").
+   - Bảng đủ 31 cột như nguồn, sắp xếp theo cột, bấm dòng xem chi tiết, xuất CSV kết quả đang lọc. */
+window.ECNS = (function(){
+  const ID = '1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', TAB = 'Báo cáo theo dõi quản lý ECN V2', PAGE = 100;
+  const S = {cols:[], rows:[], loaded:false, loading:false, err:'', at:null, q:'', toks:[], df:'ngay', from:'', to:'',
+             kh:new Set(), nm:new Set(), ht:new Set(), tt:'', sort:{i:-1, d:-1}, shown:PAGE, res:[], open:new Set()};
+  let C = {}, root = null, tmr = null;
+  const SEP = /[\s\-_.\/|,;:()]+/g;            // so khớp bỏ dấu nối/khoảng trắng: "c26100042" khớp "C2610-0042", "gh9072852a" khớp "GH90-72852A"
+  const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const p2 = n => String(n).padStart(2,'0');
+  const fD = d => d ? p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear() : '';
+  const fN = (n, dec) => n==null||isNaN(n) ? '' : Number(n).toLocaleString('vi-VN', {maximumFractionDigits: dec==null?2:dec});
+  const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+  function isoW(d){ const t = new Date(d.getFullYear(), d.getMonth(), d.getDate()); t.setDate(t.getDate()+3-(t.getDay()+6)%7);
+    const w1 = new Date(t.getFullYear(),0,4); return 1+Math.round(((t-w1)/86400000-3+(w1.getDay()+6)%7)/7); }
+  function gDate(c){ if (!c || c.v==null) return null; const m = /^Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+))?/.exec(String(c.v));
+    return m ? new Date(+m[1], +m[2], +m[3], +(m[4]||0), +(m[5]||0)) : null; }
+
+  // ── nạp dữ liệu ─────────────────────────────────────────────
+  function feed(t){
+    if (!t || !t.cols) return;
+    const cols = t.cols.map((c,i) => ({i, lab:String(c.label||'').replace(/\s+/g,' ').trim() || ('Cột '+(i+1)), type:c.type}));
+    const L = cols.map(c => nz(c.lab));
+    const fc = (keys, fb) => { for (const k of keys){ const i = L.findIndex(l => l===k); if (i>=0) return i; }
+      for (const k of keys){ const i = L.findIndex(l => l.indexOf(k)===0); if (i>=0) return i; } return fb; };
+    C = { stt:fc(['stt'],0), ma:fc(['ma vat tu'],4), ver:[fc(['ver cu'],6), fc(['ver moi'],7)], ht:fc(['hinh thuc ecn'],12),
+          han:fc(['thoi han ecn'],13), ton:fc(['so luong ton kho xac nhan (1)','so luong ton kho xac nhan'],16), ngay:fc(['ngay ecn'],18),
+          nm:fc(['nha may trien khai'],20), gia:fc(['don gia'],22), tien:fc(['thanh tien'],23), pa:fc(['phuong an xu ly'],25),
+          so:fc(['so ecn'],27), kh:fc(['ten khach hang (viet tat)'],30) };
+    cols.forEach(c => { c.num = c.type==='number' && c.i!==C.stt; c.date = /date/.test(c.type) && C.ver.indexOf(c.i)<0;
+      c.wide = /ten code|ten vat tu|dien giai|ten khach hang \(theo|nguyen nhan|phuong an/.test(nz(c.lab)); });
+    S.cols = cols;
+    S.rows = (t.rows||[]).filter(r => r && r.c && r.c.some(x => x && x.v!=null && x.v!=='')).map((r, n) => {
+      const v = [], s = [];
+      cols.forEach(c => { const x = r.c[c.i]; let txt = '', key = null;
+        if (x && x.v!=null && x.v!=='') {
+          if (c.date){ const d = gDate(x); key = d ? d.getTime() : null;
+            txt = d ? fD(d) + ((d.getHours()||d.getMinutes()) ? ' '+p2(d.getHours())+':'+p2(d.getMinutes()) : '') : String(x.f||x.v); }
+          else if (C.ver.indexOf(c.i)>=0) txt = String(x.f!=null ? x.f : x.v);          // Ver: Sheet có thể đổi kiểu → lấy chuỗi hiển thị
+          else if (typeof x.v==='number'){ key = x.v; txt = c.i===C.stt ? String(x.v) : fN(x.v); }
+          else txt = String(x.v).trim();
+        }
+        v.push(txt); s.push(key!=null ? key : nz(txt));
+      });
+      const g = i => r.c[i] && typeof r.c[i].v==='number' ? r.c[i].v : null;
+      const ngay = gDate(r.c[C.ngay]), han = gDate(r.c[C.han]);
+      const extra = [ngay, han].filter(Boolean).map(d => { const m = p2(d.getMonth()+1)+'/'+d.getFullYear();
+        return (d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear())+' '+m+' w'+isoW(d)+' w'+p2(isoW(d)); }).join(' ');
+      const k = nz(v.join(' | ')+' | '+extra);
+      return {n, v, s, ngay, han, ton:g(C.ton)||0, gia:g(C.gia), tien:g(C.tien)||0, k, k2: k.replace(SEP,'')};
+    });
+    S.loaded = true; S.loading = false; S.err = ''; S.at = new Date();
+    if (root) { buildOpts(); run(); }
+  }
+  function load(){
+    if (S.loaded || S.loading || typeof gvizFetch!=='function') return;
+    S.loading = true; status();
+    gvizFetch(ID, TAB, 7, 'select * limit 99999', 120000).then(feed)
+      .catch(e => { S.loading = false; S.err = e.message || String(e); status(); });
+  }
+
+  // ── lọc ─────────────────────────────────────────────────────
+  function tinhTrang(r, t0){
+    if (!S.tt) return true;
+    const t7 = new Date(t0.getTime()+7*86400000);
+    if (S.tt==='qh')  return r.ton>0 && r.han && r.han < t0;
+    if (S.tt==='ton') return r.ton>0;
+    if (S.tt==='7n')  return r.ton>0 && r.han && r.han >= t0 && r.han <= t7;
+    if (S.tt==='pa')  return r.ton>0 && !r.v[C.pa];
+    if (S.tt==='gia') return r.ton>0 && !r.gia;
+    return true;
+  }
+  function run(){
+    S.toks = nz(S.q).split(/\s+/).filter(Boolean); S.tk2 = S.toks.map(t => t.replace(SEP,''));
+    const t0 = today(), fr = S.from ? new Date(S.from+'T00:00:00') : null, to = S.to ? new Date(S.to+'T23:59:59') : null;
+    S.res = S.rows.filter(r => {
+      for (let j = 0; j < S.toks.length; j++) if (r.k.indexOf(S.toks[j]) < 0 && (!S.tk2[j] || r.k2.indexOf(S.tk2[j]) < 0)) return false;
+      if (fr || to){ const d = S.df==='han' ? r.han : r.ngay; if (!d || (fr && d < fr) || (to && d > to)) return false; }
+      if (S.kh.size && !S.kh.has(r.v[C.kh])) return false;
+      if (S.nm.size && !S.nm.has(r.v[C.nm])) return false;
+      if (S.ht.size && !S.ht.has(r.v[C.ht])) return false;
+      return tinhTrang(r, t0);
+    });
+    const si = S.sort.i >= 0 ? S.sort.i : C.ngay, d = S.sort.i >= 0 ? S.sort.d : -1;
+    S.res.sort((a,b) => { const x = a.s[si], y = b.s[si];
+      if (x===y || (x==='' && y==='')) return a.n-b.n;
+      if (x==='' || x==null) return 1; if (y==='' || y==null) return -1;          // ô trống luôn xuống cuối
+      return (typeof x==='number' && typeof y==='number' ? x-y : String(x).localeCompare(String(y),'vi')) * d; });
+    S.shown = PAGE; S.open.clear();
+    draw();
+  }
+
+  // ── hiển thị ────────────────────────────────────────────────
+  function hl(text){
+    if (!S.toks.length || !text) return esc(text);
+    let n = '', map = [];
+    for (let i = 0; i < text.length; i++){ const c = nz(text[i]); for (let j = 0; j < c.length; j++){ n += c[j]; map.push(i); } }
+    const mk = new Array(text.length).fill(false);
+    S.toks.forEach(t => { let p = 0; while ((p = n.indexOf(t, p)) >= 0){ for (let k = p; k < p+t.length; k++) mk[map[k]] = true; p += t.length; } });
+    let out = '', on = false;
+    for (let i = 0; i < text.length; i++){ if (mk[i]!==on){ out += mk[i] ? '<mark>' : '</mark>'; on = mk[i]; } out += esc(text[i]); }
+    return on ? out+'</mark>' : out;
+  }
+  const $ = s => root.querySelector(s);
+  function status(){
+    if (!root) return; const el = $('.ecns-st');
+    if (S.loaded){ const mx = S.rows.reduce((m,r) => (r.ngay && (!m || r.ngay > m)) ? r.ngay : m, null);
+      el.innerHTML = 'Nguồn: ECN V2 · <b>'+fN(S.rows.length)+'</b> dòng · Ngày ECN mới nhất <b>'+fD(mx)+'</b> · tải lúc '+p2(S.at.getHours())+':'+p2(S.at.getMinutes()); }
+    else if (S.err) el.innerHTML = '<span class="ecns-bad">Không tải được dữ liệu ECN: '+esc(S.err)+'</span> <button type="button" data-act="reload">Tải lại</button>';
+    else el.innerHTML = '<span class="ecns-spin"></span>Đang tải dữ liệu ECN…';
+  }
+  function draw(){
+    status(); if (!S.loaded) return;
+    const R = S.res, maSet = new Set(), soSet = new Set(); let ton = 0, tien = 0, nTon = 0;
+    R.forEach(r => { if (r.v[C.ma]) maSet.add(r.v[C.ma]); if (r.v[C.so]) soSet.add(r.v[C.so]); ton += r.ton; tien += r.tien; if (r.ton>0) nTon++; });
+    const loc = filterCount();
+    $('.ecns-sum').innerHTML = [['Dòng ECN', fN(R.length)+' <small>/ '+fN(S.rows.length)+'</small>'], ['Mã vật tư', fN(maSet.size)], ['Số ECN', fN(soSet.size)],
+      ['Dòng còn tồn', fN(nTon)], ['Tồn kho xác nhận', fN(ton,0)+' <small>pcs</small>'], ['Thành tiền tồn', fN(tien,0)+' <small>đ</small>']]
+      .map(x => '<div class="ecns-k"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('');
+    $('.ecns-adv-btn').textContent = 'Bộ lọc nâng cao' + (loc ? ' ('+loc+')' : '');
+    const t0 = today();
+    $('.ecns-t thead').innerHTML = '<tr>'+S.cols.map(c => { const on = S.sort.i===c.i || (S.sort.i<0 && c.i===C.ngay);
+      const d = S.sort.i<0 ? -1 : S.sort.d;
+      return '<th data-i="'+c.i+'" class="'+(c.num?'r':'')+(on?' on':'')+'" title="Bấm để sắp xếp">'+esc(c.lab)+(on ? (d>0?' ▲':' ▼') : '')+'</th>'; }).join('')+'</tr>';
+    const W = S.cols.length, dgW = Math.max(300, $('.ecns-tw').clientWidth - 30);   // khung chi tiết vừa phần nhìn thấy, không chạy theo cuộn ngang
+    $('.ecns-t tbody').innerHTML = R.length ? R.slice(0, S.shown).map(r => {
+      const qh = r.ton>0 && r.han && r.han < t0;
+      let h = '<tr data-n="'+r.n+'" class="'+(S.open.has(r.n)?'op':'')+'">'+S.cols.map(c => { const t = r.v[c.i];
+        const cl = [c.num?'r':'', c.wide?'w':'', (qh && c.i===C.han)?'ecns-qh':''].filter(Boolean).join(' ');
+        return '<td'+(cl?' class="'+cl+'"':'')+(c.wide && t ? ' title="'+esc(t)+'"' : '')+'>'+hl(t)+'</td>'; }).join('')+'</tr>';
+      if (S.open.has(r.n)) h += '<tr class="ecns-dt"><td colspan="'+W+'"><div class="ecns-dg" style="width:'+dgW+'px">'+S.cols.map(c =>
+        '<div><span>'+esc(c.lab)+'</span><b>'+(r.v[c.i] ? hl(r.v[c.i]) : '<i>—</i>')+'</b></div>').join('')+'</div></td></tr>';
+      return h; }).join('') : '<tr><td colspan="'+W+'" class="ecns-empty">Không có dòng ECN nào khớp điều kiện tìm.</td></tr>';
+    $('.ecns-more').innerHTML = R.length > S.shown
+      ? 'Đang hiện '+fN(S.shown)+' / '+fN(R.length)+' dòng · <button type="button" data-act="more">Xem thêm '+fN(Math.min(PAGE, R.length-S.shown))+' dòng</button> <button type="button" data-act="all">Hiện tất cả</button>'
+      : (R.length ? 'Hiện đủ '+fN(R.length)+' dòng' : '');
+  }
+  function filterCount(){ return (S.from||S.to?1:0)+(S.kh.size?1:0)+(S.nm.size?1:0)+(S.ht.size?1:0)+(S.tt?1:0); }
+
+  // ── danh sách chọn nhiều (KH, nhà máy, hình thức) ───────────
+  const DD = {kh:'Khách hàng', nm:'Nhà máy', ht:'Hình thức ECN'};
+  function buildOpts(){
+    Object.keys(DD).forEach(key => {
+      const cnt = {}; S.rows.forEach(r => { const x = r.v[C[key]] || '(trống)'; cnt[x] = (cnt[x]||0)+1; });
+      const ks = Object.keys(cnt).sort((a,b) => cnt[b]-cnt[a] || a.localeCompare(b,'vi'));
+      const box = $('.ecns-dd[data-k="'+key+'"]');
+      box.querySelector('.ecns-ddl').innerHTML = ks.map(x => '<label data-s="'+esc(nz(x))+'"><input type="checkbox" value="'+esc(x==='(trống)'?'':x)+'"> '+esc(x)+' <small>'+fN(cnt[x])+'</small></label>').join('');
+      ddLabel(key);
+    });
+  }
+  function ddLabel(key){ const s = S[key], b = $('.ecns-dd[data-k="'+key+'"] summary');
+    b.textContent = DD[key]+': '+(s.size===0 ? 'Tất cả' : s.size===1 ? ([...s][0]||'(trống)') : s.size+' mục'); }
+
+  function clearAll(){
+    S.q = ''; S.from = S.to = ''; S.tt = ''; S.kh.clear(); S.nm.clear(); S.ht.clear();
+    root.querySelectorAll('.ecns-dd input[type=checkbox]').forEach(x => x.checked = false);
+    $('.ecns-q').value = ''; $('.ecns-from').value = ''; $('.ecns-to').value = ''; $('.ecns-tt').value = '';
+    Object.keys(DD).forEach(ddLabel); run();
+  }
+
+  // ── xuất CSV (UTF-16LE + tab: Excel mở đúng tiếng Việt, tách đúng cột với mọi cài đặt vùng) ──
+  function csv(){
+    if (!S.loaded) return;
+    const cl = s => String(s==null?'':s).replace(/[\t\r\n]+/g,' ').trim();
+    const lines = [S.cols.map(c => cl(c.lab)).join('\t')];
+    S.res.forEach(r => lines.push(S.cols.map(c => { const k = r.s[c.i];
+      return c.num && typeof k==='number' ? (Number.isInteger(k) ? String(k) : String(+k.toFixed(2)).replace('.',',')) : cl(r.v[c.i]); }).join('\t')));
+    const str = lines.join('\r\n'), buf = new Uint8Array(2+str.length*2); buf[0] = 0xFF; buf[1] = 0xFE;
+    for (let i = 0; i < str.length; i++){ const c = str.charCodeAt(i); buf[2+2*i] = c & 255; buf[3+2*i] = c >> 8; }
+    const d = new Date(), a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([buf], {type:'text/csv'}));
+    a.download = 'GSP_OPS_TraCuuECN_'+d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+'.csv';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
+  // ── dựng khung + sự kiện ────────────────────────────────────
+  function init(){
+    root = document.getElementById('ecns-root'); if (!root || root.dataset.ok) return; root.dataset.ok = '1';
+    const dd = k => '<details class="ecns-dd" data-k="'+k+'"><summary>'+DD[k]+': Tất cả</summary><div class="ecns-ddp">'+
+      '<input type="search" class="ecns-ddq" placeholder="Lọc danh sách…"><div class="ecns-ddb"><button type="button" data-act="none">Bỏ chọn</button></div><div class="ecns-ddl"></div></div></details>';
+    root.innerHTML =
+      '<div class="ecns-card"><div class="ecns-hd"><b>X.0 – TRA CỨU ECN</b><span class="ecns-st"></span></div>'+
+      '<div class="ecns-bar"><input type="search" class="ecns-q" placeholder="Tìm theo mã vật tư, tên, model, version, số ECN, khách hàng, người khai báo, ngày (16/10/2026 · 10/2026 · W43)…">'+
+      '<button type="button" class="ecns-adv-btn" data-act="adv">Bộ lọc nâng cao</button><button type="button" data-act="clear">Xoá điều kiện</button>'+
+      '<button type="button" class="ecns-csv" data-act="csv">⬇ Xuất CSV</button></div>'+
+      '<div class="ecns-adv" hidden><div class="ecns-row"><span class="ecns-lb">Lọc ngày theo</span>'+
+      '<span class="ecns-seg"><button type="button" data-df="ngay" class="on">Ngày ECN</button><button type="button" data-df="han">Thời hạn ECN</button></span>'+
+      '<label>Từ <input type="date" class="ecns-from"></label><label>Đến <input type="date" class="ecns-to"></label></div>'+
+      '<div class="ecns-row">'+dd('kh')+dd('nm')+dd('ht')+
+      '<select class="ecns-tt"><option value="">Tình trạng: Tất cả</option><option value="qh">Quá hạn còn tồn</option><option value="ton">Còn tồn kho</option>'+
+      '<option value="7n">Còn tồn, đến hạn trong 7 ngày</option><option value="pa">Còn tồn, chưa có phương án</option><option value="gia">Còn tồn, chưa có đơn giá</option></select></div>'+
+      '<div class="ecns-note">Tồn kho = cột "Số lượng tồn kho xác nhận (1)". Quá hạn = Thời hạn ECN trước hôm nay.</div></div>'+
+      '<div class="ecns-sum"></div><div class="ecns-tw"><table class="ecns-t"><thead></thead><tbody></tbody></table></div><div class="ecns-more"></div>'+
+      '<div class="ecns-note">Gõ nhiều từ để thu hẹp (phải khớp tất cả). Bấm tiêu đề cột để sắp xếp, bấm một dòng để xem đầy đủ thông tin. CSV xuất đúng các dòng đang lọc.</div></div>';
+    $('.ecns-q').addEventListener('input', e => { clearTimeout(tmr); tmr = setTimeout(() => { S.q = e.target.value; run(); }, 250); });
+    $('.ecns-from').addEventListener('change', e => { S.from = e.target.value; run(); });
+    $('.ecns-to').addEventListener('change', e => { S.to = e.target.value; run(); });
+    $('.ecns-tt').addEventListener('change', e => { S.tt = e.target.value; run(); });
+    root.addEventListener('input', e => { if (!e.target.classList.contains('ecns-ddq')) return; const q = nz(e.target.value);
+      e.target.closest('.ecns-ddp').querySelectorAll('label').forEach(l => l.style.display = l.dataset.s.indexOf(q)>=0 ? '' : 'none'); });
+    root.addEventListener('change', e => { const cb = e.target; if (cb.type!=='checkbox') return; const key = cb.closest('.ecns-dd').dataset.k;
+      cb.checked ? S[key].add(cb.value) : S[key].delete(cb.value); ddLabel(key); run(); });
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button'), th = e.target.closest('.ecns-t th'), tr = e.target.closest('.ecns-t tbody tr[data-n]');
+      if (b && b.dataset.df){ S.df = b.dataset.df; root.querySelectorAll('.ecns-seg button').forEach(x => x.classList.toggle('on', x===b)); run(); return; }
+      const act = b && b.dataset.act;
+      if (act==='adv'){ const a = $('.ecns-adv'); a.hidden = !a.hidden; b.classList.toggle('on', !a.hidden); return; }
+      if (act==='clear') return clearAll();
+      if (act==='csv') return csv();
+      if (act==='reload'){ S.err = ''; return load(); }
+      if (act==='more'){ S.shown += PAGE; return draw(); }
+      if (act==='all'){ S.shown = S.res.length; return draw(); }
+      if (act==='none'){ const dk = b.closest('.ecns-dd'), key = dk.dataset.k; S[key].clear(); dk.querySelectorAll('input[type=checkbox]').forEach(x => x.checked = false); ddLabel(key); return run(); }
+      if (th){ const i = +th.dataset.i, cur = S.sort.i>=0 ? S.sort.i : C.ngay, d = S.sort.i>=0 ? S.sort.d : -1;
+        S.sort = {i, d: i===cur ? -d : (S.cols[i].num || S.cols[i].date ? -1 : 1)}; const keep = S.shown; run(); S.shown = keep; return draw(); }
+      if (tr && !window.getSelection().toString()){ const n = +tr.dataset.n; S.open.has(n) ? S.open.delete(n) : S.open.add(n); draw(); }
+    });
+    document.addEventListener('click', e => { root.querySelectorAll('.ecns-dd[open]').forEach(d => { if (!d.contains(e.target)) d.removeAttribute('open'); }); });
+    status();
+    if (S.loaded){ buildOpts(); run(); }
+    else if ('IntersectionObserver' in window){   // chỉ tự tải khi khối X.0 hiện ra mà bản tải chung của tab DLCN chưa xong sau 8 s
+      const io = new IntersectionObserver(en => { if (en.some(x => x.isIntersecting)){ io.disconnect(); setTimeout(load, 8000); } });
+      io.observe(root);
+    }
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
+  return {feed, load, init, _S:S};
+})();
+</script>
+<!-- ECNS:END JS -->
 </body>
 </html>
