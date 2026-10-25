@@ -1155,6 +1155,10 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #cdnRoot a{color:#1565C0;text-decoration:none}#cdnRoot a:hover{text-decoration:underline}
 #cdnRoot .cdn-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#B0BEC5}
 #cdnRoot .cdn-dot.green{background:#43A047}#cdnRoot .cdn-dot.amber{background:#FDD835}#cdnRoot .cdn-dot.red{background:#E53935}
+#cdnRoot .cdn-btn2{background:#fff;color:#1B5E20}
+#cdnRoot .cdn-pin{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#F1F8E9;border:1px solid #C8E6C9;border-radius:7px;padding:7px 10px;margin:0 0 8px;font-size:11.5px}
+#cdnRoot .cdn-pin input{width:110px;border:1px solid #9CCC65;border-radius:6px;padding:4px 8px;font-size:12px;letter-spacing:3px}
+#cdnRoot .cdn-lock{color:#4a5568}
 #cdnRoot .cdn-note{font-size:10.5px;color:#718096;margin-top:7px;line-height:1.5}
 </style>
 <!-- CDN:END CSS -->
@@ -11405,11 +11409,21 @@ window.TCM = (function(){
 <script>
 /* CÀI ĐẶT · NGUỒN DỮ LIỆU & THỜI GIAN CẬP NHẬT (anh yêu cầu 25/10/2026)
    Đọc tab NHAT_KY_NGUON (Sheet hệ thống 16sk2…) do CAI_DAT_NGUON\ghi_nhat_ky_nguon.py ghi mỗi giờ + cuối mỗi lần đồng bộ Bravo DB.
-   Tự tải khi tab Cài đặt được mở; đèn trạng thái theo ngưỡng giờ ghi trong tab (0 = nguồn nhập tay, không cảnh báo). */
+   Tự tải khi tab Cài đặt được mở; đèn trạng thái theo ngưỡng giờ ghi trong tab (0 = nguồn nhập tay, không cảnh báo).
+   Link mở Google Sheet ẨN, chỉ hiện sau khi nhập đúng PIN (anh chọn phương án C 25/10/2026). Trang tĩnh nên PIN chỉ che link khỏi người xem
+   thông thường — quyền sửa thật do chia sẻ Google Drive quyết định (link công khai phải để Viewer). Chỉ lưu băm PBKDF2, không lưu PIN. */
 window.CDN = (function(){
   const SHEET = '16sk2PgwrOMEY1lfNc32KEyvaw2HHyX0EZMmUbnwnO-w', TAB = 'NHAT_KY_NGUON';
   const PAGE_LOAD = new Date();
-  let loading = null, loadedAt = null;
+  let loading = null, loadedAt = null, last = [];
+  const PIN = {salt:'713adae750c6d2c7a1895dbddd55cba8', it:300000, hash:'3e4ce602882db832df30a7ffff304086103caf155e501c2ba0e4ab33a7c3be77'}, SS_KEY = 'cdn_link_mo';
+  let mo = false; try { mo = sessionStorage.getItem(SS_KEY) === '1'; } catch(e) {}
+  const hex = b => [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join('');
+  async function kiemPin(pin){
+    const k = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveBits']);
+    const salt = new Uint8Array(PIN.salt.match(/../g).map(x => parseInt(x,16)));
+    return hex(await crypto.subtle.deriveBits({name:'PBKDF2', hash:'SHA-256', salt, iterations:PIN.it}, k, 256)) === PIN.hash;
+  }
   const $ = id => document.getElementById(id);
   const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const pad = n => String(n).padStart(2,'0');
@@ -11447,6 +11461,7 @@ window.CDN = (function(){
   }
   function soVN(s){ return /^\d+$/.test(s) ? (+s).toLocaleString('vi-VN') : s; }
   function render(list){
+    last = list;
     const root = $('cdnRoot'); if (!root) return;
     const kt = list.map(r => parseVN(r.kt)).filter(Boolean).sort((a,b)=>b-a)[0];
     const cu = kt && (Date.now() - kt.getTime())/36e5 > 3;
@@ -11457,7 +11472,11 @@ window.CDN = (function(){
       + (loadedAt ? ' · bảng nguồn đọc lúc <b>' + fmt(loadedAt) + '</b>' : '')
       + (kt ? ' · nhật ký nguồn kiểm tra lúc <b>' + fmt(kt) + '</b> (' + tuoi(kt) + ')' : '') + '</div>'
       + '<div class="cdn-sum"><span class="cdn-pill green">● ' + dem.green + ' đúng lịch</span><span class="cdn-pill amber">● ' + dem.amber + ' chậm</span><span class="cdn-pill red">● ' + dem.red + ' quá hạn / lỗi</span>'
-      + '<button type="button" class="cdn-btn" onclick="CDN.reload()">↻ Tải lại</button></div></div>';
+      + (mo ? '<button type="button" class="cdn-btn cdn-btn2" onclick="CDN.khoa()">🔒 Ẩn link</button>'
+            : '<button type="button" class="cdn-btn cdn-btn2" onclick="CDN.hoiPin()">🔓 Mở link Google Sheet</button>')
+      + '<button type="button" class="cdn-btn" onclick="CDN.reload()">↻ Tải lại</button></div></div>'
+      + '<div id="cdnPin" class="cdn-pin" style="display:none">Nhập mã PIN để hiện link mở Google Sheet: <input id="cdnPinIn" type="password" inputmode="numeric" maxlength="12" autocomplete="off" onkeydown="if(event.key===\'Enter\')CDN.moPin()">'
+      + '<button type="button" class="cdn-btn" onclick="CDN.moPin()">Mở</button><span id="cdnPinMsg" class="cdn-sub"></span></div>';
     if (cu) html += '<div class="cdn-warn">⚠ Nhật ký nguồn chưa được ghi lại hơn 3 giờ (lần cuối ' + fmt(kt) + '). Máy chạy lịch có thể đang tắt / mất mạng — các thời gian dưới đây có thể chưa phải mới nhất.</div>';
     html += '<div class="cdn-wrap"><table class="cdn-tbl"><thead><tr><th>Nguồn dữ liệu</th><th>Cách cập nhật · lịch</th><th>Google Sheet · tab</th><th>Cập nhật lần cuối</th><th>Trạng thái</th><th class="num">Số dòng</th></tr></thead><tbody>';
     let nhom = '';
@@ -11466,7 +11485,8 @@ window.CDN = (function(){
       const [k, txt] = den(r), d = parseVN(r.luc);
       html += '<tr><td><div class="cdn-name">' + esc(r.ten) + '</div><div class="cdn-sub">' + esc(r.dung) + '</div></td>'
         + '<td>' + esc(r.cach) + '<div class="cdn-sub">' + esc(r.lich) + '</div></td>'
-        + '<td><a href="https://docs.google.com/spreadsheets/d/' + encodeURIComponent(r.sid) + '/edit" target="_blank" rel="noopener">' + esc(r.file) + ' ↗</a><div class="cdn-sub">' + esc(r.tab) + '</div></td>'
+        + '<td>' + (mo ? '<a href="https://docs.google.com/spreadsheets/d/' + encodeURIComponent(r.sid) + '/edit" target="_blank" rel="noopener">' + esc(r.file) + ' ↗</a>'
+                       : '<span class="cdn-lock" title="Nhập PIN để mở link">🔒 ' + esc(r.file) + '</span>') + '<div class="cdn-sub">' + esc(r.tab) + '</div></td>'
         + '<td class="cdn-when">' + (d ? '<b>' + esc(r.luc) + '</b><div class="cdn-sub">' + tuoi(d) + '</div>' : '<span class="cdn-sub">—</span>')
         + '<div class="cdn-sub cdn-cc" title="' + esc(r.cancu) + '">' + esc(r.cancu) + '</div></td>'
         + '<td><span class="cdn-dot ' + k + '"></span>' + esc(txt) + (r.kq && !/^OK$/.test(r.kq) && k !== 'gray' ? '<div class="cdn-sub">' + esc(r.kq) + '</div>' : (k==='gray' && r.kq && txt!==r.kq ? '<div class="cdn-sub">' + esc(r.kq) + '</div>' : '')) + '</td>'
@@ -11490,7 +11510,17 @@ window.CDN = (function(){
     new MutationObserver(go).observe(tab, {attributes:true, attributeFilter:['class']}); go();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch); else watch();
-  return { reload: () => load(true), enter: () => load(false) };
+  function hoiPin(){ const b = $('cdnPin'); if (b) { b.style.display = 'flex'; const i = $('cdnPinIn'); if (i) { i.value = ''; i.focus(); } } }
+  async function moPin(){
+    const i = $('cdnPinIn'), m = $('cdnPinMsg'); if (!i) return;
+    if (m) m.textContent = 'Đang kiểm tra…';
+    let ok = false; try { ok = await kiemPin(i.value.trim()); } catch(e) { if (m) m.textContent = 'Trình duyệt không hỗ trợ kiểm tra PIN.'; return; }
+    if (!ok) { if (m) m.textContent = 'Sai mã PIN.'; i.value = ''; i.focus(); return; }
+    mo = true; try { sessionStorage.setItem(SS_KEY, '1'); } catch(e) {}
+    render(last);
+  }
+  function khoa(){ mo = false; try { sessionStorage.removeItem(SS_KEY); } catch(e) {} render(last); }
+  return { reload: () => load(true), enter: () => load(false), hoiPin, moPin, khoa };
 })();
 </script>
 <!-- CDN:END JS -->
