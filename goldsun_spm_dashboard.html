@@ -1131,6 +1131,33 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #tcm-root .tcm-png{margin-left:auto;align-self:center;background:#E7F2E8;border-color:#9CC7A1;color:var(--g1)}
 </style>
 <!-- TCM:END CSS -->
+<!-- CDN:BEGIN CSS -->
+<style>
+/* CÀI ĐẶT · nguồn dữ liệu & thời gian cập nhật — chỉ áp trong #cdnRoot / .cdn-* */
+#cdnRoot{font-size:12px;color:#1f2d3d}
+#cdnRoot .cdn-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+#cdnRoot .cdn-meta{font-size:11.5px;color:#4a5568}
+#cdnRoot .cdn-sum{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#cdnRoot .cdn-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px;background:#f4f6f8;border:1px solid #e2e8f0}
+#cdnRoot .cdn-pill.green{color:#2E7D32}#cdnRoot .cdn-pill.amber{color:#B7791F}#cdnRoot .cdn-pill.red{color:#C62828}
+#cdnRoot .cdn-btn{border:1px solid #1B5E20;background:#1B5E20;color:#fff;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer}
+#cdnRoot .cdn-warn{background:#FFF8E1;border:1px solid #FDD835;color:#7a5b00;border-radius:7px;padding:7px 10px;margin:6px 0 8px;font-size:11.5px}
+#cdnRoot .cdn-wrap{overflow-x:auto;border:1px solid #dfe5ea;border-radius:9px}
+#cdnRoot .cdn-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
+#cdnRoot .cdn-tbl th{background:#1B5E20;color:#fff;text-align:left;padding:7px 9px;font-weight:600;white-space:nowrap;font-size:11px}
+#cdnRoot .cdn-tbl th.num,#cdnRoot .cdn-tbl td.num{text-align:right}
+#cdnRoot .cdn-tbl td{padding:6px 9px;border-top:1px solid #edf1f4;vertical-align:top}
+#cdnRoot .cdn-tbl tr.cdn-grp td{background:#F1F8E9;color:#1B5E20;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:5px 9px}
+#cdnRoot .cdn-name{font-weight:600;color:#1a2b4a}
+#cdnRoot .cdn-sub{font-size:10.5px;color:#718096;margin-top:2px}
+#cdnRoot .cdn-cc{max-width:230px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#cdnRoot .cdn-when{white-space:nowrap}
+#cdnRoot a{color:#1565C0;text-decoration:none}#cdnRoot a:hover{text-decoration:underline}
+#cdnRoot .cdn-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#B0BEC5}
+#cdnRoot .cdn-dot.green{background:#43A047}#cdnRoot .cdn-dot.amber{background:#FDD835}#cdnRoot .cdn-dot.red{background:#E53935}
+#cdnRoot .cdn-note{font-size:10.5px;color:#718096;margin-top:7px;line-height:1.5}
+</style>
+<!-- CDN:END CSS -->
 </head>
 <body>
 
@@ -2732,11 +2759,12 @@ PEOPLE_SCORE =
 <div class="tab-content" id="tab-setup">
   <div class="panel">
     <div class="ph"><div class="pt"><span class="pt-icon">⚙</span>Thông tin hệ thống</div></div>
-    <div class="step"><div class="snum">1</div><div><div class="stitle">Nguồn dữ liệu — Google Sheets (gviz API)</div><div class="cblock" id="api-url-display">Đang tải...</div></div></div>
-    <div class="step"><div class="snum">2</div><div><div class="stitle">Đồng bộ dữ liệu từ Excel</div><div class="sdesc">
-      ⏰ Chạy sync_excel_to_gsheet.py để đẩy dữ liệu mới nhất lên Google Sheet<br>
-      🔄 Nhấn nút "Đồng bộ" trên dashboard để tải lại dữ liệu<br>
-      📋 Script: E:\DATA BASE\1.0.DATA_PCN\DATA_SPM\sync_excel_to_gsheet.py
+    <div class="step"><div class="snum">1</div><div style="flex:1;min-width:0"><div class="stitle">Nguồn dữ liệu &amp; thời gian cập nhật</div><div id="cdnRoot"></div><details style="margin-top:8px"><summary style="cursor:pointer;font-size:11px;color:#718096">Cấu hình kỹ thuật — ID Sheet các nguồn chính (CFG)</summary><div class="cblock" id="api-url-display">Đang tải...</div></details></div></div>
+    <div class="step" id="cdnStep2"><div class="snum">2</div><div><div class="stitle">Cách dữ liệu được cập nhật</div><div class="sdesc">
+      🏭 <b>Bravo ERP</b> (Khai báo hệ thống, ECN V2, DATA_NPI, Đơn hàng bán → Mẫu thành đơn hàng V4): máy anh Mạnh tự đọc thẳng CSDL Bravo và ghi lên Google Sheet lúc 01:00 · 11:00 · 16:00 (Task Scheduler, cần máy bật + VPN).<br>
+      ⏱ <b>KBA</b> 12:00 · <b>Nội bộ GSQV</b> 10:00 &amp; 11:00 · <b>nhật ký nguồn</b> mỗi giờ — tự động trên cùng máy.<br>
+      ✍ <b>Công việc các BP, cấu hình, miễn trừ</b>: nhân sự nhập trực tiếp trên Google Sheet.<br>
+      🔄 Dashboard luôn đọc thẳng Google Sheet: nhấn “🔄 Đồng bộ” (thanh trên cùng) hoặc tải lại trang để lấy số mới nhất.
     </div></div></div>
     <div class="step"><div class="snum">3</div><div><div class="stitle">Yêu cầu quyền truy cập</div><div class="sdesc">
       Tất cả Google Sheets phải được chia sẻ: <strong>"Anyone with the link can view"</strong><br>
@@ -11373,5 +11401,98 @@ window.TCM = (function(){
 })();
 </script>
 <!-- TCM:END JS -->
+<!-- CDN:BEGIN JS -->
+<script>
+/* CÀI ĐẶT · NGUỒN DỮ LIỆU & THỜI GIAN CẬP NHẬT (anh yêu cầu 25/10/2026)
+   Đọc tab NHAT_KY_NGUON (Sheet hệ thống 16sk2…) do CAI_DAT_NGUON\ghi_nhat_ky_nguon.py ghi mỗi giờ + cuối mỗi lần đồng bộ Bravo DB.
+   Tự tải khi tab Cài đặt được mở; đèn trạng thái theo ngưỡng giờ ghi trong tab (0 = nguồn nhập tay, không cảnh báo). */
+window.CDN = (function(){
+  const SHEET = '16sk2PgwrOMEY1lfNc32KEyvaw2HHyX0EZMmUbnwnO-w', TAB = 'NHAT_KY_NGUON';
+  const PAGE_LOAD = new Date();
+  let loading = null, loadedAt = null;
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const pad = n => String(n).padStart(2,'0');
+  const fmt = d => pad(d.getHours())+':'+pad(d.getMinutes())+' '+pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+  function parseVN(s){                       // "dd/mm/yyyy HH:MM" (giờ VN, máy anh cùng múi giờ)
+    const m = String(s||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);
+    return m ? new Date(+m[3], +m[2]-1, +m[1], +(m[4]||0), +(m[5]||0)) : null;
+  }
+  function tuoi(d){
+    if (!d) return '';
+    const h = (Date.now() - d.getTime()) / 36e5;
+    if (h < 1) return Math.max(0, Math.round(h*60)) + ' phút trước';
+    if (h < 24) return Math.round(h) + ' giờ trước';
+    return Math.floor(h/24) + ' ngày trước';
+  }
+  function den(r){
+    const d = parseVN(r.luc), v = +r.vang || 0, dd = +r.do || 0;
+    if (/LỖI|LOI/i.test(r.kq)) return ['red', 'Lỗi lần chạy gần nhất'];
+    if (!d) return v ? ['red', 'Chưa có lần cập nhật'] : ['gray', r.kq || 'Chưa ghi nhận'];
+    if (!v) return ['gray', 'Theo lịch / nhập tay'];
+    const h = (Date.now() - d.getTime()) / 36e5;
+    if (h <= v) return ['green', 'Đúng lịch'];
+    if (h <= dd) return ['amber', 'Chậm hơn lịch'];
+    return ['red', 'Quá hạn cập nhật'];
+  }
+  function rowsFrom(t){
+    const cols = (t.cols||[]).map(c => String(c.label||'').trim());
+    const val = (r,i) => { const c = r.c && r.c[i]; return c ? String(c.f!=null ? c.f : (c.v==null?'':c.v)) : ''; };
+    let data = (t.rows||[]).map(r => (r.c||[]).map((_,i)=>val(r,i)));
+    let head = cols;
+    if (head[0] !== 'Mã') { head = data[0] || []; data = data.slice(1); }    // gviz đôi khi không nhận dòng tiêu đề
+    if (head[0] !== 'Mã' || head[9] !== 'Cập nhật lần cuối') throw new Error('Tab ' + TAB + ' chưa có hoặc sai cấu trúc — chạy CAI_DAT_NGUON\\GHI_NHAT_KY_NGUON.bat');
+    return data.filter(r => r[0]).map(r => ({ma:r[0], nhom:r[1], ten:r[2], dung:r[3], sid:r[4], file:r[5], tab:r[6], cach:r[7], lich:r[8],
+      luc:r[9], kq:r[10], sd:r[11], cancu:r[12], drive:r[13], vang:r[14], do:r[15], kt:r[16]}));
+  }
+  function soVN(s){ return /^\d+$/.test(s) ? (+s).toLocaleString('vi-VN') : s; }
+  function render(list){
+    const root = $('cdnRoot'); if (!root) return;
+    const kt = list.map(r => parseVN(r.kt)).filter(Boolean).sort((a,b)=>b-a)[0];
+    const cu = kt && (Date.now() - kt.getTime())/36e5 > 3;
+    const dem = {green:0, amber:0, red:0};
+    list.forEach(r => { const k = den(r)[0]; if (k in dem) dem[k]++; });
+    let html = '<div class="cdn-top">'
+      + '<div class="cdn-meta">🕒 Trang này tải lúc <b>' + fmt(PAGE_LOAD) + '</b>'
+      + (loadedAt ? ' · bảng nguồn đọc lúc <b>' + fmt(loadedAt) + '</b>' : '')
+      + (kt ? ' · nhật ký nguồn kiểm tra lúc <b>' + fmt(kt) + '</b> (' + tuoi(kt) + ')' : '') + '</div>'
+      + '<div class="cdn-sum"><span class="cdn-pill green">● ' + dem.green + ' đúng lịch</span><span class="cdn-pill amber">● ' + dem.amber + ' chậm</span><span class="cdn-pill red">● ' + dem.red + ' quá hạn / lỗi</span>'
+      + '<button type="button" class="cdn-btn" onclick="CDN.reload()">↻ Tải lại</button></div></div>';
+    if (cu) html += '<div class="cdn-warn">⚠ Nhật ký nguồn chưa được ghi lại hơn 3 giờ (lần cuối ' + fmt(kt) + '). Máy chạy lịch có thể đang tắt / mất mạng — các thời gian dưới đây có thể chưa phải mới nhất.</div>';
+    html += '<div class="cdn-wrap"><table class="cdn-tbl"><thead><tr><th>Nguồn dữ liệu</th><th>Cách cập nhật · lịch</th><th>Google Sheet · tab</th><th>Cập nhật lần cuối</th><th>Trạng thái</th><th class="num">Số dòng</th></tr></thead><tbody>';
+    let nhom = '';
+    list.forEach(r => {
+      if (r.nhom !== nhom) { nhom = r.nhom; html += '<tr class="cdn-grp"><td colspan="6">' + esc(nhom) + '</td></tr>'; }
+      const [k, txt] = den(r), d = parseVN(r.luc);
+      html += '<tr><td><div class="cdn-name">' + esc(r.ten) + '</div><div class="cdn-sub">' + esc(r.dung) + '</div></td>'
+        + '<td>' + esc(r.cach) + '<div class="cdn-sub">' + esc(r.lich) + '</div></td>'
+        + '<td><a href="https://docs.google.com/spreadsheets/d/' + encodeURIComponent(r.sid) + '/edit" target="_blank" rel="noopener">' + esc(r.file) + ' ↗</a><div class="cdn-sub">' + esc(r.tab) + '</div></td>'
+        + '<td class="cdn-when">' + (d ? '<b>' + esc(r.luc) + '</b><div class="cdn-sub">' + tuoi(d) + '</div>' : '<span class="cdn-sub">—</span>')
+        + '<div class="cdn-sub cdn-cc" title="' + esc(r.cancu) + '">' + esc(r.cancu) + '</div></td>'
+        + '<td><span class="cdn-dot ' + k + '"></span>' + esc(txt) + (r.kq && !/^OK$/.test(r.kq) && k !== 'gray' ? '<div class="cdn-sub">' + esc(r.kq) + '</div>' : (k==='gray' && r.kq && txt!==r.kq ? '<div class="cdn-sub">' + esc(r.kq) + '</div>' : '')) + '</td>'
+        + '<td class="num">' + esc(soVN(r.sd)) + '</td></tr>';
+    });
+    html += '</tbody></table></div>'
+      + '<div class="cdn-note">Đèn: <b>xanh</b> = cập nhật trong khoảng lịch · <b>vàng</b> = chậm hơn lịch · <b>đỏ</b> = quá hạn hoặc lần chạy lỗi · <b>xám</b> = nguồn nhập tay / chạy theo nhu cầu (chỉ hiện thời gian). '
+      + 'Nguồn Bravo cần máy chạy lịch bật + VPN; nhật ký nguồn tự ghi mỗi giờ. Bấm “↻ Đồng bộ” trên thanh trên cùng để tải lại dữ liệu dashboard sau khi nguồn vừa cập nhật.</div>';
+    root.innerHTML = html;
+  }
+  function load(force){
+    if (loading && !force) return loading;
+    const root = $('cdnRoot'); if (root && !root.innerHTML.trim()) root.innerHTML = '<div class="cdn-sub">Đang tải nhật ký nguồn dữ liệu…</div>';
+    loading = gvizFetch(SHEET, TAB, 1, 'select *', 30000).then(t => { loadedAt = new Date(); render(rowsFrom(t)); })
+      .catch(e => { const r = $('cdnRoot'); if (r) r.innerHTML = '<div class="cdn-warn">Không đọc được nhật ký nguồn: ' + esc(e && e.message || e) + '</div>'; loading = null; });
+    return loading;
+  }
+  function watch(){
+    const tab = $('tab-setup'); if (!tab) return;
+    const go = () => { if (tab.classList.contains('active')) load(false); };
+    new MutationObserver(go).observe(tab, {attributes:true, attributeFilter:['class']}); go();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch); else watch();
+  return { reload: () => load(true), enter: () => load(false) };
+})();
+</script>
+<!-- CDN:END JS -->
 </body>
 </html>
