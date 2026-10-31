@@ -1162,6 +1162,88 @@ details.bt-legacy>summary{cursor:pointer;padding:10px 14px;font-weight:700;color
 #cdnRoot .cdn-note{font-size:10.5px;color:#718096;margin-top:7px;line-height:1.5}
 </style>
 <!-- CDN:END CSS -->
+<!-- LSP:BEGIN CSS -->
+<style>
+/* 0. TRA CỨU LỊCH SỬ PHÁT TRIỂN SẢN PHẨM — chỉ áp trong #lspRoot */
+#lspRoot{font-size:12px;color:#1f2d3d;margin:0 0 14px}
+#lspRoot .lsp-bar0{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px}
+#lspRoot .lsp-in{flex:0 1 420px;min-width:220px;border:1px solid #9CCC65;border-radius:7px;padding:7px 10px;font-size:12.5px;outline:none}
+#lspRoot .lsp-in:focus{border-color:#1B5E20;box-shadow:0 0 0 2px #C8E6C9}
+#lspRoot .lsp-btn{border:1px solid #1B5E20;background:#1B5E20;color:#fff;border-radius:6px;padding:5px 11px;font-size:11.5px;cursor:pointer;white-space:nowrap}
+#lspRoot .lsp-btn:disabled{opacity:.6}
+#lspRoot .lsp-s{font-size:10.5px;color:#718096}
+#lspRoot .lsp-note{font-size:11.5px;color:#4a5568;margin:6px 0}
+#lspRoot .lsp-red{color:#C62828}
+#lspRoot .lsp-empty{padding:14px;color:#718096;font-style:italic}
+#lspRoot .lsp-wrap{overflow-x:auto;border:1px solid #dfe5ea;border-radius:9px;margin:4px 0 10px}
+#lspRoot .lsp-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
+#lspRoot .lsp-tbl th{background:#0E6655;color:#fff;text-align:left;padding:6px 9px;font-weight:600;white-space:nowrap}
+#lspRoot .lsp-tbl th.num,#lspRoot .lsp-tbl td.num{text-align:right}
+#lspRoot .lsp-tbl td{padding:5px 9px;border-top:1px solid #edf1f4;vertical-align:middle}
+#lspRoot .lsp-tbl tr[data-pick]{cursor:pointer}
+#lspRoot .lsp-tbl tr[data-pick]:hover td{background:#F1F8E9}
+#lspRoot .lsp-tbl tr.on td{background:#E8F5E9;font-weight:600}
+#lspRoot .lsp-tbl tr.lsp-dis td{color:#94a3b8;font-style:italic}
+#lspRoot .lsp-k{font-weight:600;color:#1a2b4a;white-space:nowrap}
+#lspRoot .lsp-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;background:#F1F8E9;border:1px solid #C8E6C9;border-radius:8px;padding:7px 10px;margin:8px 0}
+#lspRoot .lsp-cap{background:#fff;padding:6px 4px 4px}
+/* trục thời gian dạng thẻ (kiểu trục version X.0 ECN, anh đổi 31/10/2026) */
+#lspRoot .lsp-cap{background:#fff;border:1px solid #dfe5ea;border-radius:10px;padding:12px 14px}
+#lspRoot .lsp-th h3{margin:0;font-size:18px;color:#0F766E}
+#lspRoot .lsp-th p{margin:3px 0 0;color:#6B6A64;font-size:12.5px}
+#lspRoot .lsp-kps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:10px 0 6px}
+#lspRoot .lsp-kp{border:1px solid #E3E1D8;border-top:4px solid #0F766E;border-radius:9px;padding:8px 12px;background:#FDFDFB}
+#lspRoot .lsp-kp.y{border-top-color:#E2B500}
+#lspRoot .lsp-kp.r{border-top-color:#C62828}
+#lspRoot .lsp-kp .l{font-size:10.5px;font-weight:800;letter-spacing:1.2px;color:#0F766E}
+#lspRoot .lsp-kp.r .l{color:#B71C1C}
+#lspRoot .lsp-kp .v{font-size:20px;font-weight:800;margin:2px 0;color:#1F2421}
+#lspRoot .lsp-kp .s{font-size:11.5px;color:#6B6A64;line-height:1.45}
+#lspRoot .lsp-tlw{overflow-x:auto;overflow-y:hidden;padding:4px 0 8px}
+#lspRoot .lsp-snake{position:relative;margin:0 auto;display:flex;flex-direction:column;gap:6px;box-sizing:border-box}
+#lspRoot .lsp-turnc{position:absolute;border:30px solid;box-sizing:border-box;z-index:1;pointer-events:none}
+#lspRoot .lsp-sg.rtl{padding:0 22px 0 8px}
+#lspRoot .lsp-sg.rtl:before{left:auto;right:0;border-left:0;border-right:15px solid #fff}
+#lspRoot .lsp-sg.rtl:after{right:auto;left:-11px;border-left:0;border-right:15px solid var(--c)}
+#lspRoot .lsp-sg.cont:before{display:none}
+#lspRoot .lsp-sg.turn:after{display:none}
+#lspRoot .lsp-sg.end{border-radius:0 15px 15px 0}
+#lspRoot .lsp-sg.end:after{display:none}
+#lspRoot .lsp-sg.rtl.end{border-radius:15px 0 0 15px}
+#lspRoot .lsp-tg{display:grid;grid-template-rows:auto 112px 30px 112px auto;width:max-content}
+#lspRoot .lsp-tc{align-self:end;padding-bottom:6px}
+#lspRoot .lsp-bc{align-self:start;padding-top:6px}
+#lspRoot .lsp-ev{font-size:12px;line-height:1.5;cursor:pointer;background:#fff;border:1px solid #E3E1D8;border-top:4px solid;border-radius:9px;padding:8px 10px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+#lspRoot .lsp-ev.on{box-shadow:0 0 0 3px #FDD835}
+#lspRoot .lsp-ev.bad{background:#FFF7F6}
+#lspRoot .lsp-ev h4{margin:0 0 5px;font-size:14px;text-align:center}
+#lspRoot .lsp-li{border-top:1px dashed #E3E1D8;padding:3px 0;line-height:1.4}
+#lspRoot .lsp-tag{display:block;width:max-content;margin:0 auto 4px;padding:1px 8px;border-radius:999px;background:#E0F1EF;color:#0F766E;font-size:10.5px;font-weight:700}
+#lspRoot .lsp-ok{color:#2E7D32}
+#lspRoot .lsp-rel{color:#00838F}
+#lspRoot .lsp-warn{margin-top:6px;padding:6px 9px;border:1.5px solid #F2B8B5;background:#FDECEA;border-radius:7px;color:#8E1C14;font-size:11.5px}
+#lspRoot .lsp-info{margin-top:5px;padding:5px 9px;border:1.5px solid #EBD38A;background:#FFF8E1;border-radius:7px;color:#6B5200;font-size:11.5px}
+#lspRoot .lsp-nd{display:flex;flex-direction:column;align-items:center}
+#lspRoot .lsp-nd.up{justify-content:flex-end}
+#lspRoot .lsp-nd.dn{flex-direction:column-reverse;justify-content:flex-start}
+#lspRoot .lsp-node{width:92px;height:92px;border-radius:50%;border:6px solid;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.08);cursor:pointer;flex:0 0 auto}
+#lspRoot .lsp-node b{font-size:13px}
+#lspRoot .lsp-node em{font-style:normal;font-size:13px;font-weight:800;margin-top:1px}
+#lspRoot .lsp-node span{font-size:10px;color:#6B6A64}
+#lspRoot .lsp-stem{width:3px;flex:1 1 auto;min-height:10px}
+#lspRoot .lsp-sg{position:relative;height:30px;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;white-space:nowrap;padding:0 8px 0 22px}
+#lspRoot .lsp-sg span{overflow:hidden;text-overflow:ellipsis}
+#lspRoot .lsp-sg b{font-weight:800;margin-left:3px}
+#lspRoot .lsp-sg:before{content:'';position:absolute;left:0;top:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:15px solid #fff;z-index:2}
+#lspRoot .lsp-sg:after{content:'';position:absolute;right:-11px;top:0;border-top:15px solid transparent;border-bottom:15px solid transparent;border-left:15px solid var(--c);z-index:3}
+#lspRoot .lsp-sg.first{border-radius:15px 0 0 15px;padding-left:12px}
+#lspRoot .lsp-sg.first:before{display:none}
+#lspRoot .lsp-now{text-align:center;color:#6B6A64;font-size:12px;line-height:1.6;margin:0 auto;max-width:260px}
+#lspRoot .lsp-now b{color:#0F766E}
+#lspRoot .lsp-tfoot{border-top:1.5px dashed #E3E1D8;margin-top:8px;padding-top:8px;font-size:11.5px;color:#6B6A64;line-height:1.55}
+@media (max-width:1100px){#lspRoot .lsp-kps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+<!-- LSP:END CSS -->
 </head>
 <body>
 
@@ -1558,6 +1640,10 @@ PEOPLE_SCORE =
 </div>
 
 <!-- ══ ZONE I: KPI TỔNG QUAN ══ -->
+<!-- LSP:BEGIN HTML -->
+<div id="lsp-muc0" class="section-title">0. TRA CỨU LỊCH SỬ PHÁT TRIỂN SẢN PHẨM</div>
+<div id="lspRoot"></div>
+<!-- LSP:END HTML -->
 <div id="kpi" class="section-title">I. TỔNG QUAN DỮ LIỆU<button onclick="if(window._syncDLCNAllSections)window._syncDLCNAllSections();" style="float:right;font-size:11px;padding:3px 10px;background:#1a5276;color:#fff;border:none;border-radius:4px;cursor:pointer;margin-top:-2px">🔄 Cập nhật dữ liệu</button></div>
 <div class="grid-7" style="margin-bottom:14px">
   <div class="kpi-card blue">
@@ -5717,6 +5803,7 @@ function selectDashBP(btn) {
     ph.classList.remove('show');
     wrap.classList.add('open');
     const dlcnAnchors = [
+      {id:'lsp-muc0', label:'0. Tra cứu SP'},
       {id:'kpi',      label:'I. KPI'},
       {id:'canh-bao', label:'II. Cảnh báo'},
       {id:'du-an',    label:'III. Dự án'},
@@ -11524,5 +11611,428 @@ window.CDN = (function(){
 })();
 </script>
 <!-- CDN:END JS -->
+<!-- LSP:BEGIN JS -->
+<script>
+/* ═══ 0. TRA CỨU LỊCH SỬ PHÁT TRIỂN SẢN PHẨM — đầu tab Dashboard DLCN & HT (anh chốt 31/10/2026) ═══
+   - Tìm theo mã / tên sản phẩm trên: danh mục vật tư Bravo (hỏi riêng theo tên/mã), yêu cầu làm mẫu (DATA_NPI), ECN V2, đơn hàng (DON_HANG_SO).
+   - Gom kết quả về SẢN PHẨM GỐC (GH69-46250AN / _Nắp / _Đáy → GH69-46250A); nhiều sản phẩm → danh sách để chọn.
+   - Trục thời gian DẠNG THẺ như trục version X.0 ECN (anh đổi 31/10/2026): thẻ xen kẽ trên/dưới, vòng tròn ngày, dải mũi tên số ngày;
+     trục chạy hết hàng trên rồi VÒNG xuống hàng dưới chạy ngược chiều (kiểu rắn) — giữ đúng thứ tự thời gian, không thu nhỏ;
+     mốc = phiếu YC mẫu · đợt tạo mã Bravo (≤ 7 ngày gộp) · phiếu ECN · đợt đơn hàng (≤ 31 ngày gộp).
+   - Đi theo mã liên quan (1 cấp): mã mẫu & mã tương đương ghi trên phiếu SA, mã vật tư trên ECN, mã hàng trên đơn hàng.
+   - Tra quá rộng (> 15 sản phẩm hoặc > 400 mã Bravo) → chỉ hiện danh sách, không vẽ "Tất cả". Chỉ đọc Sheet. */
+window.LSP = (function(){
+  const NPI = {id:'1dXqdesaXALqaIahaIh7jOn0Y0jN5ZsI1Sf7mr_Fw8Dk', tab:'DATA_NPI', hr:9};
+  const BRAVO_ID = '17OCv3lY5dsXzItjnbOYlr3j8ZRq0ateOSh3rrqwG_GU';
+  const ECN = {id:'1DmMl4ii39XY7wOe1yi1Waq5kpX0OK2agi8kTDRI45Tg', tab:'Báo cáo theo dõi quản lý ECN V2', hr:7};
+  const PHID = '1V9kJpx6Ae-jWYSMYOjnfOoR1QxIlLsqKU5UXaQLKdGc';
+  const MAX_ROOT = 15, MAX_BR = 400;
+  const C = {yc:'#E8A317', br:'#2E7D32', brm:'#66BB6A', rel:'#00838F', ecn:'#C2185B', so:'#B8860B', bad:'#E53935'};
+  const nz = s => String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/\s+/g,' ').trim();
+  const cp = s => nz(s).replace(/[\s\-_.\/|,;:()+]+/g, '');
+  const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const p2 = n => String(n).padStart(2,'0');
+  const dm = d => d ? p2(d.getDate()) + '/' + p2(d.getMonth()+1) : '—';
+  const dmy = d => d ? p2(d.getDate()) + '/' + p2(d.getMonth()+1) + '/' + d.getFullYear() : '—';
+  const fN = n => n==null||isNaN(n) ? '' : Math.round(n).toLocaleString('vi-VN');
+  const cut = (s, n) => { s = String(s||''); return s.length > n ? s.slice(0, n-1) + '…' : s; };
+  const days = (a, b) => Math.round((b - a) / 86400000);
+  const today = () => { const t = new Date(); t.setHours(0,0,0,0); return t; };
+  function gd(c){
+    if (!c || c.v == null || c.v === '') return null;
+    let m = /^Date\((\d+),(\d+),(\d+)/.exec(String(c.v)); if (m) return new Date(+m[1], +m[2], +m[3]);
+    m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(String(c.f != null ? c.f : c.v)); if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+    m = /^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/.exec(String(c.f != null ? c.f : c.v)); if (!m) return null;
+    let y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[2]-1, +m[1]);
+  }
+  const bd = c => { const d = (typeof bravoCellDate === 'function' && bravoCellDate(c)) || gd(c); return d ? new Date(d.getFullYear(), d.getMonth(), d.getDate()) : null; };
+  const gt = c => !c || c.v == null ? '' : String(c.f != null && typeof c.v !== 'number' ? c.f : c.v).trim();
+  const gnum = c => c && typeof c.v === 'number' ? c.v : null;
+  // mã sản phẩm khách hàng trong tên (GH69-46250AN, RX1-7485-000, PM02-007653A…) — bỏ dạng mã Bravo (HC2-00011)
+  const CODE_RE = /(?<![A-Z0-9])[A-Z]{1,4}\d{1,3}(?:-[A-Z0-9]{3,})+(?![A-Z0-9])/g;
+  const BRAVO_CODE = /^[A-Z]{1,3}\d-\d{4,6}$/;
+  function rootsOf(text){
+    const out = new Set(); String(text||'').toUpperCase().replace(CODE_RE, m => {
+      if (BRAVO_CODE.test(m)) return m;
+      const r = /^(.*\d[A-Z])[ND]$/.exec(m); out.add(r ? r[1] : m); return m; });
+    return out;
+  }
+  function nameKey(s){                      // tên không có mã SP → khoá theo tên đã bỏ "(Mẫu)", nắp/đáy
+    return String(s||'').toUpperCase().replace(/\(\s*M[ẪA]U\s*\)\.?/g, '').replace(/[_\s-]*(N[ẮA]P|Đ[ÁA]Y)\b/g, '').replace(/\s+/g, ' ').trim().slice(0, 60);
+  }
+
+  const S = {npi:null, ecn:null, ph:null, so:null, loading:null, br:{}, q:'', seq:0, pick:null, D:null, E:null};
+  let root = null;
+  const $ = s => root.querySelector(s);
+  function hdrMap(t){ return (t.cols||[]).map(c => nz(c.label)); }
+  const fc = (L, keys, fb) => { for (const k of keys){ const i = L.findIndex(l => l.indexOf(nz(k)) === 0); if (i >= 0) return i; } return fb; };
+
+  // ── tải nguồn ─────────────────────────────────────────────────
+  function loadAll(){
+    if (S.loading) return S.loading;
+    S.loading = (async () => {
+      const [n, e, h, s] = await Promise.allSettled([
+        gvizFetch(NPI.id, NPI.tab, NPI.hr, 'select * limit 99999', 120000),
+        gvizFetch(ECN.id, ECN.tab, ECN.hr, 'select * limit 99999', 120000),
+        gvizFetch(PHID, '✅ TỔNG HỢP V4', 1, 'select * limit 99999', 60000),
+        gvizFetch(PHID, 'DON_HANG_SO', 7, 'select A,B,C,H,I,M,O,P,W limit 99999', 120000)]);
+      if (n.status !== 'fulfilled') throw new Error('DATA_NPI: ' + (n.reason && n.reason.message));
+      const L = hdrMap(n.value), I = {stt:fc(L,['stt'],0), ngayYC:fc(L,['ngay yeu cau'],1), tp:fc(L,['ngay tp duyet'],2), pic:fc(L,['pic trien khai mau'],5),
+        so:fc(L,['so yc mau'],10), kh:fc(L,['ten khach hang'],11), nm:fc(L,['nha may thuc hien'],14), dg:fc(L,['dien giai'],15), lan:fc(L,['lan lam mau thu'],17),
+        md:fc(L,['muc dich lam mau'],26), model:fc(L,['ten model'],27), tensp:fc(L,['ten san pham mau'],28), td:fc(L,['san pham tuong duong'],36),
+        maSP:fc(L,['ma san pham sau khi tao'],42), bg:fc(L,['ngay ban giao mau'],43), tt:fc(L,['tinh trang mau'],46), duyet:fc(L,['ngay duyet mau'],47), keo:fc(L,['ngay keo lenh'],51)};
+      S.npi = (n.value.rows||[]).filter(r => r && r.c && gnum(r.c[I.stt]) > 0).map(r => { const c = r.c, g = k => gt(c[I[k]]), d = k => gd(c[I[k]]);
+        const o = {ngayYC:d('ngayYC'), tp:d('tp'), bg:d('bg'), duyet:d('duyet'), keo:d('keo'), so:g('so'), kh:g('kh'), nm:g('nm'), dg:g('dg'), lan:gnum(c[I.lan]) || 1,
+          pic:g('pic'), md:g('md'), model:g('model'), tensp:g('tensp'), td:g('td'), maSP:g('maSP'), tt:g('tt')};
+        o.k = nz([o.so, o.dg, o.model, o.tensp, o.maSP, o.td, o.kh].join(' | ')); o.k2 = cp(o.k);
+        o.roots = rootsOf([o.tensp, o.model, o.dg].join(' ')); if (!o.roots.size && o.tensp) o.roots.add(nameKey(o.tensp)); return o; });
+      S.ecn = [];
+      if (e.status === 'fulfilled') {
+        const L2 = hdrMap(e.value), J = {code:fc(L2,['ten code'],2), ma:fc(L2,['ma vat tu'],4), ten:fc(L2,['ten vat tu'],5), ver0:fc(L2,['ver cu'],6), ver1:fc(L2,['ver moi'],7),
+          dg:fc(L2,['dien giai'],8), ht:fc(L2,['hinh thuc ecn'],12), han:fc(L2,['thoi han ecn'],13), ton:fc(L2,['so luong ton kho xac nhan'],16), ngay:fc(L2,['ngay ecn'],18), so:fc(L2,['so ecn'],27)};
+        const vs = c => c ? String(c.f != null ? c.f : c.v) : '';
+        S.ecn = (e.value.rows||[]).filter(r => r && r.c).map(r => { const c = r.c, g = k => gt(c[J[k]]);
+          const o = {code:g('code'), ma:g('ma'), ten:g('ten'), dg:g('dg'), ht:g('ht'), han:gd(c[J.han]), ton:gnum(c[J.ton]) || 0, ngay:gd(c[J.ngay]), so:g('so'), ver0:vs(c[J.ver0]), ver1:vs(c[J.ver1])};
+          o.k = nz([o.code, o.ma, o.ten, o.dg].join(' | ')); o.k2 = cp(o.k); o.roots = rootsOf([o.ten, o.code, o.dg].join(' ')); return o; });
+      }
+      S.ph = {};
+      if (h.status === 'fulfilled') {
+        const L3 = hdrMap(h.value), K = {so:fc(L3,['so yc'],1), n:fc(L3,['so dong dh'],7), gt:fc(L3,['tong gia tri'],8), sos:fc(L3,['danh sach so'],9)};
+        (h.value.rows||[]).forEach(r => { const c = r.c||[], so = gt(c[K.so]); if (so) S.ph[so] = {n:gnum(c[K.n]) || 0, gt:gnum(c[K.gt]) || 0, sos:gt(c[K.sos])}; });
+      }
+      S.so = [];
+      if (s.status === 'fulfilled') {
+        S.so = (s.value.rows||[]).filter(r => r && r.c && r.c[4] && r.c[4].v).map(r => { const c = r.c;
+          const o = {d:gd(c[0]), so:gt(c[1]), ct:gt(c[2]), ma:gt(c[3]), ten:gt(c[4]), sl:gnum(c[5]) || 0, gt:gnum(c[6]) || 0, xuat:gnum(c[7]) || 0, doDau:gd(c[8])};
+          o.k = nz(o.ma + ' | ' + o.ten); o.k2 = cp(o.k); o.roots = rootsOf(o.ten); return o; });
+      }
+    })();
+    S.loading.catch(() => { S.loading = null; });
+    return S.loading;
+  }
+  // Bravo: dashboard không tải tên SP → hỏi riêng (B ngày tạo, C sửa cuối, D số lần sửa, E người KB, L mã, M tên, R loại, T YC làm mẫu)
+  const BCOLS = 'select B,C,D,E,L,M,R,T';
+  function mapBr(t){
+    return (t.rows||[]).filter(r => r && r.c && r.c[4] && r.c[4].v).map(r => { const c = r.c;
+      const o = {d:bd(c[0]), sua:bd(c[1]), nSua:gnum(c[2]) || 0, kb:gt(c[3]), ma:gt(c[4]), ten:gt(c[5]), loai:gt(c[6]), sa:gt(c[7])};
+      o.mau = /sample/i.test(o.ma) || /m[aẫ]u\)?\.?\s*$|\(\s*m[aẫ]u\s*\)/i.test(o.ten);
+      o.roots = rootsOf(o.ten); if (!o.roots.size) o.roots.add(nameKey(o.ten)); return o; });
+  }
+  function bravoSearch(toks){
+    const key = 'q:' + toks.join(' ');
+    if (S.br[key]) return S.br[key];
+    const w = toks.map(t => { t = t.replace(/'/g, ''); return "(lower(M) contains '" + t + "' or lower(L) contains '" + t + "')"; }).join(' and ');
+    S.br[key] = gvizFetch(BRAVO_ID, '', 7, BCOLS + ' where ' + w + ' limit ' + (MAX_BR + 1), 60000).then(mapBr).catch(e => { delete S.br[key]; throw e; });
+    return S.br[key];
+  }
+  function bravoCodes(codes){
+    codes = [...new Set(codes.filter(Boolean).map(x => x.replace(/'/g, '').trim()))].slice(0, 60);
+    if (!codes.length) return Promise.resolve([]);
+    const key = 'c:' + codes.sort().join(',');
+    if (S.br[key]) return S.br[key];
+    S.br[key] = gvizFetch(BRAVO_ID, '', 7, BCOLS + ' where ' + codes.map(x => "L = '" + x + "'").join(' or '), 60000).then(mapBr).catch(e => { delete S.br[key]; throw e; });
+    return S.br[key];
+  }
+
+  // ── tìm → danh sách sản phẩm gốc ──────────────────────────────
+  async function search(q){
+    const seq = ++S.seq;
+    const toksRaw = String(q||'').toLowerCase().split(/\s+/).filter(x => x.length >= 2);
+    const toks = toksRaw.map(nz);
+    if (!toks.length) return null;
+    await loadAll();
+    let br = [], brErr = '';
+    try { br = await bravoSearch(toksRaw); } catch(e) { brErr = e.message; }
+    if (seq !== S.seq) return null;
+    const hit = o => toks.every(t => o.k.indexOf(t) >= 0 || (t.length >= 4 && o.k2.indexOf(cp(t)) >= 0));
+    br.forEach(o => { o.k = nz(o.ma + ' | ' + o.ten); o.k2 = cp(o.k); });
+    const npi = S.npi.filter(hit), ecn = S.ecn.filter(hit), so = S.so.filter(hit);
+    const qn = cp(q);
+    const agg = {};
+    const add = (r, typ, o, d) => { const a = agg[r] = agg[r] || {k:r, br:new Set(), yc:new Set(), ecn:new Set(), so:new Set(), d0:null, d1:null};
+      a[typ].add(typ === 'br' ? o.ma : typ === 'yc' ? o.so : typ === 'ecn' ? o.so : o.ct);
+      if (d) { if (!a.d0 || d < a.d0) a.d0 = d; if (!a.d1 || d > a.d1) a.d1 = d; } };
+    br.forEach(o => o.roots.forEach(r => add(r, 'br', o, o.d)));
+    npi.forEach(o => o.roots.forEach(r => add(r, 'yc', o, o.ngayYC)));
+    ecn.forEach(o => o.roots.forEach(r => add(r, 'ecn', o, o.ngay)));
+    so.forEach(o => o.roots.forEach(r => add(r, 'so', o, o.d)));
+    let list = Object.values(agg);
+    const hitR = list.filter(a => cp(a.k).indexOf(qn) >= 0 || toks.every(t => nz(a.k).indexOf(t) >= 0));
+    if (hitR.length) list = hitR;
+    list.forEach(a => { a.n = a.br.size + a.yc.size + a.ecn.size + a.so.size; });
+    list.sort((a, b) => (a.d0 || 9e15) - (b.d0 || 9e15) || b.n - a.n);
+    return {q, toks, br, brErr, brCap: br.length > MAX_BR, npi, ecn, so, list,
+      wide: list.length > MAX_ROOT || br.length > MAX_BR};
+  }
+
+  // ── dựng dữ liệu trục thời gian cho 1 sản phẩm gốc (hoặc tất cả) ─
+  async function build(R, roots){
+    const seq = ++S.seq, set = new Set(roots);
+    const inR = o => [...o.roots].some(r => set.has(r));
+    const br = R.br.filter(inR), brMa = new Set(br.map(o => o.ma));
+    const npi = R.npi.filter(inR);
+    // mã liên quan cấp 1: mã mẫu / mã tương đương trên SA; mã trên ECN, đơn hàng khớp sản phẩm
+    const ecn0 = S.ecn.filter(o => inR(o) || brMa.has(o.ma));
+    const so0 = S.so.filter(o => inR(o) || brMa.has(o.ma));
+    const why = {};
+    const rel = (ma, lydo) => { if (ma && !brMa.has(ma)) { (why[ma] = why[ma] || new Set()).add(lydo); } };
+    npi.forEach(o => { rel(o.maSP, 'mã mẫu của ' + o.so); String(o.td||'').split(/[,;+\s]+/).forEach(x => /^[A-Z]{2,4}-/.test(x) && rel(x, 'SP tương đương của ' + o.so)); });
+    ecn0.forEach(o => rel(o.ma, o.so));
+    so0.forEach(o => rel(o.ma, 'đơn ' + o.so));
+    let relBr = [], relErr = '';
+    try { relBr = await bravoCodes(Object.keys(why)); } catch(e) { relErr = e.message; }
+    if (seq !== S.seq) return null;
+    relBr.forEach(o => { o.rel = [...(why[o.ma] || [])].join(' · '); });
+    const allBr = br.concat(relBr.filter(o => !brMa.has(o.ma)));
+    const allMa = new Set(allBr.map(o => o.ma));
+    Object.keys(why).forEach(ma => { if (!allMa.has(ma)) { allBr.push({ma, ten:'(không tìm thấy trong danh mục)', d:null, rel:[...why[ma]].join(' · '), roots:new Set(), missing:true}); allMa.add(ma); } });
+    const ecn = S.ecn.filter(o => inR(o) || allMa.has(o.ma));
+    const so = S.so.filter(o => inR(o) || allMa.has(o.ma));
+    return {roots, br:allBr, npi, ecn, so, relErr, single: roots.length === 1};
+  }
+
+  // ── sự kiện cho trục thời gian dạng thẻ (kiểu trục version X.0 ECN — anh yêu cầu 31/10/2026) ──
+  const TYPE = {yc:{lb:'YC mẫu', col:C.yc}, br:{lb:'Tạo mã', col:C.br}, ecn:{lb:'ECN', col:C.ecn}, so:{lb:'Đơn hàng', col:C.so}};
+  function events(D){
+    // gom các mốc CÙNG LOẠI cách nhau ≤ 7 ngày thành 1 thẻ (đơn hàng ≤ 31 ngày) để trục không quá dài
+    const t0 = today(), rootOf = o => (o.roots && [...o.roots].find(r => D.roots.includes(r))) || '';
+    const gom = (arr, t, gap) => { const out = []; let g = null;
+      arr.filter(x => x.d).sort((a, b) => a.d - b.d).forEach(x => { if (g && days(g.d1, x.d) <= gap) { g.list.push(x.o); g.d1 = x.d; } else { g = {t, d:x.d, d1:x.d, list:[x.o]}; out.push(g); } });
+      return out; };
+    const isRed = o => /lam lai|khong dat|huy/.test(nz(o.tt));
+    const yc = gom(D.npi.map(o => ({d:o.ngayYC, o})), 'yc', 7);
+    yc.forEach(e => { e.red = e.list.every(isRed); e.nRed = e.list.filter(isRed).length; e.col = e.red ? C.bad : C.yc; e.root = rootOf(e.list[0]); });
+    const br = gom(D.br.map(o => ({d:o.d, o})), 'br', 7); br.forEach(e => e.col = C.br);
+    const byE = {}; D.ecn.forEach(x => (byE[x.so || '(không số)'] = byE[x.so || '(không số)'] || []).push(x));
+    const ecn1 = Object.keys(byE).map(k => { const L = byE[k]; return {d:L.map(x => x.ngay).filter(Boolean).sort((a, b) => a - b)[0], o:{so:k, list:L}}; });
+    const ecn = gom(ecn1, 'ecn', 7);
+    ecn.forEach(e => { e.col = C.ecn; e.qh = e.list.flatMap(g => g.list).filter(x => x.ton > 0 && x.han && x.han < t0); });
+    const so = gom(D.so.map(o => ({d:o.d, o})), 'so', 31); so.forEach(e => e.col = C.so);
+    return yc.concat(br, ecn, so).sort((a, b) => a.d - b.d || 'ybes'.indexOf(a.t[0]) - 'ybes'.indexOf(b.t[0]));
+  }
+  function card(e, all){
+    const sub = s => '<div class="lsp-s">' + s + '</div>';
+    if (e.t === 'yc' && e.list.length > 1) {
+      return '<h4 style="color:' + e.col + '">' + e.list.length + ' phiếu YC mẫu</h4>'
+        + '<div class="lsp-s" style="text-align:center">' + dm(e.d) + (e.d1 > e.d ? ' → ' + dm(e.d1) : '') + (e.nRed ? ' · ' + e.nRed + ' phiếu làm lại / huỷ' : '') + '</div>'
+        + e.list.map(o => { const red = /lam lai|khong dat|huy/.test(nz(o.tt)), ph = S.ph[o.so];
+            return '<div class="lsp-li"><b>' + esc(o.so) + '</b> · lần ' + o.lan + ' · ' + esc(cut(o.tensp || o.dg, 46)) + '<br><span class="lsp-s">YC ' + dm(o.ngayYC) + (o.bg ? ' → bàn giao ' + dm(o.bg) : '') + (o.maSP ? ' · mã mẫu ' + esc(o.maSP) : '') + '</span> · <b class="' + (red ? 'lsp-red' : 'lsp-ok') + '">' + esc(o.tt || 'chưa có') + '</b>'
+              + (ph && ph.n ? ' · <span class="lsp-ok">→ ' + ph.n + ' dòng ĐH</span>' : '') + '</div>'; }).join('')
+        + '<div class="lsp-s">PIC ' + esc([...new Set(e.list.map(o => o.pic).filter(Boolean))].join(', ') || '—') + '</div>'; }
+    if (e.t === 'yc') { const o = e.list[0], ph = S.ph[o.so];
+      const st = [['YC', o.ngayYC], ['TP duyệt', o.tp], ['bàn giao', o.bg], ['duyệt mẫu', o.duyet], ['kéo lệnh', o.keo]].filter(x => x[1]).map(x => x[0] + ' ' + (x[0] === 'bàn giao' ? '<b>' + dm(x[1]) + '</b>' : dm(x[1]))).join(' → ');
+      return '<h4 style="color:' + e.col + '">' + esc(o.so) + ' · lần ' + o.lan + '</h4>'
+        + (all && e.root ? '<div class="lsp-tag">' + esc(e.root) + '</div>' : '')
+        + '<div><b>' + esc(cut(o.tensp || o.dg, 80)) + '</b>' + (o.md ? ' · ' + esc(cut(o.md, 30)) : '') + '</div>'
+        + '<div>' + st + (o.bg && o.ngayYC && o.bg >= o.ngayYC ? ' (' + days(o.ngayYC, o.bg) + ' ngày)' : '') + '</div>'
+        + '<div>Kết quả: <b class="' + (e.red ? 'lsp-red' : 'lsp-ok') + '">' + esc(o.tt || 'chưa có') + '</b>' + (o.maSP ? ' · mã mẫu <b>' + esc(o.maSP) + '</b>' : '') + '</div>'
+        + (o.td ? sub('SP tương đương: ' + esc(o.td)) : '')
+        + (ph && ph.n ? '<div class="lsp-info">→ Thành đơn hàng (V4): <b>' + ph.n + ' dòng</b> · ' + (ph.gt/1e9).toLocaleString('vi-VN', {maximumFractionDigits:2}) + ' tỷ đ</div>' : '')
+        + sub(esc(cut(o.kh, 40)) + ' · ' + esc(o.nm) + ' · PIC ' + esc(o.pic || '—')); }
+    if (e.t === 'br') { const L = e.list, mau = L.filter(x => x.mau && !x.rel).length, rel = L.filter(x => x.rel).length, sx = L.length - mau - rel;
+      return '<h4 style="color:' + e.col + '">Tạo ' + L.length + ' mã trên Bravo</h4>'
+        + '<div class="lsp-s" style="text-align:center">' + [sx ? sx + ' mã SX' : '', mau ? mau + ' mã mẫu' : '', rel ? rel + ' mã liên quan' : ''].filter(Boolean).join(' · ') + (e.d1 > e.d ? ' · ' + dm(e.d) + ' → ' + dm(e.d1) : '') + '</div>'
+        + L.slice(0, 6).map(x => '<div><b' + (x.rel ? ' class="lsp-rel"' : '') + '>' + esc(x.ma) + '</b> · ' + esc(cut(x.ten, 34)) + (x.rel ? ' <span class="lsp-s">(' + esc(cut(x.rel, 26)) + ')</span>' : '') + '</div>').join('')
+        + (L.length > 6 ? sub('… và ' + (L.length - 6) + ' mã khác (xem bảng chi tiết)') : '')
+        + sub('Người khai báo: ' + esc([...new Set(L.map(x => x.kb).filter(Boolean))].slice(0, 3).join(', ') || '—')); }
+    if (e.t === 'ecn' && e.list.length > 1) { const all = e.list.flatMap(g => g.list), ton = all.reduce((s, x) => s + x.ton, 0);
+      return '<h4 style="color:' + e.col + '">' + e.list.length + ' phiếu ECN</h4>'
+        + '<div class="lsp-s" style="text-align:center">' + dm(e.d) + (e.d1 > e.d ? ' → ' + dm(e.d1) : '') + ' · ' + new Set(all.map(x => x.ma)).size + ' mã vật tư</div>'
+        + e.list.map(g => { const x0 = g.list[0]; return '<div class="lsp-li"><b>' + esc(g.so) + '</b> · ' + esc(x0.ht || '') + '<br>' + esc(cut(x0.dg, 70)) + ' <span class="lsp-s">· hạn ' + dm(x0.han) + ' · ' + g.list.length + ' mã</span></div>'; }).join('')
+        + (ton ? '<div>Tồn xác nhận: <b>' + fN(ton) + ' pcs</b></div>' : '')
+        + (e.qh.length ? '<div class="lsp-warn">⚠ Quá thời hạn mà còn tồn ' + fN(e.qh.reduce((s, x) => s + x.ton, 0)) + ' pcs</div>' : ''); }
+    if (e.t === 'ecn') { const g = e.list[0], L = g.list, x0 = L[0], ton = L.reduce((s, x) => s + x.ton, 0), ma = [...new Set(L.map(x => x.ma))]; e.so = g.so;
+      return '<h4 style="color:' + e.col + '">' + esc(e.so) + '</h4>'
+        + '<div>' + esc(x0.ht || '') + ' · <b>' + esc(cut(x0.dg, 90)) + '</b></div>'
+        + '<div>Thời hạn <b>' + dmy(x0.han) + '</b>' + (x0.ver0 || x0.ver1 ? ' · ver ' + esc(x0.ver0 || '—') + ' → ' + esc(x0.ver1 || '—') : '') + '</div>'
+        + '<div>' + ma.slice(0, 4).map(m => '<b>' + esc(m) + '</b>').join(' · ') + (ma.length > 4 ? ' … +' + (ma.length - 4) + ' mã' : '') + '</div>'
+        + (ton ? '<div>Tồn xác nhận: <b>' + fN(ton) + ' pcs</b></div>' : '')
+        + (e.qh.length ? '<div class="lsp-warn">⚠ Quá thời hạn mà còn tồn ' + fN(e.qh.reduce((s, x) => s + x.ton, 0)) + ' pcs</div>' : ''); }
+    if (e.t === 'so') { const L = e.list, sl = L.reduce((s, x) => s + x.sl, 0), gtr = L.reduce((s, x) => s + x.gt, 0), ma = [...new Set(L.map(x => x.ma))], so = [...new Set(L.map(x => x.so))];
+      return '<h4 style="color:' + e.col + '">Đơn hàng · ' + L.length + ' dòng</h4>'
+        + '<div class="lsp-s" style="text-align:center">' + dmy(e.d) + (e.d1 > e.d ? ' → ' + dmy(e.d1) : '') + ' · ' + so.length + ' SO</div>'
+        + '<div><b>' + fN(sl) + ' pcs</b>' + (gtr ? ' · ' + (gtr/1e9).toLocaleString('vi-VN', {maximumFractionDigits:2}) + ' tỷ đ' : '') + '</div>'
+        + '<div>' + ma.slice(0, 4).map(m => '<b>' + esc(m) + '</b>').join(' · ') + (ma.length > 4 ? ' … +' + (ma.length - 4) + ' mã' : '') + '</div>'
+        + sub(esc(cut(L[0].ten, 60)) + ' · đã xuất ' + fN(L.reduce((s, x) => s + x.xuat, 0)) + ' pcs')
+        + sub('Đơn chưa đóng trên bảng kê (từ 01/01/2026)'); }
+    return '';
+  }
+  function drawTL(D, E){
+    // TRỤC KIỂU "RẮN" (anh yêu cầu 31/10/2026): chạy hết hàng trên → vòng xuống hàng dưới chạy ngược chiều, giữ đúng thứ tự thời gian.
+    // Mỗi hàng tối đa k mốc (theo bề rộng khung), thẻ xen kẽ trên / dưới trục, cỡ chữ thật (không thu nhỏ).
+    if (!E.length) return '<div class="lsp-empty">Không có mốc thời gian nào.</div>';
+    const t0 = today(), all = !D.single, W = Math.max(700, (root.clientWidth || 1300) - 40);
+    const u = 92, TW = 64, k = Math.max(2, Math.floor((W - 2*TW - 4*u) / (2*u)));   // 1 mốc = 2 cột u; chừa đầu/cuối hàng, thẻ tràn, khúc vòng TW
+    const cw = Math.min(4*u - 16, 340), pad = Math.max(0, Math.ceil((cw - 2*u)/2));
+    const rows = []; for (let i = 0; i < E.length; i += k) rows.push(E.slice(i, i + k));
+    let h = '<div class="lsp-snake" style="width:' + ((2*k + 2)*u + 2*pad + 2*TW) + 'px;padding:0 ' + TW + 'px">';
+    rows.forEach((R, r) => {
+      const rtl = r % 2 === 1, last = r === rows.length - 1, m = R.length, N = 2*m + 2, base = r*k;
+      const col = (c, span) => rtl ? N - c - span + 2 : c;                   // hàng lẻ: đảo cột (chạy phải → trái)
+      const cell = (c, span, row, html, cls) => '<div class="' + (cls||'') + '" style="grid-column:' + col(c, span) + ' / span ' + span + ';grid-row:' + row + '">' + html + '</div>';
+      const seg = (c, span, colr, html, cls) => cell(c, span, 3, '<div class="lsp-sg ' + (rtl ? 'rtl ' : '') + (cls||'') + '" style="background:' + colr + ';--c:' + colr + '"><span>' + html + '</span></div>');
+      let g = '';
+      R.forEach((e, j) => { const i = base + j, up = i % 2 === 0;
+        g += cell(2*j+1, 2, up ? 1 : 5, '<div class="lsp-ev' + (e.t === 'yc' && e.red ? ' bad' : '') + '" data-ev="' + i + '" style="width:' + cw + 'px;margin-left:' + ((2*u - cw)/2) + 'px;border-top-color:' + e.col + '">' + card(e, all) + '</div>', up ? 'lsp-tc' : 'lsp-bc');
+        g += cell(2*j+1, 2, up ? 2 : 4, '<div class="lsp-node" data-ev="' + i + '" style="border-color:' + e.col + '"><b style="color:' + e.col + '">' + dm(e.d) + '/' + String(e.d.getFullYear()).slice(2) + '</b><em style="color:' + e.col + '">' + TYPE[e.t].lb + '</em><span>'
+          + (e.list.length > 1 || e.t === 'br' || e.t === 'so' ? e.list.length + ({yc:' phiếu', br:' mã', ecn:' phiếu', so:' dòng'})[e.t] : e.t === 'yc' ? esc(e.list[0].so.replace(/^SA/, '')) : esc(e.list[0].so.replace(/^ECN-/, '')))
+          + '</span></div><div class="lsp-stem" style="background:' + e.col + '"></div>', up ? 'lsp-nd up' : 'lsp-nd dn');
+      });
+      // dải mũi tên: đầu hàng · giữa các mốc · cuối hàng (sang hàng sau hoặc → nay)
+      g += seg(1, 1, r === 0 ? '#90A4AE' : E[base - 1].col, r === 0 ? '<b>BẮT ĐẦU</b>' : '', r === 0 ? 'first' : 'cont');
+      for (let j = 1; j < m; j++) { const a = R[j-1], b = R[j]; g += seg(2*j, 2, a.col, dm(a.d) + ' → ' + dm(b.d) + ' · <b>' + days(a.d, b.d) + ' ngày</b>'); }
+      const eL = R[m-1];
+      if (last) {
+        g += seg(2*m, 2, eL.col, dm(eL.d) + ' → nay · <b>' + days(eL.d, t0) + ' ngày</b>');
+        g += seg(N, 1, '#90A4AE', '<b>HÔM NAY</b>', 'end');
+        const i = base + m, up = i % 2 === 0;
+        g += cell(2*m+1, 2, up ? 1 : 5, '<div class="lsp-now"><b>HÔM NAY ' + dmy(t0) + '</b><br>' + days(E[0].d, t0) + ' ngày kể từ mốc đầu (' + dmy(E[0].d) + ')</div>', up ? 'lsp-tc' : 'lsp-bc');
+      } else {
+        const nx = E[base + m];
+        g += seg(2*m, 2, eL.col, dm(eL.d) + ' → ' + dm(nx.d) + ' · <b>' + days(eL.d, nx.d) + ' ngày</b>');
+        g += seg(N, 1, eL.col, '', 'cont turn');
+      }
+      h += '<div class="lsp-tg' + (rtl ? ' rtl' : '') + '" data-row="' + r + '" style="grid-template-columns:repeat(' + N + ',' + u + 'px);padding:0 ' + pad + 'px;' + (rtl ? 'margin-left:auto' : 'margin-right:auto') + '">' + g + '</div>';
+    });
+    return '<div class="lsp-tlw">' + h + '</div></div>';
+  }
+  // vẽ khúc vòng nối cuối hàng trên → đầu hàng dưới (đo vị trí thật sau khi hiển thị)
+  function drawTurns(){
+    const sn = root.querySelector('.lsp-snake'); if (!sn) return;
+    sn.querySelectorAll('.lsp-turnc').forEach(x => x.remove());
+    const rows = [...sn.querySelectorAll('.lsp-tg')], b0 = sn.getBoundingClientRect();
+    for (let r = 0; r < rows.length - 1; r++) {
+      const a = rows[r].querySelector('.lsp-sg.turn'), b = rows[r+1].querySelector('.lsp-sg.cont'); if (!a || !b) continue;
+      const ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(), right = r % 2 === 0, colr = getComputedStyle(a).backgroundColor;
+      const pad = parseFloat(getComputedStyle(rows[r]).paddingLeft) || 0;   // thẻ đầu / cuối hàng tràn ra vùng pad → cánh vòng đặt ngoài vùng đó
+      const top = ra.top - b0.top, hgt = rb.bottom - ra.top, w = pad + 52;
+      const d = document.createElement('div'); d.className = 'lsp-turnc';
+      d.style.cssText = 'top:' + top + 'px;height:' + hgt + 'px;width:' + w + 'px;border-color:' + colr + ';'
+        + (right ? 'left:' + (ra.right - b0.left - 6) + 'px;border-left:0;border-radius:0 ' + w + 'px ' + w + 'px 0'
+                 : 'left:' + (ra.left - b0.left - w + 6) + 'px;border-right:0;border-radius:' + w + 'px 0 0 ' + w + 'px');
+      sn.appendChild(d);
+    }
+  }
+  function kpis(D, E){
+    const t0 = today(), dd = E.map(e => e.d), d0 = dd[0], d1 = dd[dd.length-1];
+    const lt = D.npi.filter(o => o.ngayYC && o.bg && o.bg >= o.ngayYC).map(o => days(o.ngayYC, o.bg));
+    const red = D.npi.filter(o => /lam lai|khong dat|huy/.test(nz(o.tt))).length;
+    const rel = D.br.filter(o => o.rel).length, mau = D.br.filter(o => o.mau && !o.rel).length, sx = D.br.length - rel - mau;
+    const nE = new Set(D.ecn.map(o => o.so)).size, qh = D.ecn.filter(x => x.ton > 0 && x.han && x.han < t0).reduce((s, x) => s + x.ton, 0);
+    const sl = D.so.reduce((s, x) => s + x.sl, 0);
+    const kp = (cls, l, v, s) => '<div class="lsp-kp ' + cls + '"><div class="l">' + l + '</div><div class="v">' + v + '</div><div class="s">' + s + '</div></div>';
+    return '<div class="lsp-kps">'
+      + kp('', 'VÒNG ĐỜI PHÁT TRIỂN', d0 ? days(d0, t0) + ' ngày' : '—', d0 ? 'từ ' + dmy(d0) + ' · mốc gần nhất ' + dmy(d1) + ' · ' + E.length + ' mốc' : '')
+      + kp(red ? 'y' : '', 'YÊU CẦU LÀM MẪU', D.npi.length + ' phiếu', (lt.length ? 'YC → bàn giao TB ' + Math.round(lt.reduce((a, b) => a + b, 0) / lt.length) + ' ngày' : 'chưa bàn giao') + (red ? ' · ' + red + ' phiếu làm lại / huỷ' : ''))
+      + kp('', 'MÃ TRÊN BRAVO', D.br.length + ' mã', [sx ? sx + ' mã SX' : '', mau ? mau + ' mã mẫu' : '', rel ? rel + ' mã liên quan' : ''].filter(Boolean).join(' · '))
+      + kp(qh ? 'r' : '', 'ECN & ĐƠN HÀNG', nE + ' ECN · ' + D.so.length + ' dòng ĐH', (qh ? 'quá hạn ECN còn tồn ' + fN(qh) + ' pcs · ' : '') + (sl ? fN(sl) + ' pcs đặt hàng (đơn chưa đóng)' : 'chưa có đơn chưa đóng'))
+      + '</div>';
+  }
+  function fitTL(){ drawTurns(); }                 // trục rắn đã vừa khung, chỉ cần vẽ khúc vòng
+
+
+  // ── hiển thị ──────────────────────────────────────────────────
+  function drawList(R){
+    if (!R.list.length) return '<div class="lsp-empty">Không tìm thấy sản phẩm nào khớp "' + esc(R.q) + '" trong danh mục vật tư, yêu cầu làm mẫu, ECN, đơn hàng.</div>';
+    const all = R.list.reduce((a, x) => { x.br.forEach(v => a.br.add(v)); x.yc.forEach(v => a.yc.add(v)); x.ecn.forEach(v => a.ecn.add(v)); x.so.forEach(v => a.so.add(v)); return a; }, {br:new Set(), yc:new Set(), ecn:new Set(), so:new Set()});
+    const row = (a, i, key) => '<tr class="' + (S.pick === key ? 'on' : '') + '" data-pick="' + esc(key) + '"><td>' + (i == null ? '' : i + 1) + '</td><td class="lsp-k">' + esc(a.k) + '</td>'
+      + '<td class="num">' + a.br.size + '</td><td class="num">' + a.yc.size + '</td><td class="num">' + a.ecn.size + '</td><td class="num">' + a.so.size + '</td>'
+      + '<td>' + (a.d0 ? dmy(a.d0) + ' → ' + dmy(a.d1) : '—') + '</td><td><button type="button" class="lsp-btn" data-pick="' + esc(key) + '">Xem trục thời gian</button></td></tr>';
+    let h = '<div class="lsp-note">Tìm thấy <b>' + R.list.length + '</b> sản phẩm gốc' + (R.brCap ? ' (danh mục vật tư khớp hơn ' + MAX_BR + ' mã — nên gõ cụ thể hơn)' : '') + '. Chọn 1 dòng để xem trục thời gian.'
+      + (R.brErr ? ' <span class="lsp-red">Không đọc được danh mục vật tư: ' + esc(R.brErr) + '</span>' : '') + '</div>'
+      + '<div class="lsp-wrap"><table class="lsp-tbl"><thead><tr><th>#</th><th>Sản phẩm gốc</th><th class="num">Mã Bravo</th><th class="num">YC mẫu</th><th class="num">ECN</th><th class="num">Dòng ĐH</th><th>Mốc đầu → cuối</th><th></th></tr></thead><tbody>'
+      + R.list.slice(0, 60).map((a, i) => row(a, i, a.k)).join('');
+    if (R.list.length > 1) h += R.wide ? '<tr class="lsp-dis"><td></td><td colspan="7">(Tất cả) — kết quả quá rộng, chỉ hiện danh sách; chọn từng sản phẩm để xem trục thời gian</td></tr>'
+      : row({k:'(Tất cả kết quả "' + R.q + '")', br:all.br, yc:all.yc, ecn:all.ecn, so:all.so, d0:R.list.map(a => a.d0).filter(Boolean).sort((a, b) => a - b)[0], d1:R.list.map(a => a.d1).filter(Boolean).sort((a, b) => b - a)[0]}, null, '*');
+    return h + '</tbody></table></div>' + (R.list.length > 60 ? '<div class="lsp-note">… còn ' + (R.list.length - 60) + ' sản phẩm, gõ cụ thể hơn để thu hẹp.</div>' : '');
+  }
+  function capInfo(D){
+    const top = (arr) => { const m = {}; arr.filter(Boolean).forEach(v => m[v] = (m[v]||0) + 1); return Object.keys(m).sort((a, b) => m[b] - m[a]); };
+    return [top(D.npi.map(o => o.kh)).slice(0, 2).join(', '), top(D.npi.map(o => o.nm)).join(', ') ? 'nhà máy ' + top(D.npi.map(o => o.nm)).join(', ') : '',
+      top(D.npi.map(o => o.model)).slice(0, 1).join('') ? 'model ' + top(D.npi.map(o => o.model))[0] : '', top(D.npi.map(o => o.pic)).length ? 'PIC ' + top(D.npi.map(o => o.pic)).slice(0, 3).join(', ') : ''].filter(Boolean).join(' · ');
+  }
+  function rows(D){
+    const R = [];
+    D.npi.forEach(o => R.push([o.ngayYC, 'YC mẫu', o.so, (o.tensp || o.dg) + ' · ' + (o.tt || ''), 'DATA_NPI']));
+    D.br.forEach(o => o.d && R.push([o.d, o.rel ? 'Tạo mã (liên quan)' : o.mau ? 'Tạo mã mẫu' : 'Tạo mã', o.ma, o.ten + (o.rel ? ' · ' + o.rel : ''), 'Bravo']));
+    D.ecn.forEach(o => R.push([o.ngay, 'ECN', o.so, o.ma + ' · ' + o.dg, 'ECN V2']));
+    D.so.forEach(o => R.push([o.d, 'Đơn hàng', o.ct, o.ma + ' · ' + o.ten + ' · ' + fN(o.sl) + ' pcs', 'DON_HANG_SO']));
+    return R.sort((a, b) => (a[0] || 0) - (b[0] || 0));
+  }
+  function render(){
+    const out = $('.lsp-out'); if (!out) return;
+    if (!S.R) { out.innerHTML = ''; return; }
+    let h = drawList(S.R);
+    if (S.D) {
+      const D = S.D, E = S.E, rs = rows(D);
+      const ttl = D.single ? D.roots[0] : '(Tất cả) ' + D.roots.length + ' sản phẩm gốc';
+      h += '<div class="lsp-head"><div><b>' + esc(ttl) + '</b> · ' + D.br.length + ' mã Bravo (' + D.br.filter(o => o.rel).length + ' mã liên quan) · ' + D.npi.length + ' YC mẫu · '
+        + new Set(D.ecn.map(o => o.so)).size + ' ECN · ' + D.so.length + ' dòng đơn hàng</div><div><button type="button" class="lsp-btn" data-act="png">🖼 Xuất ảnh</button> <button type="button" class="lsp-btn" data-act="csv">⬇ Tải Excel</button></div></div>'
+        + (D.relErr ? '<div class="lsp-note lsp-red">Không đọc được mã liên quan: ' + esc(D.relErr) + '</div>' : '')
+        + '<div class="lsp-cap"><div class="lsp-th"><h3>' + esc(ttl) + '</h3><p>' + esc(capInfo(D)) + '</p></div>' + kpis(D, E) + drawTL(D, E)
+        + '<div class="lsp-tfoot">Mỗi vòng tròn là một mốc: <b style="color:' + C.yc + '">YC mẫu</b> (đỏ = làm lại / huỷ) · <b style="color:' + C.br + '">tạo mã Bravo</b> (gộp các mã tạo cách nhau ≤ 7 ngày, gồm mã liên quan) · <b style="color:' + C.ecn + '">ECN</b> · <b style="color:' + C.so + '">đơn hàng</b> (đơn chưa đóng, gộp đợt ≤ 31 ngày). Dải mũi tên = số ngày giữa hai mốc. Mã liên quan: mã mẫu / mã tương đương trên phiếu SA, mã trên ECN, mã trên đơn hàng.</div></div>'
+        + '<details class="lsp-more"><summary>Bảng chi tiết ' + rs.length + ' sự kiện</summary><div class="lsp-wrap"><table class="lsp-tbl"><thead><tr><th>Ngày</th><th>Loại</th><th>Mã / số</th><th>Nội dung</th><th>Nguồn</th></tr></thead><tbody>'
+        + rs.slice(0, 400).map(r => '<tr><td>' + dmy(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(cut(r[3], 110)) + '</td><td>' + esc(r[4]) + '</td></tr>').join('') + '</tbody></table></div></details>';
+    } else if (S.busy) h += '<div class="lsp-note">Đang dựng trục thời gian…</div>';
+    out.innerHTML = h;
+    fitTL();
+  }
+  async function run(){
+    const q = $('.lsp-in').value.trim(); S.q = q; S.R = null; S.D = null; S.pick = null; S.E = null;
+    const out = $('.lsp-out');
+    if (q.replace(/\s/g, '').length < 3) { out.innerHTML = '<div class="lsp-note">Gõ ít nhất 3 ký tự (mã hoặc tên sản phẩm).</div>'; return; }
+    out.innerHTML = '<div class="lsp-note">Đang tìm "' + esc(q) + '" trên danh mục vật tư, yêu cầu làm mẫu, ECN, đơn hàng…</div>';
+    try { const R = await search(q); if (!R) return; S.R = R; render();
+      if (R.list.length === 1) pick(R.list[0].k); }
+    catch(e) { out.innerHTML = '<div class="lsp-note lsp-red">Lỗi tải dữ liệu: ' + esc(e.message) + '</div>'; }
+  }
+  async function pick(key){
+    if (!S.R) return;
+    if (key === '*' && S.R.wide) return;
+    S.pick = key; S.D = null; S.E = null; S.busy = true; render();
+    const roots = key === '*' ? S.R.list.map(a => a.k) : [key];
+    const D = await build(S.R, roots); S.busy = false;
+    if (!D) return;
+    S.D = D; S.E = events(D); render();
+    const tl = $('.lsp-cap'); if (tl) tl.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+  function csv(){
+    if (!S.D) return;
+    const rs = rows(S.D), head = ['Ngày', 'Loại', 'Mã / số', 'Nội dung', 'Nguồn'];
+    const txt = [head].concat(rs.map(r => [dmy(r[0])].concat(r.slice(1)))).map(r => r.map(v => String(v == null ? '' : v).replace(/[\t\r\n]+/g, ' ')).join('\t')).join('\r\n');
+    const u8 = new Uint8Array(2 + txt.length * 2); u8[0] = 0xFF; u8[1] = 0xFE;
+    for (let i = 0; i < txt.length; i++) { const c = txt.charCodeAt(i); u8[2 + i*2] = c & 255; u8[3 + i*2] = c >> 8; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([u8], {type:'text/tab-separated-values'}));
+    a.download = 'LichSuSanPham_' + cp(S.D.single ? S.D.roots[0] : S.q).toUpperCase().slice(0, 30) + '.xls'; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function loadH2C(){ return window.html2canvas ? Promise.resolve() : new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'; s.onload = ok; s.onerror = () => no(new Error('Không tải được html2canvas')); document.head.appendChild(s); }); }
+  async function png(btn){
+    const el = $('.lsp-cap'); if (!el) return;
+    btn.disabled = true; const t = btn.textContent; btn.textContent = 'Đang xuất…';
+    const w = $('.lsp-tlw'), g = $('.lsp-tg');
+    try { await loadH2C(); if (w) w.style.overflow = 'visible';
+      const cv = await html2canvas(el, {backgroundColor:'#ffffff', scale:2, windowWidth: el.scrollWidth + 60});
+      const a = document.createElement('a'); a.href = cv.toDataURL('image/png'); a.download = 'TrucThoiGian_SP_' + cp(S.D.single ? S.D.roots[0] : S.q).toUpperCase().slice(0, 30) + '.png'; a.click(); }
+    catch(e) { alert(e.message); } finally { el.style.width = ''; if (w) w.style.overflow = ''; fitTL(); btn.disabled = false; btn.textContent = t; }
+  }
+  function init(){
+    root = document.getElementById('lspRoot'); if (!root || root.dataset.ok) return; root.dataset.ok = '1';
+    root.innerHTML = '<div class="lsp-bar0"><input class="lsp-in" type="search" placeholder="Gõ mã hoặc tên sản phẩm (vd GH69-46250, 46249, Pepsi)…" autocomplete="off">'
+      + '<button type="button" class="lsp-btn lsp-go">🔍 Tra cứu</button><span class="lsp-s">Tìm trên danh mục vật tư · yêu cầu làm mẫu · ECN · đơn hàng; tự đi theo mã mẫu, mã tương đương, mã trên ECN / đơn hàng.</span></div><div class="lsp-out"></div>';
+    $('.lsp-go').addEventListener('click', run);
+    let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { if (S.D && root.offsetParent) render(); }, 250); });
+    $('.lsp-in').addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+    root.addEventListener('click', e => {
+      const p = e.target.closest('[data-pick]'); if (p) { pick(p.dataset.pick); return; }
+      const a = e.target.closest('[data-act]'); if (a) { a.dataset.act === 'csv' ? csv() : png(a); return; }
+      const ev = e.target.closest('[data-ev]');
+      if (ev) { root.querySelectorAll('.lsp-ev.on').forEach(x => x.classList.remove('on')); const c = root.querySelector('.lsp-ev[data-ev="' + ev.dataset.ev + '"]'); if (c) c.classList.add('on'); }
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  return { init, run, pick, _S:S };
+})();
+</script>
+<!-- LSP:END JS -->
 </body>
 </html>
