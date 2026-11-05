@@ -4267,12 +4267,14 @@ function renderMetrics() {
   + `<div class="ob-sub" style="color:#2D8A50">YQ mẫu đã chuyển thành ĐH</div>`
   + `<div style="margin-top:7px;padding-top:7px;border-top:1px solid rgba(27,107,58,0.2)">`
   + `<div style="font-size:9px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:2px">Tỷ lệ chuyển đổi</div>`
-  + `<div style="font-size:16px;font-weight:700;color:var(--green)">${convRate}</div></div></div>`
+  + `<div id="tqV4Rate" data-yq="${ph.yq||0}" data-tot="${s.total||0}"><div style="font-size:16px;font-weight:700;color:var(--green)">${convRate}</div></div></div></div>`
   + `<div class="ob ob-blue" style="flex:1;min-width:0">`
   + `<div class="ob-lbl" style="color:#1A4B8C">📦 Tổng đơn hàng</div>`
   + `<div class="ob-row"><div class="ob-nm">Số dòng ĐH</div><div class="ob-nv" style="color:#1A4B8C">${(ph.ord||0).toLocaleString('vi-VN')}</div></div>`
   + `<div class="ob-row"><div class="ob-nm">Tổng giá trị</div><div class="ob-nv" style="color:#1A4B8C;font-size:30px">${fmtBil(ph.val||0)}</div></div>`
+  + `<div id="tqV4Note" style="font-size:9.5px;color:#1A4B8C;opacity:.8;margin-top:4px">Đơn từ 01/01/2026, gồm cả đơn đã đóng (V4)</div>`
   + `</div></div>`;
+  if (window.TQV4) TQV4.fill();
 }
 
 function renderAISummary() {
@@ -12034,5 +12036,41 @@ window.LSP = (function(){
 })();
 </script>
 <!-- LSP:END JS -->
+<!-- TQV4:BEGIN JS -->
+<script>
+/* TỶ LỆ CHUYỂN ĐỔI MẪU → ĐƠN HÀNG (ô "YQ → Đơn hàng", tab Tổng quan BP CN triển khai) — anh chốt 05/11/2026: hiện CẢ HAI chỉ số
+   - Tỷ lệ V4  = mẫu thành đơn / mẫu đã có kết quả duyệt (lọc V4)   ← tab "📊 THỐNG KÊ" Sheet PHANTICH_MAU_DONHANG
+   - Tỷ lệ YC  = mẫu thành đơn / toàn bộ YC mẫu (DATA_NPI)
+   renderMetrics() tạo #tqV4Rate (data-yq, data-tot) rồi gọi TQV4.fill(); số V4 tải 1 lần, tải xong tự điền lại. */
+window.TQV4 = (function(){
+  const PH_ID = '1V9kJpx6Ae-jWYSMYOjnfOoR1QxIlLsqKU5UXaQLKdGc', TAB = '📊 THỐNG KÊ';
+  let tk = null, p = null;
+  const num = s => { const v = parseFloat(String(s == null ? '' : s).replace(/[^\d.,-]/g, '').replace(/,/g, '')); return isNaN(v) ? null : v; };
+  const pct = (a, b) => b ? (a / b * 100).toLocaleString('vi-VN', {maximumFractionDigits:1}) + '%' : '--';
+  const vn = n => (n || 0).toLocaleString('vi-VN');
+  function load(){
+    if (p) return p;
+    p = gvizFetch(PH_ID, TAB, 1, 'select A,B', 30000).then(t => {
+      const m = {}; (t.rows || []).forEach(r => { const c = r.c || []; const k = c[0] && c[0].v; if (k) m[String(k).trim()] = c[1] ? (c[1].f != null ? c[1].f : c[1].v) : ''; });
+      if (!('Tổng mẫu sau filter V4' in m)) throw new Error('Tab ' + TAB + ' sai cấu trúc');   // gviz sai tên tab → trả tab đầu
+      tk = {loc:num(m['Tổng mẫu sau filter V4']), thanh:num(m['Mẫu chuyển thành đơn hàng'])};
+      fill();
+    }).catch(e => { console.warn('TQV4:', e && e.message); p = null; });
+    return p;
+  }
+  function fill(){
+    const el = document.getElementById('tqV4Rate'); if (!el) return;
+    const yq = +el.dataset.yq || 0, tot = +el.dataset.tot || 0;
+    const v4 = tk && tk.loc ? '<div style="font-size:16px;font-weight:700;color:var(--green);line-height:1.2">' + pct(tk.thanh != null ? tk.thanh : yq, tk.loc) + '</div>'
+        + '<div style="font-size:9.5px;color:#2D8A50;margin-bottom:4px">mẫu đã duyệt thành đơn (V4: ' + vn(tk.thanh != null ? tk.thanh : yq) + '/' + vn(tk.loc) + ')</div>'
+      : '<div style="font-size:9.5px;color:#2D8A50;margin-bottom:4px">Đang tải tỷ lệ V4…</div>';
+    el.innerHTML = v4 + '<div style="font-size:13px;font-weight:700;color:var(--green);line-height:1.2">' + pct(yq, tot) + '</div>'
+      + '<div style="font-size:9.5px;color:#2D8A50">tổng YC (' + vn(yq) + '/' + vn(tot) + ')</div>';
+    if (!tk) load();
+  }
+  return { fill, load };
+})();
+</script>
+<!-- TQV4:END JS -->
 </body>
 </html>
