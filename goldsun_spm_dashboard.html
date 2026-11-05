@@ -3217,6 +3217,7 @@ function renderPLKpi(ph, statsTot, statsKH) {
   el('plKpiRateSub').textContent = '= ' + yq + ' / ' + tot + ' YC làm mẫu';
   const badgeEl = el('plKpiRateBadge');
   if (badgeEl) { badgeEl.className = 'badge ' + badgeCls; badgeEl.textContent = badgeTxt; }
+  if (window.TQV4) TQV4.fillPL(yq, tot);
   const gtBil = (val / 1e9).toFixed(1);
   el('plKpiVal').innerHTML = gtBil + '<span style="font-size:13px;font-weight:400"> tỷ</span>';
 }
@@ -12054,7 +12055,7 @@ window.TQV4 = (function(){
       const m = {}; (t.rows || []).forEach(r => { const c = r.c || []; const k = c[0] && c[0].v; if (k) m[String(k).trim()] = c[1] ? (c[1].f != null ? c[1].f : c[1].v) : ''; });
       if (!('Tổng mẫu sau filter V4' in m)) throw new Error('Tab ' + TAB + ' sai cấu trúc');   // gviz sai tên tab → trả tab đầu
       tk = {loc:num(m['Tổng mẫu sau filter V4']), thanh:num(m['Mẫu chuyển thành đơn hàng'])};
-      fill();
+      fill(); fillPL();
     }).catch(e => { console.warn('TQV4:', e && e.message); p = null; });
     return p;
   }
@@ -12068,7 +12069,20 @@ window.TQV4 = (function(){
       + '<div style="font-size:9.5px;color:#2D8A50">tổng YC (' + vn(yq) + '/' + vn(tot) + ')</div>';
     if (!tk) load();
   }
-  return { fill, load };
+  // Tab Phân tích mẫu → ĐH: ô "Tỷ lệ chuyển đổi" (#plKpiRate) — số chính = tỷ lệ V4, dòng phụ kèm tỷ lệ trên tổng YC (anh đồng ý 05/11/2026)
+  let pl = null;
+  function fillPL(yq, tot){
+    if (yq != null) pl = {yq:+yq || 0, tot:+tot || 0};
+    const r = document.getElementById('plKpiRate'), sub = document.getElementById('plKpiRateSub'), bd = document.getElementById('plKpiRateBadge');
+    if (!r || !pl) return;
+    if (!tk || !tk.loc) { if (sub) sub.textContent = '= ' + vn(pl.yq) + ' / ' + vn(pl.tot) + ' tổng YC · đang tải tỷ lệ V4…'; load(); return; }
+    const th = tk.thanh != null ? tk.thanh : pl.yq, v = th / tk.loc * 100;
+    r.innerHTML = v.toLocaleString('vi-VN', {maximumFractionDigits:1}) + '<span style="font-size:13px;font-weight:400">%</span>';
+    r.style.color = v >= 60 ? 'var(--green)' : v >= 30 ? 'var(--orange, #D97706)' : 'var(--red)';
+    if (sub) sub.innerHTML = 'mẫu đã duyệt thành đơn (V4: ' + vn(th) + '/' + vn(tk.loc) + ')<br>' + pct(pl.yq, pl.tot) + ' trên tổng YC (' + vn(pl.yq) + '/' + vn(pl.tot) + ')';
+    if (bd) { bd.className = 'badge ' + (v >= 60 ? 'b-green' : v >= 30 ? 'b-orange' : 'b-red'); bd.textContent = v >= 60 ? '✓ Tốt' : 'Cần cải thiện'; }
+  }
+  return { fill, load, fillPL };
 })();
 </script>
 <!-- TQV4:END JS -->
