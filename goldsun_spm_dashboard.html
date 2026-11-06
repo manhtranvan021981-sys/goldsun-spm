@@ -2968,7 +2968,8 @@ PEOPLE_SCORE =
         <div style="position:relative;height:clamp(220px,26vh,265px)"><canvas id="tk-c6"></canvas></div>
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:12px;margin-bottom:12px">
+    <style>/* TKCB: hàng mục 10 + 11 */#tk-row10{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,1fr);gap:12px;margin-bottom:12px}@media(max-width:900px){#tk-row10{grid-template-columns:minmax(0,1fr)}}</style>
+    <div id="tk-row10">
       <div class="panel" style="margin:0">
         <div class="ph"><div class="pt">10. Xu Hướng Khối Lượng Theo Tuần</div>
           <span style="font-size:9px;color:var(--gray)">Bar + Số + Trendline</span></div>
@@ -6327,14 +6328,23 @@ function tkInitC7(){
         [[0,'#003F2D'],[1,'#006B3F'],[2,'#16A085']].forEach(([idx,color])=>{
           const ds=ch.data.datasets[idx]; if(!ds) return;
           const meta=ch.getDatasetMeta(idx); if(meta.hidden) return;
-          meta.data.forEach((bar,bi)=>{
+          meta.data.forEach((bar,bi)=>{ /* TKCB-NHAN: cỡ chữ theo bề rộng cột; cột hẹp → xoay dọc, không đè cột bên cạnh */
             const val=ds.data[bi]; if(!val) return;
-            const txt=String(val);
-            ctx2.save();ctx2.font='bold 12px "Times New Roman"';
+            const txt=String(val), bw=Math.max(6,bar.width||10);
+            const fs=Math.max(9,Math.min(12,Math.floor(bw*0.95)));
+            ctx2.save();ctx2.font='bold '+fs+'px Arial';
             const tw=ctx2.measureText(txt).width;
-            ctx2.fillStyle='rgba(255,255,255,0.9)';ctx2.fillRect(bar.x-tw/2-4,bar.y-22,tw+8,18);
-            ctx2.fillStyle=color;ctx2.textAlign='center';ctx2.textBaseline='bottom';
-            ctx2.fillText(txt,bar.x,bar.y-5);ctx2.restore();
+            if(tw+4<=bw){
+              ctx2.fillStyle='rgba(255,255,255,0.9)';ctx2.fillRect(bar.x-tw/2-2,bar.y-fs-6,tw+4,fs+3);
+              ctx2.fillStyle=color;ctx2.textAlign='center';ctx2.textBaseline='bottom';
+              ctx2.fillText(txt,bar.x,bar.y-4);
+            }else{
+              ctx2.translate(bar.x,bar.y-3);ctx2.rotate(-Math.PI/2);
+              ctx2.fillStyle='rgba(255,255,255,0.9)';ctx2.fillRect(0,-fs/2-1,tw+4,fs+2);
+              ctx2.fillStyle=color;ctx2.textAlign='left';ctx2.textBaseline='middle';
+              ctx2.fillText(txt,2,0.5);
+            }
+            ctx2.restore();
           });
         });
       }catch(e2){}
@@ -6353,7 +6363,7 @@ function tkInitC7(){
       options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:30}},
         plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:10,boxWidth:14}},datalabels:{display:false}},
         scales:{x:{ticks:{font:{size:11}},grid:{display:false}},
-          y:{ticks:{font:{size:10}},grid:{color:'#E8EFF4'},beginAtZero:true,max:Math.max(...tot)+40}}}});
+          y:{ticks:{font:{size:10}},grid:{color:'#E8EFF4'},beginAtZero:true,max:Math.ceil(Math.max(...tot)*1.2/10)*10+10 /*TKCB-YMAX*/}}}});
   }catch(e){console.error('tk-c7',e);}
 }
 
